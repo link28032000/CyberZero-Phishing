@@ -1,0 +1,249 @@
+================================================================
+CYBERZERO — GAMEPLAY & SCORING REFERENCE
+================================================================
+
+OVERVIEW
+----------------------------------------------------------------
+You play a newly hired Cyber Detective inside a simulated Windows
+desktop with exactly two apps: Gmail and Browser. Your mission is
+to investigate 5 emails, find the real evidence of phishing (or
+confirm an email is safe), flag that evidence, and report each
+email as PHISHING or LEGITIMATE. The Capybara Detective reviews
+every submission and explains what you got right, wrong, or
+missed.
+
+This is not a guessing quiz — you have to find and flag the
+specific suspicious parts of an email (or correctly recognize
+that there's nothing suspicious to flag) before you report it.
+
+
+GAMEPLAY FLOW
+----------------------------------------------------------------
+1. Welcome & briefing — no clock yet. Capybara/Detective Zero
+   introduces what phishing looks like: fake senders, false
+   urgency, mismatched links.
+2. Live demo — Detective Zero personally investigates one
+   phishing email and one legitimate email, placing flags and
+   narrating exactly how many points each action is worth. The
+   demo also shows how to undo a flag placed by mistake: click
+   the same flagged spot again and it toggles off, no penalty,
+   as long as it's removed before you report.
+3. "Your turn, Detective." Gmail opens with 5 unread emails.
+4. For each email:
+     - Open it and read the sender, subject, and body carefully.
+     - Turn on FLAG EVIDENCE mode, then click anything you think
+       is suspicious (sender address, an urgent line, a link).
+       Each click drops a flag into the Evidence panel.
+     - Click a flagged item again to remove it if you change
+       your mind — this works at any point before you report.
+     - Open the Browser app if a link looks suspicious, to see
+       exactly where it goes. Switching between Gmail and
+       Browser never resets your progress.
+     - Click "Report Email" and choose REPORT AS PHISHING or
+       MARK AS LEGITIMATE.
+     - Capybara reviews your submission immediately: confirms
+       your verdict, praises correct flags, explains incorrect
+       flags, points out anything missed, and shows a full
+       line-by-line score breakdown.
+     - Click "Next Email" and repeat.
+5. Emails 1–3 are completely untimed — investigate at your own
+   pace.
+6. Right after Email 3's review, Capybara warns that the final
+   two emails are timed. Each of Emails 4 and 5 gets its own
+   2-minute clock that only starts once you confirm you're
+   ready.
+7. If a clock hits zero before you submit, Capybara auto-submits
+   whatever you currently have:
+     - Decision is inferred as Phishing if you've placed 1+
+       flags, or Legitimate if you've placed none.
+     - Whatever flags are on the board are scored exactly as if
+       you'd submitted them manually.
+     - Scoring follows the normal rules, so an incomplete or
+       wrong auto-submit still earns partial credit — never a
+       hard zero.
+     - The review screen shows a "TIME EXPIRED" banner on any
+       auto-submitted email.
+8. After Email 5, you reach the Mission Complete screen with
+   full stats, final score, and Detective Rank.
+
+
+THE FIVE-EMAIL MISSION
+----------------------------------------------------------------
+  #   Type          Evidence to Find
+  1   Phishing      Fake sender + false urgency + suspicious link
+  2   Legitimate    Normal company email — don't flag it
+  3   Phishing      Fake sender + password threat + suspicious link
+  4   Legitimate    Normal internal email — don't flag it
+  5   Phishing      Fake sender + reward scam + suspicious link
+
+
+FLAG-BASED INVESTIGATION
+----------------------------------------------------------------
+Turn on Flag Mode, then click directly on suspicious evidence.
+
+What to flag:
+  fake_sender             e.g. security@bpi-secure-login.xyz
+  false_urgency           e.g. "account suspended in 30 minutes"
+  suspicious_link         button text vs. real destination don't match
+  suspicious_attachment   unexpected .zip / .exe attached
+  credential_request      e.g. "enter your PIN to confirm"
+  suspicious_wording      unusual phrasing or grammatical errors
+
+You can remove a flag if it was placed incorrectly — click the
+same flagged spot again and it toggles off. This works any time
+before you submit the report; nothing is locked in until then.
+
+
+ONE SUBMISSION PER EMAIL — BUT INVESTIGATE FREELY
+----------------------------------------------------------------
+- Submitting a report is final. Once you click "Report Email"
+  (or the clock auto-submits for you), that email is locked —
+  no resubmitting or changing the verdict.
+- You can still reopen and re-read any email at any time:
+    - Reopening your current, still-in-progress email resumes
+      exactly where you left off, flags included.
+    - Reopening a past, already-reported email shows it in
+      read-only review mode with your submitted flags
+      highlighted and a banner confirming the case is closed.
+- Closing or minimizing Gmail or Browser never loses progress.
+
+
+SCORING SYSTEM, EXPLAINED
+----------------------------------------------------------------
+Every email you report earns (or loses) points from two
+independent sources, added together:
+  1. Decision points — for correctly calling the email
+     Phishing or Legitimate.
+  2. Evidence points — for each flag you placed, scored
+     individually as correct or incorrect.
+
+1) DECISION POINTS
+  Situation                                                Points
+  Phishing email, you say Phishing, backed by 1+ correct
+    flags                                                   +100
+  Phishing email, you say Phishing, but zero correct
+    flags (a lucky guess)                                     +0
+  Legitimate email, you say Legitimate                        +50
+  Any email, wrong verdict                                   -50
+
+  Why phishing calls are worth more: a correct "Phishing"
+  verdict only pays out if backed by real evidence — you have
+  to have actually found and flagged something true, not just
+  guessed right. A "Legitimate" verdict doesn't require finding
+  anything (there's nothing to flag), so it's worth half as
+  much.
+
+2) EVIDENCE (FLAG) POINTS
+  Every flag you place is checked against that email's real
+  evidence list.
+  Flag result                                              Points
+  Correct flag (matches real evidence on a phishing email)   +25
+  Incorrect flag (wrong spot on a phishing email, or ANY
+    flag on a legitimate email)                              -10
+
+  Real evidence you never flagged isn't penalized directly —
+  it shows up as "Missed Evidence" in Capybara's review, so
+  you learn what to look for next time.
+
+3) THE CONTRADICTION RULE: FLAGS + "LEGITIMATE" = 0 POINTS
+  If you place one or more flags and then submit the email as
+  Legitimate, the whole report scores a flat 0 — no decision
+  points, no flag points, no penalties either way. Flagging
+  something as suspicious and then clearing the email doesn't
+  reflect a real verdict, so Capybara throws the report out
+  rather than scoring it. The Report dialog always warns you
+  about this up front whenever you have flags placed.
+
+WORKED EXAMPLE — ONE PHISHING EMAIL
+  You investigate "BPI Security" (a phishing email with 3 real
+  pieces of evidence: fake sender, false urgency, suspicious
+  link), correctly flag all 3, and report it as Phishing:
+
+  Line item                                                Points
+  Correct flag — Fake Sender                                 +25
+  Correct flag — False Urgency                                +25
+  Correct flag — Suspicious Link                              +25
+  Decision — Phishing correctly identified, backed by
+    evidence                                                 +100
+  TOTAL                                                      +175
+
+  This is exactly what the Capybara review screen shows,
+  line by line, for every single email.
+
+RUNNING TOTAL ACROSS THE WHOLE MISSION
+  The mission has 5 emails: 3 phishing (each worth up to +175:
+  100 decision + 75 for its 3 flags) and 2 legitimate (each
+  worth up to +50, no flags needed). A perfect run:
+
+  Email   Type          Best possible score
+  1       Phishing      +175
+  2       Legitimate    +50
+  3       Phishing      +175
+  4       Legitimate    +50
+  5       Phishing      +175
+  Maximum possible                          625
+
+  Your running total is floored at 0 after every email — a bad
+  start can never dig you into a hole you can't climb out of
+  (though a single email's own score can still display as
+  negative in Capybara's review, before that floor is applied
+  to your total).
+
+DETECTIVE RANK
+  Final score is measured as a percentage of the 625-point max.
+
+  Rank   Label                    Score %     Roughly (of 625)
+  S      Cyber Detective          95-100%     594-625
+  A      Excellent                85-94%      532-593
+  B      Good                     70-84%      438-531
+  C      Needs Training           50-69%      313-437
+  D      Investigation Failed     Below 50%   0-312
+
+SCORE BREAKDOWN ON EVERY REVIEW
+  Every Capybara review screen shows the line-by-line breakdown
+  above for that specific email — one line per flag placed
+  (correct / incorrect) plus the decision line, ending in a
+  TOTAL row. Nothing about the math is hidden from the player.
+
+
+CAPYBARA REVIEW SYSTEM
+----------------------------------------------------------------
+After every submission, Capybara Detective reviews the
+investigation: confirms the verdict (e.g. "PHISHING CONFIRMED"),
+walks through each flag placed with a short explanation of why
+it was correct, calls out any incorrect flags with a short
+explanation of why they weren't real evidence, lists anything
+missed with the actual evidence text, and ends with the email's
+score and a "Next Email" button.
+
+
+PHISHING INDICATORS GUIDE
+----------------------------------------------------------------
+Fake Sender Address
+  e.g. security@bpi-secure-login.xyz
+  The domain looks related to the real company, but it isn't.
+
+False Urgency
+  e.g. "URGENT! Your account will be permanently locked within
+  30 minutes unless you verify it."
+  Attackers pressure victims into acting fast, without thinking.
+
+Mismatched Link
+  Button text:  "Verify Your Account"
+  Destination:  https://bpi-account-security.io/login
+  The visible text looks safe — the actual destination doesn't.
+
+
+FINAL RESULTS SCREEN
+----------------------------------------------------------------
+The Mission Complete screen shows:
+  - Emails Investigated (X / 5)
+  - Correct Decisions (X / 5)
+  - Evidence Found (X / 9)
+  - Phishing Detected / Legitimate Identified counts
+  - Final Stretch stat (e.g. "2 / 2 On Time") — how many of the
+    last two timed emails were submitted before the clock ran
+    out
+  - Final Score and Detective Rank
+
+================================================================

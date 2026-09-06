@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CYBERZERO — Cyber Detective Simulation</title>
+  <meta name="description" content="CYBERZERO: An interactive cybersecurity simulation game. Become a Cyber Detective and investigate phishing emails." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════════════════
+     DESKTOP ENVIRONMENT
+═══════════════════════════════════════════════════════════ -->
+<div id="desktop">
+
+  <!-- Desktop wallpaper grid lines (CSS only) -->
+  <div class="desktop-bg"></div>
+
+  <!-- Desktop Icons -->
+  <div class="desktop-icons">
+    <div class="desktop-icon" id="icon-gmail" onclick="openApp('gmail')">
+      <div class="icon-img">📧</div>
+      <span>Gmail</span>
+    </div>
+    <div class="desktop-icon" id="icon-browser" onclick="openApp('browser')">
+      <div class="icon-img">🌐</div>
+      <span>Browser</span>
+    </div>
+  </div>
+
+  <!-- HUD Panel (visible only during mission) -->
+  <div id="hud" class="hud hidden">
+    <div class="hud-item">
+      <span class="hud-label">EMAIL</span>
+      <span id="hud-email-count" class="hud-value">1 / 5</span>
+    </div>
+    <div class="hud-divider"></div>
+    <div class="hud-item">
+      <span class="hud-label">SCORE</span>
+      <span id="hud-score" class="hud-value">0</span>
+    </div>
+    <div class="hud-divider"></div>
+    <div class="hud-item" id="hud-timer-wrap">
+      <span class="hud-label" id="hud-timer-label">TIME</span>
+      <span id="hud-timer" class="hud-value timer-untimed">UNTIMED</span>
+    </div>
+  </div>
+
+  <!-- ── GMAIL WINDOW ── -->
+  <div id="win-gmail" class="app-window hidden" data-app="gmail">
+    <div class="win-titlebar" id="titlebar-gmail">
+      <div class="win-title">
+        <span class="win-icon">📧</span>
+        <span>Gmail</span>
+      </div>
+      <div class="win-controls">
+        <button class="win-btn win-minimize" onclick="minimizeApp('gmail')" title="Minimize">─</button>
+        <button class="win-btn win-maximize" onclick="toggleMaximize('gmail')" title="Maximize">□</button>
+        <button class="win-btn win-close" onclick="closeApp('gmail')" title="Close">✕</button>
+      </div>
+    </div>
+    <div class="win-body gmail-body">
+      <!-- Gmail Sidebar -->
+      <div class="gmail-sidebar">
+        <div class="gmail-logo">
+          <span class="gmail-logo-g">G</span><span class="gmail-logo-mail">mail</span>
+        </div>
+        <button class="gmail-compose-btn" disabled>✏ Compose</button>
+        <div class="gmail-nav">
+          <div class="gmail-nav-item active">📥 Inbox <span id="inbox-count" class="inbox-badge">5</span></div>
+          <div class="gmail-nav-item">📤 Sent</div>
+          <div class="gmail-nav-item">🗑 Trash</div>
+        </div>
+      </div>
+
+      <!-- Gmail Main Area -->
+      <div class="gmail-main">
+        <!-- Email List View -->
+        <div id="email-list-view" class="gmail-view active">
+          <div class="gmail-toolbar">
+            <div class="gmail-toolbar-title">Inbox</div>
+          </div>
+          <div id="email-list" class="email-list">
+            <!-- Populated by JS -->
+          </div>
+        </div>
+
+        <!-- Email Detail View -->
+        <div id="email-detail-view" class="gmail-view">
+          <div class="gmail-toolbar">
+            <button class="back-btn" onclick="returnToInbox()">← Back to Inbox</button>
+            <button id="flag-mode-btn" class="flag-mode-btn" onclick="toggleFlagMode()">🚩 Flag Evidence</button>
+            <button id="report-btn" class="report-btn" onclick="showReportDialog()">📋 Report Email</button>
+          </div>
+
+          <div id="email-reported-banner" class="email-reported-banner hidden"></div>
+
+          <div id="email-content" class="email-content">
+            <!-- Populated by JS -->
+          </div>
+
+          <!-- Evidence Panel -->
+          <div id="evidence-panel" class="evidence-panel">
+            <div class="evidence-panel-header">
+              <span class="evidence-panel-title">🔍 Investigation Evidence</span>
+              <span id="evidence-count-badge" class="evidence-count-badge">0 FLAGS</span>
+            </div>
+            <div id="evidence-list" class="evidence-list">
+              <div class="evidence-empty">No flags placed yet. Activate 🚩 Flag Evidence to begin.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── BROWSER WINDOW ── -->
+  <div id="win-browser" class="app-window hidden" data-app="browser">
+    <div class="win-titlebar" id="titlebar-browser">
+      <div class="win-title">
+        <span class="win-icon">🌐</span>
+        <span>Browser</span>
+      </div>
+      <div class="win-controls">
+        <button class="win-btn win-minimize" onclick="minimizeApp('browser')" title="Minimize">─</button>
+        <button class="win-btn win-maximize" onclick="toggleMaximize('browser')" title="Maximize">□</button>
+        <button class="win-btn win-close" onclick="closeApp('browser')" title="Close">✕</button>
+      </div>
+    </div>
+    <div class="win-body browser-body">
+      <div class="browser-chrome">
+        <div class="browser-nav-bar">
+          <button class="browser-nav-btn" id="browser-back" onclick="browserBack()">←</button>
+          <button class="browser-nav-btn" onclick="browserRefresh()">↻</button>
+          <div class="browser-url-bar" id="browser-url-display">about:blank</div>
+          <div class="browser-security-indicator" id="browser-security">⚠️ Not Secure</div>
+        </div>
+      </div>
+      <div id="browser-content" class="browser-content">
+        <div class="browser-home">
+          <div class="browser-home-logo">🌐 CyberBrowser</div>
+          <p class="browser-home-sub">Enter a URL to begin browsing</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════
+       TASKBAR
+  ══════════════════════════════════════════════════════ -->
+  <div id="taskbar">
+    <div class="taskbar-start">
+      <button class="start-btn" id="start-btn">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+          <rect width="7" height="7" fill="#4FC3F7"/>
+          <rect x="9" width="7" height="7" fill="#81D4FA"/>
+          <rect y="9" width="7" height="7" fill="#29B6F6"/>
+          <rect x="9" y="9" width="7" height="7" fill="#0288D1"/>
+        </svg>
+      </button>
+    </div>
+    <div class="taskbar-apps">
+      <button class="taskbar-app-btn" id="taskbar-gmail" onclick="taskbarClick('gmail')">
+        <span>📧</span> Gmail
+      </button>
+      <button class="taskbar-app-btn" id="taskbar-browser" onclick="taskbarClick('browser')">
+        <span>🌐</span> Browser
+      </button>
+    </div>
+    <div class="taskbar-tray">
+      <span class="tray-icon">🔊</span>
+      <span class="tray-icon">📶</span>
+      <div class="taskbar-clock">
+        <div id="taskbar-time" class="clock-time">10:42</div>
+        <div id="taskbar-date" class="clock-date">9/6/2026</div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /desktop -->
+
+<!-- ══════════════════════════════════════════════════════════
+     OVERLAY SYSTEM
+══════════════════════════════════════════════════════════ -->
+<div id="overlay-backdrop" class="overlay-backdrop"></div>
+
+<!-- ── WELCOME SCREEN (Visual Novel Intro) ── -->
+<div id="overlay-welcome" class="overlay active" id="overlay-welcome">
+
+  <!-- Skip button -->
+  <button class="vn-skip-btn" id="vn-skip-btn" onclick="vnSkip()">Skip ⏩</button>
+
+  <!-- Scene background particles -->
+  <div class="vn-scene">
+    <div class="vn-particles" id="vn-particles"></div>
+
+    <!-- Character area -->
+    <div class="vn-character-area">
+      <div class="vn-character" id="vn-character">
+        <div class="vn-char-sprite" id="vn-char-sprite">🕵️</div>
+        <div class="vn-char-glow"></div>
+      </div>
+    </div>
+
+    <!-- Dialogue box -->
+    <div class="vn-dialogue-box" id="vn-dialogue-box" onclick="vnAdvance()">
+      <div class="vn-dialogue-inner">
+        <div class="vn-speaker-name" id="vn-speaker-name">DIRECTOR ZERO</div>
+        <div class="vn-text-area">
+          <p class="vn-text" id="vn-text"></p>
+          <span class="vn-cursor" id="vn-cursor">▌</span>
+        </div>
+        <div class="vn-bottom-bar">
+          <span class="vn-line-indicator" id="vn-line-indicator">1 / 6</span>
+          <div class="vn-advance-hint" id="vn-advance-hint">
+            <span>Click to continue</span>
+            <span class="vn-arrow-anim">▶</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ── TRAINING SLIDES ── -->
+<div id="overlay-training" class="overlay">
+  <div class="training-card">
+    <div class="capy-avatar">🕵️</div>
+    <div class="capy-bubble" id="training-bubble">
+      <!-- JS fills this -->
+    </div>
+    <div class="training-dots" id="training-dots"></div>
+    <div class="training-nav">
+      <button class="btn-ghost" id="btn-training-prev" onclick="trainingPrev()" style="visibility:hidden">← Previous</button>
+      <button class="btn-primary" id="btn-training-next" onclick="trainingNext()">Next →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── DETECTIVE GUIDED DEMO ── -->
+<div id="overlay-demo" class="overlay">
+  <div class="guided-demo-shell">
+
+    <!-- Left: Detective panel -->
+    <div class="gdemo-capy-panel">
+      <div class="gdemo-capy-avatar" id="gdemo-capy">🕵️</div>
+      <div class="gdemo-speech-bubble" id="gdemo-speech">
+        <div class="gdemo-speech-arrow"></div>
+        <div id="gdemo-speech-text" class="gdemo-speech-text"></div>
+      </div>
+      <div class="gdemo-steps" id="gdemo-steps">
+        <div class="gdemo-step" id="gstep-0"><span class="gdemo-step-dot"></span>Welcome</div>
+        <div class="gdemo-step" id="gstep-1"><span class="gdemo-step-dot"></span>Read Phishing</div>
+        <div class="gdemo-step" id="gstep-2"><span class="gdemo-step-dot"></span>Flag Sender</div>
+        <div class="gdemo-step" id="gstep-3"><span class="gdemo-step-dot"></span>Flag Urgency</div>
+        <div class="gdemo-step" id="gstep-4"><span class="gdemo-step-dot"></span>Inspect Link</div>
+        <div class="gdemo-step" id="gstep-5"><span class="gdemo-step-dot"></span>Flag Link</div>
+        <div class="gdemo-step" id="gstep-6"><span class="gdemo-step-dot"></span>Report Phishing</div>
+        <div class="gdemo-step" id="gstep-7"><span class="gdemo-step-dot"></span>Legit Email</div>
+        <div class="gdemo-step" id="gstep-8"><span class="gdemo-step-dot"></span>Flag Mistake</div>
+        <div class="gdemo-step" id="gstep-9"><span class="gdemo-step-dot"></span>Unflag It</div>
+        <div class="gdemo-step" id="gstep-10"><span class="gdemo-step-dot"></span>Report Legit</div>
+        <div class="gdemo-step" id="gstep-11"><span class="gdemo-step-dot"></span>Briefing</div>
+      </div>
+    </div>
+
+
+    <!-- Right: Demo email workspace -->
+    <div class="gdemo-workspace">
+
+      <!-- Toolbar mock -->
+      <div class="gdemo-toolbar" id="gdemo-toolbar">
+        <span class="gdemo-toolbar-back">← Inbox</span>
+        <button class="flag-mode-btn" id="gdemo-flag-btn">🚩 Flag Evidence</button>
+        <button class="report-btn" id="gdemo-report-btn" style="margin-left:auto;">📋 Report Email</button>
+      </div>
+
+      <!-- Demo Email Content — PHISHING EMAIL (steps 1-6) -->
+      <div class="gdemo-email" id="gdemo-email">
+        <!-- Header -->
+        <div class="gdemo-email-hdr">
+          <div class="gdemo-email-subject">URGENT: Your BPI account will be locked today</div>
+          <div class="gdemo-meta-row">
+            <span class="gdemo-meta-label">FROM</span>
+            <span class="gdemo-meta-val" id="gdemo-sender">BPI Security &lt;security@bpi-secure-login.xyz&gt;</span>
+          </div>
+          <div class="gdemo-meta-row">
+            <span class="gdemo-meta-label">TO</span>
+            <span class="gdemo-meta-val" style="color:var(--text-muted)">me@company.com.ph</span>
+          </div>
+        </div>
+        <!-- Body -->
+        <div class="gdemo-email-body">
+          <p>Dear Customer,</p>
+          <p>We detected unusual activity on your BPI online banking account. To protect your account, access has been temporarily restricted.</p>
+          <p id="gdemo-urgency">You must verify your account within <strong>30 minutes</strong> or your online banking access will be <strong>permanently suspended</strong>.</p>
+          <p>Please click the button below to verify your identity and restore full account access.</p>
+          <div class="gdemo-link-row">
+            <a class="email-link" id="gdemo-link" href="#" onclick="return false;">Verify My BPI Account</a>
+            <div class="gdemo-link-dest hidden" id="gdemo-link-dest">
+              <span class="gdemo-link-dest-label">🔗 Actual destination:</span>
+              <span class="gdemo-link-dest-url">https://bpi-account-security.io/login</span>
+            </div>
+          </div>
+          <p>Thank you,<br>BPI Security Team</p>
+        </div>
+        <!-- Mini evidence panel -->
+        <div class="gdemo-evidence-panel" id="gdemo-evidence-panel">
+          <div class="evidence-panel-header">
+            <span class="evidence-panel-title">🔍 Investigation Evidence</span>
+            <span class="evidence-count-badge" id="gdemo-evidence-count">0 FLAGS</span>
+          </div>
+          <div id="gdemo-evidence-list" class="evidence-list">
+            <div class="evidence-empty">No flags yet…</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Demo Email Content — LEGITIMATE EMAIL (steps 7-8) -->
+      <div class="gdemo-email hidden" id="gdemo-legit-email">
+        <!-- Trust indicators banner -->
+        <div class="gdemo-legit-banner" id="gdemo-legit-banner">
+          <span class="gdemo-legit-banner-icon">🛡️</span>
+          <span>Checking legitimacy signals…</span>
+        </div>
+        <!-- Header -->
+        <div class="gdemo-email-hdr">
+          <div class="gdemo-email-subject" style="color:var(--accent-green)">✅ September Employee Benefits Update</div>
+          <div class="gdemo-meta-row">
+            <span class="gdemo-meta-label">FROM</span>
+            <span class="gdemo-meta-val" id="gdemo-legit-sender">HR Department &lt;hr@company.com.ph&gt;</span>
+          </div>
+          <div class="gdemo-meta-row">
+            <span class="gdemo-meta-label">TO</span>
+            <span class="gdemo-meta-val" style="color:var(--text-muted)">me@company.com.ph</span>
+          </div>
+        </div>
+        <!-- Body -->
+        <div class="gdemo-email-body">
+          <p>Dear Employee,</p>
+          <p>We hope you are doing well. The September employee benefits information is now available for your review.</p>
+          <p>This month's update includes details about the health plan renewal, updated leave policies, and the company wellness program.</p>
+          <p>Please review the information through the company's internal HR portal, accessible through your standard work credentials.</p>
+          <p>If you have any questions, feel free to reach out to the HR team directly at <strong>hr@company.com.ph</strong>.</p>
+          <p>Thank you,<br>HR Department<br>Company Inc.</p>
+        </div>
+        <!-- Legitimacy checklist (revealed in step 7) -->
+        <div class="gdemo-legit-checklist hidden" id="gdemo-legit-checklist">
+          <div class="gdemo-legit-title">✅ Why this email is LEGITIMATE:</div>
+          <div class="gdemo-legit-item" id="gdemo-lcheck-1">
+            <span class="gdemo-lcheck-icon">⬜</span>
+            <div><strong>Sender matches company domain</strong> — <code>hr@company.com.ph</code> is an internal address</div>
+          </div>
+          <div class="gdemo-legit-item" id="gdemo-lcheck-2">
+            <span class="gdemo-lcheck-icon">⬜</span>
+            <div><strong>No false urgency</strong> — No countdown timers, no threats, no panic-inducing language</div>
+          </div>
+          <div class="gdemo-legit-item" id="gdemo-lcheck-3">
+            <span class="gdemo-lcheck-icon">⬜</span>
+            <div><strong>No suspicious links</strong> — Directs you to the <em>normal internal HR portal</em>, no external URLs</div>
+          </div>
+          <div class="gdemo-legit-item" id="gdemo-lcheck-4">
+            <span class="gdemo-lcheck-icon">⬜</span>
+            <div><strong>Routine, expected content</strong> — Monthly benefits update is a normal HR communication</div>
+          </div>
+          <div class="gdemo-legit-item" id="gdemo-lcheck-5">
+            <span class="gdemo-lcheck-icon">⬜</span>
+            <div><strong>No credential requests</strong> — Doesn't ask you to verify, reset, or submit any passwords</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Report dialog mock — PHISHING (hidden until report step) -->
+      <div class="gdemo-report-modal hidden" id="gdemo-report-modal">
+        <h3 class="gdemo-rm-title">📋 Report This Email?</h3>
+        <div class="gdemo-rm-flags" id="gdemo-rm-flags"></div>
+        <div class="gdemo-rm-question">Is this email phishing?</div>
+        <div class="gdemo-rm-btns">
+          <button class="btn-danger gdemo-rm-phishing" id="gdemo-report-phishing">🚩 REPORT AS PHISHING</button>
+          <button class="btn-success" style="opacity:.4;cursor:default">✓ MARK AS LEGITIMATE</button>
+        </div>
+      </div>
+
+      <!-- Report dialog mock — LEGITIMATE (hidden until legit report step) -->
+      <div class="gdemo-report-modal hidden" id="gdemo-legit-report-modal">
+        <h3 class="gdemo-rm-title" style="color:var(--accent-green)">📋 Report This Email?</h3>
+        <div class="gdemo-rm-flags" id="gdemo-legit-rm-flags">
+          <div class="gdemo-legit-check-summary">
+            <div class="gdemo-lcs-item">✅ Verified sender domain</div>
+            <div class="gdemo-lcs-item">✅ No urgency tactics</div>
+            <div class="gdemo-lcs-item">✅ No suspicious links</div>
+            <div class="gdemo-lcs-item">✅ Normal business content</div>
+          </div>
+        </div>
+        <div class="gdemo-rm-question">Is this email phishing?</div>
+        <div class="gdemo-rm-btns">
+          <button class="btn-danger" style="opacity:.4;cursor:default">🚩 REPORT AS PHISHING</button>
+          <button class="btn-success gdemo-rm-legit" id="gdemo-report-legit">✓ MARK AS LEGITIMATE</button>
+        </div>
+      </div>
+
+      <!-- Highlight cursor animation -->
+      <div class="gdemo-cursor" id="gdemo-cursor">👆</div>
+
+      <!-- Proceed button -->
+      <div class="gdemo-bottom-bar">
+        <button class="btn-primary" id="btn-demo-next" onclick="demoProceed()">Let's Begin →</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── FINAL STRETCH WARNING (before Emails 4 & 5) ── -->
+<div id="overlay-final-stretch" class="overlay">
+  <div class="training-card final-stretch-card">
+    <div class="final-stretch-badge" id="final-stretch-badge">⚡ FINAL STRETCH</div>
+    <div class="capy-avatar">🕵️</div>
+    <div class="capy-bubble" id="final-stretch-bubble">
+      <!-- JS fills this -->
+    </div>
+    <button class="btn-primary" id="btn-final-stretch-continue" onclick="beginFinalStretchEmail()">I'm Ready →</button>
+  </div>
+</div>
+
+<!-- ── REPORT DIALOG ── -->
+<div id="overlay-report" class="overlay">
+  <div class="dialog-card">
+    <h2 class="dialog-title">📋 Report This Email?</h2>
+    <div id="report-evidence-summary" class="report-evidence-summary">
+      <!-- JS fills -->
+    </div>
+    <p class="dialog-question">What is your verdict on this email?</p>
+    <div class="dialog-actions">
+      <button class="btn-danger" onclick="submitReport(true)">🚩 REPORT AS PHISHING</button>
+      <button class="btn-success" onclick="submitReport(false)">✓ MARK AS LEGITIMATE</button>
+    </div>
+    <button class="btn-ghost" onclick="closeOverlay('overlay-report')" style="margin-top:12px">← Keep Investigating</button>
+  </div>
+</div>
+
+<!-- ── CAPYBARA REVIEW ── -->
+<div id="overlay-review" class="overlay">
+  <div class="review-card">
+    <div class="review-header">
+      <div class="capy-avatar-large">🕵️</div>
+      <div>
+        <div class="review-badge" id="review-badge">INVESTIGATION COMPLETE</div>
+        <h2 id="review-verdict-title">✓ PHISHING CONFIRMED</h2>
+      </div>
+    </div>
+
+    <div id="review-decision-row" class="review-decision-row"></div>
+
+    <div id="review-flags-list" class="review-flags-list">
+      <!-- JS fills -->
+    </div>
+
+    <div id="review-missed" class="review-missed hidden">
+      <!-- JS fills -->
+    </div>
+
+    <div id="review-incorrect-flags" class="review-incorrect-flags hidden">
+      <!-- JS fills -->
+    </div>
+
+    <div id="review-score-breakdown" class="score-breakdown">
+      <!-- JS fills: line-by-line point math for this email -->
+    </div>
+
+    <div class="review-score-row">
+      <span class="review-score-label">SCORE THIS EMAIL</span>
+      <span id="review-score-value" class="review-score-value">+0</span>
+    </div>
+
+    <button class="btn-primary review-next-btn" id="btn-next-email" onclick="nextEmail()">NEXT EMAIL →</button>
+  </div>
+</div>
+
+<!-- ── FINAL RESULTS ── -->
+<div id="overlay-results" class="overlay">
+  <div class="results-card">
+    <div class="results-badge">MISSION COMPLETE</div>
+    <div class="results-capy">🕵️</div>
+    <div class="results-rank-circle" id="results-rank">A</div>
+    <div class="results-rank-label" id="results-rank-label">EXCELLENT DETECTIVE</div>
+
+    <div class="results-grid">
+      <div class="results-stat">
+        <span class="results-stat-label">Emails Investigated</span>
+        <span class="results-stat-value" id="res-emails">5 / 5</span>
+      </div>
+      <div class="results-stat">
+        <span class="results-stat-label">Correct Decisions</span>
+        <span class="results-stat-value" id="res-decisions">0 / 5</span>
+      </div>
+      <div class="results-stat">
+        <span class="results-stat-label">Evidence Found</span>
+        <span class="results-stat-value" id="res-evidence">0 / 9</span>
+      </div>
+      <div class="results-stat">
+        <span class="results-stat-label">Phishing Detected</span>
+        <span class="results-stat-value" id="res-phishing">0</span>
+      </div>
+      <div class="results-stat">
+        <span class="results-stat-label">Legitimate ID'd</span>
+        <span class="results-stat-value" id="res-legit">0</span>
+      </div>
+      <div class="results-stat">
+        <span class="results-stat-label">Final Stretch</span>
+        <span class="results-stat-value" id="res-time">--</span>
+      </div>
+    </div>
+
+    <div class="results-final-score">
+      <span class="results-score-label">FINAL SCORE</span>
+      <span id="res-final-score" class="results-score-num">0</span>
+    </div>
+
+    <button class="btn-primary" onclick="playAgain()">🔄 GET READY FOR THE NEXT CHAPTER</button>
+  </div>
+</div>
+
+<!-- ── LINK INSPECT POPUP ── -->
+<div id="link-inspect-popup" class="link-inspect-popup hidden">
+  <div class="lip-header">🔗 Link Destination</div>
+  <div id="lip-url" class="lip-url"></div>
+  <div class="lip-actions">
+    <button class="btn-primary btn-sm" id="lip-flag-btn" onclick="flagFromPopup()">🚩 Flag This Link</button>
+    <button class="btn-ghost btn-sm" id="lip-open-btn" onclick="openInBrowser()">🌐 Open in Browser</button>
+    <button class="btn-ghost btn-sm" onclick="closeLinkPopup()">✕ Close</button>
+  </div>
+</div>
+
+<!-- ── NOTIFICATION TOAST ── -->
+<div id="toast" class="toast hidden"></div>
+
+<script src="script.js"></script>
+</body>
+</html>
