@@ -329,10 +329,53 @@ const appState = {
 };
 
 // ═══════════════════════════════════════════════════════════
-// WINDOW MANAGEMENT
+// WINDOW MANAGEMENT & APP LOCKS
 // ═══════════════════════════════════════════════════════════
 
+function isAppLocked(appName) {
+  if (appName === 'folder' || appName === 'antivirus') {
+    const emailsDone = gameState.emailResults && gameState.emailResults.length >= EMAILS.length;
+    return !emailsDone && gameState.phase !== 'malware';
+  }
+  return false;
+}
+
+function updateAppLockStates() {
+  const isLocked = isAppLocked('folder');
+  const remaining = EMAILS.length - (gameState.emailResults ? gameState.emailResults.length : 0);
+  ['folder', 'antivirus'].forEach(appName => {
+    const icon = document.getElementById(`icon-${appName}`);
+    const taskbarBtn = document.getElementById(`taskbar-${appName}`);
+    const titleText = isLocked ? `🔒 Locked — Complete all 5 email investigations in Gmail first (${remaining} remaining)` : '';
+
+    if (icon) {
+      if (isLocked) {
+        icon.classList.add('locked');
+        icon.title = titleText;
+      } else {
+        icon.classList.remove('locked');
+        icon.title = '';
+      }
+    }
+    if (taskbarBtn) {
+      if (isLocked) {
+        taskbarBtn.classList.add('locked');
+        taskbarBtn.title = titleText;
+      } else {
+        taskbarBtn.classList.remove('locked');
+        taskbarBtn.title = '';
+      }
+    }
+  });
+}
+
 function openApp(appName) {
+  if (isAppLocked(appName)) {
+    const remaining = EMAILS.length - (gameState.emailResults ? gameState.emailResults.length : 0);
+    showToast(`🔒 Locked: Complete all 5 email investigations first (${remaining} remaining) to unlock ${appName === 'folder' ? 'Folder' : 'Anti-Virus'}!`, 'warning');
+    return;
+  }
+
   const win = document.getElementById(`win-${appName}`);
   const state = appState[appName];
 
@@ -418,6 +461,12 @@ function focusWindow(appName) {
 }
 
 function taskbarClick(appName) {
+  if (isAppLocked(appName)) {
+    const remaining = EMAILS.length - (gameState.emailResults ? gameState.emailResults.length : 0);
+    showToast(`🔒 Locked: Complete all 5 email investigations first (${remaining} remaining) to unlock ${appName === 'folder' ? 'Folder' : 'Anti-Virus'}!`, 'warning');
+    return;
+  }
+
   const state = appState[appName];
   if (!state.open) {
     openApp(appName);
@@ -442,6 +491,7 @@ function minimizeApp_restore(appName) {
 }
 
 function updateTaskbar() {
+  updateAppLockStates();
   ['gmail', 'browser', 'folder', 'antivirus'].forEach(appName => {
     const btn = document.getElementById(`taskbar-${appName}`);
     if (!btn) return;
@@ -1300,6 +1350,7 @@ function startMission() {
   hideAllOverlays();
   renderEmailList();
   updateHUD();
+  updateAppLockStates();
 
   document.getElementById('hud').classList.remove('hidden');
   openApp('gmail');
@@ -1428,6 +1479,7 @@ function updateHUD() {
     if (hudCount) hudCount.textContent = `${currentNum} / ${EMAILS.length}`;
   }
   if (hudScore) hudScore.textContent = `${gameState.score}`;
+  updateAppLockStates();
 }
 
 // ═══════════════════════════════════════════════════════════
@@ -2312,7 +2364,7 @@ function finishMission() {
   document.getElementById('results-rank').textContent = rank;
   document.getElementById('results-rank').className = `results-rank-circle ${rankClass}`;
   document.getElementById('results-rank-label').textContent = rankLabel;
-
+  updateAppLockStates();
   showOverlay('overlay-results');
 }
 
@@ -3178,4 +3230,5 @@ window.addEventListener('DOMContentLoaded', () => {
   renderEmailList();
   vnInit();
   initStickyNote();
+  updateAppLockStates();
 });

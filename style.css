@@ -106,6 +106,40 @@ p { line-height: 1.6; }
   text-align: center;
 }
 
+.desktop-icon.locked {
+  opacity: 0.45;
+  filter: grayscale(0.5);
+  position: relative;
+}
+.desktop-icon.locked .icon-img {
+  filter: drop-shadow(0 2px 6px rgba(0,0,0,0.5));
+}
+.desktop-icon.locked::after {
+  content: '🔒';
+  position: absolute;
+  top: 8px;
+  right: 10px;
+  font-size: 13px;
+  background: rgba(10, 20, 45, 0.9);
+  padding: 2px 4px;
+  border-radius: 6px;
+  border: 1px solid rgba(255, 82, 82, 0.4);
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.8));
+}
+.desktop-icon.locked:hover {
+  background: rgba(255, 82, 82, 0.08);
+  border-color: rgba(255, 82, 82, 0.25);
+}
+
+.taskbar-app-btn.locked {
+  opacity: 0.45;
+}
+.taskbar-app-btn.locked::after {
+  content: '🔒';
+  font-size: 10px;
+  margin-left: 4px;
+}
+
 /* ═══════════════════════════════════════════════
    HUD
 ═══════════════════════════════════════════════ */
