@@ -101,7 +101,9 @@ CAPYBARA DEMONSTRATION   ← Live example walkthrough
     ↓
 "YOUR TURN, DETECTIVE"
     ↓
-OPEN GMAIL  (Emails 1–3 are untimed)
+⏱ START 4-MINUTE TIMER
+    ↓
+OPEN GMAIL
     ↓
 READ EMAIL → 🚩 FLAG EVIDENCE → INSPECT SENDER / URGENCY / LINKS
     ↓
@@ -115,29 +117,8 @@ EXPLAIN CORRECT / MISSED FLAGS → AWARD SCORE
     ↓
 NEXT EMAIL  (×5 total)
     ↓
-⚡ AFTER EMAIL 3: CAPYBARA WARNS — 2-MIN CLOCK PER EMAIL FROM HERE
-    ↓
-EMAIL 4 (timed) → EMAIL 5 (timed)
-    ↓
 🏆 FINAL RESULTS
 ```
-
-### Step-by-Step, in Plain English
-
-1. **Welcome & briefing.** You land on the simulated desktop before the mission even starts — no clock, no pressure. Capybara Detective introduces itself and walks you through what a phishing email actually looks like: fake senders, false urgency, and mismatched links.
-2. **Live demo.** Capybara personally investigates one phishing email and one legitimate email in front of you, placing flags and narrating exactly how many points each action is worth — so you know the stakes before you ever touch anything.
-3. **"Your turn, Detective."** Gmail opens with 5 unread emails in the inbox. From here on, you're on your own.
-4. **For each email:**
-   - Open it from the inbox and read the sender, subject, and body carefully.
-   - Turn on **🚩 Flag Evidence** mode, then click directly on anything you think is suspicious — the sender address, an urgent line, a button/link. Each click drops a flag into the Evidence panel; you can remove a flag if you change your mind.
-   - If a link looks suspicious, you can open the **Browser** app to see exactly where it actually goes before deciding — switching between Gmail and Browser never resets your progress.
-   - When you're confident, click **📋 Report Email** and choose **Report as Phishing** or **Mark as Legitimate**.
-   - Capybara reviews your submission immediately: it confirms your verdict, praises correct flags, explains any incorrect flags, points out anything you missed, and shows a full line-by-line score breakdown for that email.
-   - Click **Next Email** and repeat.
-5. **Emails 1–3 are completely untimed** — investigate at your own pace.
-6. **Right after Email 3's review**, Capybara warns you that the final two emails are timed. Each of Emails 4 and 5 gets its own 2-minute clock that only starts once you confirm you're ready.
-7. **If a clock hits zero before you submit**, Capybara auto-submits whatever you currently have (see the Final Stretch section below) — it's scored exactly like a normal submission, so it's never a wasted email.
-8. **After Email 5**, you reach the **Mission Complete** screen with your full stats, final score, and Detective Rank.
 
 ---
 
@@ -166,46 +147,24 @@ The Gmail investigation **never resets** when switching to Browser and back.
 
 ## ⏱️ Investigation Timer
 
-**Emails 1–3 are completely untimed.** Investigate at your own pace — no clock, no pressure. The HUD's TIME slot simply reads `UNTIMED`.
-
-The real clock only appears for the **final two emails**. See the section below.
-
----
-
-## ⚡ Final Stretch: Per-Email Hard Deadline (Emails 4 & 5)
-
-Right after the player submits their report for **Email 3** and reviews Capybara's feedback, Capybara breaks in with a warning before Email 4 opens:
+The 4-minute countdown starts **only** when the real investigation begins.
 
 ```
-⚡ Two Left, Detective.
-You've done well investigating without a clock — but I'm
-turning up the heat for the final stretch.
-
-Starting now, each of these last two emails gets its own
-2-minute clock. The moment you confirm you're ready, it
-starts counting down.
-
-If that clock hits zero before you submit, I won't wait —
-I'll go with whatever flags and decision you've got.
+┌───────────────────────┐
+│ EMAIL 2 / 5           │
+│ SCORE: 175            │
+│ TIME: 03:21           │
+└───────────────────────┘
 ```
-
-From that point on:
-
-- The player confirms with **"I'm Ready →"**, which starts a **2-minute (02:00) countdown** for Email 4. The HUD's TIME slot relabels itself **"⚡ CLOCK"** and counts down.
-- Email 5 restarts the same 2-minute clock automatically (with a quick toast reminder instead of the full briefing) the moment it begins.
 
 | Time Remaining | State |
 |----------------|-------|
-| 02:00 – 00:46  | 🟢 NORMAL |
-| 00:45 – 00:21  | 🟡 WARNING |
-| 00:20 – 00:00  | 🔴 CRITICAL |
+| 04:00 – 01:01  | 🟢 NORMAL |
+| 01:00 – 00:31  | 🟡 WARNING |
+| 00:30 – 00:01  | 🔴 CRITICAL |
+| 00:00          | ⛔ TIME UP |
 
-- **If the 2-minute clock reaches 00:00 before the player clicks "Report Email":** Capybara **auto-submits the report** using whatever the player currently has —
-  - **Decision:** inferred as *Phishing* if the player has placed one or more evidence flags, or *Legitimate* if they've placed none.
-  - **Flags:** whatever evidence flags are currently on the board are scored exactly as if the player had submitted them manually.
-  - Scoring follows the normal rules, so an incomplete or wrong auto-submitted report still earns **partial credit** — it isn't a hard zero.
-  - The Capybara review screen shows a **"⏰ TIME EXPIRED"** banner on any auto-submitted email so the player knows what happened.
-- The final results screen shows a **"Final Stretch"** stat (e.g. `2 / 2 On Time`) reflecting how many of the last two emails were submitted before the clock ran out.
+The timer does **not** run during the welcome screen, training, guide, or demonstration.
 
 ---
 
@@ -217,9 +176,9 @@ This is the heart of the game. Activate **Flag Mode** and click suspicious parts
 
 | Category | Example |
 |----------|---------|
-| `fake_sender` | `security@bpi-secure-login.xyz` |
+| `fake_sender` | `security@bpi-secure-login.example` |
 | `false_urgency` | *"Your account will be suspended in 30 minutes"* |
-| `suspicious_link` | Button says "Verify Account" → goes to `bpi-check.xyz` |
+| `suspicious_link` | Button says "Verify Account" → goes to `bpi-check.example` |
 | `suspicious_attachment` | Unexpected `.zip` or `.exe` attached |
 | `credential_request` | *"Enter your PIN to confirm"* |
 | `suspicious_wording` | Unusual phrasing or grammatical errors |
@@ -242,16 +201,6 @@ Players can remove a flag if it was placed incorrectly.
 
 ---
 
-## 🔒 One Submission Per Email — But Investigate Freely
-
-- **Submitting a report is final.** Once you click "Report Email" (or the final-stretch clock auto-submits for you), that email is locked — the Report and Flag Evidence buttons are disabled, and there's no way to resubmit or change the verdict.
-- **You can still open and re-read any email** — the current one you're investigating, or any past one you've already reported — at any time from the inbox list.
-  - Reopening your **current, still-in-progress** email resumes exactly where you left off: every flag you've placed is still there.
-  - Reopening a **past, already-reported** email shows it in **read-only review mode**: your submitted flags are shown highlighted in the body and listed in the evidence panel, with a banner confirming what you reported and that the case is closed.
-- **Closing or minimizing the Gmail or Browser app windows never loses progress.** Your flags, your current email, and your investigation state all live in memory regardless of which windows are open — close Gmail, reopen it, and you're right back where you were.
-
----
-
 ## 📧 The Five-Email Mission
 
 | # | Type | Evidence to Find |
@@ -271,7 +220,7 @@ The Capybara Detective teaches you the three key red flags:
 ### 🔴 Fake Sender Address
 
 ```
-security@bpi-secure-login.xyz
+security@bpi-secure-login.example
 ```
 
 The domain looks related to the bank, but it's not the real one.
@@ -289,7 +238,7 @@ Attackers pressure victims into acting fast, without thinking.
 
 ```
 Button text:  "Verify Your Account"
-Destination:  https://bpi-account-security.io/login
+Destination:  https://bpi-account-security.example/login
 ```
 
 The visible text looks safe — the actual destination doesn't.
@@ -302,7 +251,7 @@ The visible text looks safe — the actual destination doesn't.
 <summary><strong>📧 BPI Phishing Email (Email #1)</strong></summary>
 
 ```
-From:    BPI Security <security@bpi-secure-login.xyz>
+From:    BPI Security <security@bpi-secure-login.example>
 Subject: URGENT: Your account will be locked today
 
 Dear Customer,
@@ -312,7 +261,7 @@ We detected unusual activity on your account.
 You must verify your account within 30 minutes
 or your online banking access will be suspended.
 
-[ Verify Your Account ]  →  https://bpi-account-security.io/login
+[ Verify Your Account ]  →  https://bpi-account-security.example/login
 
 Thank you,
 BPI Security Team
@@ -326,7 +275,7 @@ BPI Security Team
 <summary><strong>📧 PayPal Phishing Email (Email #3)</strong></summary>
 
 ```
-From:    PayPal Security <security@paypa1-security.io>
+From:    PayPal Security <security@paypa1-security.example>
 Subject: URGENT: Your PayPal account will be suspended
 
 Dear Customer,
@@ -336,7 +285,7 @@ We detected unusual activity on your PayPal account.
 Your account will be permanently limited within
 24 hours unless you verify your information.
 
-[ Restore My Account ]  →  https://paypal-account-check.xyz/login
+[ Restore My Account ]  →  https://paypal-account-check.example/login
 
 Thank you,
 PayPal Security Team
@@ -350,7 +299,7 @@ PayPal Security Team
 <summary><strong>📧 Legitimate Email (Email #2)</strong></summary>
 
 ```
-From:    HR Department <hr@company.com.ph>
+From:    HR Department <hr@company.example>
 Subject: September Employee Benefits Update
 
 Dear Employee,
@@ -407,90 +356,22 @@ Look for: suspicious senders · false urgency · suspicious links
 
 🚩 MISSED EVIDENCE
 You did not flag the suspicious sender.
-→ security@bpi-secure-login.xyz
+→ security@bpi-secure-login.example
 ```
 
 ---
 
-## 🏆 Scoring System, Explained
+## 🏆 Scoring System
 
-> Detective Zero explains this point-by-point during the demo — after the phishing case, and again after the legitimate case — so players know exactly what's at stake before the clock starts.
+| Action | Points |
+|--------|-------:|
+| Correct phishing decision | +100 |
+| Correct legitimate decision | +100 |
+| Correct evidence flag | +25 |
+| Incorrect decision | −50 |
+| Incorrect evidence flag | −10 |
 
-Every email you report earns (or loses) points from **two independent sources**, added together:
-
-1. **Decision points** — for correctly calling the email Phishing or Legitimate.
-2. **Evidence points** — for each flag you placed, scored individually as correct or incorrect.
-
-### 1. Decision points
-
-| Situation | Points |
-|---|---:|
-| Phishing email, you say **Phishing**, backed by ≥1 correct flag | **+100** |
-| Phishing email, you say **Phishing**, but with **zero** correct flags (a lucky guess) | **+0** |
-| Legitimate email, you say **Legitimate** | **+50** |
-| Any email, wrong verdict | **−50** |
-
-**Why phishing calls are worth more:** a correct "Phishing" verdict only pays out if it's backed by real evidence — you have to have actually found and flagged something true, not just guessed right. A "Legitimate" verdict doesn't require finding anything (there's nothing to flag), so it's worth half as much.
-
-### 2. Evidence (flag) points
-
-Every flag you place is checked against that email's real evidence list:
-
-| Flag result | Points |
-|---|---:|
-| ✅ Correct flag (matches real evidence on a phishing email) | **+25** |
-| ⚠️ Incorrect flag (wrong spot on a phishing email, or **any** flag on a legitimate email) | **−10** |
-
-Real evidence you never flagged isn't penalized directly — it just shows up as **"Missed Evidence"** in Capybara's review, so you learn what to look for next time.
-
-### 3. The contradiction rule: flags + "Legitimate" = 0 points
-
-If you place one or more flags and then submit the email as **Legitimate**, the whole report scores a flat **0** — no decision points, no flag points, no penalties either way. Flagging something as suspicious and then clearing the email doesn't reflect a real verdict, so Capybara throws the report out rather than scoring it. The Report dialog always warns you about this up front whenever you have flags placed.
-
-### Worked example — one phishing email
-
-You investigate "BPI Security" (a phishing email with 3 real pieces of evidence: fake sender, false urgency, suspicious link), correctly flag all 3, and report it as Phishing:
-
-| Line item | Points |
-|---|---:|
-| ✅ Correct flag — Fake Sender | +25 |
-| ✅ Correct flag — False Urgency | +25 |
-| ✅ Correct flag — Suspicious Link | +25 |
-| ✓ Decision — Phishing correctly identified, backed by evidence | +100 |
-| **TOTAL** | **+175** |
-
-This is exactly what the Capybara review screen shows you — line by line — for every single email.
-
-### Running total across the whole mission
-
-The mission has 5 emails: 3 phishing (each worth up to **+175**: 100 decision + 75 for its 3 flags) and 2 legitimate (each worth up to **+50**, no flags needed). A perfect run adds up like this:
-
-| Email | Type | Best possible score |
-|---|---|---:|
-| 1 | 🎣 Phishing | +175 |
-| 2 | ✅ Legitimate | +50 |
-| 3 | 🎣 Phishing | +175 |
-| 4 | ✅ Legitimate | +50 |
-| 5 | 🎣 Phishing | +175 |
-| | **Maximum possible** | **625** |
-
-Your running total is floored at **0 after every email** — a bad start can never dig you into a hole you can't climb out of for the rest of the mission (though a single email's own score can still display as negative in Capybara's review, before that floor is applied to your total).
-
-### Detective Rank
-
-At the end, your final score is measured as a percentage of the 625-point maximum:
-
-| Rank | Label | Score % | Roughly (of 625) |
-|------|-------|---------|---:|
-| **S** | 🏅 Cyber Detective | 95 – 100% | 594 – 625 |
-| **A** | ⭐ Excellent | 85 – 94% | 532 – 593 |
-| **B** | 👍 Good | 70 – 84% | 438 – 531 |
-| **C** | 📚 Needs Training | 50 – 69% | 313 – 437 |
-| **D** | ❌ Investigation Failed | Below 50% | 0 – 312 |
-
-### 🧮 Score Breakdown on Every Review
-
-Every Capybara review screen shows the line-by-line breakdown above for that specific email — one line per flag placed (✅ correct / ⚠️ incorrect) plus the decision line, ending in a **TOTAL** row. Nothing about the math is hidden from the player.
+**Example:** Correct decision + 3 correct flags = **+175 points**
 
 ### Detective Ranks
 
@@ -512,22 +393,18 @@ Every Capybara review screen shows the line-by-line breakdown above for that spe
 ╠════════════════════════════════════════╣
 ║  Emails Investigated:      5 / 5       ║
 ║  Correct Decisions:        5 / 5       ║
-║  Evidence Found:           8 / 9       ║
+║  Evidence Found:          11 / 12      ║
 ║                                        ║
 ║  Phishing Detected:        3           ║
 ║  Legitimate Identified:    2           ║
 ║                                        ║
-║  Final Stretch:          2 / 2 On Time ║
-║  FINAL SCORE:              600         ║
-║  RANK:                     S           ║
+║  Time Remaining:          01:24        ║
+║  FINAL SCORE:              725         ║
+║  RANK:                     A           ║
 ║                                        ║
-║        CYBER DETECTIVE!                ║
+║        EXCELLENT DETECTIVE!            ║
 ╚════════════════════════════════════════╝
 ```
-
-(This example: two phishing emails with all 3 flags found (+175 each), one phishing email with 2 of 3 flags found (+100 decision + 50 flags = +150), and both legitimate emails correctly identified (+50 each) — 175+175+150+50+50 = **600 / 625**, a 96% score and an **S** rank.)
-
-The "Play Again" button is now labeled **🔄 GET READY FOR THE NEXT CHAPTER**, and the results card scrolls internally on short screens instead of clipping its content.
 
 ---
 
@@ -540,14 +417,14 @@ The "Play Again" button is now labeled **🔄 GET READY FOR THE NEXT CHAPTER**, 
     id: 1,
     sender: {
         name: "BPI Security",
-        address: "security@bpi-secure-login.xyz"
+        address: "security@bpi-secure-login.example"
     },
     subject: "URGENT: Your account will be locked today",
     body: "...",
     links: [
         {
             text: "Verify Your Account",
-            destination: "https://bpi-account-security.io/login",
+            destination: "https://bpi-account-security.example/login",
             suspicious: true
         }
     ],
@@ -567,9 +444,8 @@ const gameState = {
     phishingDetected: 0,
     legitimateDetected: 0,
     flagsPlaced: [],
-    timeRemaining: 0,        // 0 until Email 4's 2-minute clock starts
-    missionStarted: false,
-    finalStretchWarned: false
+    timeRemaining: 240,
+    missionStarted: false
 };
 ```
 
@@ -629,7 +505,7 @@ nextEmail()  finishMission()  showFinalResults()  playAgain()
 7. Players cannot spam "Report as Phishing" — wrong flags cost points
 8. Some emails are always legitimate
 9. The Browser app is available to inspect suspicious link destinations
-10. Emails 1–3 are untimed; the clock only appears for Emails 4 & 5, and Capybara explains it beforehand
+10. The timer only starts when the real investigation begins
 
 ---
 
@@ -637,8 +513,7 @@ nextEmail()  finishMission()  showFinalResults()  playAgain()
 
 All content in CYBERZERO is **fictional and simulated**:
 
-- Phishing sender addresses and fake link destinations use realistic-looking but entirely fictional domains (e.g. `.xyz`, `.io`) chosen to resemble real attacker registration patterns — none of them are real, currently-targeted phishing sites. Legitimate/internal sender addresses use `company.com.ph` — a generic, invented placeholder domain in the same fictional style, not tied to any real organization
-- Every "link" in the game is rendered from a hardcoded lookup table inside `script.js` — the simulated Browser never makes a real network request to any domain, phishing or otherwise
+- All email addresses use `.example` domains (per RFC 2606)
 - All websites are simulated — no real banking, PayPal, or financial sites
 - No real credentials, login systems, or backend connections
 - No data is collected or transmitted

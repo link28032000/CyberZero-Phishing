@@ -12,7 +12,7 @@
 const EMAILS = [
   {
     id: 1,
-    sender: { name: 'BPI Security', address: 'security@bpi-secure-login.xyz' },
+    sender: { name: 'BPI Security', address: 'security@bpi-secure-login.example' },
     subject: 'URGENT: Your BPI account will be locked today',
     time: '8:04 AM',
     preview: 'We detected unusual activity on your account...',
@@ -34,7 +34,7 @@ const EMAILS = [
         flagId: 'link1',
         flagType: 'suspicious_link',
         text: 'Verify My BPI Account',
-        destination: 'https://bpi-account-security.io/login',
+        destination: 'https://bpi-account-security.example/login',
         label: 'SUSPICIOUS LINK'
       },
       { type: 'p', text: 'Thank you for banking with BPI.' },
@@ -42,22 +42,22 @@ const EMAILS = [
     ],
     capybaraAnalysis: {
       fake_sender: {
-        correct: '🚩 SENDER — CORRECT\nThe domain <code>bpi-secure-login.xyz</code> is not a legitimate BPI domain. Real BPI emails come from <code>@bpi.com.ph</code>. Attackers register similar-sounding domains to trick victims.',
-        missed: '🚩 MISSED — FAKE SENDER\nThe sender address was <code>security@bpi-secure-login.xyz</code>. This is not a real BPI domain. Always check the actual email address, not just the display name.'
+        correct: '🚩 SENDER — CORRECT\nThe domain <code>bpi-secure-login.example</code> is not a legitimate BPI domain. Real BPI emails come from <code>@bpi.com.ph</code>. Attackers register similar-sounding domains to trick victims.',
+        missed: '🚩 MISSED — FAKE SENDER\nThe sender address was <code>security@bpi-secure-login.example</code>. This is not a real BPI domain. Always check the actual email address, not just the display name.'
       },
       false_urgency: {
         correct: '🚩 URGENCY — CORRECT\nThe "30 minutes" deadline is a classic social engineering pressure tactic. Attackers create panic to prevent careful thinking.',
         missed: '🚩 MISSED — FALSE URGENCY\nThe email threatened account suspension within 30 minutes. This extreme time pressure is a hallmark of phishing — it forces the victim to act without thinking.'
       },
       suspicious_link: {
-        correct: '🚩 LINK — CORRECT\nThe button links to <code>bpi-account-security.io</code>, not BPI\'s real website. The domain sounds official but is completely unrelated to BPI.',
-        missed: '🚩 MISSED — SUSPICIOUS LINK\nThe "Verify" button leads to <code>bpi-account-security.io</code>. Always hover over or inspect links before clicking — the destination reveals the deception.'
+        correct: '🚩 LINK — CORRECT\nThe button links to <code>bpi-account-security.example</code>, not BPI\'s real website. The domain sounds official but is completely unrelated to BPI.',
+        missed: '🚩 MISSED — SUSPICIOUS LINK\nThe "Verify" button leads to <code>bpi-account-security.example</code>. Always hover over or inspect links before clicking — the destination reveals the deception.'
       }
     }
   },
   {
     id: 2,
-    sender: { name: 'HR Department', address: 'hr@company.com.ph' },
+    sender: { name: 'HR Department', address: 'hr@company.example' },
     subject: 'September Employee Benefits Update',
     time: '9:15 AM',
     preview: 'The September employee benefits information is now available...',
@@ -68,14 +68,14 @@ const EMAILS = [
       { type: 'p', text: 'We hope you are doing well. The September employee benefits information is now available for your review.' },
       { type: 'p', text: 'This month\'s update includes details about the health plan renewal, updated leave policies, and the company wellness program.' },
       { type: 'p', text: 'Please review the information through the company\'s normal internal HR portal, accessible through your standard work credentials.' },
-      { type: 'p', text: 'If you have any questions, feel free to reach out to the HR team directly at hr@company.com.ph.' },
+      { type: 'p', text: 'If you have any questions, feel free to reach out to the HR team directly at hr@company.example.' },
       { type: 'p', text: 'Thank you,\nHR Department\nCompany Inc.' }
     ],
     capybaraAnalysis: {}
   },
   {
     id: 3,
-    sender: { name: 'PayPal Security', address: 'security@paypa1-security.io' },
+    sender: { name: 'PayPal Security', address: 'security@paypa1-security.example' },
     subject: 'URGENT: Your PayPal account will be suspended',
     time: '10:22 AM',
     preview: 'We detected unusual activity on your PayPal account...',
@@ -97,7 +97,7 @@ const EMAILS = [
         flagId: 'link1',
         flagType: 'suspicious_link',
         text: 'Restore My Account',
-        destination: 'https://paypal-account-check.xyz/login',
+        destination: 'https://paypal-account-check.example/login',
         label: 'SUSPICIOUS LINK'
       },
       { type: 'p', text: 'Thank you for using PayPal.' },
@@ -105,22 +105,22 @@ const EMAILS = [
     ],
     capybaraAnalysis: {
       fake_sender: {
-        correct: '🚩 SENDER — CORRECT\nNotice the domain: <code>paypa1-security.io</code> uses the number "1" instead of the letter "l" in "PayPal". This is called a typosquat domain — a common attacker trick.',
-        missed: '🚩 MISSED — FAKE SENDER\nThe sender was <code>security@paypa1-security.io</code>. Look closely — "paypa<strong>1</strong>" uses the digit 1, not the letter l. This subtle swap is a typosquat phishing technique.'
+        correct: '🚩 SENDER — CORRECT\nNotice the domain: <code>paypa1-security.example</code> uses the number "1" instead of the letter "l" in "PayPal". This is called a typosquat domain — a common attacker trick.',
+        missed: '🚩 MISSED — FAKE SENDER\nThe sender was <code>security@paypa1-security.example</code>. Look closely — "paypa<strong>1</strong>" uses the digit 1, not the letter l. This subtle swap is a typosquat phishing technique.'
       },
       false_urgency: {
         correct: '🚩 URGENCY — CORRECT\nThe "24 hours" deadline and threat of permanent closure is engineered to create panic. Legitimate companies give adequate time and never threaten instant loss.',
         missed: '🚩 MISSED — FALSE URGENCY\nThe email threatened permanent account closure within 24 hours. This is a pressure tactic to prevent you from verifying the email\'s legitimacy before acting.'
       },
       suspicious_link: {
-        correct: '🚩 LINK — CORRECT\nThe link destination <code>paypal-account-check.xyz</code> is not owned by PayPal. The real PayPal uses <code>paypal.com</code>.',
-        missed: '🚩 MISSED — SUSPICIOUS LINK\nThe "Restore My Account" button leads to <code>paypal-account-check.xyz</code>. Always check actual link destinations — not the button label text.'
+        correct: '🚩 LINK — CORRECT\nThe link destination <code>paypal-account-check.example</code> is not owned by PayPal. The real PayPal uses <code>paypal.com</code>.',
+        missed: '🚩 MISSED — SUSPICIOUS LINK\nThe "Restore My Account" button leads to <code>paypal-account-check.example</code>. Always check actual link destinations — not the button label text.'
       }
     }
   },
   {
     id: 4,
-    sender: { name: 'IT Department', address: 'it@company.com.ph' },
+    sender: { name: 'IT Department', address: 'it@company.example' },
     subject: 'Scheduled System Maintenance — Sunday 11 PM',
     time: '11:05 AM',
     preview: 'Please be advised of scheduled maintenance this Sunday...',
@@ -132,14 +132,14 @@ const EMAILS = [
       { type: 'p', text: 'During this window, the following services will be temporarily unavailable:' },
       { type: 'p', text: '• Employee portal\n• Internal file sharing\n• Company email (intermittent)' },
       { type: 'p', text: 'No action is required from your side. Your data is safe and no credentials need to be updated.' },
-      { type: 'p', text: 'We apologize for any inconvenience. For urgent matters during the maintenance window, please contact the on-call IT team at it-oncall@company.com.ph.' },
+      { type: 'p', text: 'We apologize for any inconvenience. For urgent matters during the maintenance window, please contact the on-call IT team at it-oncall@company.example.' },
       { type: 'p', text: 'Thank you for your understanding.\nIT Department' }
     ],
     capybaraAnalysis: {}
   },
   {
     id: 5,
-    sender: { name: 'GCash Rewards', address: 'noreply@gcash-rewards.xyz' },
+    sender: { name: 'GCash Rewards', address: 'noreply@gcash-rewards.example' },
     subject: '🎉 Congratulations! You\'ve won a GCash reward!',
     time: '12:33 PM',
     preview: 'You have been selected as a special GCash customer reward winner...',
@@ -162,7 +162,7 @@ const EMAILS = [
         flagId: 'link1',
         flagType: 'suspicious_link',
         text: 'Claim My ₱5,000 Reward',
-        destination: 'https://gcash-claim-rewards.io/verify',
+        destination: 'https://gcash-claim-rewards.example/verify',
         label: 'SUSPICIOUS LINK'
       },
       { type: 'p', text: 'Do not share this link. It is unique to your account.' },
@@ -170,24 +170,57 @@ const EMAILS = [
     ],
     capybaraAnalysis: {
       fake_sender: {
-        correct: '🚩 SENDER — CORRECT\nThe domain <code>gcash-rewards.xyz</code> is not GCash\'s official domain. GCash communications come from <code>@gcash.com</code>. Reward scams always use unofficial domains.',
-        missed: '🚩 MISSED — FAKE SENDER\nThe sender domain was <code>gcash-rewards.xyz</code>. This is not an official GCash domain. Reward scams often create plausible-looking domains to fool recipients.'
+        correct: '🚩 SENDER — CORRECT\nThe domain <code>gcash-rewards.example</code> is not GCash\'s official domain. GCash communications come from <code>@gcash.com</code>. Reward scams always use unofficial domains.',
+        missed: '🚩 MISSED — FAKE SENDER\nThe sender domain was <code>gcash-rewards.example</code>. This is not an official GCash domain. Reward scams often create plausible-looking domains to fool recipients.'
       },
       false_urgency: {
         correct: '🚩 URGENCY — CORRECT\nA "2-hour expiry" on a supposed reward is a classic scam pressure tactic. Legitimate rewards do not expire within hours and do not threaten immediate forfeiture.',
         missed: '🚩 MISSED — FALSE URGENCY\nThe 2-hour countdown before the reward "expires" is a pressure tactic. Scammers use short deadlines to stop you from pausing and thinking critically.'
       },
       suspicious_link: {
-        correct: '🚩 LINK — CORRECT\nThe claim link goes to <code>gcash-claim-rewards.io</code> — not GCash\'s real website. This is a fake site designed to steal your login credentials.',
-        missed: '🚩 MISSED — SUSPICIOUS LINK\nThe "Claim My Reward" button leads to <code>gcash-claim-rewards.io</code>. The real GCash website is <code>gcash.com</code>. Always verify destinations before clicking.'
+        correct: '🚩 LINK — CORRECT\nThe claim link goes to <code>gcash-claim-rewards.example</code> — not GCash\'s real website. This is a fake site designed to steal your login credentials.',
+        missed: '🚩 MISSED — SUSPICIOUS LINK\nThe "Claim My Reward" button leads to <code>gcash-claim-rewards.example</code>. The real GCash website is <code>gcash.com</code>. Always verify destinations before clicking.'
       }
     }
   }
 ];
 
+// Perfect-run total: phishing emails are worth 100 (decision) + 25 per clue;
+// legitimate emails are a flat 50 (no evidence to find). Used by the HUD
+// and the final results screen so both stay in sync automatically.
+const MAX_SCORE = EMAILS.reduce((sum, e) => sum + (e.phishing ? 100 + e.evidence.length * 25 : 50), 0);
+
+// Emails already sent by the player — viewable in the Sent folder
+const SENT_EMAILS = [
+  {
+    id: 101,
+    to: 'hr@company.example',
+    subject: 'Re: September Employee Benefits Update',
+    time: '9:12 AM',
+    preview: 'Thanks for the update — reviewed and confirmed on my end...',
+    body: [
+      { type: 'p', text: 'Hi HR Department,' },
+      { type: 'p', text: 'Thanks for the update — I reviewed the September benefits information through the normal internal resources. No issues on my end.' },
+      { type: 'p', text: 'Regards,\nCyber Detective' }
+    ]
+  },
+  {
+    id: 102,
+    to: 'it-security@company.example',
+    subject: 'Suspicious emails flagged this week',
+    time: '10:47 AM',
+    preview: 'Sharing a couple of phishing samples I caught for awareness...',
+    body: [
+      { type: 'p', text: 'Hi IT Security Team,' },
+      { type: 'p', text: 'Sharing a couple of phishing samples I caught this week — fake sender domains, urgency pressure tactics, and mismatched links. Recommend circulating these for staff awareness training.' },
+      { type: 'p', text: 'Regards,\nCyber Detective' }
+    ]
+  }
+];
+
 // Fake websites for the browser
 const FAKE_SITES = {
-  'https://bpi-account-security.io/login': `
+  'https://bpi-account-security.example/login': `
     <div class="fakesite">
       <div class="fakesite-header">
         <div class="fakesite-logo">BPI Online</div>
@@ -200,10 +233,10 @@ const FAKE_SITES = {
         <div class="fakesite-field"><label>Username / Card Number</label><input type="text" placeholder="Enter username" /></div>
         <div class="fakesite-field"><label>Password</label><input type="password" placeholder="Enter password" /></div>
         <button class="fakesite-submit" onclick="alert('🚩 This is a phishing page! Real credentials would be stolen here.')">Log In</button>
-        <p style="font-size:11px;color:#888;margin-top:16px;text-align:center;">bpi-account-security.io — NOT the real BPI website</p>
+        <p style="font-size:11px;color:#888;margin-top:16px;text-align:center;">bpi-account-security.example — NOT the real BPI website</p>
       </div>
     </div>`,
-  'https://paypal-account-check.xyz/login': `
+  'https://paypal-account-check.example/login': `
     <div class="fakesite">
       <div class="fakesite-header" style="background:linear-gradient(90deg,#003087,#009cde);">
         <div class="fakesite-logo">PayPal</div>
@@ -216,10 +249,10 @@ const FAKE_SITES = {
         <div class="fakesite-field"><label>Email or Phone</label><input type="text" placeholder="Enter email or phone" /></div>
         <div class="fakesite-field"><label>Password</label><input type="password" placeholder="Enter password" /></div>
         <button class="fakesite-submit" style="background:linear-gradient(90deg,#003087,#009cde);" onclick="alert('🚩 This is a phishing page! Real credentials would be stolen here.')">Log In</button>
-        <p style="font-size:11px;color:#888;margin-top:16px;text-align:center;">paypal-account-check.xyz — NOT the real PayPal website</p>
+        <p style="font-size:11px;color:#888;margin-top:16px;text-align:center;">paypal-account-check.example — NOT the real PayPal website</p>
       </div>
     </div>`,
-  'https://gcash-claim-rewards.io/verify': `
+  'https://gcash-claim-rewards.example/verify': `
     <div class="fakesite">
       <div class="fakesite-header" style="background:linear-gradient(90deg,#0f5d2e,#17a34a);">
         <div class="fakesite-logo">GCash</div>
@@ -232,18 +265,31 @@ const FAKE_SITES = {
         <div class="fakesite-field"><label>GCash Mobile Number</label><input type="text" placeholder="+63 9XX XXX XXXX" /></div>
         <div class="fakesite-field"><label>MPIN</label><input type="password" placeholder="Enter your 4-digit MPIN" /></div>
         <button class="fakesite-submit" style="background:linear-gradient(90deg,#0f5d2e,#17a34a);" onclick="alert('🚩 This is a phishing page! Real credentials would be stolen here.')">Claim Reward</button>
-        <p style="font-size:11px;color:#888;margin-top:16px;text-align:center;">gcash-claim-rewards.io — NOT the real GCash website</p>
+        <p style="font-size:11px;color:#888;margin-top:16px;text-align:center;">gcash-claim-rewards.example — NOT the real GCash website</p>
       </div>
     </div>`
 };
+
+// The browser's default "home" page — a mock Google search homepage
+const BROWSER_HOME_HTML = `
+  <div class="browser-home">
+    <div class="google-logo"><span style="color:#4285F4">G</span><span style="color:#EA4335">o</span><span style="color:#FBBC05">o</span><span style="color:#4285F4">g</span><span style="color:#34A853">l</span><span style="color:#EA4335">e</span></div>
+    <div class="google-search-box">
+      <span class="google-search-icon">🔍</span>
+      <input type="text" id="browser-home-search" class="google-search-input" placeholder="Search Google or type a URL" autocomplete="off" spellcheck="false" onkeydown="handleHomeSearchKey(event)" />
+    </div>
+    <div class="google-search-actions">
+      <button class="google-btn" onclick="submitHomeSearch()">Google Search</button>
+    </div>
+  </div>`;
 
 // Training slides content — only the demo-ready slide remains (others moved to VN intro)
 const TRAINING_SLIDES = [
   {
     title: 'Ready for the Demo? 🎬',
     content: `<p>Before your mission begins, I'll walk you through a real example.</p>
-    <p style="margin-top:12px;">I'll show you exactly how to spot all three red flags in a phishing email — and how a legitimate email clears itself.</p>
-    <p style="margin-top:20px;font-size:13px;color:#90caf9;">⏱ No pressure here — this demo and your first 3 real emails are untimed. The clock only shows up for the final 2 emails, and I'll warn you before it starts.</p>`
+    <p style="margin-top:12px;">I'll show you exactly how to spot the three red flags in a phishing email.</p>
+    <p style="margin-top:12px;">Watch closely — then it's your turn.</p>`
   }
 ];
 
@@ -252,18 +298,13 @@ const TRAINING_SLIDES = [
 // ═══════════════════════════════════════════════════════════
 
 const gameState = {
-  phase: 'welcome',         // welcome | training | demo | mission | results
+  phase: 'welcome',         // welcome | training | demo | mission | results | malware
   currentEmail: 0,          // index into EMAILS
   score: 0,
   correctDecisions: 0,
   phishingDetected: 0,
   legitimateDetected: 0,
   evidenceFoundTotal: 0,
-  // Emails 1–3 are untimed. This only counts down during the final-stretch
-  // per-email deadline (Emails 4 & 5) — see FINAL_STRETCH_EMAIL_INDICES.
-  timeRemaining: 0,
-  missionStarted: false,
-  timerInterval: null,
   trainingSlide: 0,
   demoStep: 0,
   flagModeActive: false,
@@ -272,20 +313,19 @@ const gameState = {
   pendingLinkUrl: null,
   pendingLinkFlagId: null,
   pendingLinkFlagType: null,
-  finalStretchWarned: false, // has the "2 minutes each" briefing been shown yet
-  // When set, the player is reviewing an already-submitted email (read-only).
-  // null means they're looking at the live, still-in-progress current email.
-  reviewingEmailIdx: null,
+  currentFolder: 'inbox',   // inbox | sent | trash
+  trashedSentIds: [],       // ids of SENT_EMAILS moved to Trash (only sent mail can be deleted)
+  malwareQuarantined: 0,
+  malwareFalsePositives: 0,
+  selectedFolderFileId: null,
+  activeScanFileId: null
 };
 
-// Emails 4 & 5 (0-indexed: 3, 4) are the only timed emails. Each gets its
-// own strict 2-minute countdown, starting only once Email 3 is submitted.
-const FINAL_STRETCH_EMAIL_INDICES = [3, 4];
-const EMAIL_TIMER_DURATION = 120; // 2 minutes
-
 const appState = {
-  gmail: { open: false, minimized: false, maximized: false },
-  browser: { open: false, minimized: false, maximized: false }
+  gmail: { open: false, minimized: false, maximized: false, hasBeenPositioned: false },
+  browser: { open: false, minimized: false, maximized: false, hasBeenPositioned: false },
+  folder: { open: false, minimized: false, maximized: false, hasBeenPositioned: false },
+  antivirus: { open: false, minimized: false, maximized: false, hasBeenPositioned: false }
 };
 
 // ═══════════════════════════════════════════════════════════
@@ -307,9 +347,37 @@ function openApp(appName) {
   focusWindow(appName);
   updateTaskbar();
 
-  if (appName === 'gmail' && gameState.missionStarted && !gameState.timerInterval) {
-    // don't restart timer
+  // First time this app is opened, center it on screen so it isn't
+  // hidden behind the Detective's Notes sticky note in the bottom-right corner.
+  if (!state.hasBeenPositioned) {
+    centerWindow(appName);
+    state.hasBeenPositioned = true;
   }
+}
+
+// Centers a window on the desktop, nudged left so the sticky note
+// (which now lives in the bottom-right corner) never overlaps it.
+function centerWindow(appName) {
+  const win = document.getElementById(`win-${appName}`);
+  const desktop = document.getElementById('desktop');
+  const taskbar = document.getElementById('taskbar');
+  if (!win || !desktop) return;
+
+  const w = win.offsetWidth || 800;
+  const h = win.offsetHeight || 560;
+  const viewportW = desktop.clientWidth;
+  const viewportH = desktop.clientHeight - (taskbar ? taskbar.offsetHeight : 48);
+
+  const STICKY_NOTE_CLEARANCE = 280; // sticky note sits ~24-256px from the right
+
+  let left = Math.round((viewportW - w) / 2);
+  let top = Math.round((viewportH - h) / 2);
+
+  left = Math.min(left, Math.max(24, viewportW - STICKY_NOTE_CLEARANCE - w));
+  top = Math.max(24, top);
+
+  win.style.left = left + 'px';
+  win.style.top = top + 'px';
 }
 
 function closeApp(appName) {
@@ -374,8 +442,9 @@ function minimizeApp_restore(appName) {
 }
 
 function updateTaskbar() {
-  ['gmail', 'browser'].forEach(appName => {
+  ['gmail', 'browser', 'folder', 'antivirus'].forEach(appName => {
     const btn = document.getElementById(`taskbar-${appName}`);
+    if (!btn) return;
     const state = appState[appName];
     const win = document.getElementById(`win-${appName}`);
 
@@ -384,7 +453,7 @@ function updateTaskbar() {
       btn.classList.add('open');
       if (state.minimized) {
         btn.classList.add('minimized');
-      } else if (win.classList.contains('focused')) {
+      } else if (win && win.classList.contains('focused')) {
         btn.classList.add('active');
       }
     }
@@ -501,7 +570,7 @@ const VN_DIALOGUE = [
   },
   {
     speaker: 'DIRECTOR ZERO',
-    text: "The city's digital safety depends on agents like you. Take your time through training and your first 3 emails — the real clock only starts once you hit the final 2.",
+    text: "The city's digital safety depends on agents like you. Take your time, trust the evidence, and give your honest verdict.",
     speed: 30
   },
   {
@@ -703,74 +772,82 @@ function trainingPrev() {
 const DEMO_SCRIPT = [
   {
     step: 0,
-    speech: `<strong>Hey there, Detective! 🕵️</strong><br><br>I'm <strong>Detective Zero</strong>, your cybersecurity instructor.<br><br>I'll walk you through <em>two</em> real cases — one <span style="color:#ff6b6b">phishing</span> attack and one <span style="color:#69db7c">legitimate</span> email — so you know exactly what evidence to look for, and exactly how you'll be scored.<br><br>Click <strong>Let's Begin</strong> to start!`,
+    label: 'Welcome',
+    objective: 'Meet your instructor',
+    speech: `<strong>Hey there, Detective! 🕵️</strong><br><br>I'm <strong>Detective Zero</strong>. I'll walk you through <strong>2 emails</strong> — one <span style="color:#ff6b6b">phishing</span>, one <span style="color:#69db7c">legitimate</span> — so you know what to look for.`,
     btn: "Let's Begin →",
     action: null
   },
   {
     step: 1,
-    speech: `📧 <strong>Case #1: Read It First</strong><br><br>Before flagging anything, I always <strong>read everything</strong> — the sender address, the subject line, and the full body.<br><br>Something already feels off here: the tone is aggressive and there's a hard deadline pushing me to act fast.<br><br>Can you spot it? Click <strong>Show Me</strong> to see the red flags.`,
-    btn: "Show Me →",
+    label: 'Read Phishing',
+    objective: 'Read the email before judging it',
+    speech: `📧 <strong>READ EVERYTHING FIRST</strong><br><br>Never judge by the subject alone. Check the <strong>sender</strong>, <strong>subject</strong>, and <strong>body</strong> first.<br><br>This one already feels rushed and aggressive — that's a clue.`,
+    btn: 'Show Me the Red Flags →',
     action: 'read'
   },
   {
     step: 2,
-    speech: `🔴 <strong>Red Flag #1 — Fake Sender</strong><br><br>Look at that email address:<br><em>security@bpi-secure-login.xyz</em><br><br>Real BPI emails come from <em>@bpi.com.ph</em>. This domain is a <strong>lookalike</strong> — attackers register domains like this to impersonate banks.<br><br>Every red flag I correctly mark is worth <strong>+25 points</strong>. I'll activate Flag Mode and place this one now…`,
-    btn: "Next Red Flag →",
+    label: 'Flag Sender',
+    objective: 'Flag the fake sender address',
+    speech: `🔴 <strong>RED FLAG #1 — FAKE SENDER</strong><br><br><em>security@bpi-secure-login.example</em> isn't the real bank domain (<em>@bpi.com.ph</em>) — it's a lookalike built to fool you.<br><br>First, click 🚩 <strong>Flag Evidence</strong> to turn on flag mode, then flag it →`,
+    btn: 'Flag It & Continue →',
     action: 'flag-sender'
   },
   {
     step: 3,
-    speech: `⚡ <strong>Red Flag #2 — False Urgency</strong><br><br>"<em>30 minutes or suspended</em>" is a classic <strong>pressure tactic</strong> — attackers create panic so you act before you think.<br><br>Legitimate banks never issue 30-minute ultimatums. That's another <strong>+25 points</strong> for correctly flagging it. One red flag left…`,
-    btn: "Reveal the Last Flag →",
+    label: 'Flag Urgency',
+    objective: 'Flag the false urgency tactic',
+    speech: `⚡ <strong>RED FLAG #2 — FALSE URGENCY</strong><br><br>"30 minutes or suspended" is pressure meant to stop you thinking. Real banks don't do 30-minute countdowns.<br><br>Flagging it →`,
+    btn: 'Flag It & Continue →',
     action: 'flag-urgency'
   },
   {
     step: 4,
-    speech: `🔗 <strong>Red Flag #3 — Suspicious Link</strong><br><br>The button reads "Verify My BPI Account" — sounds official. But hover over it and the <strong>real destination</strong> is exposed, and it is NOT bpi.com.ph.<br><br><strong>That's all 3 red flags uncovered.</strong> No clock yet, though — you'll investigate your first 3 real emails at your own pace.`,
-    btn: "Expose the Link →",
+    label: 'Inspect Link',
+    objective: 'Reveal the link\u2019s real destination',
+    speech: `🔗 <strong>RED FLAG #3 — INSPECT BEFORE YOU CLICK</strong><br><br>"Verify My BPI Account" is just a label — it can say anything. Let's reveal where it actually goes →`,
+    btn: 'Inspect the Link →',
     action: 'inspect-link'
   },
   {
     step: 5,
-    speech: `The link actually goes to:<br><em>bpi-account-security.io</em><br><br>That is <strong>NOT</strong> BPI's real website — it's a fake page built to steal login credentials the moment they're typed in.<br><br>+25 points for catching this too. Flagging it now…`,
-    btn: "Now Report It →",
+    label: 'Flag Link',
+    objective: 'Flag the mismatched link',
+    speech: `🕵️ <strong>CAUGHT IT.</strong><br><br>The real destination is <em>bpi-account-security.example</em> — a fake login page built to steal credentials.<br><br>Flagging it as evidence #3 →`,
+    btn: 'Flag It & Continue →',
     action: 'flag-link'
   },
   {
     step: 6,
-    speech: `✅ <strong>3 flags placed — 3 pieces of evidence!</strong><br><br>Now I'll click <strong>Report Email</strong> and submit my verdict as <strong>Phishing</strong>.<br><br>A correct final verdict is worth <strong>+100 points</strong> on its own, plus <strong>+25 per correct flag</strong> — so a clean case like this earns the full <strong>+175 points</strong>. Miss a flag and you simply earn less; place a <strong>wrong</strong> flag and it costs <strong>−10</strong>, while a <strong>wrong verdict</strong> costs <strong>−50</strong>. Evidence-based accuracy is what pays off.`,
-    btn: "Submit Report →",
+    label: 'Report Phishing',
+    objective: 'Submit the verdict: Phishing',
+    speech: `✅ <strong>3 FLAGS PLACED — EVIDENCE COMPLETE</strong><br><br>→ Fake sender<br>→ False urgency<br>→ Suspicious link<br><br>Time to report this as <strong>Phishing</strong>.`,
+    btn: 'Submit Report →',
     action: 'report'
   },
   {
     step: 7,
-    speech: `🛡️ <strong>Case #2: A LEGITIMATE Email</strong><br><br>Not every email is a threat! A good detective also has to recognize <em>safe</em> emails — flag everything and you'll lose points just as fast as missing a real attack.<br><br>Here's a routine HR email. Watch how I check its legitimacy signals…`,
-    btn: "Show Legit Email →",
+    label: 'Legit Email',
+    objective: 'Learn to recognize a safe email',
+    speech: `🛡️ <strong>NOT EVERYTHING IS A THREAT</strong><br><br>Flagging every email is just as useless as flagging none. Here's a routine HR email — let's check it for safety signals instead →`,
+    btn: 'Show Legit Email →',
     action: 'show-legit'
   },
   {
     step: 8,
-    speech: `🤔 <strong>What if I flag something by mistake?</strong><br><br>Say I get twitchy and flag this sender out of habit, even though nothing's actually wrong with it. Watch what happens…<br><br>A wrong flag costs <strong>−10 points</strong> — but only if it's still there when I report. Nothing is locked in until then.`,
-    btn: "Flag It →",
-    action: 'flag-mistake-legit'
-  },
-  {
-    step: 9,
-    speech: `🚩 <strong>Oops — flagged in error.</strong><br><br>Good thing I checked myself before reporting. To remove a flag, just click the <strong>same spot again</strong> — it toggles right off, no penalty, no harm done.<br><br>Watch me undo it now.`,
-    btn: "Undo the Flag →",
-    action: 'unflag-mistake-legit'
-  },
-  {
-    step: 10,
-    speech: `✅ <strong>How to verify a LEGITIMATE email:</strong><br><br>I check 5 things — watch the checklist appear as I go through each one.<br><br>✔ Domain matches company<br>✔ No fake urgency<br>✔ No suspicious links<br>✔ Routine content<br>✔ No credential requests<br><br>All clear — this is safe. Reporting it as <strong>Legitimate</strong> earns the same <strong>+100 points</strong> as catching a phishing attack. Placing flags on a safe email like this one would cost <strong>−10 points each</strong>, so when nothing's wrong, the smartest move is to leave it unflagged — and now you know exactly how to undo one if you slip up.`,
-    btn: "Mark as Legitimate →",
+    label: 'Report Legit',
+    objective: 'Submit the verdict: Legitimate',
+    speech: `✅ <strong>THE 5-POINT LEGITIMACY CHECK</strong><br><br>✔ Matching domain ✔ No urgency ✔ No shady links<br>✔ Routine content ✔ No credential requests<br><br>All clear — marking it <strong>Legitimate</strong>.`,
+    btn: 'Mark as Legitimate →',
     action: 'check-legit'
   },
   {
-    step: 11,
-    speech: `🏆 <strong>Training complete, Detective!</strong><br><br>You've learned the skills every cyber detective needs:<br><br>→ <strong>Spot phishing</strong> — fake senders, pressure tactics, bad links<br>→ <strong>Recognize legit</strong> — verified domain, no urgency, no suspicious links<br>→ <strong>Undo a mistake</strong> — click a flagged item again to remove it before you report<br><br><strong>Scoring recap:</strong> +100 for a correct verdict, +25 per correct flag, −50 for a wrong verdict, −10 per wrong flag.<br><br>Your first 3 emails are untimed — investigate freely. But the last 2 will each come with a strict 2-minute clock. Good luck!`,
-    btn: "START MY MISSION →",
+    step: 9,
+    label: 'Briefing',
+    objective: 'Get ready for your real mission',
+    speech: `🏆 <strong>TRAINING COMPLETE, DETECTIVE!</strong><br><br>🔎 <strong>Spot phishing</strong> — fake senders, pressure tactics, bad links<br>🛡️ <strong>Recognize legit</strong> — verified domain, no urgency<br><br><strong>Your mission:</strong> 5 real emails. Read, flag the evidence, and submit your verdict.`,
+    btn: 'START MY MISSION →',
     action: 'done'
   }
 ];
@@ -790,6 +867,12 @@ function startDemo() {
   renderDemoStep(0);
 }
 
+function skipDemo() {
+  hideAllOverlays();
+  startMission();
+  showToast('⏭ Demo skipped — mission started!', 'success');
+}
+
 function resetDemoVisuals() {
   // Cursor
   const cursor = document.getElementById('gdemo-cursor');
@@ -798,10 +881,6 @@ function resetDemoVisuals() {
   // Sender
   const sender = document.getElementById('gdemo-sender');
   if (sender) { sender.className = 'gdemo-meta-val'; }
-
-  // Legit sender (used for the mistaken-flag / unflag demo)
-  const legitSender = document.getElementById('gdemo-legit-sender');
-  if (legitSender) { legitSender.className = 'gdemo-meta-val'; }
 
   // Urgency
   const urgency = document.getElementById('gdemo-urgency');
@@ -867,27 +946,18 @@ function resetDemoVisuals() {
 
   // Evidence panel
   updateDemoEvidencePanel([]);
-
-  // Steps
-  document.querySelectorAll('.gdemo-step').forEach(s => s.className = 'gdemo-step');
 }
 
 function renderDemoStep(stepIdx) {
   const script = DEMO_SCRIPT[stepIdx];
   if (!script) return;
 
-  // Update speech bubble with typewriter effect
-  setDemoSpeech(script.speech);
+  // Update speech bubble with typewriter effect, prefixed by a clear objective banner
+  const objectiveHtml = `<div class="gdemo-objective"><span class="gdemo-objective-tag">STEP ${stepIdx + 1}/${DEMO_SCRIPT.length} · ${script.label}</span><span class="gdemo-objective-goal">🎯 ${script.objective}</span></div>`;
+  setDemoSpeech(objectiveHtml + script.speech);
 
   // Update proceed button
   document.getElementById('btn-demo-next').textContent = script.btn;
-
-  // Update step tracker
-  document.querySelectorAll('.gdemo-step').forEach((el, i) => {
-    el.className = 'gdemo-step';
-    if (i < stepIdx) el.classList.add('done');
-    else if (i === stepIdx) el.classList.add('active');
-  });
 }
 
 function setDemoSpeech(html) {
@@ -939,26 +1009,32 @@ function executeDemoAction(action, callback) {
     });
 
   } else if (action === 'flag-sender') {
-    // 1. Activate flag mode
+    // 1. Cursor visibly clicks the Flag Evidence button to turn it on
     const flagBtn = document.getElementById('gdemo-flag-btn');
-    flagBtn.classList.add('active');
+    animateCursorTo('gdemo-flag-btn', () => {
+      setTimeout(() => {
+        clickEffect(() => {
+          flagBtn.classList.add('active');
 
-    // 2. Cursor to sender
-    setTimeout(() => {
-      animateCursorTo('gdemo-sender', () => {
-        // 3. Click & flag
-        setTimeout(() => {
-          clickEffect(() => {
-            const sender = document.getElementById('gdemo-sender');
-            sender.classList.add('gdemo-flagged');
-            gdemoFlags.push({ icon: '🚩', label: 'FAKE SENDER', text: 'security@bpi-secure-login.xyz' });
-            updateDemoEvidencePanel(gdemoFlags);
-            hideCursor();
-            setTimeout(re, 500);
-          });
-        }, 400);
-      });
-    }, 300);
+          // 2. Cursor to sender
+          setTimeout(() => {
+            animateCursorTo('gdemo-sender', () => {
+              // 3. Click & flag
+              setTimeout(() => {
+                clickEffect(() => {
+                  const sender = document.getElementById('gdemo-sender');
+                  sender.classList.add('gdemo-flagged');
+                  gdemoFlags.push({ icon: '🚩', label: 'FAKE SENDER', text: 'security@bpi-secure-login.example' });
+                  updateDemoEvidencePanel(gdemoFlags);
+                  hideCursor();
+                  setTimeout(re, 500);
+                });
+              }, 400);
+            });
+          }, 300);
+        });
+      }, 400);
+    });
 
   } else if (action === 'flag-urgency') {
     animateCursorTo('gdemo-urgency', () => {
@@ -990,7 +1066,7 @@ function executeDemoAction(action, callback) {
         clickEffect(() => {
           const link = document.getElementById('gdemo-link');
           link.classList.add('gdemo-flagged');
-          gdemoFlags.push({ icon: '🚩', label: 'SUSPICIOUS LINK', text: 'https://bpi-account-security.io/login' });
+          gdemoFlags.push({ icon: '🚩', label: 'SUSPICIOUS LINK', text: 'https://bpi-account-security.example/login' });
           updateDemoEvidencePanel(gdemoFlags);
           hideCursor();
           setTimeout(re, 500);
@@ -1078,53 +1154,6 @@ function executeDemoAction(action, callback) {
       }, 50);
     }, 450);
 
-  } else if (action === 'flag-mistake-legit') {
-    // Re-enable flag mode (was disabled after switching to the legit email)
-    const flagBtn = document.getElementById('gdemo-flag-btn');
-    flagBtn.disabled = false;
-    flagBtn.style.opacity = '1';
-    flagBtn.classList.add('active');
-
-    setTimeout(() => {
-      animateCursorTo('gdemo-legit-sender', () => {
-        setTimeout(() => {
-          clickEffect(() => {
-            const sender = document.getElementById('gdemo-legit-sender');
-            sender.classList.add('gdemo-flagged');
-            gdemoFlags.push({ icon: '🚩', label: 'SENDER (flagged in error)', text: 'hr@company.com.ph' });
-            updateDemoEvidencePanel(gdemoFlags);
-            hideCursor();
-            setTimeout(re, 500);
-          });
-        }, 400);
-      });
-    }, 300);
-
-  } else if (action === 'unflag-mistake-legit') {
-    // Click the same flagged element again — toggles the flag off, just like real gameplay
-    animateCursorTo('gdemo-legit-sender', () => {
-      setTimeout(() => {
-        clickEffect(() => {
-          const sender = document.getElementById('gdemo-legit-sender');
-          sender.classList.remove('gdemo-flagged');
-          sender.classList.add('gdemo-highlight-pulse');
-          setTimeout(() => sender.classList.remove('gdemo-highlight-pulse'), 700);
-
-          gdemoFlags = gdemoFlags.filter(f => f.label !== 'SENDER (flagged in error)');
-          updateDemoEvidencePanel(gdemoFlags);
-
-          // Flag mode isn't needed again until the player's own emails, so switch it off
-          const flagBtn = document.getElementById('gdemo-flag-btn');
-          flagBtn.classList.remove('active');
-          flagBtn.disabled = true;
-          flagBtn.style.opacity = '0.4';
-
-          hideCursor();
-          setTimeout(re, 500);
-        });
-      }, 400);
-    });
-
   } else if (action === 'check-legit') {
     // Reveal legitimacy checklist with staggered animations
     const checklist = document.getElementById('gdemo-legit-checklist');
@@ -1202,8 +1231,9 @@ function animateCursorTo(targetId, cb) {
   const wsRect = workspace.getBoundingClientRect();
   const tRect = target.getBoundingClientRect();
 
-  const left = tRect.left - wsRect.left + tRect.width * 0.3;
-  const top = tRect.top - wsRect.top + tRect.height * 0.4;
+  // Point precisely at the target with fingertip aligned, steady and fixed
+  const left = tRect.left - wsRect.left + (tRect.width / 2) - 12;
+  const top = tRect.top - wsRect.top + (tRect.height / 2);
 
   cursor.classList.add('visible');
   cursor.style.left = left + 'px';
@@ -1219,11 +1249,10 @@ function animateCursorTo(targetId, cb) {
 
 function clickEffect(cb) {
   const cursor = document.getElementById('gdemo-cursor');
-  cursor.textContent = '👇';
+  // Fixed steady pointer: only apply subtle scale tap without changing emoji between up and down
   cursor.style.transform = 'scale(0.85)';
   setTimeout(() => {
     cursor.style.transform = 'scale(1)';
-    cursor.textContent = '👆';
     if (cb) cb();
   }, 200);
 }
@@ -1258,7 +1287,6 @@ function updateDemoEvidencePanel(flags) {
 
 function startMission() {
   gameState.phase = 'mission';
-  gameState.missionStarted = true;
   gameState.currentEmail = 0;
   gameState.score = 0;
   gameState.correctDecisions = 0;
@@ -1266,8 +1294,8 @@ function startMission() {
   gameState.legitimateDetected = 0;
   gameState.evidenceFoundTotal = 0;
   gameState.emailResults = [];
-  gameState.finalStretchWarned = false;
-  gameState.reviewingEmailIdx = null;
+  gameState.currentFolder = 'inbox';
+  gameState.trashedSentIds = [];
 
   hideAllOverlays();
   renderEmailList();
@@ -1276,141 +1304,186 @@ function startMission() {
   document.getElementById('hud').classList.remove('hidden');
   openApp('gmail');
 
-  // Emails 1–3 are untimed by design. The clock only appears once the
-  // player reaches Email 4 — see nextEmail() / showFinalStretchWarning().
-  renderUntimedHUD();
-  showToast('🕵️ Mission started! Investigate your inbox — no clock yet.', 'success');
+  showToast('🕵️ Mission started! Investigate your inbox.', 'success');
+
+  // Pop up the scoring sticky note beside the desktop once the demo is done
+  setTimeout(showStickyNote, 700);
 }
 
 // ═══════════════════════════════════════════════════════════
-// TIMER
+// STICKY NOTE — Scoring Reminder
 // ═══════════════════════════════════════════════════════════
 
-function startTimer() {
-  if (gameState.timerInterval) clearInterval(gameState.timerInterval);
-  gameState.timerInterval = setInterval(updateTimer, 1000);
+function showStickyNote() {
+  const note = document.getElementById('sticky-note');
+  const icon = document.getElementById('icon-notes');
+  if (!note) return;
+
+  note.classList.remove('hidden');
+  note.classList.remove('sticky-note-pop');
+  // Force reflow so the pop-in animation replays every time it's shown
+  void note.offsetWidth;
+  note.classList.add('sticky-note-pop');
+
+  if (icon) icon.classList.remove('hidden');
 }
 
-function stopTimer() {
-  if (gameState.timerInterval) {
-    clearInterval(gameState.timerInterval);
-    gameState.timerInterval = null;
+function closeStickyNote() {
+  const note = document.getElementById('sticky-note');
+  if (note) note.classList.add('hidden');
+}
+
+function toggleStickyNote() {
+  const note = document.getElementById('sticky-note');
+  if (!note) return;
+  if (note.classList.contains('hidden')) {
+    showStickyNote();
+  } else {
+    closeStickyNote();
   }
 }
 
-function updateTimer() {
-  if (gameState.timeRemaining <= 0) {
-    stopTimer();
-    handleTimeUp();
-    return;
+// Drag-to-move + click-to-rename for the sticky note
+function initStickyNote() {
+  const note = document.getElementById('sticky-note');
+  const handles = [
+    document.getElementById('sticky-note-drag-handle'),
+    document.getElementById('sticky-note-drag-handle-2')
+  ].filter(Boolean);
+  if (!note || handles.length === 0) return;
+
+  let dragging = false;
+  let offsetX = 0;
+  let offsetY = 0;
+
+  function startDrag(e) {
+    const parent = note.offsetParent || document.getElementById('desktop');
+    const parentRect = parent.getBoundingClientRect();
+    const noteRect = note.getBoundingClientRect();
+
+    // The note starts out anchored with only `bottom`/`right` in CSS (no
+    // `top`), with its height auto-computed from its content. Before we
+    // can drag it we need to switch it to `top`-anchored positioning —
+    // but if we only clear `bottom` without also freezing `top`, the note
+    // has neither anchor for an instant and snaps to its static in-flow
+    // position (up near the desktop icons), which looks like it suddenly
+    // jumped. Freeze top and left first so the switch is visually a
+    // no-op. Height is intentionally left alone (no explicit height is
+    // ever set) so the note always keeps its natural, default height.
+    note.style.top = (noteRect.top - parentRect.top) + 'px';
+    note.style.left = (noteRect.left - parentRect.left) + 'px';
+    note.style.bottom = 'auto';
+
+    dragging = true;
+    offsetX = e.clientX - noteRect.left;
+    offsetY = e.clientY - noteRect.top;
+    note.classList.add('dragging');
+    e.preventDefault();
   }
-  gameState.timeRemaining--;
-  renderTimer();
-}
 
-function renderTimer() {
-  const t = gameState.timeRemaining;
-  const m = Math.floor(t / 60).toString().padStart(2, '0');
-  const s = (t % 60).toString().padStart(2, '0');
-  const stateClass = t <= 20 ? 'timer-critical' : t <= 45 ? 'timer-warning' : 'timer-normal';
-  const timeText = `${m}:${s}`;
+  function onMove(e) {
+    if (!dragging) return;
+    const parent = note.offsetParent || document.getElementById('desktop');
+    const parentRect = parent.getBoundingClientRect();
 
-  const el = document.getElementById('hud-timer');
-  if (el) {
-    el.textContent = timeText;
-    el.className = `hud-value ${stateClass}`;
+    let left = e.clientX - parentRect.left - offsetX;
+    let top = e.clientY - parentRect.top - offsetY;
+
+    left = Math.max(0, Math.min(left, parentRect.width - note.offsetWidth));
+    top = Math.max(0, Math.min(top, parentRect.height - note.offsetHeight));
+
+    note.style.left = left + 'px';
+    note.style.top = top + 'px';
   }
-}
 
-// Shows the "no clock yet" state on the HUD, used for Emails 1–3.
-function renderUntimedHUD() {
-  const label = document.getElementById('hud-timer-label');
-  const el = document.getElementById('hud-timer');
-  if (label) label.textContent = 'TIME';
-  if (el) {
-    el.textContent = 'UNTIMED';
-    el.className = 'hud-value timer-untimed';
+  function endDrag() {
+    if (dragging) {
+      dragging = false;
+      note.classList.remove('dragging');
+    }
   }
-}
 
-// Fires when a final-stretch email's 2-minute clock hits zero before the
-// player submitted their own report. Whatever flags/decision they have
-// standing right now gets submitted for them — partial credit possible.
-function handleTimeUp() {
-  showToast("⏰ Time's up on this one! Capybara is auto-submitting your report...", 'error');
-  setTimeout(() => autoSubmitReport(), 1200);
-}
-
-function autoSubmitReport() {
-  closeOverlay('overlay-report');
-  const impliedIsPhishing = gameState.currentEmailFlags.length > 0;
-  submitReport(impliedIsPhishing, true);
-}
-
-// ═══════════════════════════════════════════════════════════
-// FINAL STRETCH (Emails 4 & 5 — the only timed emails)
-// ═══════════════════════════════════════════════════════════
-
-function isFinalStretchEmail(idx) {
-  return FINAL_STRETCH_EMAIL_INDICES.includes(idx);
-}
-
-// Starts the 2-minute countdown for the current (final-stretch) email.
-function startFinalStretchTimer() {
-  stopTimer();
-  gameState.timeRemaining = EMAIL_TIMER_DURATION;
-  const label = document.getElementById('hud-timer-label');
-  if (label) label.textContent = '⚡ CLOCK';
-  renderTimer();
-  startTimer();
-}
-
-// Shown once, right after Email 3's report is submitted and reviewed,
-// before the player enters Email 4. Explains the new 2-minutes-each rule.
-// Email 5 just gets a quick toast reminder instead of the full briefing.
-function showFinalStretchWarning() {
-  const bubble = document.getElementById('final-stretch-bubble');
-  bubble.innerHTML = `
-    <h3>⚡ Two Left, Detective.</h3>
-    <p>You've done well investigating without a clock — but I'm turning up the heat for the final stretch.</p>
-    <p style="margin-top:12px;">Starting now, <span class="highlight-red">each of these last two emails gets its own 2-minute clock</span>. The moment you confirm you're ready, it starts counting down.</p>
-    <p style="margin-top:12px;">If that clock hits zero before you hit <strong>Report Email</strong>, I won't wait — I'll go with whatever flags and decision you've got on the board. Partial credit only, so don't leave evidence unflagged.</p>
-    <p style="margin-top:16px;font-size:13px;color:#ff8a80;">⏱ Move fast, but move carefully. Ready?</p>`;
-  showOverlay('overlay-final-stretch');
-}
-
-// Fired by the "I'm Ready →" button on the final-stretch interstitial.
-function beginFinalStretchEmail() {
-  closeOverlay('overlay-final-stretch');
-  startFinalStretchTimer();
+  handles.forEach(h => h.addEventListener('pointerdown', startDrag));
+  window.addEventListener('pointermove', onMove);
+  window.addEventListener('pointerup', endDrag);
+  window.addEventListener('pointercancel', endDrag);
 }
 
 // ═══════════════════════════════════════════════════════════
 // HUD
 // ═══════════════════════════════════════════════════════════
 
-
 function updateHUD() {
-  document.getElementById('hud-email-count').textContent =
-    `${gameState.currentEmail + 1} / ${EMAILS.length}`;
-  document.getElementById('hud-score').textContent = gameState.score;
+  const hudType = document.getElementById('hud-type-label');
+  const hudCount = document.getElementById('hud-email-count');
+  const hudScore = document.getElementById('hud-score');
+
+  if (gameState.phase === 'malware') {
+    if (hudType) hudType.textContent = 'MALWARE';
+    if (hudCount) hudCount.textContent = `${gameState.malwareQuarantined} / ${TOTAL_MALWARE_COUNT}`;
+  } else {
+    if (hudType) hudType.textContent = 'EMAIL';
+    const activeMissionIdx = EMAILS.findIndex(e => !gameState.emailResults.some(r => r.emailId === e.id));
+    const currentNum = activeMissionIdx === -1 ? EMAILS.length : activeMissionIdx + 1;
+    if (hudCount) hudCount.textContent = `${currentNum} / ${EMAILS.length}`;
+  }
+  if (hudScore) hudScore.textContent = `${gameState.score}`;
 }
 
 // ═══════════════════════════════════════════════════════════
 // GMAIL — EMAIL LIST
 // ═══════════════════════════════════════════════════════════
 
+function switchGmailFolder(folder) {
+  gameState.currentFolder = folder;
+
+  document.querySelectorAll('.gmail-nav-item').forEach(el => el.classList.remove('active'));
+  const navEl = document.getElementById(`nav-${folder}`);
+  if (navEl) navEl.classList.add('active');
+
+  const titles = { inbox: 'Inbox', sent: 'Sent', trash: 'Trash' };
+  const titleEl = document.getElementById('gmail-toolbar-title');
+  if (titleEl) titleEl.textContent = titles[folder] || 'Inbox';
+
+  // Always land back on the list view when switching folders
+  document.getElementById('sent-detail-view').classList.remove('active');
+  document.getElementById('email-detail-view').classList.remove('active');
+  document.getElementById('email-list-view').classList.add('active');
+
+  renderEmailList();
+}
+
+function updateFolderCounts() {
+  const sentBadge = document.getElementById('sent-count');
+  const trashBadge = document.getElementById('trash-count');
+  if (sentBadge) {
+    const activeCount = SENT_EMAILS.filter(e => !gameState.trashedSentIds.includes(e.id)).length;
+    sentBadge.textContent = activeCount;
+  }
+  if (trashBadge) {
+    trashBadge.textContent = gameState.trashedSentIds.length;
+  }
+}
+
 function renderEmailList() {
+  const folder = gameState.currentFolder || 'inbox';
+  updateFolderCounts();
+
+  if (folder === 'sent') return renderSentOrTrashList(SENT_EMAILS.filter(e => !gameState.trashedSentIds.includes(e.id)), 'sent');
+  if (folder === 'trash') return renderSentOrTrashList(SENT_EMAILS.filter(e => gameState.trashedSentIds.includes(e.id)), 'trash');
+
   const list = document.getElementById('email-list');
   list.innerHTML = '';
 
+  const activeMissionIdx = EMAILS.findIndex(e => !gameState.emailResults.some(r => r.emailId === e.id));
+
   EMAILS.forEach((email, idx) => {
     const result = gameState.emailResults.find(r => r.emailId === email.id);
-    const isRead = idx < gameState.currentEmail;
-    const isCurrent = idx === gameState.currentEmail;
+    const isCurrent = (activeMissionIdx !== -1 && idx === activeMissionIdx);
+    const isRead = !!result;
 
     const item = document.createElement('div');
-    item.className = `email-list-item ${isRead || result ? 'read' : 'unread'}`;
+    item.className = `email-list-item ${isRead ? 'read' : 'unread'}`;
     item.id = `email-item-${email.id}`;
 
     // Avatar letter
@@ -1453,99 +1526,194 @@ function renderEmailList() {
 }
 
 // ═══════════════════════════════════════════════════════════
+// GMAIL — SENT & TRASH
+// ═══════════════════════════════════════════════════════════
+
+function renderSentOrTrashList(items, folder) {
+  const list = document.getElementById('email-list');
+  list.innerHTML = '';
+
+  if (items.length === 0) {
+    list.innerHTML = `<div class="email-empty-state">${folder === 'trash' ? '🗑 Trash is empty' : '📤 No sent mail'}</div>`;
+    return;
+  }
+
+  items.forEach((email, idx) => {
+    const initial = 'D'; // Detective — the player is the sender
+    const avatarColors = ['#5c6bc0', '#00897b'];
+    const avatarColor = avatarColors[idx % avatarColors.length];
+
+    const item = document.createElement('div');
+    item.className = 'email-list-item read';
+
+    let actionBtn = '';
+    if (folder === 'sent') {
+      actionBtn = `<button class="email-action-btn email-delete-btn" title="Delete" onclick="event.stopPropagation(); deleteSentEmail(${email.id})">🗑</button>`;
+    } else {
+      actionBtn = `<button class="email-action-btn email-restore-btn" title="Restore" onclick="event.stopPropagation(); restoreSentEmail(${email.id})">↩ Restore</button>`;
+    }
+
+    item.innerHTML = `
+      <div class="email-list-avatar" style="background:${avatarColor}">${initial}</div>
+      <div class="email-list-content">
+        <div class="email-list-sender">To: ${email.to}</div>
+        <div class="email-list-subject">${email.subject}</div>
+        <div class="email-list-preview">${email.preview}</div>
+      </div>
+      <div class="email-list-meta">
+        <span class="email-list-time">${email.time}</span>
+        ${actionBtn}
+      </div>`;
+
+    item.style.cursor = 'pointer';
+    item.addEventListener('click', () => openSentOrTrashEmail(email.id, folder));
+
+    list.appendChild(item);
+  });
+}
+
+function openSentOrTrashEmail(id, folder) {
+  const email = SENT_EMAILS.find(e => e.id === id);
+  if (!email) return;
+
+  // Switch view: list -> reading pane (same visual treatment as Inbox)
+  document.getElementById('email-list-view').classList.remove('active');
+  document.getElementById('sent-detail-view').classList.add('active');
+
+  const backBtn = document.getElementById('sent-detail-back-btn');
+  backBtn.textContent = folder === 'trash' ? '← Back to Trash' : '← Back to Sent';
+
+  const content = document.getElementById('sent-detail-content');
+  content.innerHTML = '';
+
+  // Header block — mirrors the Inbox email-header-block markup
+  const header = document.createElement('div');
+  header.className = 'email-header-block';
+  header.innerHTML = `
+    <div class="email-subject-line">${email.subject}</div>
+    <div class="email-meta-row">
+      <span class="email-meta-label">FROM</span>
+      <span class="email-meta-value">Cyber Detective (You)</span>
+    </div>
+    <div class="email-meta-row">
+      <span class="email-meta-label">TO</span>
+      <span class="email-meta-value" style="color:var(--text-muted)">${email.to}</span>
+    </div>
+    <div class="email-meta-row">
+      <span class="email-meta-label">DATE</span>
+      <span class="email-meta-value" style="color:var(--text-muted)">${email.time}</span>
+    </div>`;
+  content.appendChild(header);
+
+  // Body — mirrors the Inbox email-body-text markup
+  const body = document.createElement('div');
+  body.className = 'email-body-text';
+  email.body.forEach(part => {
+    const p = document.createElement('p');
+    p.style.whiteSpace = 'pre-line';
+    p.textContent = part.text;
+    body.appendChild(p);
+  });
+  content.appendChild(body);
+
+  // Action button — Delete for Sent, Restore for Trash
+  const actionBtn = document.getElementById('sent-detail-action-btn');
+  if (folder === 'sent') {
+    actionBtn.textContent = '🗑 Delete';
+    actionBtn.className = 'report-btn sent-detail-action-btn-delete';
+    actionBtn.onclick = () => { deleteSentEmail(email.id); closeSentDetailView(); };
+  } else {
+    actionBtn.textContent = '↩ Restore to Sent';
+    actionBtn.className = 'report-btn sent-detail-action-btn-restore';
+    actionBtn.onclick = () => { restoreSentEmail(email.id); closeSentDetailView(); };
+  }
+}
+
+function closeSentDetailView() {
+  document.getElementById('sent-detail-view').classList.remove('active');
+  document.getElementById('email-list-view').classList.add('active');
+  renderEmailList();
+}
+
+function deleteSentEmail(id) {
+  if (!gameState.trashedSentIds.includes(id)) {
+    gameState.trashedSentIds.push(id);
+  }
+  showToast('🗑 Moved to Trash', 'success');
+  renderEmailList();
+}
+
+function restoreSentEmail(id) {
+  gameState.trashedSentIds = gameState.trashedSentIds.filter(x => x !== id);
+  showToast('↩ Restored to Sent', 'success');
+  renderEmailList();
+}
+
+// ═══════════════════════════════════════════════════════════
 // GMAIL — EMAIL DETAIL
 // ═══════════════════════════════════════════════════════════
 
 function openEmail(idx) {
   const email = EMAILS[idx];
-  const result = gameState.emailResults.find(r => r.emailIdx === idx);
+  gameState.currentEmail = idx;
+  const existingResult = gameState.emailResults.find(r => r.emailId === email.id);
 
-  if (idx === gameState.currentEmail && !result) {
-    // The live, still-in-progress email — resume exactly where the player
-    // left off. Flags are NOT reset here; they only ever reset in
-    // nextEmail()/startMission() when a genuinely new email begins.
-    gameState.reviewingEmailIdx = null;
-  } else if (result) {
-    // A past, already-reported email — read-only review. This never
-    // touches gameState.currentEmail or currentEmailFlags, so the live
-    // investigation (and the ability to submit only once) stays intact.
-    gameState.reviewingEmailIdx = idx;
+  if (existingResult) {
+    gameState.currentEmailFlags = existingResult.savedFlags ? [...existingResult.savedFlags] : [];
   } else {
-    return; // not reachable from the UI, but guard just in case
+    gameState.currentEmailFlags = [];
   }
+  gameState.flagModeActive = false;
 
   // Switch view
   document.getElementById('email-list-view').classList.remove('active');
   document.getElementById('email-detail-view').classList.add('active');
 
-  gameState.flagModeActive = false;
-  document.getElementById('flag-mode-btn').classList.remove('active');
+  const flagModeBtn = document.getElementById('flag-mode-btn');
+  const reportBtn = document.getElementById('report-btn');
+
+  flagModeBtn.classList.remove('active');
   document.querySelector('.gmail-body').classList.remove('flag-mode-active');
 
-  renderEmailContent(email);
-
-  const flagsToShow = result ? result.flagsSnapshot : gameState.currentEmailFlags;
-  applyFlagVisuals(flagsToShow.map(f => f.type));
-  renderEvidencePanel(flagsToShow, /* readOnly */ !!result);
-  updateReportControls(result);
-  updateHUD();
-}
-
-// Re-applies the "flagged" highlight to matching elements after a fresh
-// render — needed because renderEmailContent() rebuilds the DOM from
-// scratch every time an email is opened.
-function applyFlagVisuals(flagTypes) {
-  document.querySelectorAll('.flaggable').forEach(el => {
-    if (flagTypes.includes(el.dataset.flagType)) {
-      el.classList.add('flagged');
-    } else {
-      el.classList.remove('flagged');
-    }
-  });
-}
-
-// Shows/hides the toolbar controls depending on whether the player is
-// looking at the live email (can flag + report) or reviewing a past,
-// already-submitted one (read-only — reporting again is not allowed).
-function updateReportControls(result) {
-  const flagBtn = document.getElementById('flag-mode-btn');
-  const reportBtn = document.getElementById('report-btn');
-  const banner = document.getElementById('email-reported-banner');
-
-  if (result) {
-    flagBtn.disabled = true;
-    flagBtn.style.opacity = '0.4';
-    flagBtn.style.cursor = 'not-allowed';
+  if (existingResult) {
     reportBtn.disabled = true;
-    reportBtn.style.opacity = '0.4';
-    reportBtn.style.cursor = 'not-allowed';
-    reportBtn.textContent = '✓ Already Reported';
+    reportBtn.textContent = '✓ Reported';
+    reportBtn.classList.add('reported');
+    reportBtn.title = 'You have already submitted a report for this email.';
 
-    if (banner) {
-      const label = result.isPhishing === result.playerDecision
-        ? (result.playerDecision ? '🚩 Reported as Phishing' : '✓ Marked Legitimate')
-        : (result.playerDecision ? '🚩 Reported as Phishing (incorrect)' : '✓ Marked Legitimate (incorrect)');
-      banner.textContent = `${label} — this investigation is closed. You're just reviewing it now.`;
-      banner.classList.remove('hidden');
-    }
+    flagModeBtn.disabled = true;
+    flagModeBtn.title = 'Investigation concluded — report already submitted.';
   } else {
-    flagBtn.disabled = false;
-    flagBtn.style.opacity = '1';
-    flagBtn.style.cursor = '';
     reportBtn.disabled = false;
-    reportBtn.style.opacity = '1';
-    reportBtn.style.cursor = '';
-    reportBtn.textContent = '📋 Report Email';
+    reportBtn.textContent = '📋 Report';
+    reportBtn.classList.remove('reported');
+    reportBtn.title = '';
 
-    if (banner) banner.classList.add('hidden');
+    flagModeBtn.disabled = false;
+    flagModeBtn.title = '';
   }
+
+  renderEmailContent(email);
+  renderEvidencePanel();
+  updateHUD();
 }
 
 function renderEmailContent(email) {
   const content = document.getElementById('email-content');
   content.innerHTML = '';
 
+  const existingResult = gameState.emailResults.find(r => r.emailId === email.id);
+  if (existingResult) {
+    const verdictText = existingResult.playerDecision ? '🚩 Reported as Phishing' : '✓ Marked as Legitimate';
+    const verdictClass = existingResult.playerDecision ? 'phishing' : 'legit';
+    const banner = document.createElement('div');
+    banner.className = `case-closed-banner ${verdictClass}`;
+    banner.innerHTML = `🔒 <strong>CASE CLOSED</strong> — ${verdictText} (${existingResult.score >= 0 ? '+' : ''}${existingResult.score} pts). You can review this email, but reports can only be submitted once.`;
+    content.appendChild(banner);
+  }
+
   // Header block
+  const isSenderFlagged = gameState.currentEmailFlags.some(f => f.type === 'fake_sender');
   const header = document.createElement('div');
   header.className = 'email-header-block';
   header.innerHTML = `
@@ -1553,14 +1721,14 @@ function renderEmailContent(email) {
     <div class="email-meta-row">
       <span class="email-meta-label">FROM</span>
       <span class="email-meta-value">
-        <span class="flaggable" data-flag-id="sender" data-flag-type="fake_sender" data-flag-label="FAKE SENDER"
+        <span class="flaggable${isSenderFlagged ? ' flagged' : ''}" data-flag-id="sender" data-flag-type="fake_sender" data-flag-label="FAKE SENDER"
           data-flag-text="${email.sender.address}"
           onclick="handleFlaggableClick(this)">${email.sender.name} &lt;${email.sender.address}&gt;</span>
       </span>
     </div>
     <div class="email-meta-row">
       <span class="email-meta-label">TO</span>
-      <span class="email-meta-value" style="color:var(--text-muted)">me@company.com.ph</span>
+      <span class="email-meta-value" style="color:var(--text-muted)">me@company.example</span>
     </div>
     <div class="email-meta-row">
       <span class="email-meta-label">DATE</span>
@@ -1582,7 +1750,8 @@ function renderEmailContent(email) {
     } else if (part.type === 'p-flag') {
       const p = document.createElement('p');
       const span = document.createElement('span');
-      span.className = 'flaggable';
+      const isFlagged = gameState.currentEmailFlags.some(f => f.type === part.flagType);
+      span.className = `flaggable${isFlagged ? ' flagged' : ''}`;
       span.dataset.flagId = part.flagId;
       span.dataset.flagType = part.flagType;
       span.dataset.flagLabel = part.label;
@@ -1596,7 +1765,8 @@ function renderEmailContent(email) {
       const wrap = document.createElement('div');
       wrap.className = 'email-link-wrap';
       const link = document.createElement('a');
-      link.className = 'email-link flaggable';
+      const isFlagged = gameState.currentEmailFlags.some(f => f.type === part.flagType);
+      link.className = `email-link flaggable${isFlagged ? ' flagged' : ''}`;
       link.href = '#';
       link.dataset.flagId = part.flagId;
       link.dataset.flagType = part.flagType;
@@ -1614,8 +1784,9 @@ function renderEmailContent(email) {
 }
 
 function handleFlaggableClick(el) {
-  if (gameState.reviewingEmailIdx !== null) {
-    showToast('📁 This case is closed — you already reported this email.', '');
+  const currentEmailObj = EMAILS[gameState.currentEmail];
+  if (currentEmailObj && gameState.emailResults.some(r => r.emailId === currentEmailObj.id)) {
+    showToast('🔒 This email has already been reported. Case is closed.', 'warning');
     return;
   }
   // If already flagged, always allow unflagging (regardless of flag mode)
@@ -1636,7 +1807,7 @@ function handleEmailLinkClick(event, el) {
   const destination = el.dataset.destination;
   if (destination) {
     showLinkPopup(el, destination);
-  } else if (gameState.flagModeActive && gameState.reviewingEmailIdx === null) {
+  } else if (gameState.flagModeActive) {
     placeFlag(el);
   }
 }
@@ -1662,11 +1833,12 @@ function closeLinkPopup() {
 }
 
 function flagFromPopup() {
-  if (gameState.reviewingEmailIdx !== null) {
+  const email = EMAILS[gameState.currentEmail];
+  if (email && gameState.emailResults.some(r => r.emailId === email.id)) {
+    showToast('🔒 This email has already been reported. Case is closed.', 'warning');
     closeLinkPopup();
     return;
   }
-  const email = EMAILS[gameState.currentEmail];
   const el = document.querySelector(`[data-flag-id="${gameState.pendingLinkFlagId}"]`);
   if (el) {
     if (!gameState.flagModeActive) {
@@ -1695,10 +1867,12 @@ function openSuspiciousSite(url) {
 // ═══════════════════════════════════════════════════════════
 
 function toggleFlagMode() {
-  if (gameState.reviewingEmailIdx !== null) {
-    showToast('📁 This case is closed — nothing left to flag here.', '');
+  const currentEmailObj = EMAILS[gameState.currentEmail];
+  if (currentEmailObj && gameState.emailResults.some(r => r.emailId === currentEmailObj.id)) {
+    showToast('🔒 This email has already been reported. Case is closed.', 'warning');
     return;
   }
+
   gameState.flagModeActive = !gameState.flagModeActive;
   const btn = document.getElementById('flag-mode-btn');
   const body = document.querySelector('.gmail-body');
@@ -1715,6 +1889,12 @@ function toggleFlagMode() {
 }
 
 function placeFlag(el) {
+  const currentEmailObj = EMAILS[gameState.currentEmail];
+  if (currentEmailObj && gameState.emailResults.some(r => r.emailId === currentEmailObj.id)) {
+    showToast('🔒 This email has already been reported. Case is closed.', 'warning');
+    return;
+  }
+
   const flagId   = el.dataset.flagId;
   const flagType = el.dataset.flagType;
   const flagLabel = el.dataset.flagLabel;
@@ -1742,6 +1922,11 @@ function placeFlag(el) {
 }
 
 function removeFlag(flagType) {
+  const currentEmailObj = EMAILS[gameState.currentEmail];
+  if (currentEmailObj && gameState.emailResults.some(r => r.emailId === currentEmailObj.id)) {
+    return;
+  }
+
   const idx = gameState.currentEmailFlags.findIndex(f => f.type === flagType);
   if (idx === -1) return;
   const [removed] = gameState.currentEmailFlags.splice(idx, 1);
@@ -1759,17 +1944,17 @@ function removeFlag(flagType) {
   showToast(`🗑 Unflagged: ${removed.label}`, '');
 }
 
-function renderEvidencePanel(flagsOverride = null, readOnly = false) {
+function renderEvidencePanel() {
   const list = document.getElementById('evidence-list');
   const badge = document.getElementById('evidence-count-badge');
-  const flags = flagsOverride || gameState.currentEmailFlags;
+  const flags = gameState.currentEmailFlags;
+  const currentEmailObj = EMAILS[gameState.currentEmail];
+  const isClosed = currentEmailObj && gameState.emailResults.some(r => r.emailId === currentEmailObj.id);
 
-  badge.textContent = `${flags.length} FLAG${flags.length !== 1 ? 'S' : ''}`;
+  badge.textContent = isClosed ? `${flags.length} SUBMITTED` : `${flags.length} FLAG${flags.length !== 1 ? 'S' : ''}`;
 
   if (flags.length === 0) {
-    list.innerHTML = readOnly
-      ? '<div class="evidence-empty">No flags were placed on this one.</div>'
-      : '<div class="evidence-empty">No flags placed yet. Activate 🚩 Flag Evidence to begin.</div>';
+    list.innerHTML = `<div class="evidence-empty">${isClosed ? 'No evidence flags were submitted for this email.' : 'No flags placed yet. Activate 🚩 Flag Evidence to begin.'}</div>`;
     return;
   }
 
@@ -1777,12 +1962,12 @@ function renderEvidencePanel(flagsOverride = null, readOnly = false) {
   flags.forEach(flag => {
     const item = document.createElement('div');
     item.className = 'evidence-item';
-    const removeBtn = readOnly ? '' : `<button class="evidence-remove-btn" onclick="removeFlag('${flag.type}')" title="Remove flag">✕</button>`;
+    const removeBtnHtml = isClosed ? '' : `<button class="evidence-remove-btn" onclick="removeFlag('${flag.type}')" title="Remove flag">✕</button>`;
     item.innerHTML = `
       <span class="evidence-item-icon">🚩</span>
-      <span class="evidence-item-text">${(flag.text || '').length > 60 ? flag.text.slice(0,60)+'…' : (flag.text || '')}</span>
+      <span class="evidence-item-text">${flag.text.length > 60 ? flag.text.slice(0,60)+'…' : flag.text}</span>
       <span class="evidence-item-type">${flag.label}</span>
-      ${removeBtn}`;
+      ${removeBtnHtml}`;
     list.appendChild(item);
   });
 }
@@ -1795,9 +1980,10 @@ function returnToInbox() {
   document.getElementById('email-detail-view').classList.remove('active');
   document.getElementById('email-list-view').classList.add('active');
   gameState.flagModeActive = false;
-  gameState.reviewingEmailIdx = null;
   document.getElementById('flag-mode-btn').classList.remove('active');
   document.querySelector('.gmail-body').classList.remove('flag-mode-active');
+  renderEmailList();
+  updateHUD();
 }
 
 // ═══════════════════════════════════════════════════════════
@@ -1805,10 +1991,14 @@ function returnToInbox() {
 // ═══════════════════════════════════════════════════════════
 
 function showReportDialog() {
-  if (gameState.reviewingEmailIdx !== null) {
-    showToast('📁 This case is already closed.', '');
+  const email = EMAILS[gameState.currentEmail];
+  if (!email) return;
+
+  if (gameState.emailResults.some(r => r.emailId === email.id)) {
+    showToast('⚠️ You have already submitted a report for this email.', 'warning');
     return;
   }
+
   const flags = gameState.currentEmailFlags;
   const summary = document.getElementById('report-evidence-summary');
 
@@ -1820,133 +2010,113 @@ function showReportDialog() {
       `<div class="res-item">🚩 <span>${f.label}</span><span style="color:var(--text-muted);margin-left:auto;font-size:11px">${f.text.slice(0,40)}${f.text.length > 40 ? '…' : ''}</span></div>`
     ).join('');
     summary.innerHTML = items +
-      `<div class="report-evidence-count">${flags.length} evidence flag${flags.length > 1 ? 's' : ''} placed</div>
-      <div class="report-legit-warning">⚠ Note: If you submit this as <strong>Legitimate</strong> while flags are placed, this report scores <strong>0 points</strong> — flagging evidence and then clearing the email is a contradiction, not a real verdict.</div>`;
+      `<div class="report-evidence-count">${flags.length} evidence flag${flags.length > 1 ? 's' : ''} placed</div>`;
   }
 
   showOverlay('overlay-report');
 }
 
-function submitReport(isPhishing, autoSubmitted = false) {
-  // Guard: a report can only ever be filed once per email. This should
-  // already be unreachable from the UI (the Report button is hidden/disabled
-  // once an email has a result), but the check protects against any stray
-  // call path — e.g. an in-flight auto-submit timer firing after the
-  // player already submitted manually.
-  if (gameState.emailResults.some(r => r.emailIdx === gameState.currentEmail)) {
+let isSubmittingReport = false;
+function submitReport(isPhishing) {
+  if (isSubmittingReport) return;
+  const email = EMAILS[gameState.currentEmail];
+  if (!email) return;
+
+  if (gameState.emailResults.some(r => r.emailId === email.id)) {
+    showToast('⚠️ You have already submitted a report for this email.', 'warning');
     closeOverlay('overlay-report');
     return;
   }
 
-  closeOverlay('overlay-report');
-  stopTimer();
+  isSubmittingReport = true;
+  try {
+    closeOverlay('overlay-report');
 
-  const email = EMAILS[gameState.currentEmail];
-  const flagsSnapshot = gameState.currentEmailFlags.slice(); // full flag objects, for read-only review later
-  const playerFlags = gameState.currentEmailFlags.map(f => f.type);
-  const expectedEvidence = email.evidence;
+    const playerFlags = gameState.currentEmailFlags.map(f => f.type);
+    const expectedEvidence = email.evidence;
 
-  const correctDecision = (isPhishing === email.phishing);
-  let emailScore = 0;
-  const scoreBreakdown = []; // [{ label, points }] — the exact math shown to the player
+    // Decision scoring — a correct Phishing call is worth more than a correct
+    // Legitimate call, since Phishing requires solid evidence to back it up.
+    const correctDecision = (isPhishing === email.phishing);
+    let emailScore = 0;
 
-  // Evidence scoring (only matters for phishing emails) — computed BEFORE
-  // decision points, since a phishing decision only earns credit when it's
-  // backed by actual evidence.
-  let correctFlags = [];
-  let incorrectFlags = [];
-  let missedEvidence = [];
-
-  if (email.phishing) {
-    playerFlags.forEach(pf => {
-      if (expectedEvidence.includes(pf)) correctFlags.push(pf);
-      else incorrectFlags.push(pf);
-    });
-    missedEvidence = expectedEvidence.filter(e => !playerFlags.includes(e));
-  } else if (playerFlags.length > 0) {
-    // Legitimate email — any flag is incorrect
-    incorrectFlags = playerFlags.slice();
-  }
-
-  // Special case: the player placed one or more evidence flags — meaning
-  // they found something suspicious — but then submitted the email as
-  // Legitimate anyway. That's a contradiction: flagging evidence and then
-  // clearing the email doesn't reflect a real investigation, so it scores
-  // a flat 0 — no decision credit, no flag credit, no flag penalties.
-  const flaggedButMarkedLegit = (playerFlags.length > 0 && !isPhishing);
-
-  if (flaggedButMarkedLegit) {
-    emailScore = 0;
-    scoreBreakdown.push({
-      label: `⚠ ${playerFlags.length} flag${playerFlags.length > 1 ? 's' : ''} placed, then reported as Legitimate`,
-      points: 0,
-      note: 'Flagging evidence and then clearing the email cancels out — no points either way.'
-    });
-  } else {
-    // Flag points
-    correctFlags.forEach(pf => {
-      emailScore += 25;
-      gameState.evidenceFoundTotal++;
-      const flagObj = flagsSnapshot.find(f => f.type === pf);
-      scoreBreakdown.push({ label: `✅ Correct flag — ${flagObj ? flagObj.label : pf.replace('_', ' ').toUpperCase()}`, points: 25 });
-    });
-    incorrectFlags.forEach(pf => {
-      emailScore -= 10;
-      const flagObj = flagsSnapshot.find(f => f.type === pf);
-      scoreBreakdown.push({ label: `⚠️ Incorrect flag — ${flagObj ? flagObj.label : pf.replace('_', ' ').toUpperCase()}`, points: -10 });
-    });
-
-    // Decision scoring
     if (correctDecision) {
+      emailScore += isPhishing ? 100 : 50;
       gameState.correctDecisions++;
       if (isPhishing) gameState.phishingDetected++;
       else gameState.legitimateDetected++;
-
-      if (email.phishing) {
-        // Correctly calling out phishing only earns decision points if it's
-        // backed by at least one correct evidence flag — a correct guess
-        // with no evidence found earns no decision points.
-        if (correctFlags.length > 0) {
-          emailScore += 100;
-          scoreBreakdown.push({ label: '✓ Decision — Phishing correctly identified, backed by evidence', points: 100 });
-        } else {
-          scoreBreakdown.push({ label: '✓ Decision — correct guess, but no evidence found', points: 0 });
-        }
-      } else {
-        // Correctly identifying a legitimate email — no evidence is needed,
-        // so it's worth less than a fully-evidenced phishing call.
-        emailScore += 50;
-        scoreBreakdown.push({ label: '✓ Decision — Legitimate correctly identified', points: 50 });
-      }
     } else {
       emailScore -= 50;
-      scoreBreakdown.push({ label: '✗ Decision — incorrect verdict', points: -50 });
     }
+
+    // Evidence scoring (only matters for phishing emails)
+    let correctFlags = [];
+    let incorrectFlags = [];
+    let missedEvidence = [];
+
+    if (email.phishing) {
+      playerFlags.forEach(pf => {
+        if (expectedEvidence.includes(pf)) {
+          correctFlags.push(pf);
+          emailScore += 25;
+          gameState.evidenceFoundTotal++;
+        } else {
+          incorrectFlags.push(pf);
+          emailScore -= 10;
+        }
+      });
+      missedEvidence = expectedEvidence.filter(e => !playerFlags.includes(e));
+
+      // Getting the verdict right isn't the whole job — missing real evidence
+      // costs points too, even when the final call was correct.
+      if (correctDecision && missedEvidence.length > 0) {
+        emailScore -= missedEvidence.length * 25;
+      }
+    } else {
+      // Legitimate email — any flag is incorrect
+      if (playerFlags.length > 0) {
+        incorrectFlags = playerFlags;
+        emailScore -= playerFlags.length * 10;
+      }
+    }
+
+    gameState.score = Math.max(0, gameState.score + emailScore);
+
+    // Store result
+    const result = {
+      emailId: email.id,
+      emailIdx: gameState.currentEmail,
+      isPhishing: email.phishing,
+      playerDecision: isPhishing,
+      correctDecision,
+      playerFlags,
+      correctFlags,
+      incorrectFlags,
+      missedEvidence,
+      score: emailScore,
+      savedFlags: [...gameState.currentEmailFlags]
+    };
+    gameState.emailResults.push(result);
+
+    // Disable report and flag buttons immediately
+    const reportBtn = document.getElementById('report-btn');
+    if (reportBtn) {
+      reportBtn.disabled = true;
+      reportBtn.textContent = '✓ Reported';
+      reportBtn.classList.add('reported');
+      reportBtn.title = 'You have already submitted a report for this email.';
+    }
+    const flagModeBtn = document.getElementById('flag-mode-btn');
+    if (flagModeBtn) {
+      flagModeBtn.disabled = true;
+      flagModeBtn.classList.remove('active');
+    }
+
+    updateHUD();
+    showCapybaraResult(result, email);
+  } finally {
+    isSubmittingReport = false;
   }
-
-  gameState.score = Math.max(0, gameState.score + emailScore);
-
-  // Store result
-  const result = {
-    emailId: email.id,
-    emailIdx: gameState.currentEmail,
-    isPhishing: email.phishing,
-    playerDecision: isPhishing,
-    correctDecision,
-    playerFlags,
-    flagsSnapshot,
-    correctFlags,
-    incorrectFlags,
-    missedEvidence,
-    score: emailScore,
-    scoreBreakdown,
-    flaggedButMarkedLegit,
-    autoSubmitted
-  };
-  gameState.emailResults.push(result);
-
-  updateHUD();
-  showCapybaraResult(result, email);
 }
 
 // ═══════════════════════════════════════════════════════════
@@ -1954,64 +2124,35 @@ function submitReport(isPhishing, autoSubmitted = false) {
 // ═══════════════════════════════════════════════════════════
 
 function showCapybaraResult(result, email) {
-  const { correctDecision, isPhishing, playerDecision, correctFlags, incorrectFlags, missedEvidence, score, scoreBreakdown, flaggedButMarkedLegit, autoSubmitted } = result;
+  const { correctDecision, isPhishing, playerDecision, correctFlags, incorrectFlags, missedEvidence, score } = result;
 
   // Verdict
   const verdictTitle = document.getElementById('review-verdict-title');
   const decisionRow = document.getElementById('review-decision-row');
 
-  // Auto-submit notice — the 2-minute email clock ran out before the player reported
-  const autoNoteId = 'review-autosubmit-note';
-  let autoNote = document.getElementById(autoNoteId);
-  if (autoSubmitted) {
-    if (!autoNote) {
-      autoNote = document.createElement('div');
-      autoNote.id = autoNoteId;
-      autoNote.style.cssText = 'margin-bottom:12px;padding:10px 14px;border-radius:8px;background:rgba(255,82,82,0.1);border:1px solid rgba(255,82,82,0.3);color:#ff8a80;font-size:13px;font-weight:600;';
-      decisionRow.parentNode.insertBefore(autoNote, decisionRow);
-    }
-    autoNote.textContent = '⏰ TIME EXPIRED — I submitted this one for you, based on your flags so far.';
-    autoNote.classList.remove('hidden');
-  } else if (autoNote) {
-    autoNote.classList.add('hidden');
-  }
-
-  if (flaggedButMarkedLegit) {
-    // Special case: flags were placed (evidence of suspicion) but the email
-    // was still reported as Legitimate. This overrides the usual
-    // correct/incorrect wording since the submission is contradictory.
-    verdictTitle.textContent = '⚠ CONTRADICTORY REPORT';
-    verdictTitle.className = 'incorrect';
-    decisionRow.className = 'review-decision-row incorrect';
-    decisionRow.innerHTML = `⚠ You placed evidence flags but then reported this email as Legitimate. Flagging something as suspicious and then clearing it doesn't reflect a real verdict, so this submission earned <strong>0 points</strong> — no decision credit, no flag credit.`;
-  } else if (isPhishing) {
+  if (isPhishing) {
     if (correctDecision) {
       verdictTitle.textContent = '✓ PHISHING CONFIRMED';
       verdictTitle.className = 'correct';
       decisionRow.className = 'review-decision-row correct';
-      if (correctFlags.length > 0) {
-        decisionRow.innerHTML = '✓ Correct decision — You correctly identified this as a phishing email.';
-      } else {
-        decisionRow.className = 'review-decision-row incorrect';
-        decisionRow.innerHTML = '⚠ Correct guess, no evidence — You called this phishing, but didn\'t flag any of the actual evidence, so no decision points were awarded. A right answer needs proof.';
-      }
+      decisionRow.innerHTML = '✓ Correct decision (+100) — You correctly identified this as a phishing email.';
     } else {
       verdictTitle.textContent = '✗ MISSED PHISHING';
       verdictTitle.className = 'incorrect';
       decisionRow.className = 'review-decision-row incorrect';
-      decisionRow.innerHTML = '✗ Incorrect — This was a phishing email. You marked it as legitimate.';
+      decisionRow.innerHTML = '✗ Incorrect (−50) — This was a phishing email. You marked it as legitimate.';
     }
   } else {
     if (correctDecision) {
       verdictTitle.textContent = '✓ LEGITIMATE EMAIL';
       verdictTitle.className = 'correct';
       decisionRow.className = 'review-decision-row correct';
-      decisionRow.innerHTML = '✓ Correct — You correctly identified this as a legitimate email.';
+      decisionRow.innerHTML = '✓ Correct (+50) — You correctly identified this as a legitimate email.';
     } else {
       verdictTitle.textContent = '✗ FALSE POSITIVE';
       verdictTitle.className = 'incorrect';
       decisionRow.className = 'review-decision-row incorrect';
-      decisionRow.innerHTML = '✗ Incorrect — This was a legitimate email. You reported it as phishing.';
+      decisionRow.innerHTML = '✗ Incorrect (−50) — This was a legitimate email. You reported it as phishing.';
     }
   }
 
@@ -2019,7 +2160,7 @@ function showCapybaraResult(result, email) {
   const flagsList = document.getElementById('review-flags-list');
   flagsList.innerHTML = '';
 
-  if (!flaggedButMarkedLegit && isPhishing && correctFlags.length > 0) {
+  if (isPhishing && correctFlags.length > 0) {
     correctFlags.forEach(f => {
       const analysis = email.capybaraAnalysis[f];
       if (!analysis) return;
@@ -2028,7 +2169,7 @@ function showCapybaraResult(result, email) {
       item.innerHTML = `
         <div class="review-flag-icon">✅</div>
         <div>
-          <div class="review-flag-title">CORRECT FLAG</div>
+          <div class="review-flag-title">CORRECT FLAG (+25)</div>
           <div class="review-flag-desc">${formatAnalysisText(analysis.correct)}</div>
         </div>`;
       flagsList.appendChild(item);
@@ -2036,7 +2177,7 @@ function showCapybaraResult(result, email) {
   }
 
   // Legitimate email — correct identification
-  if (!flaggedButMarkedLegit && !isPhishing && correctDecision) {
+  if (!isPhishing && correctDecision) {
     const item = document.createElement('div');
     item.className = 'review-flag-item correct';
     item.innerHTML = `
@@ -2059,7 +2200,7 @@ function showCapybaraResult(result, email) {
       item.innerHTML = `
         <div class="review-flag-icon">⚠️</div>
         <div>
-          <div class="review-flag-title">INCORRECT FLAG — ${f.replace('_', ' ').toUpperCase()}</div>
+          <div class="review-flag-title">INCORRECT FLAG — ${f.replace('_', ' ').toUpperCase()} (−10)</div>
           <div class="review-flag-desc">${isPhishing
             ? 'This was not a recognised red flag for this email. Focus on fake sender addresses, false urgency, and suspicious links.'
             : 'This is a legitimate email. This element does not indicate phishing. Look for specific, concrete indicators, not general content.'
@@ -2084,38 +2225,13 @@ function showCapybaraResult(result, email) {
       item.innerHTML = `
         <div class="review-flag-icon">🚩</div>
         <div>
-          <div class="review-flag-title">MISSED EVIDENCE</div>
+          <div class="review-flag-title">MISSED EVIDENCE${correctDecision ? ' (−25)' : ''}</div>
           <div class="review-flag-desc">${formatAnalysisText(analysis.missed)}</div>
         </div>`;
       missedEl.appendChild(item);
     });
   } else {
     missedEl.classList.add('hidden');
-  }
-
-  // Score breakdown — shows the exact math behind the total, line by line,
-  // for every flag placed plus the decision.
-  const breakdownEl = document.getElementById('review-score-breakdown');
-  breakdownEl.innerHTML = '';
-  if (scoreBreakdown && scoreBreakdown.length > 0) {
-    scoreBreakdown.forEach(row => {
-      const line = document.createElement('div');
-      line.className = 'score-breakdown-row' + (row.points > 0 ? ' positive' : row.points < 0 ? ' negative' : ' neutral');
-      line.innerHTML = `
-        <span class="score-breakdown-label">${row.label}</span>
-        <span class="score-breakdown-points">${row.points > 0 ? '+' : ''}${row.points}</span>`;
-      breakdownEl.appendChild(line);
-      if (row.note) {
-        const note = document.createElement('div');
-        note.className = 'score-breakdown-note';
-        note.textContent = row.note;
-        breakdownEl.appendChild(note);
-      }
-    });
-    const totalRow = document.createElement('div');
-    totalRow.className = 'score-breakdown-row total';
-    totalRow.innerHTML = `<span class="score-breakdown-label">TOTAL</span><span class="score-breakdown-points">${score >= 0 ? '+' : ''}${score}</span>`;
-    breakdownEl.appendChild(totalRow);
   }
 
   // Score
@@ -2125,7 +2241,7 @@ function showCapybaraResult(result, email) {
 
   // Next button label
   const nextBtn = document.getElementById('btn-next-email');
-  const isLast = gameState.currentEmail >= EMAILS.length - 1;
+  const isLast = gameState.emailResults.length >= EMAILS.length;
   nextBtn.textContent = isLast ? '📊 VIEW FINAL RESULTS' : 'NEXT EMAIL →';
 
   showOverlay('overlay-review');
@@ -2141,17 +2257,21 @@ function formatAnalysisText(text) {
 
 function nextEmail() {
   closeOverlay('overlay-review');
-  stopTimer();
 
-  if (gameState.currentEmail >= EMAILS.length - 1) {
+  if (gameState.emailResults.length >= EMAILS.length) {
     finishMission();
     return;
   }
 
-  gameState.currentEmail++;
+  const nextIdx = EMAILS.findIndex(e => !gameState.emailResults.some(r => r.emailId === e.id));
+  if (nextIdx === -1) {
+    finishMission();
+    return;
+  }
+
+  gameState.currentEmail = nextIdx;
   gameState.currentEmailFlags = [];
   gameState.flagModeActive = false;
-  gameState.reviewingEmailIdx = null;
 
   renderEmailList();
   updateHUD();
@@ -2160,21 +2280,7 @@ function nextEmail() {
   document.getElementById('email-detail-view').classList.remove('active');
   document.getElementById('email-list-view').classList.add('active');
 
-  showToast(`📧 Email ${gameState.currentEmail + 1} of ${EMAILS.length} — investigate next.`, 'success');
-
-  // Emails 1–3: no clock. Emails 4 & 5: Capybara starts a strict,
-  // independent 2-minute deadline for each — this is the only timed part.
-  if (isFinalStretchEmail(gameState.currentEmail)) {
-    if (!gameState.finalStretchWarned) {
-      gameState.finalStretchWarned = true;
-      showFinalStretchWarning(); // starts the timer once the player clicks "I'm Ready"
-    } else {
-      showToast('⚡ Final email — your 2-minute clock just started!', 'error');
-      startFinalStretchTimer();
-    }
-  } else {
-    renderUntimedHUD();
-  }
+  showToast(`📧 Email ${nextIdx + 1} of ${EMAILS.length} — investigate next.`, 'success');
 }
 
 // ═══════════════════════════════════════════════════════════
@@ -2182,24 +2288,12 @@ function nextEmail() {
 // ═══════════════════════════════════════════════════════════
 
 function finishMission() {
-  stopTimer();
   gameState.phase = 'results';
 
   const totalEvidence = EMAILS.reduce((sum, e) => sum + e.evidence.length, 0);
 
-  // "Final Stretch" stat: how many of the two timed emails (4 & 5) were
-  // submitted by the player before their clock ran out, vs. auto-submitted.
-  const finalStretchResults = gameState.emailResults.filter(r => isFinalStretchEmail(r.emailIdx));
-  const onTimeCount = finalStretchResults.filter(r => !r.autoSubmitted).length;
-  const finalStretchText = finalStretchResults.length === 0
-    ? '—'
-    : `${onTimeCount} / ${finalStretchResults.length} On Time`;
-
-  // Calculate rank — max achievable score must match the real scoring rules:
-  // phishing emails are worth 100 decision points, legitimate emails only 50.
-  const maxDecisionPoints = EMAILS.reduce((sum, e) => sum + (e.phishing ? 100 : 50), 0);
-  const maxScore = maxDecisionPoints + totalEvidence * 25;
-  const pct = gameState.score / maxScore;
+  // Calculate rank against the perfect-run total (MAX_SCORE).
+  const pct = gameState.score / MAX_SCORE;
   let rank, rankClass, rankLabel;
   if (pct >= 0.95) { rank = 'S'; rankClass = 'rank-s'; rankLabel = 'CYBER DETECTIVE'; }
   else if (pct >= 0.85) { rank = 'A'; rankClass = ''; rankLabel = 'EXCELLENT DETECTIVE'; }
@@ -2212,8 +2306,9 @@ function finishMission() {
   document.getElementById('res-evidence').textContent = `${gameState.evidenceFoundTotal} / ${totalEvidence}`;
   document.getElementById('res-phishing').textContent = gameState.phishingDetected;
   document.getElementById('res-legit').textContent = gameState.legitimateDetected;
-  document.getElementById('res-time').textContent = finalStretchText;
+  document.getElementById('res-accuracy').textContent = `${Math.max(0, Math.round(pct * 100))}%`;
   document.getElementById('res-final-score').textContent = gameState.score;
+  document.getElementById('res-max-score').textContent = MAX_SCORE;
   document.getElementById('results-rank').textContent = rank;
   document.getElementById('results-rank').className = `results-rank-circle ${rankClass}`;
   document.getElementById('results-rank-label').textContent = rankLabel;
@@ -2227,7 +2322,6 @@ function finishMission() {
 
 function playAgain() {
   // Reset state
-  stopTimer();
   gameState.phase = 'welcome';
   gameState.currentEmail = 0;
   gameState.score = 0;
@@ -2238,43 +2332,50 @@ function playAgain() {
   gameState.emailResults = [];
   gameState.currentEmailFlags = [];
   gameState.flagModeActive = false;
-  gameState.timeRemaining = 0;
-  gameState.missionStarted = false;
-  gameState.finalStretchWarned = false;
-  gameState.reviewingEmailIdx = null;
   gameState.trainingSlide = 0;
   gameState.demoStep = 0;
   gdemoStep = 0;
   gdemoFlags = [];
+  gameState.malwareQuarantined = 0;
+  gameState.malwareFalsePositives = 0;
+  gameState.selectedFolderFileId = null;
+  gameState.activeScanFileId = null;
+  if (typeof FOLDER_FILES !== 'undefined') {
+    FOLDER_FILES.forEach(f => { f.quarantined = false; f.scanned = false; });
+  }
 
   // Close apps
-  ['gmail', 'browser'].forEach(a => {
+  ['gmail', 'browser', 'folder', 'antivirus'].forEach(a => {
     appState[a].open = false;
     appState[a].minimized = false;
     appState[a].maximized = false;
+    appState[a].hasBeenPositioned = false;
     const w = document.getElementById(`win-${a}`);
-    w.classList.add('hidden');
-    w.classList.remove('maximized', 'focused', 'minimized');
+    if (w) {
+      w.classList.add('hidden');
+      w.classList.remove('maximized', 'focused', 'minimized');
+      w.style.left = '';
+      w.style.top = '';
+    }
   });
   updateTaskbar();
 
   document.getElementById('hud').classList.add('hidden');
-  document.getElementById('hud-timer').textContent = '03:00';
-  document.getElementById('hud-timer').className = 'hud-value timer-normal';
 
   // Reset email list view
   document.getElementById('email-detail-view').classList.remove('active');
   document.getElementById('email-list-view').classList.add('active');
+  renderEmailList();
+  updateHUD();
 
   // Reset browser
-  document.getElementById('browser-content').innerHTML = `
-    <div class="browser-home">
-      <div class="browser-home-logo">🌐 CyberBrowser</div>
-      <p class="browser-home-sub">Enter a URL to begin browsing</p>
-    </div>`;
-  document.getElementById('browser-url-display').textContent = 'about:blank';
+  document.getElementById('browser-content').innerHTML = BROWSER_HOME_HTML;
+  document.getElementById('browser-url-input').value = '';
   document.getElementById('browser-security').textContent = '⚠️ Not Secure';
   document.getElementById('browser-security').className = 'browser-security-indicator';
+  browserHistory = [];
+  browserCurrentIdx = -1;
+  browserBypassed = new Set();
 
   showOverlay('overlay-welcome');
   vnInit();
@@ -2286,44 +2387,288 @@ function playAgain() {
 
 let browserHistory = [];
 let browserCurrentIdx = -1;
+let browserBypassed = new Set(); // URLs the player chose to "Proceed (unsafe)" past the cert warning
+
+function escapeHtml(str) {
+  const div = document.createElement('div');
+  div.textContent = str;
+  return div.innerHTML;
+}
+
+// Treat plain text (no scheme, has spaces, or no dot) as a Google search;
+// anything that looks like a domain/URL is navigated to directly.
+function isSearchQuery(str) {
+  if (/^https?:\/\//i.test(str)) return false;
+  if (/\s/.test(str)) return true;
+  return !/\./.test(str);
+}
+
+function handleBrowserUrlKey(e) {
+  if (e.key === 'Enter') {
+    e.preventDefault();
+    browserGo(e.target.value);
+  }
+}
+
+function handleHomeSearchKey(e) {
+  if (e.key === 'Enter') {
+    e.preventDefault();
+    submitHomeSearch();
+  }
+}
+
+function submitHomeSearch() {
+  const input = document.getElementById('browser-home-search');
+  if (input) browserGo(input.value);
+}
+
+function browserGo(raw) {
+  const trimmed = (raw || '').trim();
+  if (!trimmed) return;
+
+  let url;
+  if (isSearchQuery(trimmed)) {
+    url = 'https://www.google.com/search?q=' + encodeURIComponent(trimmed);
+  } else {
+    url = /^https?:\/\//i.test(trimmed) ? trimmed : 'https://' + trimmed;
+  }
+  navigateBrowser(url);
+}
 
 function navigateBrowser(url) {
-  const urlDisplay = document.getElementById('browser-url-display');
-  const content = document.getElementById('browser-content');
-  const security = document.getElementById('browser-security');
+  const urlInput = document.getElementById('browser-url-input');
+  if (urlInput) urlInput.value = url;
 
-  urlDisplay.textContent = url;
   browserHistory = browserHistory.slice(0, browserCurrentIdx + 1);
   browserHistory.push(url);
   browserCurrentIdx = browserHistory.length - 1;
 
-  // Always show as not-secure for the game's simulated phishing sites
-  security.textContent = '⚠️ Not Secure';
-  security.className = 'browser-security-indicator';
+  renderBrowserPage(url);
+}
 
-  if (FAKE_SITES[url]) {
+function renderBrowserPage(url) {
+  const content = document.getElementById('browser-content');
+  const security = document.getElementById('browser-security');
+
+  const isGoogleSearch = /^https:\/\/www\.google\.com\/search\?q=/i.test(url);
+  const isKnownUnsafe = Object.prototype.hasOwnProperty.call(FAKE_SITES, url);
+
+  if (isKnownUnsafe && !browserBypassed.has(url)) {
+    security.textContent = '⚠️ Not secure';
+    security.className = 'browser-security-indicator';
+    content.innerHTML = renderPrivacyWarning(url);
+    return;
+  }
+
+  if (isKnownUnsafe && browserBypassed.has(url)) {
+    security.textContent = '⚠️ Not Secure';
+    security.className = 'browser-security-indicator';
     content.innerHTML = FAKE_SITES[url];
-  } else {
-    content.innerHTML = `
-      <div style="padding:40px;font-family:Arial;color:#333;text-align:center;">
-        <div style="font-size:48px;margin-bottom:16px;">🚫</div>
-        <h2 style="color:#333;">Site Not Found</h2>
-        <p style="color:#666;margin-top:8px;">The address <strong>${url}</strong> could not be reached.</p>
+    return;
+  }
+
+  if (isGoogleSearch) {
+    security.textContent = '🔒 Secure';
+    security.className = 'browser-security-indicator secure';
+    const q = decodeURIComponent(url.split('q=')[1] || '');
+    content.innerHTML = renderGoogleResults(q);
+    return;
+  }
+
+  // Any other real-looking address — not one of the game's simulated
+  // phishing pages, so it renders as an ordinary, safe website. Emails
+  // reference real-world domains (bank sites, Wikipedia, news orgs, etc.)
+  // as part of legitimate messages, and players need to be able to open
+  // those to compare them against the phishing links — a dead-end
+  // "site can't be reached" error broke that investigation flow.
+  security.textContent = '🔒 Secure';
+  security.className = 'browser-security-indicator secure';
+  content.innerHTML = renderGenericSite(url);
+}
+
+// A generic, safe-looking mock webpage for any address that isn't one of
+// the game's simulated phishing sites. Gives Wikipedia a bit of special
+// flavor since it's the site referenced in the mock search results, and
+// falls back to a generic "brochure" page for everything else so no typed
+// or clicked address ever dead-ends.
+function renderGenericSite(url) {
+  let hostname, pathname;
+  try {
+    const u = new URL(url);
+    hostname = u.hostname;
+    pathname = u.pathname;
+  } catch (e) {
+    hostname = url;
+    pathname = '/';
+  }
+
+  if (/(^|\.)wikipedia\.org$/i.test(hostname)) {
+    const slug = decodeURIComponent((pathname.split('/wiki/')[1] || 'Phishing').replace(/_/g, ' '));
+    const title = slug || 'Phishing';
+    return `
+      <div class="wikisite">
+        <div class="wikisite-header">
+          <span class="wikisite-logo">📖</span>
+          <span class="wikisite-wordmark">WIKIPEDIA</span>
+          <span class="wikisite-tag">The Free Encyclopedia</span>
+        </div>
+        <div class="wikisite-body">
+          <h1>${escapeHtml(title)}</h1>
+          <p class="wikisite-sub">From Wikipedia, the free encyclopedia</p>
+          <hr/>
+          <p><strong>${escapeHtml(title)}</strong> is a form of social engineering in which an attacker impersonates a trustworthy sender or organization to trick a target into revealing sensitive information, such as login credentials or financial details, or into installing malware.</p>
+          <p>Common techniques include spoofed sender addresses, urgent or threatening language designed to rush a decision, and links whose visible text does not match their actual destination.</p>
+          <p class="wikisite-note">This is a simulated Wikipedia page for training purposes — content is illustrative, not a live article.</p>
+        </div>
       </div>`;
   }
+
+  const displayHost = hostname.replace(/^www\./i, '');
+  const siteName = (displayHost.split('.')[0] || 'Website').replace(/[-_]/g, ' ');
+  const capitalized = siteName.charAt(0).toUpperCase() + siteName.slice(1);
+
+  return `
+    <div class="genericsite">
+      <div class="genericsite-header">
+        <span class="genericsite-logo">${escapeHtml(capitalized.charAt(0))}</span>
+        <span class="genericsite-name">${escapeHtml(capitalized)}</span>
+        <nav class="genericsite-nav"><a href="#" onclick="return false;">Home</a><a href="#" onclick="return false;">About</a><a href="#" onclick="return false;">Contact</a></nav>
+      </div>
+      <div class="genericsite-body">
+        <h2>Welcome to ${escapeHtml(capitalized)}</h2>
+        <p>${escapeHtml(displayHost)} — this page loaded successfully and looks like an ordinary website.</p>
+        <p class="genericsite-note">This is a simulated page for training purposes — content is illustrative, not a real website.</p>
+      </div>
+    </div>`;
+}
+
+// Chrome-style "Your connection is not private" certificate warning
+function renderPrivacyWarning(url) {
+  let hostname;
+  try { hostname = new URL(url).hostname; } catch (e) { hostname = url; }
+  const safeUrl = escapeHtml(url);
+  return `
+    <div class="cert-warning">
+      <div class="cert-warning-icon">✕</div>
+      <h1>Your connection is not private</h1>
+      <p>Attackers might be trying to steal your information from <strong>${escapeHtml(hostname)}</strong> (for example, passwords, messages, or credit cards). <a href="#" onclick="return false;">Learn more</a></p>
+      <p class="cert-code">NET::ERR_CERT_AUTHORITY_INVALID</p>
+      <button class="cert-back-btn" onclick="browserBackToSafety()">Back to safety</button>
+      <div class="cert-advanced">
+        <button class="cert-advanced-toggle" onclick="toggleCertAdvanced(this)">Advanced ▾</button>
+        <div class="cert-advanced-body hidden">
+          <p>This server could not prove that it is <strong>${escapeHtml(hostname)}</strong>; its security certificate is not trusted by your computer's operating system. This may be caused by a misconfiguration or an attacker intercepting your connection.</p>
+          <a href="#" class="cert-proceed-link" onclick="browserProceedUnsafe('${safeUrl}'); return false;">Proceed to ${escapeHtml(hostname)} (unsafe)</a>
+        </div>
+      </div>
+    </div>`;
+}
+
+function toggleCertAdvanced(btn) {
+  const body = btn.nextElementSibling;
+  const nowHidden = !body.classList.contains('hidden');
+  body.classList.toggle('hidden');
+  btn.textContent = nowHidden ? 'Advanced ▾' : 'Advanced ▴';
+}
+
+function browserProceedUnsafe(url) {
+  browserBypassed.add(url);
+  renderBrowserPage(url);
+}
+
+function browserBackToSafety() {
+  if (browserCurrentIdx > 0) {
+    browserBack();
+  } else {
+    browserGoHome();
+  }
+}
+
+function browserGoHome() {
+  browserHistory = [];
+  browserCurrentIdx = -1;
+  const urlInput = document.getElementById('browser-url-input');
+  if (urlInput) urlInput.value = '';
+  document.getElementById('browser-content').innerHTML = BROWSER_HOME_HTML;
+  const security = document.getElementById('browser-security');
+  security.textContent = '⚠️ Not Secure';
+  security.className = 'browser-security-indicator';
+}
+
+// A simple mock Google results page — not connected to any real search engine
+function renderGoogleResults(query) {
+  const q = escapeHtml(query);
+  const mockResults = [
+    {
+      url: 'www.consumer.ftc.gov › articles › how-recognize-phishing',
+      link: 'https://www.consumer.ftc.gov/articles/how-recognize-phishing',
+      title: 'How to Recognize and Avoid Phishing Scams',
+      desc: `Learn the tell-tale signs of a phishing email or text message: mismatched sender addresses, urgent threats, and links that don't go where they claim to.`
+    },
+    {
+      url: 'www.cisa.gov › news-events › news › avoiding-social-engineering',
+      link: 'https://www.cisa.gov/news-events/news/avoiding-social-engineering',
+      title: 'Avoiding Social Engineering and Phishing Attacks | CISA',
+      desc: `Attackers use email or malicious websites to solicit personal information by posing as a trustworthy organization.`
+    },
+    {
+      url: 'en.wikipedia.org › wiki › Phishing',
+      link: 'https://en.wikipedia.org/wiki/Phishing',
+      title: 'Phishing - Wikipedia',
+      desc: `Phishing is a form of social engineering where attackers deceive people into revealing sensitive information or installing malware.`
+    }
+  ];
+
+  // Results are clickable — each one navigates the browser to a real-looking
+  // address, which renderGenericSite() (or the Wikipedia special-case) will
+  // render, so clicking a search result never dead-ends.
+  const items = mockResults.map(r => `
+    <div class="gresult-item">
+      <div class="gresult-url">${r.url}</div>
+      <div class="gresult-title" onclick="navigateBrowser('${r.link}')">${r.title}</div>
+      <div class="gresult-desc">${r.desc}</div>
+    </div>`).join('');
+
+  return `
+    <div class="gresults">
+      <div class="gresults-header">
+        <div class="gresults-logo"><span style="color:#4285F4">G</span><span style="color:#EA4335">o</span><span style="color:#FBBC05">o</span><span style="color:#4285F4">g</span><span style="color:#34A853">l</span><span style="color:#EA4335">e</span></div>
+        <div class="gresults-query">${q}</div>
+      </div>
+      <div class="gresults-stats">About ${(Math.floor(Math.random()*9)+1)},${Math.floor(Math.random()*900+100)},000 results (simulated)</div>
+      ${items}
+      <div class="gresults-empty">This is a simulated search — results are for training purposes only.</div>
+    </div>`;
 }
 
 function browserBack() {
   if (browserCurrentIdx > 0) {
     browserCurrentIdx--;
     const url = browserHistory[browserCurrentIdx];
-    navigateBrowser(url);
+    // Render only — do NOT call navigateBrowser() here. navigateBrowser()
+    // truncates history to the current index and then pushes the url again,
+    // which duplicates the entry we just navigated back to. That duplicate
+    // then makes every subsequent Back press land on the same duplicated
+    // entry instead of moving further back, so Back appeared to get "stuck".
+    const urlInput = document.getElementById('browser-url-input');
+    if (urlInput) urlInput.value = url;
+    renderBrowserPage(url);
+  } else if (browserCurrentIdx === 0) {
+    // The home page isn't stored in browserHistory, so index 0 is the
+    // first site the player visited. There's nothing earlier to go back
+    // to except home — without this, Back silently did nothing here.
+    browserGoHome();
   }
 }
 
 function browserRefresh() {
   if (browserCurrentIdx >= 0) {
-    navigateBrowser(browserHistory[browserCurrentIdx]);
+    // Same fix as browserBack(): re-render the current entry without
+    // routing through navigateBrowser(), which would push a duplicate
+    // history entry every time Reload is pressed.
+    renderBrowserPage(browserHistory[browserCurrentIdx]);
+  } else {
+    browserGoHome();
   }
 }
 
@@ -2358,21 +2703,469 @@ function checkEvidence(email, playerFlags) {
   return { correct, incorrect, missed };
 }
 
-function calculateScore(correctDecision, correct, incorrect, isPhishing = true, penaltyPerIncorrect = 10) {
-  let s = 0;
-  if (correctDecision) {
-    if (isPhishing) {
-      // Phishing decision only pays out if backed by at least one correct flag.
-      s += correct.length > 0 ? 100 : 0;
-    } else {
-      s += 50;
-    }
-  } else {
-    s -= 50;
-  }
+function calculateScore(correctDecision, correct, incorrect, penaltyPerIncorrect = 10) {
+  let s = correctDecision ? 100 : -50;
   s += correct.length * 25;
   s -= incorrect.length * penaltyPerIncorrect;
   return s;
+}
+
+// ═══════════════════════════════════════════════════════════
+// CHAPTER 2: MALWARE INVESTIGATION & HUNTING
+// ═══════════════════════════════════════════════════════════
+
+const TOTAL_MALWARE_COUNT = 4;
+
+const FOLDER_FILES = [
+  {
+    id: 'f1',
+    name: 'salary_bonus_september.pdf.exe',
+    fakeExt: 'pdf',
+    realExt: 'exe',
+    type: 'Application (.exe)',
+    size: '1.8 MB',
+    date: '9/6/2026 09:14 AM',
+    icon: '⚡',
+    isMalware: true,
+    threatName: 'Trojan.Win32.DoubleExt.Dropper',
+    threatCategory: 'CRITICAL THREAT',
+    hash: 'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855',
+    analysis: '⚠️ Dangerous double extension! Disguised as a PDF document but actually an executable program that installs backdoors.',
+    quarantined: false,
+    scanned: false
+  },
+  {
+    id: 'f2',
+    name: 'project_architecture_notes.docx',
+    fakeExt: 'docx',
+    realExt: 'docx',
+    type: 'Microsoft Word Document',
+    size: '48 KB',
+    date: '9/6/2026 08:30 AM',
+    icon: '📄',
+    isMalware: false,
+    threatName: 'Clean File',
+    threatCategory: 'SAFE',
+    hash: 'a591a6d40bf420404a011733cfb7b190d62c65bf0bcda32b57b277d9ad9f146e',
+    analysis: '✅ Verified clean Word document. Normal Office OpenXML structure, no malicious macro payloads detected.',
+    quarantined: false,
+    scanned: false
+  },
+  {
+    id: 'f3',
+    name: 'security_credentials_patch.scr',
+    fakeExt: 'scr',
+    realExt: 'scr',
+    type: 'Screensaver Executable (.scr)',
+    size: '3.4 MB',
+    date: '9/6/2026 10:02 AM',
+    icon: '⚡',
+    isMalware: true,
+    threatName: 'Spyware.Keylogger.Injector',
+    threatCategory: 'CRITICAL THREAT',
+    hash: '5f4dcc3b5aa765d61d8327deb882cf992b95990a9151374abd8fa30ee0633b4b',
+    analysis: '⚠️ Screensaver executable (.scr). Windows executes .scr files identically to .exe files. Contains keylogging telemetry.',
+    quarantined: false,
+    scanned: false
+  },
+  {
+    id: 'f4',
+    name: 'company_vacation_policy.pdf',
+    fakeExt: 'pdf',
+    realExt: 'pdf',
+    type: 'Adobe Acrobat Document',
+    size: '220 KB',
+    date: '9/5/2026 04:15 PM',
+    icon: '📄',
+    isMalware: false,
+    threatName: 'Clean File',
+    threatCategory: 'SAFE',
+    hash: 'ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad',
+    analysis: '✅ Standard PDF document. No embedded JavaScript, exploits, or malicious stream objects found.',
+    quarantined: false,
+    scanned: false
+  },
+  {
+    id: 'f5',
+    name: 'overdue_invoice_inv9918.vbs',
+    fakeExt: 'vbs',
+    realExt: 'vbs',
+    type: 'VBScript Script File',
+    size: '14 KB',
+    date: '9/6/2026 09:48 AM',
+    icon: '📜',
+    isMalware: true,
+    threatName: 'Dropper.VBS.PowerShellDownloader',
+    threatCategory: 'HIGH RISK',
+    hash: 'ca978112ca1bbdcafac231b39a23dc4da786081cd1e14eed6da746e44b4735f6',
+    analysis: '⚠️ Malicious VBScript. Obfuscated script configured to spawn PowerShell in hidden mode and download ransomware.',
+    quarantined: false,
+    scanned: false
+  },
+  {
+    id: 'f6',
+    name: 'annual_team_retreat.jpg',
+    fakeExt: 'jpg',
+    realExt: 'jpg',
+    type: 'JPEG Image',
+    size: '1.2 MB',
+    date: '9/4/2026 02:22 PM',
+    icon: '🖼️',
+    isMalware: false,
+    threatName: 'Clean File',
+    threatCategory: 'SAFE',
+    hash: '098f6bcd4621d373cade4e832627b4f6cf4c45a76e9c60e34c98f98c4f74d081',
+    analysis: '✅ Standard digital photograph. Valid JFIF/EXIF header metadata, no steganographic or buffer overflow payload.',
+    quarantined: false,
+    scanned: false
+  },
+  {
+    id: 'f7',
+    name: 'crypto_mining_daemon.exe',
+    fakeExt: 'exe',
+    realExt: 'exe',
+    type: 'Executable Binary (.exe)',
+    size: '5.1 MB',
+    date: '9/6/2026 10:15 AM',
+    icon: '⚡',
+    isMalware: true,
+    threatName: 'CoinMiner.XMR.Stealth',
+    threatCategory: 'CRITICAL THREAT',
+    hash: '4e07408562bedb8b60ce05c1decfe3ad16b72230967de01f640b7e4729b49fce',
+    analysis: '⚠️ Unauthorized cryptomining payload. Connects to remote command-and-control pools to consume host hardware resources.',
+    quarantined: false,
+    scanned: false
+  },
+  {
+    id: 'f8',
+    name: 'q3_quarterly_budget.xlsx',
+    fakeExt: 'xlsx',
+    realExt: 'xlsx',
+    type: 'Microsoft Excel Spreadsheet',
+    size: '86 KB',
+    date: '9/6/2026 08:45 AM',
+    icon: '📊',
+    isMalware: false,
+    threatName: 'Clean File',
+    threatCategory: 'SAFE',
+    hash: 'b10a8db164e0754105b7a99be72e3fe572b8d009fe82670d912da6d65427ec56',
+    analysis: '✅ Standard Excel workbook. Clean formulas, digitally unsigned VBA macros disabled, zero malicious hooks.',
+    quarantined: false,
+    scanned: false
+  }
+];
+
+function startMalwareMission() {
+  closeOverlay('overlay-results');
+  gameState.phase = 'malware';
+  gameState.malwareQuarantined = 0;
+  gameState.malwareFalsePositives = 0;
+  gameState.selectedFolderFileId = null;
+  gameState.activeScanFileId = null;
+
+  FOLDER_FILES.forEach(f => {
+    f.quarantined = false;
+    f.scanned = false;
+  });
+
+  // Minimize Gmail so player focuses on Folder and Anti-Virus
+  minimizeApp('gmail');
+
+  renderFolderFiles();
+  updateAntivirusUI();
+  updateHUD();
+
+  // Position and open Folder on the left, Anti-Virus on the right
+  openApp('folder');
+  openApp('antivirus');
+
+  // Offset window positions nicely on desktop
+  const winFolder = document.getElementById('win-folder');
+  const winAv = document.getElementById('win-antivirus');
+  if (winFolder && winAv) {
+    winFolder.style.left = '40px';
+    winFolder.style.top = '50px';
+    winAv.style.left = '520px';
+    winAv.style.top = '70px';
+  }
+
+  showToast('📁 Chapter 2: Inspect files in Folder and use Anti-Virus to quarantine all 4 malware threats!', 'warning');
+}
+
+function renderFolderFiles(filterQuery = '') {
+  const list = document.getElementById('folder-file-list');
+  if (!list) return;
+  list.innerHTML = '';
+
+  const q = filterQuery.toLowerCase().trim();
+  const filtered = FOLDER_FILES.filter(f => f.name.toLowerCase().includes(q) || f.type.toLowerCase().includes(q));
+
+  if (filtered.length === 0) {
+    list.innerHTML = '<div style="padding:20px;text-align:center;color:var(--text-muted);font-size:12px">No matching files found.</div>';
+    return;
+  }
+
+  filtered.forEach(file => {
+    const row = document.createElement('div');
+    row.className = `folder-file-row ${file.id === gameState.selectedFolderFileId ? 'selected' : ''} ${file.quarantined ? 'quarantined' : ''}`;
+    row.onclick = () => selectFolderFile(file.id);
+
+    let statusBadge = '<span class="badge-file-status badge-unscanned">Unscanned</span>';
+    if (file.quarantined) {
+      statusBadge = '<span class="badge-file-status badge-quarantined">🛡️ Quarantined</span>';
+    } else if (file.scanned) {
+      statusBadge = file.isMalware
+        ? '<span class="badge-file-status badge-threat">⚠️ Threat</span>'
+        : '<span class="badge-file-status badge-clean">✓ Safe</span>';
+    }
+
+    row.innerHTML = `
+      <div class="file-name-cell">
+        <span class="file-icon">${file.icon}</span>
+        <span title="${file.name}">${file.name}</span>
+      </div>
+      <div>${file.date}</div>
+      <div>${file.type}</div>
+      <div>${file.size}</div>
+      <div>${statusBadge}</div>`;
+
+    list.appendChild(row);
+  });
+}
+
+function filterFolderFiles(val) {
+  renderFolderFiles(val);
+}
+
+function selectFolderFile(fileId) {
+  gameState.selectedFolderFileId = fileId;
+  const file = FOLDER_FILES.find(f => f.id === fileId);
+  renderFolderFiles(document.getElementById('folder-search-input')?.value || '');
+
+  const emptyEl = document.getElementById('fdp-empty');
+  const contentEl = document.getElementById('fdp-content');
+  if (!file || !contentEl) return;
+
+  emptyEl.classList.add('hidden');
+  contentEl.classList.remove('hidden');
+
+  // Determine analysis visual style
+  let analysisClass = 'suspicious';
+  if (file.scanned) {
+    analysisClass = file.isMalware ? 'threat' : 'clean';
+  }
+
+  let quarantineBtnHtml = '';
+  if (file.quarantined) {
+    quarantineBtnHtml = `<button class="btn-ghost btn-sm" disabled style="opacity:0.6;width:100%">🛡️ File Quarantined</button>`;
+  } else {
+    quarantineBtnHtml = `<button class="btn-danger btn-sm" style="width:100%" onclick="quarantineFile('${file.id}')">🚩 Quarantine This File</button>`;
+  }
+
+  contentEl.innerHTML = `
+    <div class="fdp-header">
+      <div class="fdp-icon-large">${file.icon}</div>
+      <div>
+        <div class="fdp-name">${file.name}</div>
+        <div style="font-size:11px;color:var(--text-muted);margin-top:2px">${file.type} • ${file.size}</div>
+      </div>
+    </div>
+
+    <div class="fdp-meta-table">
+      <div class="fdp-meta-row">
+        <span class="fdp-meta-label">SHA-256</span>
+        <span class="fdp-meta-val">${file.hash.slice(0, 16)}…</span>
+      </div>
+      <div class="fdp-meta-row">
+        <span class="fdp-meta-label">Actual Ext</span>
+        <span class="fdp-meta-val" style="color:${file.realExt === 'exe' || file.realExt === 'scr' || file.realExt === 'vbs' ? 'var(--accent-red)' : 'var(--accent-cyan)'}">.${file.realExt}</span>
+      </div>
+      <div class="fdp-meta-row">
+        <span class="fdp-meta-label">Status</span>
+        <span class="fdp-meta-val">${file.quarantined ? 'Quarantined' : file.scanned ? (file.isMalware ? 'Threat Detected' : 'Clean') : 'Ready for Scan'}</span>
+      </div>
+    </div>
+
+    <div class="fdp-analysis-box ${analysisClass}">
+      ${file.analysis}
+    </div>
+
+    <div class="fdp-actions">
+      <button class="btn-primary btn-sm" style="width:100%" onclick="scanFileInAntivirus('${file.id}')">⚡ Scan with Anti-Virus</button>
+      ${quarantineBtnHtml}
+    </div>`;
+
+  // Pre-load target in Anti-Virus window
+  const avTcName = document.getElementById('av-tc-name');
+  const avTcDetail = document.getElementById('av-tc-detail');
+  const avTcIcon = document.getElementById('av-tc-icon');
+  if (avTcName && avTcDetail && avTcIcon) {
+    avTcName.textContent = file.name;
+    avTcDetail.textContent = `${file.type} • ${file.size} • SHA-256: ${file.hash.slice(0, 10)}…`;
+    avTcIcon.textContent = file.icon;
+  }
+}
+
+function scanFileInAntivirus(fileId) {
+  selectFolderFile(fileId);
+  openApp('antivirus');
+  focusWindow('antivirus');
+  startActiveScan();
+}
+
+let scanInProgress = false;
+function startActiveScan() {
+  if (scanInProgress) return;
+  const fileId = gameState.selectedFolderFileId;
+  const file = FOLDER_FILES.find(f => f.id === fileId);
+  if (!file) {
+    showToast('💡 Please select a file from the Folder first.', 'warning');
+    return;
+  }
+
+  scanInProgress = true;
+  const progressWrap = document.getElementById('av-progress-wrap');
+  const progressFill = document.getElementById('av-progress-fill');
+  const progressPct = document.getElementById('av-progress-pct');
+  const resultCard = document.getElementById('av-result-card');
+  const scanBtn = document.getElementById('av-scan-btn');
+
+  if (progressWrap) progressWrap.classList.remove('hidden');
+  if (resultCard) resultCard.classList.add('hidden');
+  if (scanBtn) scanBtn.disabled = true;
+
+  let pct = 0;
+  const interval = setInterval(() => {
+    pct += 20;
+    if (progressFill) progressFill.style.width = pct + '%';
+    if (progressPct) progressPct.textContent = pct + '%';
+
+    if (pct >= 100) {
+      clearInterval(interval);
+      setTimeout(() => {
+        scanInProgress = false;
+        file.scanned = true;
+        if (progressWrap) progressWrap.classList.add('hidden');
+        if (scanBtn) scanBtn.disabled = false;
+        renderFolderFiles(document.getElementById('folder-search-input')?.value || '');
+        selectFolderFile(file.id);
+        displayScanResult(file);
+      }, 300);
+    }
+  }, 120);
+}
+
+function displayScanResult(file) {
+  const resultCard = document.getElementById('av-result-card');
+  if (!resultCard) return;
+
+  resultCard.classList.remove('hidden', 'threat', 'clean');
+  resultCard.classList.add(file.isMalware ? 'threat' : 'clean');
+
+  let actionBtn = '';
+  if (file.quarantined) {
+    actionBtn = '<span style="font-size:12px;color:var(--text-muted);font-weight:700">✓ ALREADY QUARANTINED</span>';
+  } else if (file.isMalware) {
+    actionBtn = `<button class="btn-danger btn-sm" onclick="quarantineFile('${file.id}')">🚩 QUARANTINE THREAT (+100)</button>`;
+  } else {
+    actionBtn = '<span style="font-size:12px;color:var(--accent-green);font-weight:700">✓ NO ACTION NEEDED</span>';
+  }
+
+  resultCard.innerHTML = `
+    <div class="av-result-left">
+      <div class="av-threat-title">${file.isMalware ? '⚠️ THREAT IDENTIFIED: ' + file.threatName : '✅ FILE IS CLEAN: ' + file.threatName}</div>
+      <div class="av-threat-desc">${file.analysis}</div>
+    </div>
+    <div>${actionBtn}</div>`;
+}
+
+function quarantineFile(fileId) {
+  const file = FOLDER_FILES.find(f => f.id === fileId);
+  if (!file) return;
+
+  if (file.quarantined) {
+    showToast('🛡️ This file is already quarantined.', 'warning');
+    return;
+  }
+
+  if (file.isMalware) {
+    file.quarantined = true;
+    file.scanned = true;
+    gameState.malwareQuarantined++;
+    gameState.score += 100;
+    updateHUD();
+    updateAntivirusUI();
+    renderFolderFiles(document.getElementById('folder-search-input')?.value || '');
+    selectFolderFile(file.id);
+    displayScanResult(file);
+
+    showToast(`🛡️ Neutralized ${file.name}! (+100 points)`, 'success');
+
+    if (gameState.malwareQuarantined >= TOTAL_MALWARE_COUNT) {
+      setTimeout(finishMalwareMission, 1000);
+    }
+  } else {
+    gameState.malwareFalsePositives++;
+    gameState.score = Math.max(0, gameState.score - 25);
+    updateHUD();
+    showToast(`⚠️ False Positive! "${file.name}" is a clean, legitimate file (−25 pts).`, 'warning');
+  }
+}
+
+function updateAntivirusUI() {
+  const countBadge = document.getElementById('av-quarantine-count');
+  const logCount = document.getElementById('av-log-count');
+  const threatsList = document.getElementById('av-threats-list');
+  const banner = document.getElementById('av-status-banner');
+
+  if (countBadge) countBadge.textContent = gameState.malwareQuarantined;
+  if (logCount) logCount.textContent = `${gameState.malwareQuarantined} / ${TOTAL_MALWARE_COUNT} Neutralized`;
+
+  const quarantinedFiles = FOLDER_FILES.filter(f => f.quarantined);
+
+  if (quarantinedFiles.length > 0 && banner) {
+    banner.classList.add('alert');
+  }
+
+  if (threatsList) {
+    if (quarantinedFiles.length === 0) {
+      threatsList.innerHTML = '<div class="av-threats-empty">No quarantined files yet. Inspect suspicious files in the Folder!</div>';
+    } else {
+      threatsList.innerHTML = quarantinedFiles.map(f => `
+        <div class="av-threat-item quarantined">
+          <div>
+            <strong>${f.name}</strong>
+            <div style="font-size:11px;color:var(--text-muted)">${f.threatName} • Quarantined into Vault</div>
+          </div>
+          <span style="color:#b388ff;font-weight:700;font-size:11px">🛡️ SECURED</span>
+        </div>`).join('');
+    }
+  }
+}
+
+function finishMalwareMission() {
+  document.getElementById('res-malware-count').textContent = `${gameState.malwareQuarantined} / ${TOTAL_MALWARE_COUNT}`;
+  document.getElementById('res-malware-fp').textContent = gameState.malwareFalsePositives;
+  document.getElementById('res-malware-score').textContent = gameState.score;
+
+  let rank = 'S';
+  let rankLabel = 'MASTER CYBER DETECTIVE';
+  if (gameState.malwareFalsePositives > 1) {
+    rank = 'A';
+    rankLabel = 'EXCELLENT DETECTIVE';
+  }
+
+  const rankEl = document.getElementById('malware-results-rank');
+  const rankLabelEl = document.getElementById('malware-results-rank-label');
+  if (rankEl) rankEl.textContent = rank;
+  if (rankLabelEl) rankLabelEl.textContent = rankLabel;
+
+  showOverlay('overlay-malware-results');
+}
+
+function restartEntireGame() {
+  hideAllOverlays();
+  playAgain();
 }
 
 // ═══════════════════════════════════════════════════════════
@@ -2384,4 +3177,5 @@ window.addEventListener('DOMContentLoaded', () => {
   showOverlay('overlay-welcome');
   renderEmailList();
   vnInit();
+  initStickyNote();
 });

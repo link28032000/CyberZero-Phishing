@@ -30,23 +30,52 @@
       <div class="icon-img">🌐</div>
       <span>Browser</span>
     </div>
+    <div class="desktop-icon" id="icon-folder" onclick="openApp('folder')">
+      <div class="icon-img">📁</div>
+      <span>Folder</span>
+    </div>
+    <div class="desktop-icon" id="icon-antivirus" onclick="openApp('antivirus')">
+      <div class="icon-img">🛡️</div>
+      <span>Anti-Virus</span>
+    </div>
+    <div class="desktop-icon hidden" id="icon-notes" onclick="toggleStickyNote()">
+      <div class="icon-img">📒</div>
+      <span>Sticky Notes</span>
+    </div>
+  </div>
+
+  <!-- Sticky Note: Scoring Rules (pops up beside the desktop after the demo) — draggable, fixed title -->
+  <div id="sticky-note" class="sticky-note hidden">
+    <div class="sticky-note-tape" id="sticky-note-drag-handle" title="Drag to move"></div>
+    <button class="sticky-note-close" onclick="closeStickyNote()" title="Close note">✕</button>
+    <div class="sticky-note-header" id="sticky-note-drag-handle-2" title="Drag to move">
+      <span id="sticky-note-title" class="sticky-note-title-text">📒 Detective's Notes</span>
+    </div>
+    <div class="sticky-note-scroll">
+      <div class="sticky-note-title">How Scoring Works</div>
+      <ul class="sticky-note-list">
+        <li><span class="sn-icon sn-good">✅</span><span>Correct Phishing verdict <strong>+100</strong> (highest)</span></li>
+        <li><span class="sn-icon sn-good">✅</span><span>Correct Legitimate verdict <strong>+50</strong></span></li>
+        <li><span class="sn-icon sn-good">🚩</span><span>Each correct evidence flag <strong>+25</strong></span></li>
+        <li><span class="sn-icon sn-bad">❌</span><span>Wrong verdict <strong>−50</strong></span></li>
+        <li><span class="sn-icon sn-bad">⚠️</span><span>Wrong flag placed <strong>−10</strong></span></li>
+        <li><span class="sn-icon sn-bad">🔍</span><span>Missed a real clue (even if verdict's right) <strong>−25</strong></span></li>
+        <li><span class="sn-icon sn-good">📊</span><span>Watch your live score in the <strong>top-right corner</strong></span></li>
+      </ul>
+      <div class="sticky-note-tip">💡 A correct verdict isn't enough on its own — find every clue too, or you'll lose points for what you missed.</div>
+    </div>
   </div>
 
   <!-- HUD Panel (visible only during mission) -->
   <div id="hud" class="hud hidden">
     <div class="hud-item">
-      <span class="hud-label">EMAIL</span>
+      <span id="hud-type-label" class="hud-label">EMAIL</span>
       <span id="hud-email-count" class="hud-value">1 / 5</span>
     </div>
     <div class="hud-divider"></div>
     <div class="hud-item">
       <span class="hud-label">SCORE</span>
       <span id="hud-score" class="hud-value">0</span>
-    </div>
-    <div class="hud-divider"></div>
-    <div class="hud-item" id="hud-timer-wrap">
-      <span class="hud-label" id="hud-timer-label">TIME</span>
-      <span id="hud-timer" class="hud-value timer-untimed">UNTIMED</span>
     </div>
   </div>
 
@@ -71,9 +100,9 @@
         </div>
         <button class="gmail-compose-btn" disabled>✏ Compose</button>
         <div class="gmail-nav">
-          <div class="gmail-nav-item active">📥 Inbox <span id="inbox-count" class="inbox-badge">5</span></div>
-          <div class="gmail-nav-item">📤 Sent</div>
-          <div class="gmail-nav-item">🗑 Trash</div>
+          <div class="gmail-nav-item active" id="nav-inbox" onclick="switchGmailFolder('inbox')">📥 Inbox <span id="inbox-count" class="inbox-badge">5</span></div>
+          <div class="gmail-nav-item" id="nav-sent" onclick="switchGmailFolder('sent')">📤 Sent <span id="sent-count" class="inbox-badge">2</span></div>
+          <div class="gmail-nav-item" id="nav-trash" onclick="switchGmailFolder('trash')">🗑 Trash <span id="trash-count" class="inbox-badge">0</span></div>
         </div>
       </div>
 
@@ -82,22 +111,20 @@
         <!-- Email List View -->
         <div id="email-list-view" class="gmail-view active">
           <div class="gmail-toolbar">
-            <div class="gmail-toolbar-title">Inbox</div>
+            <div id="gmail-toolbar-title" class="gmail-toolbar-title">Inbox</div>
           </div>
           <div id="email-list" class="email-list">
             <!-- Populated by JS -->
           </div>
         </div>
 
-        <!-- Email Detail View -->
+        <!-- Email Detail View (Inbox investigation emails) -->
         <div id="email-detail-view" class="gmail-view">
           <div class="gmail-toolbar">
             <button class="back-btn" onclick="returnToInbox()">← Back to Inbox</button>
             <button id="flag-mode-btn" class="flag-mode-btn" onclick="toggleFlagMode()">🚩 Flag Evidence</button>
-            <button id="report-btn" class="report-btn" onclick="showReportDialog()">📋 Report Email</button>
+            <button id="report-btn" class="report-btn" onclick="showReportDialog()">📋 Report</button>
           </div>
-
-          <div id="email-reported-banner" class="email-reported-banner hidden"></div>
 
           <div id="email-content" class="email-content">
             <!-- Populated by JS -->
@@ -112,6 +139,18 @@
             <div id="evidence-list" class="evidence-list">
               <div class="evidence-empty">No flags placed yet. Activate 🚩 Flag Evidence to begin.</div>
             </div>
+          </div>
+        </div>
+
+        <!-- Sent / Trash Detail View — same reading-pane look as Inbox, read-only -->
+        <div id="sent-detail-view" class="gmail-view">
+          <div class="gmail-toolbar">
+            <button class="back-btn" id="sent-detail-back-btn" onclick="closeSentDetailView()">← Back</button>
+            <button id="sent-detail-action-btn" class="report-btn" style="margin-left:auto;"></button>
+          </div>
+
+          <div id="sent-detail-content" class="email-content">
+            <!-- Populated by JS -->
           </div>
         </div>
       </div>
@@ -134,16 +173,149 @@
     <div class="win-body browser-body">
       <div class="browser-chrome">
         <div class="browser-nav-bar">
-          <button class="browser-nav-btn" id="browser-back" onclick="browserBack()">←</button>
-          <button class="browser-nav-btn" onclick="browserRefresh()">↻</button>
-          <div class="browser-url-bar" id="browser-url-display">about:blank</div>
+          <button class="browser-nav-btn" id="browser-back" onclick="browserBack()" title="Back">←</button>
+          <button class="browser-nav-btn" onclick="browserRefresh()" title="Reload">↻</button>
+          <input type="text" class="browser-url-bar" id="browser-url-input" value="" placeholder="Search Google or type a URL" autocomplete="off" spellcheck="false" onkeydown="handleBrowserUrlKey(event)" onfocus="this.select()" />
           <div class="browser-security-indicator" id="browser-security">⚠️ Not Secure</div>
         </div>
       </div>
       <div id="browser-content" class="browser-content">
         <div class="browser-home">
-          <div class="browser-home-logo">🌐 CyberBrowser</div>
-          <p class="browser-home-sub">Enter a URL to begin browsing</p>
+          <div class="google-logo"><span style="color:#4285F4">G</span><span style="color:#EA4335">o</span><span style="color:#FBBC05">o</span><span style="color:#4285F4">g</span><span style="color:#34A853">l</span><span style="color:#EA4335">e</span></div>
+          <div class="google-search-box">
+            <span class="google-search-icon">🔍</span>
+            <input type="text" id="browser-home-search" class="google-search-input" placeholder="Search Google or type a URL" autocomplete="off" spellcheck="false" onkeydown="handleHomeSearchKey(event)" />
+          </div>
+          <div class="google-search-actions">
+            <button class="google-btn" onclick="submitHomeSearch()">Google Search</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── FOLDER (FILE EXPLORER) WINDOW ── -->
+  <div id="win-folder" class="app-window hidden" data-app="folder">
+    <div class="win-titlebar" id="titlebar-folder">
+      <div class="win-title">
+        <span class="win-icon">📁</span>
+        <span>Folder — Downloads</span>
+      </div>
+      <div class="win-controls">
+        <button class="win-btn win-minimize" onclick="minimizeApp('folder')" title="Minimize">─</button>
+        <button class="win-btn win-maximize" onclick="toggleMaximize('folder')" title="Maximize">□</button>
+        <button class="win-btn win-close" onclick="closeApp('folder')" title="Close">✕</button>
+      </div>
+    </div>
+    <div class="win-body folder-body">
+      <!-- Folder Toolbar -->
+      <div class="folder-toolbar">
+        <div class="folder-breadcrumb">
+          <span>📁 This PC</span>
+          <span class="breadcrumb-sep">›</span>
+          <span>Downloads</span>
+          <span class="breadcrumb-sep">›</span>
+          <span class="folder-active-path">Suspicious_Transfers</span>
+        </div>
+        <div class="folder-search-box">
+          <span>🔍</span>
+          <input type="text" id="folder-search-input" placeholder="Search files..." oninput="filterFolderFiles(this.value)" />
+        </div>
+      </div>
+
+      <!-- Folder Content (File Table + Inspection Pane) -->
+      <div class="folder-main-area">
+        <div class="folder-file-list-wrap">
+          <div class="folder-file-table-header">
+            <span class="col-name">Name</span>
+            <span class="col-date">Date modified</span>
+            <span class="col-type">Type</span>
+            <span class="col-size">Size</span>
+            <span class="col-status">Status</span>
+          </div>
+          <div id="folder-file-list" class="folder-file-list">
+            <!-- Populated by JS -->
+          </div>
+        </div>
+
+        <!-- File Inspection Side Pane -->
+        <div id="folder-detail-pane" class="folder-detail-pane">
+          <div class="fdp-empty" id="fdp-empty">
+            <div style="font-size:32px;margin-bottom:8px">📄</div>
+            <div>Select a file to inspect metadata and verify safety</div>
+          </div>
+          <div id="fdp-content" class="fdp-content hidden">
+            <!-- Populated by JS -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── ANTI-VIRUS WINDOW ── -->
+  <div id="win-antivirus" class="app-window hidden" data-app="antivirus">
+    <div class="win-titlebar" id="titlebar-antivirus">
+      <div class="win-title">
+        <span class="win-icon">🛡️</span>
+        <span>ShieldAV — CyberZero Security Center</span>
+      </div>
+      <div class="win-controls">
+        <button class="win-btn win-minimize" onclick="minimizeApp('antivirus')" title="Minimize">─</button>
+        <button class="win-btn win-maximize" onclick="toggleMaximize('antivirus')" title="Maximize">□</button>
+        <button class="win-btn win-close" onclick="closeApp('antivirus')" title="Close">✕</button>
+      </div>
+    </div>
+    <div class="win-body av-body">
+      <!-- AV Header / Status Banner -->
+      <div class="av-status-banner" id="av-status-banner">
+        <div class="av-shield-icon" id="av-shield-icon">🛡️</div>
+        <div class="av-status-text">
+          <div class="av-status-title" id="av-status-title">DEFENSE ENGINE ACTIVE</div>
+          <div class="av-status-subtitle" id="av-status-sub">Definitions v2026.09 • Real-Time Heuristics Online</div>
+        </div>
+        <div class="av-stats-badge" id="av-stats-badge">
+          <span id="av-quarantine-count">0</span> / 4 QUARANTINED
+        </div>
+      </div>
+
+      <!-- AV Main Content -->
+      <div class="av-main">
+        <div class="av-scanner-box">
+          <div class="av-target-card" id="av-target-card">
+            <div class="av-tc-icon" id="av-tc-icon">📁</div>
+            <div class="av-tc-info">
+              <div class="av-tc-name" id="av-tc-name">No file selected for scan</div>
+              <div class="av-tc-detail" id="av-tc-detail">Select a file from the Folder app or click "Quick Scan All"</div>
+            </div>
+            <button class="av-scan-btn" id="av-scan-btn" onclick="startActiveScan()">⚡ Scan File</button>
+          </div>
+
+          <!-- Scanning Progress Bar / Radar -->
+          <div class="av-progress-wrap hidden" id="av-progress-wrap">
+            <div class="av-progress-label">
+              <span id="av-progress-text">Deep scanning file signatures…</span>
+              <span id="av-progress-pct">0%</span>
+            </div>
+            <div class="av-progress-bar">
+              <div class="av-progress-fill" id="av-progress-fill"></div>
+            </div>
+          </div>
+
+          <!-- Scan Result Diagnostic Card -->
+          <div class="av-result-card hidden" id="av-result-card">
+            <!-- Populated by JS -->
+          </div>
+        </div>
+
+        <!-- Threats / Quarantine List -->
+        <div class="av-threats-section">
+          <div class="av-threats-header">
+            <span>🛡️ Quarantined Threats Log</span>
+            <span class="av-threats-counter" id="av-log-count">0 / 4 Neutralized</span>
+          </div>
+          <div class="av-threats-list" id="av-threats-list">
+            <div class="av-threats-empty">No quarantined files yet. Inspect suspicious files in the Folder!</div>
+          </div>
         </div>
       </div>
     </div>
@@ -169,6 +341,12 @@
       </button>
       <button class="taskbar-app-btn" id="taskbar-browser" onclick="taskbarClick('browser')">
         <span>🌐</span> Browser
+      </button>
+      <button class="taskbar-app-btn" id="taskbar-folder" onclick="taskbarClick('folder')">
+        <span>📁</span> Folder
+      </button>
+      <button class="taskbar-app-btn" id="taskbar-antivirus" onclick="taskbarClick('antivirus')">
+        <span>🛡️</span> Anti-Virus
       </button>
     </div>
     <div class="taskbar-tray">
@@ -253,20 +431,7 @@
         <div class="gdemo-speech-arrow"></div>
         <div id="gdemo-speech-text" class="gdemo-speech-text"></div>
       </div>
-      <div class="gdemo-steps" id="gdemo-steps">
-        <div class="gdemo-step" id="gstep-0"><span class="gdemo-step-dot"></span>Welcome</div>
-        <div class="gdemo-step" id="gstep-1"><span class="gdemo-step-dot"></span>Read Phishing</div>
-        <div class="gdemo-step" id="gstep-2"><span class="gdemo-step-dot"></span>Flag Sender</div>
-        <div class="gdemo-step" id="gstep-3"><span class="gdemo-step-dot"></span>Flag Urgency</div>
-        <div class="gdemo-step" id="gstep-4"><span class="gdemo-step-dot"></span>Inspect Link</div>
-        <div class="gdemo-step" id="gstep-5"><span class="gdemo-step-dot"></span>Flag Link</div>
-        <div class="gdemo-step" id="gstep-6"><span class="gdemo-step-dot"></span>Report Phishing</div>
-        <div class="gdemo-step" id="gstep-7"><span class="gdemo-step-dot"></span>Legit Email</div>
-        <div class="gdemo-step" id="gstep-8"><span class="gdemo-step-dot"></span>Flag Mistake</div>
-        <div class="gdemo-step" id="gstep-9"><span class="gdemo-step-dot"></span>Unflag It</div>
-        <div class="gdemo-step" id="gstep-10"><span class="gdemo-step-dot"></span>Report Legit</div>
-        <div class="gdemo-step" id="gstep-11"><span class="gdemo-step-dot"></span>Briefing</div>
-      </div>
+      <button class="gdemo-skip-btn" onclick="skipDemo()" title="Skip the walkthrough and jump straight to your mission">⏭ Skip Demo</button>
     </div>
 
 
@@ -277,7 +442,7 @@
       <div class="gdemo-toolbar" id="gdemo-toolbar">
         <span class="gdemo-toolbar-back">← Inbox</span>
         <button class="flag-mode-btn" id="gdemo-flag-btn">🚩 Flag Evidence</button>
-        <button class="report-btn" id="gdemo-report-btn" style="margin-left:auto;">📋 Report Email</button>
+        <button class="report-btn" id="gdemo-report-btn" style="margin-left:auto;">📋 Report</button>
       </div>
 
       <!-- Demo Email Content — PHISHING EMAIL (steps 1-6) -->
@@ -287,11 +452,11 @@
           <div class="gdemo-email-subject">URGENT: Your BPI account will be locked today</div>
           <div class="gdemo-meta-row">
             <span class="gdemo-meta-label">FROM</span>
-            <span class="gdemo-meta-val" id="gdemo-sender">BPI Security &lt;security@bpi-secure-login.xyz&gt;</span>
+            <span class="gdemo-meta-val" id="gdemo-sender">BPI Security &lt;security@bpi-secure-login.example&gt;</span>
           </div>
           <div class="gdemo-meta-row">
             <span class="gdemo-meta-label">TO</span>
-            <span class="gdemo-meta-val" style="color:var(--text-muted)">me@company.com.ph</span>
+            <span class="gdemo-meta-val" style="color:var(--text-muted)">me@company.example</span>
           </div>
         </div>
         <!-- Body -->
@@ -304,7 +469,7 @@
             <a class="email-link" id="gdemo-link" href="#" onclick="return false;">Verify My BPI Account</a>
             <div class="gdemo-link-dest hidden" id="gdemo-link-dest">
               <span class="gdemo-link-dest-label">🔗 Actual destination:</span>
-              <span class="gdemo-link-dest-url">https://bpi-account-security.io/login</span>
+              <span class="gdemo-link-dest-url">https://bpi-account-security.example/login</span>
             </div>
           </div>
           <p>Thank you,<br>BPI Security Team</p>
@@ -333,11 +498,11 @@
           <div class="gdemo-email-subject" style="color:var(--accent-green)">✅ September Employee Benefits Update</div>
           <div class="gdemo-meta-row">
             <span class="gdemo-meta-label">FROM</span>
-            <span class="gdemo-meta-val" id="gdemo-legit-sender">HR Department &lt;hr@company.com.ph&gt;</span>
+            <span class="gdemo-meta-val" id="gdemo-legit-sender">HR Department &lt;hr@company.example&gt;</span>
           </div>
           <div class="gdemo-meta-row">
             <span class="gdemo-meta-label">TO</span>
-            <span class="gdemo-meta-val" style="color:var(--text-muted)">me@company.com.ph</span>
+            <span class="gdemo-meta-val" style="color:var(--text-muted)">me@company.example</span>
           </div>
         </div>
         <!-- Body -->
@@ -346,7 +511,7 @@
           <p>We hope you are doing well. The September employee benefits information is now available for your review.</p>
           <p>This month's update includes details about the health plan renewal, updated leave policies, and the company wellness program.</p>
           <p>Please review the information through the company's internal HR portal, accessible through your standard work credentials.</p>
-          <p>If you have any questions, feel free to reach out to the HR team directly at <strong>hr@company.com.ph</strong>.</p>
+          <p>If you have any questions, feel free to reach out to the HR team directly at <strong>hr@company.example</strong>.</p>
           <p>Thank you,<br>HR Department<br>Company Inc.</p>
         </div>
         <!-- Legitimacy checklist (revealed in step 7) -->
@@ -354,7 +519,7 @@
           <div class="gdemo-legit-title">✅ Why this email is LEGITIMATE:</div>
           <div class="gdemo-legit-item" id="gdemo-lcheck-1">
             <span class="gdemo-lcheck-icon">⬜</span>
-            <div><strong>Sender matches company domain</strong> — <code>hr@company.com.ph</code> is an internal address</div>
+            <div><strong>Sender matches company domain</strong> — <code>hr@company.example</code> is an internal address</div>
           </div>
           <div class="gdemo-legit-item" id="gdemo-lcheck-2">
             <span class="gdemo-lcheck-icon">⬜</span>
@@ -415,18 +580,6 @@
   </div>
 </div>
 
-<!-- ── FINAL STRETCH WARNING (before Emails 4 & 5) ── -->
-<div id="overlay-final-stretch" class="overlay">
-  <div class="training-card final-stretch-card">
-    <div class="final-stretch-badge" id="final-stretch-badge">⚡ FINAL STRETCH</div>
-    <div class="capy-avatar">🕵️</div>
-    <div class="capy-bubble" id="final-stretch-bubble">
-      <!-- JS fills this -->
-    </div>
-    <button class="btn-primary" id="btn-final-stretch-continue" onclick="beginFinalStretchEmail()">I'm Ready →</button>
-  </div>
-</div>
-
 <!-- ── REPORT DIALOG ── -->
 <div id="overlay-report" class="overlay">
   <div class="dialog-card">
@@ -468,10 +621,6 @@
       <!-- JS fills -->
     </div>
 
-    <div id="review-score-breakdown" class="score-breakdown">
-      <!-- JS fills: line-by-line point math for this email -->
-    </div>
-
     <div class="review-score-row">
       <span class="review-score-label">SCORE THIS EMAIL</span>
       <span id="review-score-value" class="review-score-value">+0</span>
@@ -485,7 +634,6 @@
 <div id="overlay-results" class="overlay">
   <div class="results-card">
     <div class="results-badge">MISSION COMPLETE</div>
-    <div class="results-capy">🕵️</div>
     <div class="results-rank-circle" id="results-rank">A</div>
     <div class="results-rank-label" id="results-rank-label">EXCELLENT DETECTIVE</div>
 
@@ -511,17 +659,50 @@
         <span class="results-stat-value" id="res-legit">0</span>
       </div>
       <div class="results-stat">
-        <span class="results-stat-label">Final Stretch</span>
-        <span class="results-stat-value" id="res-time">--</span>
+        <span class="results-stat-label">Accuracy</span>
+        <span class="results-stat-value" id="res-accuracy">0%</span>
       </div>
     </div>
 
     <div class="results-final-score">
       <span class="results-score-label">FINAL SCORE</span>
       <span id="res-final-score" class="results-score-num">0</span>
+      <span class="results-score-max">out of <span id="res-max-score">625</span> possible</span>
     </div>
 
-    <button class="btn-primary" onclick="playAgain()">🔄 GET READY FOR THE NEXT CHAPTER</button>
+    <div class="results-actions" style="display:flex;gap:12px;margin-top:16px;justify-content:center;flex-wrap:wrap">
+      <button class="btn-primary" id="btn-next-malware" onclick="startMalwareMission()">🛡️ NEXT MALWARE →</button>
+      <button class="btn-ghost" onclick="playAgain()">🔄 Replay Emails</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── MALWARE MISSION RESULTS ── -->
+<div id="overlay-malware-results" class="overlay">
+  <div class="results-card">
+    <div class="results-badge" style="background:rgba(0,230,118,0.2);color:var(--accent-green);border:1px solid rgba(0,230,118,0.4)">CHAPTER 2 COMPLETE</div>
+    <div class="results-rank-circle rank-s" id="malware-results-rank">S</div>
+    <div class="results-rank-label" id="malware-results-rank-label">MASTER MALWARE HUNTER</div>
+    <p style="color:var(--text-secondary);font-size:13px;margin:10px 0 16px">All 4 disguised malware threats in the folder were successfully quarantined and neutralized!</p>
+    <div class="results-grid">
+      <div class="results-stat">
+        <span class="results-stat-label">Malware Quarantined</span>
+        <span class="results-stat-value" id="res-malware-count" style="color:var(--accent-green)">4 / 4</span>
+      </div>
+      <div class="results-stat">
+        <span class="results-stat-label">Clean Files Protected</span>
+        <span class="results-stat-value">4 / 4</span>
+      </div>
+      <div class="results-stat">
+        <span class="results-stat-label">False Positives</span>
+        <span class="results-stat-value" id="res-malware-fp">0</span>
+      </div>
+      <div class="results-stat">
+        <span class="results-stat-label">Total Detective Score</span>
+        <span class="results-stat-value" id="res-malware-score" style="color:var(--accent-cyan)">0</span>
+      </div>
+    </div>
+    <button class="btn-primary" onclick="restartEntireGame()" style="margin-top:20px">🔄 RESTART ADVENTURE</button>
   </div>
 </div>
 
