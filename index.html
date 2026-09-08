@@ -7,7 +7,7 @@
   <meta name="description" content="CYBERZERO: An interactive cybersecurity simulation game. Become a Cyber Detective and investigate phishing emails." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Kalam:wght@700&family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
@@ -221,6 +221,7 @@
           <span>🔍</span>
           <input type="text" id="folder-search-input" placeholder="Search files..." oninput="filterFolderFiles(this.value)" />
         </div>
+        <button class="btn-ghost btn-sm" onclick="startMalwareDemo()" title="How to Play Malware Tutorial" style="margin-left:auto;font-size:11px;padding:4px 10px;display:flex;align-items:center;gap:4px">❓ How to Play</button>
       </div>
 
       <!-- Folder Content (File Table + Inspection Pane) -->
@@ -271,11 +272,20 @@
         <div class="av-shield-icon" id="av-shield-icon">🛡️</div>
         <div class="av-status-text">
           <div class="av-status-title" id="av-status-title">DEFENSE ENGINE ACTIVE</div>
-          <div class="av-status-subtitle" id="av-status-sub">Definitions v2026.09 • Real-Time Heuristics Online</div>
+          <div class="av-status-subtitle" id="av-status-sub">Definitions v2026.09 • Real-Time Protection Online</div>
+        </div>
+        <!-- Real-Time Protection Toggle Button -->
+        <div class="av-toggle-wrap">
+          <span class="av-toggle-label">PROTECTION:</span>
+          <button class="av-toggle-btn active" id="av-realtime-toggle" onclick="toggleAntiVirusProtection()" title="Click to turn Real-Time Protection ON or OFF">
+            <span class="av-toggle-slider"></span>
+            <span class="av-toggle-text" id="av-toggle-text">ON</span>
+          </button>
         </div>
         <div class="av-stats-badge" id="av-stats-badge">
           <span id="av-quarantine-count">0</span> / 4 QUARANTINED
         </div>
+        <button class="btn-ghost btn-sm" onclick="startMalwareDemo()" title="How to Play Malware Tutorial" style="font-size:11px;padding:4px 10px;margin-left:10px">❓ Tutorial</button>
       </div>
 
       <!-- AV Main Content -->
@@ -366,8 +376,165 @@
 ══════════════════════════════════════════════════════════ -->
 <div id="overlay-backdrop" class="overlay-backdrop"></div>
 
+<!-- ── MAIN MENU / TITLE SCREEN ── -->
+<div id="overlay-title-menu" class="overlay active">
+  <div class="title-screen-container">
+    <!-- Cyber Corner Accents for Terminal Look -->
+    <div class="title-corner title-corner-tl"></div>
+    <div class="title-corner title-corner-tr"></div>
+    <div class="title-corner title-corner-bl"></div>
+    <div class="title-corner title-corner-br"></div>
+
+    <!-- Background cyber grid & animated scanner beam -->
+    <div class="title-cyber-grid"></div>
+    <div class="title-cyber-scanline"></div>
+    <div class="title-particles" id="title-particles"></div>
+
+    <div class="title-content-card">
+      <!-- Main Logo with Crest -->
+      <div class="title-logo-wrap">
+        <div class="title-shield-badge">
+          <span class="title-shield-icon">🛡️</span>
+        </div>
+        <h1 class="title-logo">CYBER<span class="logo-accent">ZERO</span></h1>
+      </div>
+
+      <!-- Cyber Threat Awareness Subtitle Badge -->
+      <div class="title-subtitle-badge">
+        <span class="badge-accent-bracket">[</span>
+        <span>CYBER THREAT AWARENESS &amp; KNOWLEDGE</span>
+        <span class="badge-accent-bracket">]</span>
+      </div>
+
+      <!-- Main Menu Buttons (Stacked: Start on top, Exit down below) -->
+      <div class="title-menu-actions">
+        <button class="btn-title-play" id="btn-menu-play" onclick="startFromTitleMenu()">
+          <span class="play-icon">▶</span>
+          <span>START (PLAY)</span>
+        </button>
+        <button class="btn-title-exit" id="btn-menu-exit" onclick="openExitModal()">
+          <span>✕</span>
+          <span>EXIT</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Exit Confirmation Modal (inside title screen) -->
+    <div class="title-modal-backdrop hidden" id="title-exit-modal">
+      <div class="title-exit-card">
+        <div class="exit-modal-icon">⚠️</div>
+        <h3 class="exit-modal-title">TERMINAL SESSION SUSPENSION</h3>
+        <p class="exit-modal-msg">
+          Security awareness is an ongoing practice. Cyber threats evolve constantly — always verify sender domains, inspect suspicious links, and never run unverified executable files.
+        </p>
+        <p class="exit-modal-sub">Are you sure you want to exit the CyberZero Terminal?</p>
+        <div class="exit-modal-actions">
+          <button class="btn-primary" onclick="closeExitModal()">◀ RETURN TO TITLE MENU</button>
+          <button class="btn-danger" onclick="confirmExitGame()">DISCONNECT &amp; CLOSE</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Disconnected Terminal Screen (if user confirms exit) -->
+    <div class="title-modal-backdrop hidden" id="title-disconnected-screen">
+      <div class="title-exit-card" style="border-color:rgba(255,82,82,0.5)">
+        <div class="exit-modal-icon" style="color:var(--accent-red)">🔌</div>
+        <h3 class="exit-modal-title" style="color:var(--accent-red)">TERMINAL DISCONNECTED</h3>
+        <p class="exit-modal-msg">
+          CyberZero Detective Terminal offline. Thank you for strengthening your cyber threat awareness.
+        </p>
+        <div class="exit-modal-actions" style="justify-content:center;margin-top:18px">
+          <button class="btn-primary" onclick="reconnectTerminal()">⚡ RECONNECT TERMINAL</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ── PRE-ASSESSMENT EXAM (Paper Test) ── -->
+<div id="overlay-pre-assessment" class="overlay">
+  <div class="exam-desk-backdrop">
+    <div class="exam-paper-shell" id="exam-paper-shell">
+
+      <!-- Metallic Corner Staple -->
+      <div class="exam-staple" title="Official Academy Paperwork"></div>
+
+      <!-- Teacher Graded Stamp Header Area (visible after grading) -->
+      <div class="exam-teacher-grade-box hidden" id="exam-teacher-grade-box">
+        <div class="exam-stamp-wrapper">
+          <div class="exam-stamp" id="exam-stamp">
+            <div class="exam-stamp-border">
+              <span class="exam-stamp-title" id="exam-stamp-title">PASSED</span>
+              <span class="exam-stamp-sub" id="exam-stamp-sub">CYBER ACADEMY • CERTIFIED</span>
+            </div>
+          </div>
+        </div>
+        <div class="exam-score-circle" id="exam-score-circle">
+          <span class="exam-score-val" id="exam-score-val">10/10</span>
+          <span class="exam-score-lbl">SCORE</span>
+        </div>
+        <div class="exam-teacher-feedback">
+          <div class="exam-teacher-header">TEACHER REMARKS:</div>
+          <div class="exam-teacher-note" id="exam-teacher-note">"Outstanding baseline intelligence! You spot phishing tricks and disguised executables effortlessly. Report to Director Zero for immediate field assignment."</div>
+          <div class="exam-teacher-sig">— Prof. Zero, Head of Threat Assessment</div>
+        </div>
+      </div>
+
+      <!-- Exam Paper Header -->
+      <div class="exam-header">
+        <div class="exam-header-top">
+          <div class="exam-institution">
+            <span class="exam-seal">🛡️</span>
+            <div>
+              <div class="exam-inst-name">CYBERZERO ACADEMY OF CYBER DEFENSE</div>
+              <div class="exam-inst-sub">NATIONAL THREAT ASSESSMENT DIVISION • EXAM SERIES 2026</div>
+            </div>
+          </div>
+          <div class="exam-code-tag">FORM 10-DIAGNOSTIC</div>
+        </div>
+
+        <h1 class="exam-title">BASELINE THREAT EVALUATION: PHISHING &amp; MALWARE</h1>
+        <p class="exam-desc"><strong>INSTRUCTIONS:</strong> Read each question carefully and choose the correct answer from the choices given below.</p>
+
+        <div class="exam-student-fields">
+          <div class="exam-field exam-field-name">
+            <label for="exam-input-name" class="exam-field-label">NAME:</label>
+            <input type="text" id="exam-input-name" class="exam-paper-name-input" placeholder="Write your name here..." maxlength="30" autocomplete="off" spellcheck="false" />
+          </div>
+          <div class="exam-field">
+            <span class="exam-field-label">DATE:</span>
+            <span class="exam-field-line" id="exam-paper-date">September 8, 2026</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Exam Questions Body -->
+      <div class="exam-questions-list" id="exam-questions-list">
+        <!-- Rendered dynamically by script.js -->
+      </div>
+
+      <!-- Exam Footer / Action Bar -->
+      <div class="exam-footer">
+        <div class="exam-progress-info">
+          <span id="exam-answered-count">0 of 10</span> questions answered
+        </div>
+        <div class="exam-actions">
+          <button class="btn-primary exam-submit-btn" id="btn-submit-exam" onclick="submitPreAssessment()">
+            Submit
+          </button>
+          <button class="btn-success exam-proceed-btn hidden" id="btn-proceed-vn" onclick="proceedFromPreAssessmentToVN()">
+            CONTINUE TO DIRECTOR ZERO BRIEFING &amp; DEMO ➔
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
 <!-- ── WELCOME SCREEN (Visual Novel Intro) ── -->
-<div id="overlay-welcome" class="overlay active" id="overlay-welcome">
+<div id="overlay-welcome" class="overlay">
 
   <!-- Skip button -->
   <button class="vn-skip-btn" id="vn-skip-btn" onclick="vnSkip()">Skip ⏩</button>
@@ -580,6 +747,219 @@
   </div>
 </div>
 
+<!-- ── CHAPTER 2 MALWARE GUIDED DEMO ── -->
+<div id="overlay-malware-demo" class="overlay">
+  <div class="guided-demo-shell">
+
+    <!-- Left: Detective Panel -->
+    <div class="gdemo-capy-panel">
+      <div class="gdemo-capy-avatar">🕵️</div>
+      <div class="gdemo-speech-bubble">
+        <div class="gdemo-speech-arrow"></div>
+        <div id="gdemo-malware-speech-text" class="gdemo-speech-text"></div>
+      </div>
+      <button class="gdemo-skip-btn" onclick="skipMalwareDemo()" title="Skip tutorial and jump straight to the malware mission">⏭ Skip Demo</button>
+    </div>
+
+    <!-- Right: Malware Demo Workspace -->
+    <div class="gdemo-workspace" id="gdemo-malware-workspace">
+      <!-- Toolbar with App Switcher Tabs -->
+      <div class="gdemo-toolbar" id="gdemo-malware-toolbar">
+        <div class="gdemo-app-tabs">
+          <button class="gdemo-tab-btn active" id="gdemo-mtab-folder" onclick="setMalwareDemoTab('folder')">
+            <span>📁</span> Folder (Downloads)
+          </button>
+          <button class="gdemo-tab-btn" id="gdemo-mtab-av" onclick="setMalwareDemoTab('av')">
+            <span>🛡️</span> ShieldAV Scanner
+          </button>
+        </div>
+        <span class="gdemo-phase-badge" id="gdemo-malware-badge">CHAPTER 2 TUTORIAL</span>
+      </div>
+
+      <!-- Tab View 1: MOCK FOLDER -->
+      <div class="gdemo-tab-view active" id="gdemo-mview-folder">
+        <div class="gdemo-folder-header">
+          <div class="folder-breadcrumb">
+            <span>📁 This PC</span>
+            <span class="breadcrumb-sep">›</span>
+            <span>Downloads</span>
+            <span class="breadcrumb-sep">›</span>
+            <span class="folder-active-path">Suspicious_Transfers</span>
+          </div>
+          <div class="gdemo-folder-tag">4 Files Listed</div>
+        </div>
+
+        <div class="gdemo-folder-main">
+          <!-- File List -->
+          <div class="gdemo-file-table-wrap">
+            <div class="folder-file-table-header">
+              <span class="col-name">Name</span>
+              <span class="col-type">Type</span>
+              <span class="col-size">Size</span>
+              <span class="col-status">Status</span>
+            </div>
+            <div class="gdemo-file-list" id="gdemo-file-list">
+              <!-- File 1: Trojan double extension -->
+              <div class="folder-file-row" id="gdemo-mfile-1" onclick="handleMalwareDemoFileClick('f1')">
+                <div class="file-name-cell">
+                  <span class="file-icon">📄</span>
+                  <span class="file-name-text">bonus_payroll_sept.pdf.exe</span>
+                </div>
+                <div>Executable (.exe)</div>
+                <div>2.4 MB</div>
+                <div><span class="badge-file-status badge-unscanned" id="gdemo-mfile-1-status">Unscanned</span></div>
+              </div>
+
+              <!-- File 2: Safe Document -->
+              <div class="folder-file-row" id="gdemo-mfile-2" onclick="handleMalwareDemoFileClick('f2')">
+                <div class="file-name-cell">
+                  <span class="file-icon">📝</span>
+                  <span class="file-name-text">project_roadmap_2026.docx</span>
+                </div>
+                <div>Word Document (.docx)</div>
+                <div>340 KB</div>
+                <div><span class="badge-file-status badge-unscanned" id="gdemo-mfile-2-status">Unscanned</span></div>
+              </div>
+
+              <!-- File 3: Script dropper -->
+              <div class="folder-file-row" id="gdemo-mfile-3">
+                <div class="file-name-cell">
+                  <span class="file-icon">📜</span>
+                  <span class="file-name-text">overdue_invoice.vbs</span>
+                </div>
+                <div>VBScript (.vbs)</div>
+                <div>18 KB</div>
+                <div><span class="badge-file-status badge-unscanned">Unscanned</span></div>
+              </div>
+
+              <!-- File 4: Clean image -->
+              <div class="folder-file-row" id="gdemo-mfile-4">
+                <div class="file-name-cell">
+                  <span class="file-icon">🖼️</span>
+                  <span class="file-name-text">annual_retreat.jpg</span>
+                </div>
+                <div>JPEG Image (.jpg)</div>
+                <div>1.2 MB</div>
+                <div><span class="badge-file-status badge-clean">✓ Safe</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- File Inspection Detail Pane -->
+          <div class="gdemo-inspection-pane" id="gdemo-m-inspection">
+            <div class="fdp-header">
+              <div class="fdp-icon-large" id="gdemo-minsp-icon">📄</div>
+              <div>
+                <div class="fdp-name" id="gdemo-minsp-name">bonus_payroll_sept.pdf.exe</div>
+                <div style="font-size:11px;color:var(--text-muted);margin-top:2px" id="gdemo-minsp-sub">Executable Binary • 2.4 MB</div>
+              </div>
+            </div>
+
+            <div class="fdp-meta-table">
+              <div class="fdp-meta-row">
+                <span class="fdp-meta-label">SHA-256</span>
+                <span class="fdp-meta-val" id="gdemo-minsp-hash">a94f82c1b483e102…</span>
+              </div>
+              <div class="fdp-meta-row" id="gdemo-mext-row">
+                <span class="fdp-meta-label">Actual Ext</span>
+                <span class="fdp-meta-val" id="gdemo-mext-val" style="color:var(--accent-red);font-weight:700">.exe <span class="gdemo-warning-pill">⚠️ HIDDEN EXECUTABLE</span></span>
+              </div>
+              <div class="fdp-meta-row">
+                <span class="fdp-meta-label">Status</span>
+                <span class="fdp-meta-val" id="gdemo-minsp-status">Ready for Scan</span>
+              </div>
+            </div>
+
+            <div class="fdp-analysis-box suspicious" id="gdemo-minsp-analysis">
+              ⚠️ <strong>Double Extension Alert</strong>: Filename mimics a PDF document, but the real file extension is <code>.exe</code>. Opening it executes binary code!
+            </div>
+
+            <div class="fdp-actions" style="margin-top:auto">
+              <button class="btn-primary btn-sm" id="gdemo-mbtn-scan-av" style="width:100%" onclick="malwareDemoGoToScan()">⚡ Scan with Anti-Virus</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tab View 2: MOCK ANTI-VIRUS -->
+      <div class="gdemo-tab-view hidden" id="gdemo-mview-av">
+        <!-- AV Banner -->
+        <div class="av-status-banner disabled" id="gdemo-mav-banner">
+          <div class="av-shield-icon" id="gdemo-mav-shield-icon">⚠️</div>
+          <div class="av-status-text">
+            <div class="av-status-title" id="gdemo-mav-status-title">DEFENSE ENGINE DISABLED</div>
+            <div class="av-status-subtitle" id="gdemo-mav-status-sub">⚠️ Real-Time Protection is OFF • Turn ON to scan threats</div>
+          </div>
+          <!-- Real-Time Protection Toggle in Demo -->
+          <div class="av-toggle-wrap">
+            <span class="av-toggle-label">PROTECTION:</span>
+            <button class="av-toggle-btn" id="gdemo-mav-toggle" onclick="toggleMalwareDemoProtection()" title="Click to turn Real-Time Protection ON or OFF">
+              <span class="av-toggle-slider"></span>
+              <span class="av-toggle-text" id="gdemo-mav-toggle-text">OFF</span>
+            </button>
+          </div>
+          <div class="av-stats-badge" id="gdemo-mav-stats">
+            <span id="gdemo-mav-qcount">0</span> / 4 QUARANTINED
+          </div>
+        </div>
+
+        <div class="gdemo-av-body">
+          <!-- Target Card -->
+          <div class="av-target-card" id="gdemo-mav-target-card">
+            <div class="av-tc-icon" id="gdemo-mav-tc-icon">📄</div>
+            <div class="av-tc-info">
+              <div class="av-tc-name" id="gdemo-mav-tc-name">bonus_payroll_sept.pdf.exe</div>
+              <div class="av-tc-detail" id="gdemo-mav-tc-detail">Executable Binary (.exe) • 2.4 MB • SHA-256: a94f82c1b4…</div>
+            </div>
+            <button class="av-scan-btn" id="gdemo-mav-scan-btn" onclick="malwareDemoTriggerScan()">⚡ Scan File</button>
+          </div>
+
+          <!-- Scanning Progress Bar -->
+          <div class="av-progress-wrap hidden" id="gdemo-mav-progress-wrap">
+            <div class="av-progress-label">
+              <span>Deep scanning file signatures &amp; heuristics…</span>
+              <span id="gdemo-mav-progress-pct">0%</span>
+            </div>
+            <div class="av-progress-bar">
+              <div class="av-progress-fill" id="gdemo-mav-progress-fill"></div>
+            </div>
+          </div>
+
+          <!-- Diagnostic Result Card -->
+          <div class="av-result-card hidden threat" id="gdemo-mav-result">
+            <div class="av-result-left">
+              <div class="av-threat-title" id="gdemo-mav-res-title">⚠️ THREAT IDENTIFIED: Trojan.Win32.DoubleExt</div>
+              <div class="av-threat-desc" id="gdemo-mav-res-desc">Disguised executable binary. Signature matches known backdoor dropper payload.</div>
+            </div>
+            <div>
+              <button class="btn-danger btn-sm" id="gdemo-mav-quarantine-btn" onclick="malwareDemoTriggerQuarantine()">🚩 QUARANTINE THREAT (+100)</button>
+            </div>
+          </div>
+
+          <!-- Quarantined Threats Log -->
+          <div class="av-threats-section">
+            <div class="av-threats-header">
+              <span>🛡️ Quarantined Threats Vault</span>
+              <span class="av-threats-counter" id="gdemo-mav-vault-count">0 Quarantined</span>
+            </div>
+            <div class="av-threats-list" id="gdemo-mav-threats-list">
+              <div class="av-threats-empty" id="gdemo-mav-empty-log">No quarantined files yet. Scan and neutralize threats!</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Highlight cursor animation -->
+      <div class="gdemo-cursor" id="gdemo-malware-cursor">👆</div>
+
+      <!-- Proceed button -->
+      <div class="gdemo-bottom-bar">
+        <button class="btn-primary" id="btn-malware-demo-next" onclick="malwareDemoProceed()">Let's Begin →</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- ── REPORT DIALOG ── -->
 <div id="overlay-report" class="overlay">
   <div class="dialog-card">
@@ -671,7 +1051,7 @@
     </div>
 
     <div class="results-actions" style="display:flex;gap:12px;margin-top:16px;justify-content:center;flex-wrap:wrap">
-      <button class="btn-primary" id="btn-next-malware" onclick="startMalwareMission()">🛡️ NEXT MALWARE →</button>
+      <button class="btn-primary" id="btn-next-malware" onclick="startMalwareDemo()">🛡️ NEXT MALWARE →</button>
       <button class="btn-ghost" onclick="playAgain()">🔄 Replay Emails</button>
     </div>
   </div>
@@ -702,7 +1082,10 @@
         <span class="results-stat-value" id="res-malware-score" style="color:var(--accent-cyan)">0</span>
       </div>
     </div>
-    <button class="btn-primary" onclick="restartEntireGame()" style="margin-top:20px">🔄 RESTART ADVENTURE</button>
+    <div style="display:flex;gap:12px;margin-top:20px;justify-content:center;flex-wrap:wrap">
+      <button class="btn-primary" onclick="restartEntireGame()">🔄 RESTART ADVENTURE</button>
+      <button class="btn-ghost" onclick="startMalwareDemo()">📖 Review Tutorial</button>
+    </div>
   </div>
 </div>
 
