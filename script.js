@@ -12,7 +12,7 @@
 const EMAILS = [
   {
     id: 1,
-    sender: { name: 'BPI Security', address: 'security@bpi-secure-login.example' },
+    sender: { name: 'BPI Security', address: 'bpi.security.verification@gmail.com' },
     subject: 'URGENT: Your BPI account will be locked today',
     time: '8:04 AM',
     preview: 'We detected unusual activity on your account...',
@@ -34,7 +34,7 @@ const EMAILS = [
         flagId: 'link1',
         flagType: 'suspicious_link',
         text: 'Verify My BPI Account',
-        destination: 'https://bpi-account-security.example/login',
+        destination: 'https://bpi-online-security.com/login',
         label: 'SUSPICIOUS LINK'
       },
       { type: 'p', text: 'Thank you for banking with BPI.' },
@@ -42,22 +42,22 @@ const EMAILS = [
     ],
     capybaraAnalysis: {
       fake_sender: {
-        correct: '🚩 SENDER — CORRECT\nThe domain <code>bpi-secure-login.example</code> is not a legitimate BPI domain. Real BPI emails come from <code>@bpi.com.ph</code>. Attackers register similar-sounding domains to trick victims.',
-        missed: '🚩 MISSED — FAKE SENDER\nThe sender address was <code>security@bpi-secure-login.example</code>. This is not a real BPI domain. Always check the actual email address, not just the display name.'
+        correct: '🚩 SENDER — CORRECT\nThe sender address is <code>bpi.security.verification@gmail.com</code>. Notice the <strong>@gmail.com</strong>! Official BPI emails come only from <code>@bpi.com.ph</code>. Legitimate banks NEVER use free public email accounts like Gmail to deliver urgent security alerts.',
+        missed: '🚩 MISSED — FAKE SENDER\nThe email was sent from <code>bpi.security.verification@gmail.com</code>. Notice the <strong>@gmail.com</strong> domain — real banks use their official domain (<code>@bpi.com.ph</code>), never a personal or free Gmail account.'
       },
       false_urgency: {
         correct: '🚩 URGENCY — CORRECT\nThe "30 minutes" deadline is a classic social engineering pressure tactic. Attackers create panic to prevent careful thinking.',
         missed: '🚩 MISSED — FALSE URGENCY\nThe email threatened account suspension within 30 minutes. This extreme time pressure is a hallmark of phishing — it forces the victim to act without thinking.'
       },
       suspicious_link: {
-        correct: '🚩 LINK — CORRECT\nThe button links to <code>bpi-account-security.example</code>, not BPI\'s real website. The domain sounds official but is completely unrelated to BPI.',
-        missed: '🚩 MISSED — SUSPICIOUS LINK\nThe "Verify" button leads to <code>bpi-account-security.example</code>. Always hover over or inspect links before clicking — the destination reveals the deception.'
+        correct: '🚩 LINK — CORRECT\nThe button links to <code>https://bpi-online-security.com/login</code>, not BPI\'s real website (<code>bpi.com.ph</code>). The domain looks convincing, but attackers register fake domains to harvest credentials.',
+        missed: '🚩 MISSED — SUSPICIOUS LINK\nThe "Verify" button leads to <code>https://bpi-online-security.com/login</code>. Always inspect the destination — the real BPI website is <code>bpi.com.ph</code>.'
       }
     }
   },
   {
     id: 2,
-    sender: { name: 'HR Department', address: 'hr@company.example' },
+    sender: { name: 'HR Department', address: 'hr@cybercorp.com' },
     subject: 'September Employee Benefits Update',
     time: '9:15 AM',
     preview: 'The September employee benefits information is now available...',
@@ -68,14 +68,14 @@ const EMAILS = [
       { type: 'p', text: 'We hope you are doing well. The September employee benefits information is now available for your review.' },
       { type: 'p', text: 'This month\'s update includes details about the health plan renewal, updated leave policies, and the company wellness program.' },
       { type: 'p', text: 'Please review the information through the company\'s normal internal HR portal, accessible through your standard work credentials.' },
-      { type: 'p', text: 'If you have any questions, feel free to reach out to the HR team directly at hr@company.example.' },
-      { type: 'p', text: 'Thank you,\nHR Department\nCompany Inc.' }
+      { type: 'p', text: 'If you have any questions, feel free to reach out to the HR team directly at hr@cybercorp.com.' },
+      { type: 'p', text: 'Thank you,\nHR Department\nCyberCorp Inc.' }
     ],
     capybaraAnalysis: {}
   },
   {
     id: 3,
-    sender: { name: 'PayPal Security', address: 'security@paypa1-security.example' },
+    sender: { name: 'PayPal Security', address: 'security@paypa1-security.com' },
     subject: 'URGENT: Your PayPal account will be suspended',
     time: '10:22 AM',
     preview: 'We detected unusual activity on your PayPal account...',
@@ -97,7 +97,7 @@ const EMAILS = [
         flagId: 'link1',
         flagType: 'suspicious_link',
         text: 'Restore My Account',
-        destination: 'https://paypal-account-check.example/login',
+        destination: 'https://paypal-account-check.com/login',
         label: 'SUSPICIOUS LINK'
       },
       { type: 'p', text: 'Thank you for using PayPal.' },
@@ -105,22 +105,22 @@ const EMAILS = [
     ],
     capybaraAnalysis: {
       fake_sender: {
-        correct: '🚩 SENDER — CORRECT\nNotice the domain: <code>paypa1-security.example</code> uses the number "1" instead of the letter "l" in "PayPal". This is called a typosquat domain — a common attacker trick.',
-        missed: '🚩 MISSED — FAKE SENDER\nThe sender was <code>security@paypa1-security.example</code>. Look closely — "paypa<strong>1</strong>" uses the digit 1, not the letter l. This subtle swap is a typosquat phishing technique.'
+        correct: '🚩 SENDER — CORRECT\nNotice the domain: <code>paypa1-security.com</code> uses the number "1" instead of the letter "l" in "PayPal". This is called a typosquat domain — a common attacker trick.',
+        missed: '🚩 MISSED — FAKE SENDER\nThe sender was <code>security@paypa1-security.com</code>. Look closely — "paypa<strong>1</strong>" uses the digit 1, not the letter l. This subtle swap is a typosquat phishing technique.'
       },
       false_urgency: {
         correct: '🚩 URGENCY — CORRECT\nThe "24 hours" deadline and threat of permanent closure is engineered to create panic. Legitimate companies give adequate time and never threaten instant loss.',
         missed: '🚩 MISSED — FALSE URGENCY\nThe email threatened permanent account closure within 24 hours. This is a pressure tactic to prevent you from verifying the email\'s legitimacy before acting.'
       },
       suspicious_link: {
-        correct: '🚩 LINK — CORRECT\nThe link destination <code>paypal-account-check.example</code> is not owned by PayPal. The real PayPal uses <code>paypal.com</code>.',
-        missed: '🚩 MISSED — SUSPICIOUS LINK\nThe "Restore My Account" button leads to <code>paypal-account-check.example</code>. Always check actual link destinations — not the button label text.'
+        correct: '🚩 LINK — CORRECT\nThe link destination <code>https://paypal-account-check.com/login</code> is not owned by PayPal. The real PayPal uses <code>paypal.com</code>.',
+        missed: '🚩 MISSED — SUSPICIOUS LINK\nThe "Restore My Account" button leads to <code>https://paypal-account-check.com/login</code>. Always check actual link destinations — not the button label text.'
       }
     }
   },
   {
     id: 4,
-    sender: { name: 'IT Department', address: 'it@company.example' },
+    sender: { name: 'IT Department', address: 'it@cybercorp.com' },
     subject: 'Scheduled System Maintenance — Sunday 11 PM',
     time: '11:05 AM',
     preview: 'Please be advised of scheduled maintenance this Sunday...',
@@ -132,14 +132,14 @@ const EMAILS = [
       { type: 'p', text: 'During this window, the following services will be temporarily unavailable:' },
       { type: 'p', text: '• Employee portal\n• Internal file sharing\n• Company email (intermittent)' },
       { type: 'p', text: 'No action is required from your side. Your data is safe and no credentials need to be updated.' },
-      { type: 'p', text: 'We apologize for any inconvenience. For urgent matters during the maintenance window, please contact the on-call IT team at it-oncall@company.example.' },
+      { type: 'p', text: 'We apologize for any inconvenience. For urgent matters during the maintenance window, please contact the on-call IT team at it-oncall@cybercorp.com.' },
       { type: 'p', text: 'Thank you for your understanding.\nIT Department' }
     ],
     capybaraAnalysis: {}
   },
   {
     id: 5,
-    sender: { name: 'GCash Rewards', address: 'noreply@gcash-rewards.example' },
+    sender: { name: 'GCash Rewards', address: 'gcash.promotions.rewards@gmail.com' },
     subject: '🎉 Congratulations! You\'ve won a GCash reward!',
     time: '12:33 PM',
     preview: 'You have been selected as a special GCash customer reward winner...',
@@ -162,7 +162,7 @@ const EMAILS = [
         flagId: 'link1',
         flagType: 'suspicious_link',
         text: 'Claim My ₱5,000 Reward',
-        destination: 'https://gcash-claim-rewards.example/verify',
+        destination: 'https://gcash-claim-rewards.com/verify',
         label: 'SUSPICIOUS LINK'
       },
       { type: 'p', text: 'Do not share this link. It is unique to your account.' },
@@ -170,16 +170,16 @@ const EMAILS = [
     ],
     capybaraAnalysis: {
       fake_sender: {
-        correct: '🚩 SENDER — CORRECT\nThe domain <code>gcash-rewards.example</code> is not GCash\'s official domain. GCash communications come from <code>@gcash.com</code>. Reward scams always use unofficial domains.',
-        missed: '🚩 MISSED — FAKE SENDER\nThe sender domain was <code>gcash-rewards.example</code>. This is not an official GCash domain. Reward scams often create plausible-looking domains to fool recipients.'
+        correct: '🚩 SENDER — CORRECT\nThe sender address is <code>gcash.promotions.rewards@gmail.com</code>. Notice the <strong>@gmail.com</strong>! Official GCash communications come exclusively from <code>@gcash.com</code>. Scammers often use free Gmail accounts to lure victims with fake giveaways.',
+        missed: '🚩 MISSED — FAKE SENDER\nThe sender was <code>gcash.promotions.rewards@gmail.com</code>. Notice the <strong>@gmail.com</strong> domain — GCash will never use a public or personal Gmail account to distribute rewards.'
       },
       false_urgency: {
         correct: '🚩 URGENCY — CORRECT\nA "2-hour expiry" on a supposed reward is a classic scam pressure tactic. Legitimate rewards do not expire within hours and do not threaten immediate forfeiture.',
         missed: '🚩 MISSED — FALSE URGENCY\nThe 2-hour countdown before the reward "expires" is a pressure tactic. Scammers use short deadlines to stop you from pausing and thinking critically.'
       },
       suspicious_link: {
-        correct: '🚩 LINK — CORRECT\nThe claim link goes to <code>gcash-claim-rewards.example</code> — not GCash\'s real website. This is a fake site designed to steal your login credentials.',
-        missed: '🚩 MISSED — SUSPICIOUS LINK\nThe "Claim My Reward" button leads to <code>gcash-claim-rewards.example</code>. The real GCash website is <code>gcash.com</code>. Always verify destinations before clicking.'
+        correct: '🚩 LINK — CORRECT\nThe claim link goes to <code>https://gcash-claim-rewards.com/verify</code> — not GCash\'s real website (<code>gcash.com</code>). This is a fake phishing site designed to steal your 4-digit MPIN.',
+        missed: '🚩 MISSED — SUSPICIOUS LINK\nThe "Claim My Reward" button leads to <code>https://gcash-claim-rewards.com/verify</code>. The real GCash website is <code>gcash.com</code>. Always verify destinations before clicking.'
       }
     }
   }
@@ -194,7 +194,7 @@ const MAX_SCORE = EMAILS.reduce((sum, e) => sum + (e.phishing ? 100 + e.evidence
 const SENT_EMAILS = [
   {
     id: 101,
-    to: 'hr@company.example',
+    to: 'hr@cybercorp.com',
     subject: 'Re: September Employee Benefits Update',
     time: '9:12 AM',
     preview: 'Thanks for the update — reviewed and confirmed on my end...',
@@ -206,7 +206,7 @@ const SENT_EMAILS = [
   },
   {
     id: 102,
-    to: 'it-security@company.example',
+    to: 'it-security@cybercorp.com',
     subject: 'Suspicious emails flagged this week',
     time: '10:47 AM',
     preview: 'Sharing a couple of phishing samples I caught for awareness...',
@@ -219,53 +219,154 @@ const SENT_EMAILS = [
 ];
 
 // Fake websites for the browser
+// Fake websites for the browser (Authentic Phishing Website Examples)
 const FAKE_SITES = {
-  'https://bpi-account-security.example/login': `
-    <div class="fakesite">
-      <div class="fakesite-header">
-        <div class="fakesite-logo">BPI Online</div>
-        <small style="font-size:12px;opacity:0.8">Online Banking</small>
+  'https://bpi-online-security.com/login': `
+    <div class="fakesite fakesite-bpi">
+      <div class="phish-sim-banner">
+        <span class="phish-banner-icon">🚨</span>
+        <span class="phish-banner-text"><strong>PHISHING SIMULATION EXAMPLE:</strong> Look at the browser URL bar: <code>bpi-online-security.com</code> is a fake phishing website, NOT the authentic <code>bpi.com.ph</code>!</span>
+      </div>
+      <div class="fakesite-header" style="background:linear-gradient(90deg, #8a0011, #b3001b);">
+        <div class="fakesite-header-inner">
+          <div class="fakesite-logo">🏦 BPI Online</div>
+          <div class="fakesite-subtag">Personal &amp; Corporate Banking</div>
+        </div>
       </div>
       <div class="fakesite-body">
-        <div class="fakesite-warn">This is a simulated phishing page. Do NOT enter real credentials on suspicious websites.</div>
-        <h2>Sign In to Your Account</h2>
-        <p>Enter your online banking credentials to verify your account.</p>
-        <div class="fakesite-field"><label>Username / Card Number</label><input type="text" placeholder="Enter username" /></div>
-        <div class="fakesite-field"><label>Password</label><input type="password" placeholder="Enter password" /></div>
-        <button class="fakesite-submit" onclick="alert('🚩 This is a phishing page! Real credentials would be stolen here.')">Log In</button>
-        <p style="font-size:11px;color:#888;margin-top:16px;text-align:center;">bpi-account-security.example — NOT the real BPI website</p>
+        <div class="fakesite-card">
+          <div class="fakesite-card-header">
+            <h2>Log In to BPI Online</h2>
+            <p>Security Alert: Confirm your account credentials to avoid immediate account restriction.</p>
+          </div>
+          <form onsubmit="event.preventDefault(); handlePhishingSubmit('bpi-online-security.com', 'BPI Online');">
+            <div class="fakesite-field">
+              <label for="bpi-user">Username or User ID</label>
+              <input type="text" id="bpi-user" placeholder="Enter username" required autocomplete="off" />
+            </div>
+            <div class="fakesite-field">
+              <label for="bpi-pass">Password</label>
+              <input type="password" id="bpi-pass" placeholder="Enter password" required autocomplete="off" />
+            </div>
+            <div class="fakesite-row">
+              <label class="fakesite-remember">
+                <input type="checkbox" checked /> Remember User ID
+              </label>
+              <a href="#" class="fakesite-link" onclick="event.preventDefault(); showToast('⚠️ Fake link: Phishing sites only harvest submitted passwords.', 'warning');">Forgot Password?</a>
+            </div>
+            <button type="submit" class="fakesite-submit" style="background:linear-gradient(90deg, #8a0011, #b3001b);">
+              Log In &amp; Verify Account
+            </button>
+          </form>
+          <div class="fakesite-card-footer">
+            <p>Don't have an account? <a href="#" onclick="event.preventDefault(); showToast('⚠️ Fake link on phishing portal.', 'warning');">Register for BPI Online</a></p>
+          </div>
+        </div>
+        <div class="fakesite-disclaimer">
+          ⚠️ <strong>Cyber Detective Clue:</strong> Notice the domain in your browser bar: <code>bpi-online-security.com</code>. Authentic Philippine banks use <code>.com.ph</code> domains (e.g. <code>bpi.com.ph</code>). Attackers buy lookalike domains to steal login credentials!
+        </div>
+      </div>
+      <div class="fakesite-footer">
+        <p>© 2026 Bank of the Philippine Islands. Regulated by the Bangko Sentral ng Pilipinas.</p>
       </div>
     </div>`,
-  'https://paypal-account-check.example/login': `
-    <div class="fakesite">
-      <div class="fakesite-header" style="background:linear-gradient(90deg,#003087,#009cde);">
-        <div class="fakesite-logo">PayPal</div>
-        <small style="font-size:12px;opacity:0.8">Account Recovery</small>
+
+  'https://paypal-account-check.com/login': `
+    <div class="fakesite fakesite-paypal">
+      <div class="phish-sim-banner">
+        <span class="phish-banner-icon">🚨</span>
+        <span class="phish-banner-text"><strong>PHISHING SIMULATION EXAMPLE:</strong> Look at the browser URL bar: <code>paypal-account-check.com</code> is a fake clone! Real PayPal is <code>paypal.com</code>.</span>
+      </div>
+      <div class="fakesite-header" style="background:#ffffff;border-bottom:1px solid #e2e8f0;">
+        <div class="fakesite-header-inner">
+          <div class="fakesite-logo" style="color:#003087;">🅿️ PayPal</div>
+          <div class="fakesite-subtag" style="color:#64748b;">Security &amp; Verification Center</div>
+        </div>
       </div>
       <div class="fakesite-body">
-        <div class="fakesite-warn">This is a simulated phishing page. Do NOT enter real credentials on suspicious websites.</div>
-        <h2>Account Verification Required</h2>
-        <p>Your account has been flagged. Please log in to restore access.</p>
-        <div class="fakesite-field"><label>Email or Phone</label><input type="text" placeholder="Enter email or phone" /></div>
-        <div class="fakesite-field"><label>Password</label><input type="password" placeholder="Enter password" /></div>
-        <button class="fakesite-submit" style="background:linear-gradient(90deg,#003087,#009cde);" onclick="alert('🚩 This is a phishing page! Real credentials would be stolen here.')">Log In</button>
-        <p style="font-size:11px;color:#888;margin-top:16px;text-align:center;">paypal-account-check.example — NOT the real PayPal website</p>
+        <div class="fakesite-card">
+          <div class="fakesite-card-header">
+            <h2 style="color:#003087;">Log in to your PayPal account</h2>
+            <p>We detected unauthorized activity. Please verify your credentials to restore wallet access.</p>
+          </div>
+          <form onsubmit="event.preventDefault(); handlePhishingSubmit('paypal-account-check.com', 'PayPal');">
+            <div class="fakesite-field">
+              <label for="paypal-email">Email address or mobile number</label>
+              <input type="text" id="paypal-email" placeholder="Email or mobile number" required autocomplete="off" />
+            </div>
+            <div class="fakesite-field">
+              <label for="paypal-pass">PayPal Password</label>
+              <input type="password" id="paypal-pass" placeholder="Password" required autocomplete="off" />
+            </div>
+            <div class="fakesite-row">
+              <label class="fakesite-remember">
+                <input type="checkbox" checked /> Stay logged in
+              </label>
+              <a href="#" class="fakesite-link" onclick="event.preventDefault(); showToast('⚠️ Fake link: Attackers only collect submitted credentials.', 'warning');">Having trouble logging in?</a>
+            </div>
+            <button type="submit" class="fakesite-submit" style="background:linear-gradient(90deg, #003087, #0070ba);">
+              Log In &amp; Restore Access
+            </button>
+            <div style="margin-top:14px;text-align:center;">
+              <button type="button" class="fakesite-secondary-btn" onclick="event.preventDefault(); showToast('⚠️ Fake link on phishing portal.', 'warning');">Sign Up</button>
+            </div>
+          </form>
+        </div>
+        <div class="fakesite-disclaimer">
+          ⚠️ <strong>Cyber Detective Clue:</strong> Authentic PayPal emails address you by your full name, not generic greetings. Look at the URL bar — <code>paypal-account-check.com</code> is not owned by PayPal!
+        </div>
+      </div>
+      <div class="fakesite-footer">
+        <p>English | Español | Français | Contact Us | Privacy | Legal</p>
+        <p style="margin-top:4px;">Copyright © 1999–2026 PayPal. All rights reserved.</p>
       </div>
     </div>`,
-  'https://gcash-claim-rewards.example/verify': `
-    <div class="fakesite">
-      <div class="fakesite-header" style="background:linear-gradient(90deg,#0f5d2e,#17a34a);">
-        <div class="fakesite-logo">GCash</div>
-        <small style="font-size:12px;opacity:0.8">Rewards Portal</small>
+
+  'https://gcash-claim-rewards.com/verify': `
+    <div class="fakesite fakesite-gcash">
+      <div class="phish-sim-banner">
+        <span class="phish-banner-icon">🚨</span>
+        <span class="phish-banner-text"><strong>PHISHING SIMULATION EXAMPLE:</strong> Look at the browser URL bar: <code>gcash-claim-rewards.com</code> is an MPIN harvesting scam! Authentic GCash is <code>gcash.com</code>.</span>
+      </div>
+      <div class="fakesite-header" style="background:linear-gradient(90deg,#005cfc,#007dfc);">
+        <div class="fakesite-header-inner">
+          <div class="fakesite-logo">📱 GCash</div>
+          <div class="fakesite-subtag">Rewards &amp; Cash Rebates</div>
+        </div>
       </div>
       <div class="fakesite-body">
-        <div class="fakesite-warn">This is a simulated phishing page. Do NOT enter real credentials on suspicious websites.</div>
-        <h2>🎉 Claim Your ₱5,000 Reward</h2>
-        <p>Verify your GCash account to receive your reward instantly.</p>
-        <div class="fakesite-field"><label>GCash Mobile Number</label><input type="text" placeholder="+63 9XX XXX XXXX" /></div>
-        <div class="fakesite-field"><label>MPIN</label><input type="password" placeholder="Enter your 4-digit MPIN" /></div>
-        <button class="fakesite-submit" style="background:linear-gradient(90deg,#0f5d2e,#17a34a);" onclick="alert('🚩 This is a phishing page! Real credentials would be stolen here.')">Claim Reward</button>
-        <p style="font-size:11px;color:#888;margin-top:16px;text-align:center;">gcash-claim-rewards.example — NOT the real GCash website</p>
+        <div class="fakesite-card">
+          <div class="fakesite-card-header">
+            <h2 style="color:#005cfc;">🎉 Claim Your ₱5,000 Cash Reward</h2>
+            <p>Special loyalty reward for verified GCash accounts. Enter details below to deposit directly into your wallet.</p>
+          </div>
+          <form onsubmit="event.preventDefault(); handlePhishingSubmit('gcash-claim-rewards.com', 'GCash');">
+            <div class="fakesite-field">
+              <label for="gcash-phone">Registered Mobile Number</label>
+              <div class="fakesite-phone-wrap">
+                <span class="fakesite-phone-prefix">+63</span>
+                <input type="tel" id="gcash-phone" placeholder="9XX XXX XXXX" maxlength="12" required autocomplete="off" />
+              </div>
+            </div>
+            <div class="fakesite-field">
+              <label for="gcash-mpin">4-Digit MPIN (Security Code)</label>
+              <input type="password" id="gcash-mpin" maxlength="4" placeholder="••••" required autocomplete="off" style="letter-spacing:6px;font-size:18px;text-align:center;" />
+            </div>
+            <div class="fakesite-field">
+              <label for="gcash-otp">One-Time PIN (OTP) from SMS</label>
+              <input type="password" id="gcash-otp" maxlength="6" placeholder="6-digit OTP" autocomplete="off" style="letter-spacing:4px;text-align:center;" />
+            </div>
+            <button type="submit" class="fakesite-submit" style="background:linear-gradient(90deg,#005cfc,#007dfc);">
+              Verify &amp; Claim ₱5,000 Reward
+            </button>
+          </form>
+        </div>
+        <div class="fakesite-disclaimer">
+          ⚠️ <strong>Cyber Detective Clue:</strong> <strong>NEVER</strong> enter your 4-digit MPIN or SMS OTP on any website. GCash will NEVER request your MPIN or OTP via a web link! Real domain is strictly <code>gcash.com</code>.
+        </div>
+      </div>
+      <div class="fakesite-footer">
+        <p>GCash is regulated by the Bangko Sentral ng Pilipinas (BSP).</p>
       </div>
     </div>`
 };
@@ -315,6 +416,7 @@ const gameState = {
   pendingLinkFlagType: null,
   currentFolder: 'inbox',   // inbox | sent | trash
   trashedSentIds: [],       // ids of SENT_EMAILS moved to Trash (only sent mail can be deleted)
+  readSentIds: [],          // ids of SENT_EMAILS that player has opened/read
   malwareQuarantined: 0,
   malwareFalsePositives: 0,
   selectedFolderFileId: null,
@@ -348,6 +450,9 @@ function updateAppLockStates() {
   ['folder', 'antivirus'].forEach(appName => {
     const icon = document.getElementById(`icon-${appName}`);
     const taskbarBtn = document.getElementById(`taskbar-${appName}`);
+    const startCard = document.getElementById(`start-app-${appName}`);
+    const startBadge = document.getElementById(`start-badge-${appName}`);
+    const recItem = document.getElementById(`rec-app-${appName}`);
     const titleText = isLocked ? `🔒 Locked — Complete all 5 email investigations in Gmail first (${remaining} remaining)` : '';
 
     if (icon) {
@@ -368,6 +473,28 @@ function updateAppLockStates() {
         taskbarBtn.title = '';
       }
     }
+    if (startCard) {
+      if (isLocked) {
+        startCard.classList.add('locked');
+        if (startBadge) {
+          startBadge.className = 'start-tile-status lock';
+          startBadge.textContent = '🔒 Locked';
+        }
+      } else {
+        startCard.classList.remove('locked');
+        if (startBadge) {
+          startBadge.className = 'start-tile-status';
+          startBadge.textContent = 'Ready';
+        }
+      }
+    }
+    if (recItem) {
+      if (isLocked) {
+        recItem.classList.add('hidden');
+      } else {
+        recItem.classList.remove('hidden');
+      }
+    }
   });
 }
 
@@ -375,6 +502,7 @@ function openApp(appName) {
   if (isAppLocked(appName)) {
     const remaining = EMAILS.length - (gameState.emailResults ? gameState.emailResults.length : 0);
     showToast(`🔒 Locked: Complete all 5 email investigations first (${remaining} remaining) to unlock ${appName === 'folder' ? 'Folder' : 'Anti-Virus'}!`, 'warning');
+    if (typeof AudioManager !== 'undefined') AudioManager.playWrong();
     return;
   }
 
@@ -391,6 +519,19 @@ function openApp(appName) {
   win.classList.remove('hidden', 'minimized');
   focusWindow(appName);
   updateTaskbar();
+  if (typeof AudioManager !== 'undefined') AudioManager.playWindowSound(true);
+
+  if (appName === 'gmail') {
+    updateFolderCounts();
+  }
+
+  if (appName === 'browser') {
+    if (!browserTabs || browserTabs.length === 0) {
+      initBrowserTabs();
+    } else {
+      renderActiveTab();
+    }
+  }
 
   // First time this app is opened, center it on screen so it isn't
   // hidden behind the Detective's Notes sticky note in the bottom-right corner.
@@ -433,6 +574,7 @@ function closeApp(appName) {
   win.classList.add('hidden');
   win.classList.remove('maximized', 'focused');
   updateTaskbar();
+  if (typeof AudioManager !== 'undefined') AudioManager.playWindowSound(false);
 }
 
 function minimizeApp(appName) {
@@ -441,6 +583,7 @@ function minimizeApp(appName) {
   win.classList.add('minimized');
   win.classList.remove('focused');
   updateTaskbar();
+  if (typeof AudioManager !== 'undefined') AudioManager.playWindowSound(false);
 }
 
 function toggleMaximize(appName) {
@@ -471,7 +614,11 @@ function taskbarClick(appName) {
 
   const state = appState[appName];
   if (!state.open) {
-    openApp(appName);
+    if (appName === 'browser') {
+      openBrowserDefault();
+    } else {
+      openApp(appName);
+    }
   } else if (state.minimized) {
     minimizeApp_restore(appName);
   } else {
@@ -519,6 +666,7 @@ function updateTaskbar() {
   document.addEventListener('mousedown', e => {
     const titlebar = e.target.closest('.win-titlebar');
     if (!titlebar) return;
+    if (e.target.closest('button') || e.target.closest('input')) return;
     const win = titlebar.closest('.app-window');
     if (!win || win.classList.contains('maximized')) return;
 
@@ -543,6 +691,16 @@ function updateTaskbar() {
   });
 
   document.addEventListener('mouseup', () => { dragging = false; });
+
+  // Double click titlebar to toggle maximize (desktop experience)
+  document.addEventListener('dblclick', e => {
+    const titlebar = e.target.closest('.win-titlebar');
+    if (!titlebar || e.target.closest('button') || e.target.closest('input')) return;
+    const win = titlebar.closest('.app-window');
+    if (!win) return;
+    const appName = win.dataset.app;
+    if (appName) toggleMaximize(appName);
+  });
 })();
 
 // ── Click to focus ──
@@ -561,13 +719,35 @@ function updateClock() {
   const now = new Date();
   const h = now.getHours().toString().padStart(2, '0');
   const m = now.getMinutes().toString().padStart(2, '0');
-  document.getElementById('taskbar-time').textContent = `${h}:${m}`;
-  const d = now;
-  document.getElementById('taskbar-date').textContent =
-    `${d.getMonth()+1}/${d.getDate()}/${d.getFullYear()}`;
+  const s = now.getSeconds().toString().padStart(2, '0');
+  
+  const timeEl = document.getElementById('taskbar-time');
+  if (timeEl) timeEl.textContent = `${h}:${m}`;
+  const dateEl = document.getElementById('taskbar-date');
+  if (dateEl) dateEl.textContent = `${now.getMonth()+1}/${now.getDate()}/${now.getFullYear()}`;
+
+  // Live seconds and full date in words for the calendar flyout
+  const calLiveTime = document.getElementById('cal-live-time');
+  if (calLiveTime) {
+    let hours = now.getHours();
+    const ampm = hours >= 12 ? 'PM' : 'AM';
+    hours = hours % 12;
+    hours = hours ? hours : 12; // '0' becomes '12'
+    calLiveTime.textContent = `${hours.toString().padStart(2, '0')}:${m}:${s} ${ampm}`;
+  }
+
+  const calDateWords = document.getElementById('cal-date-words');
+  if (calDateWords) {
+    calDateWords.textContent = now.toLocaleDateString('en-US', {
+      weekday: 'long',
+      month: 'long',
+      day: 'numeric',
+      year: 'numeric'
+    });
+  }
 }
 updateClock();
-setInterval(updateClock, 10000);
+setInterval(updateClock, 1000);
 
 // ═══════════════════════════════════════════════════════════
 // OVERLAY SYSTEM
@@ -806,6 +986,8 @@ function renderPreAssessment() {
   const gradeBox = document.getElementById('exam-teacher-grade-box');
   const submitBtn = document.getElementById('btn-submit-exam');
   const proceedBtn = document.getElementById('btn-proceed-vn');
+  const skipBtn = document.getElementById('btn-skip-exam');
+  const floatingSkipBtn = document.getElementById('btn-floating-skip-exam');
 
   if (isPreAssessmentGraded) {
     if (gradeBox) {
@@ -828,8 +1010,8 @@ function renderPreAssessment() {
         }
         if (teacherNote) {
           teacherNote.textContent = preAssessmentScore >= 9
-            ? '"Outstanding baseline cybersecurity intelligence! You spot phishing lures and double-extension executables effortlessly. Report to Director Zero for immediate field operations."'
-            : '"Solid detective instincts! You understand sender verification and link inspection well. Stay vigilant when inspecting files in Chapter 2."';
+            ? '"Excellent! You already have strong cybersecurity instincts. Ace, Nishren, Phillip, and Jonald would be lucky to have you on their team. CyberZerØ will show you even more!"'
+            : '"Good start! You understand the basics well. Follow Ace and the team through CyberZerØ\'s simulation to sharpen your detection skills."';
         }
       } else {
         if (stampTitle) stampTitle.textContent = 'EVALUATED';
@@ -839,16 +1021,20 @@ function renderPreAssessment() {
           stampEl.style.color = '#d84315';
         }
         if (teacherNote) {
-          teacherNote.textContent = '"Valuable diagnostic baseline. You will need sharp attention in Director Zero\'s simulation to master deceptive domains, script droppers, and file extensions. Follow closely."';
+          teacherNote.textContent = '"Valuable diagnostic result. You will learn a lot as Ace, Nishren, Phillip, and Jonald face their cyber threats. Pay close attention to CyberZerØ\'s guidance throughout the simulation."';
         }
       }
     }
 
     if (submitBtn) submitBtn.classList.add('hidden');
+    if (skipBtn) skipBtn.classList.add('hidden');
+    if (floatingSkipBtn) floatingSkipBtn.classList.add('hidden');
     if (proceedBtn) proceedBtn.classList.remove('hidden');
   } else {
     if (gradeBox) gradeBox.classList.add('hidden');
     if (submitBtn) submitBtn.classList.remove('hidden');
+    if (skipBtn) skipBtn.classList.remove('hidden');
+    if (floatingSkipBtn) floatingSkipBtn.classList.remove('hidden');
     if (proceedBtn) proceedBtn.classList.add('hidden');
   }
 }
@@ -856,14 +1042,33 @@ function renderPreAssessment() {
 function selectPreAssessmentOption(qId, optIdx) {
   if (isPreAssessmentGraded) return;
   preAssessmentAnswers[qId] = optIdx;
+  if (typeof AudioManager !== 'undefined') {
+    AudioManager.playExamChoice();
+  }
   renderPreAssessment();
 }
 
 function submitPreAssessment() {
+  const nameInput = document.getElementById('exam-input-name');
+  const playerName = nameInput ? nameInput.value.trim() : '';
+
+  if (!playerName) {
+    showToast('✍️ Please write your Detective Name on the exam paper before turning it in!', 'warning');
+    if (typeof AudioManager !== 'undefined') AudioManager.playWrong();
+    if (nameInput) {
+      nameInput.focus();
+      nameInput.classList.add('highlight-pulse');
+      setTimeout(() => nameInput.classList.remove('highlight-pulse'), 1200);
+      nameInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+    return;
+  }
+
   const answeredCount = Object.keys(preAssessmentAnswers).length;
   if (answeredCount < PRE_ASSESSMENT_QUESTIONS.length) {
     const missing = PRE_ASSESSMENT_QUESTIONS.length - answeredCount;
     showToast(`⚠️ Please answer all questions before turning in your paper (${missing} left)!`, 'warning');
+    if (typeof AudioManager !== 'undefined') AudioManager.playWrong();
     for (const q of PRE_ASSESSMENT_QUESTIONS) {
       if (preAssessmentAnswers[q.id] === undefined) {
         const el = document.getElementById(`exam-q-${q.id}`);
@@ -874,8 +1079,6 @@ function submitPreAssessment() {
     return;
   }
 
-  const nameInput = document.getElementById('exam-input-name');
-  const playerName = nameInput && nameInput.value.trim() ? nameInput.value.trim() : 'Student';
   gameState.playerName = playerName;
   if (nameInput) nameInput.disabled = true;
 
@@ -895,10 +1098,15 @@ function submitPreAssessment() {
     shell.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
 
+  if (typeof AudioManager !== 'undefined') {
+    if (score >= 7) AudioManager.playCorrect();
+    else AudioManager.playWrong();
+  }
+
   showToast(
     score >= 7
-      ? `🎓 Exam Graded: ${score}/10 — PASSED! Signed by Prof. Zero.`
-      : `🎓 Exam Graded: ${score}/10 — Evaluated. Review teacher remarks!`,
+      ? `🎓 Exam Graded: ${score}/10 — PASSED! CyberZerØ is ready to guide you.`
+      : `🎓 Exam Graded: ${score}/10 — Keep learning! Check the remarks.`,
     score >= 7 ? 'success' : 'warning'
   );
 }
@@ -907,14 +1115,35 @@ function proceedFromPreAssessmentToVN() {
   closeOverlay('overlay-pre-assessment');
   showOverlay('overlay-welcome');
   vnInit();
-  showToast('🕵️ Baseline assessment recorded! Director Zero is briefing you.', 'success');
+  showToast('📖 Pre-assessment done! Follow the story of Ace and friends with CyberZerØ.', 'success');
 }
 
 function skipPreAssessment() {
+  const nameInput = document.getElementById('exam-input-name');
+  const playerName = (nameInput && nameInput.value.trim()) ? nameInput.value.trim() : 'Ace';
+  if (!gameState.playerName) {
+    gameState.playerName = playerName;
+  }
+  if (typeof AudioManager !== 'undefined') {
+    AudioManager.playExamChoice();
+  }
   closeOverlay('overlay-pre-assessment');
   showOverlay('overlay-welcome');
   vnInit();
-  showToast('⏩ Diagnostic skipped — starting field briefing.', 'warning');
+  showToast('⏩ Assessment skipped — starting CyberZerØ story.', 'info');
+}
+
+function skipPreAssessmentFromIntro() {
+  if (!gameState.playerName) {
+    gameState.playerName = 'Ace';
+  }
+  if (typeof AudioManager !== 'undefined') {
+    AudioManager.playNotification();
+  }
+  closeOverlay('overlay-game-intro');
+  showOverlay('overlay-welcome');
+  vnInit();
+  showToast('⏩ Assessment skipped — starting CyberZerØ story.', 'info');
 }
 
 function retakePreAssessment() {
@@ -940,42 +1169,331 @@ function openPreAssessment() {
 // VISUAL NOVEL INTRO ENGINE
 // ═══════════════════════════════════════════════════════════
 
+// ── Speaker → character image map (uses assets/ folder)
+const VN_CHARACTER_MAP = {
+  'NARRATOR':    null,                          // no sprite — narrator is text only
+  'CYBERZERO':   'assets/CyberZerØ.png',
+  'ACE':         'assets/Ace.png',
+  'ACE (ALT)':   'assets/Ace1.png',
+  'NISHREN':     'assets/Nishren.png',
+  'NISHREN (ALT)':'assets/Nishren1.png',
+  'PHILLIP':     'assets/Phillip.png',
+  'PHILLIP (ALT)':'assets/Phillip1.png',
+  'JONALD':      'assets/Jonald.png',
+  'JONALD (ALT)':'assets/Jonald1.png',
+  'SYSTEM':      null,
+};
+
 const VN_DIALOGUE = [
+
+  // ── GAME INTRODUCTION (Narrator-led) ──────────────────────
   {
-    speaker: 'SYSTEM',
-    text: 'CYBERZERO SECURITY DIVISION — AGENT ORIENTATION — YEAR 2026',
-    speed: 40
+    speaker: 'NARRATOR',
+    text: 'Welcome to CyberZerØ — a web simulation game created for enhancing cybersecurity knowledge and awareness for students.',
+    speed: 28,
+    mood: 'neutral',
+    scene: 'intro'
   },
   {
-    speaker: 'DIRECTOR ZERO',
-    text: "Welcome, Agent. I've been expecting you. I'm Director Zero — head of CyberZero's Threat Intelligence Division.",
-    speed: 30
+    speaker: 'NARRATOR',
+    text: 'In this simulation, you will explore realistic digital environments where every link, download, and message carries real security consequences.',
+    speed: 26,
+    mood: 'neutral',
+    scene: 'intro'
   },
   {
-    speaker: 'DIRECTOR ZERO',
-    text: "You've been selected because of your potential. But potential means nothing without the right training.",
-    speed: 30
+    speaker: 'NARRATOR',
+    text: 'You will learn to identify deceptive phishing emails, detect malicious downloads, recognize social engineering, and defend systems from ransomware.',
+    speed: 26,
+    mood: 'neutral',
+    scene: 'intro'
   },
   {
-    speaker: 'DIRECTOR ZERO',
-    text: "Your first mission: 5 suspicious emails are sitting in our monitored inbox. We believe they contain phishing attacks.",
-    speed: 30
+    speaker: 'NARRATOR',
+    text: 'From Zero Knowledge to Cyber Awareness. Your mission: Learn. Detect. Defend.',
+    speed: 28,
+    mood: 'neutral',
+    scene: 'intro'
   },
   {
-    speaker: 'DIRECTOR ZERO',
-    text: "Read each email carefully. Flag every red flag you find — fake senders, false urgency, suspicious links. Then give your verdict.",
-    speed: 30
+    speaker: 'NARRATOR',
+    text: 'Now, follow the story of four students — Ace, Nishren, Phillip, and Jonald — as their journey into the cyber world begins.',
+    speed: 26,
+    mood: 'neutral',
+    scene: 'intro'
+  },
+
+  // ── CHAPTER 1 — THE VIDEO CALL ───────────────────────────
+  {
+    speaker: 'NARRATOR',
+    text: 'CHAPTER 1: The Video Call\n\nAfter school, four friends connect to a video call to work on their school project.',
+    speed: 28,
+    mood: 'neutral',
+    scene: 'chapter1_intro'
   },
   {
-    speaker: 'DIRECTOR ZERO',
-    text: "The city's digital safety depends on agents like you. Take your time, trust the evidence, and give your honest verdict.",
-    speed: 30
+    speaker: 'ACE',
+    text: '"Alright team! Let\'s finish this project before the deadline!"',
+    speed: 28,
+    mood: 'happy',
+    scene: 'videocall'
   },
   {
-    speaker: 'DIRECTOR ZERO',
-    text: "Alright, Agent. Let me show you exactly what to look for — and how to tell a safe email from a dangerous one. Follow closely.",
-    speed: 30
+    speaker: 'PHILLIP',
+    text: '"You said that last week."',
+    speed: 28,
+    mood: 'neutral',
+    scene: 'videocall'
+  },
+  {
+    speaker: 'JONALD',
+    text: '"And then disappeared for three hours."',
+    speed: 28,
+    mood: 'neutral',
+    scene: 'videocall'
+  },
+  {
+    speaker: 'ACE',
+    text: '"I was researching."',
+    speed: 28,
+    mood: 'neutral',
+    scene: 'videocall'
+  },
+  {
+    speaker: 'NISHREN',
+    text: '"You mean gaming."',
+    speed: 28,
+    mood: 'happy',
+    scene: 'videocall'
+  },
+  {
+    speaker: 'ACE',
+    text: '"Researching games."',
+    speed: 28,
+    mood: 'happy',
+    scene: 'videocall'
+  },
+  {
+    speaker: 'NARRATOR',
+    text: 'Everyone laughs.\n\nAs they continue discussing their project, a breaking news alert suddenly appears on screen.',
+    speed: 26,
+    mood: 'neutral',
+    scene: 'videocall'
+  },
+  {
+    speaker: 'NARRATOR',
+    text: '📺 BREAKING NEWS: "Cyber threats targeting students continue to increase as learning activities move online."',
+    speed: 26,
+    mood: 'neutral',
+    scene: 'videocall',
+    newsAlert: true
+  },
+  {
+    speaker: 'PHILLIP',
+    text: '"Students are getting targeted now?"',
+    speed: 28,
+    mood: 'worried',
+    scene: 'videocall'
+  },
+  {
+    speaker: 'JONALD',
+    text: '"Imagine losing our entire project."',
+    speed: 28,
+    mood: 'worried',
+    scene: 'videocall'
+  },
+  {
+    speaker: 'ACE',
+    text: '"That would be terrible."',
+    speed: 28,
+    mood: 'neutral',
+    scene: 'videocall'
+  },
+  {
+    speaker: 'NISHREN',
+    text: '"Good thing we\'re smart."',
+    speed: 28,
+    mood: 'happy',
+    scene: 'videocall'
+  },
+  {
+    speaker: 'PHILLIP',
+    text: '"Those are famous last words."',
+    speed: 28,
+    mood: 'neutral',
+    scene: 'videocall'
+  },
+  {
+    speaker: 'NARRATOR',
+    text: 'Everyone laughs again.',
+    speed: 28,
+    mood: 'neutral',
+    scene: 'videocall'
+  },
+
+  // ── SCENE 2 — CYBERZERO ADVERTISEMENT ───────────────────
+  {
+    speaker: 'NARRATOR',
+    text: 'A new advertisement suddenly appears. Futuristic music begins playing. A glowing AI mascot appears on screen.',
+    speed: 26,
+    mood: 'neutral',
+    scene: 'story'
+  },
+  {
+    speaker: 'CYBERZERO',
+    text: '"Cyber threats are becoming more common every day."\n\nPhishing. Malware. Social Engineering. Ransomware.',
+    speed: 26,
+    mood: 'neutral',
+    scene: 'story'
+  },
+  {
+    speaker: 'CYBERZERO',
+    text: 'Hello, students. I am CyberZerØ — your AI Guide for Cybersecurity Knowledge and Awareness.',
+    speed: 26,
+    mood: 'neutral',
+    scene: 'story'
+  },
+  {
+    speaker: 'CYBERZERO',
+    text: 'My mission is to help students recognize cyber threats and stay safe online.',
+    speed: 26,
+    mood: 'neutral',
+    scene: 'story'
+  },
+  {
+    speaker: 'CYBERZERO',
+    text: 'Learn. Detect. Defend.',
+    speed: 32,
+    mood: 'neutral',
+    scene: 'story'
+  },
+  {
+    speaker: 'NISHREN',
+    text: '"That looks like a game trailer."',
+    speed: 28,
+    mood: 'happy',
+    scene: 'story'
+  },
+  {
+    speaker: 'PHILLIP',
+    text: '"I\'d play it."',
+    speed: 28,
+    mood: 'happy',
+    scene: 'story'
+  },
+  {
+    speaker: 'ACE',
+    text: '"Looks cool."',
+    speed: 28,
+    mood: 'happy',
+    scene: 'story'
+  },
+  {
+    speaker: 'JONALD',
+    text: '"Hopefully we never need it."',
+    speed: 28,
+    mood: 'neutral',
+    scene: 'story'
+  },
+  {
+    speaker: 'NARRATOR',
+    text: 'The four friends continue working on their project.\n\nBut over the next few days, each student encounters a different cyber threat.',
+    speed: 26,
+    mood: 'neutral',
+    scene: 'story'
+  },
+
+  // ── CHAPTER 2 — ACE & PHISHING ───────────────────────────
+  {
+    speaker: 'NARRATOR',
+    text: 'CHAPTER 2: Ace and the Phishing Email\n\nThe next morning, Ace receives an urgent email.',
+    speed: 28,
+    mood: 'neutral',
+    scene: 'story'
+  },
+  {
+    speaker: 'ACE',
+    text: '"What?! My school account will be suspended? I better click this link..."',
+    speed: 28,
+    mood: 'worried',
+    scene: 'story'
+  },
+  {
+    speaker: 'ACE',
+    text: '"Wait... CyberZerØ mentioned something about phishing."',
+    speed: 28,
+    mood: 'neutral',
+    scene: 'story'
+  },
+  {
+    speaker: 'CYBERZERO',
+    text: 'Warning detected. This email contains signs of phishing.',
+    speed: 26,
+    mood: 'neutral',
+    scene: 'story'
+  },
+  {
+    speaker: 'ACE',
+    text: '"So it\'s fake?"',
+    speed: 28,
+    mood: 'worried',
+    scene: 'story'
+  },
+  {
+    speaker: 'CYBERZERO',
+    text: 'Most likely. Let\'s investigate. Can you find the suspicious clues?',
+    speed: 26,
+    mood: 'neutral',
+    scene: 'story'
+  },
+  {
+    speaker: 'ACE',
+    text: '"The sender address looks strange — it\'s not from an official domain."',
+    speed: 28,
+    mood: 'neutral',
+    scene: 'story'
+  },
+  {
+    speaker: 'CYBERZERO',
+    text: 'Lesson learned: Check the sender. Verify links. Avoid urgent requests. Now it\'s your turn to investigate.',
+    speed: 26,
+    mood: 'neutral',
+    scene: 'story'
   }
+];
+
+// Archived script chapters for subsequent game expansions
+const ARCHIVED_EXPANSION_CHAPTERS = [
+  // Chapter 3: Nishren and Malware
+  { speaker: 'NARRATOR', text: 'CHAPTER 3: Nishren and Malware\n\nNishren discovers a free software tool online that he thinks will help with the school project.' },
+  { speaker: 'NISHREN', text: '"This will help our project! Let me download it."' },
+  { speaker: 'NARRATOR', text: 'He downloads the file. Moments later, his computer slows down and strange errors begin to appear.' },
+  { speaker: 'NISHREN', text: '"Uh-oh. Something\'s wrong..."' },
+  { speaker: 'CYBERZERO', text: 'This software may contain malware. Malicious programs disguise themselves as useful tools to gain access to your system.' },
+  { speaker: 'CYBERZERO', text: 'Lesson learned: Download from trusted websites only. Verify publishers. Scan files before opening.' },
+  // Chapter 4: Phillip and Social Engineering
+  { speaker: 'NARRATOR', text: 'CHAPTER 4: Phillip and Social Engineering\n\nPhillip receives an unexpected phone call from someone claiming to be from his school\'s IT department.' },
+  { speaker: 'PHILLIP', text: '"We need your password to verify your account," the caller says. They sound very official...' },
+  { speaker: 'NARRATOR', text: 'Then Phillip remembers what CyberZerØ taught him.' },
+  { speaker: 'PHILLIP', text: '"Wait... legitimate staff would never ask for my password over a call."' },
+  { speaker: 'CYBERZERO', text: 'Exactly, Phillip. That is social engineering — manipulating people into giving up sensitive information.' },
+  { speaker: 'CYBERZERO', text: 'Lesson learned: Verify identities through official channels. Never share your password. Think before you respond.' },
+  // Chapter 5: Jonald and Ransomware
+  { speaker: 'NARRATOR', text: 'CHAPTER 5: Jonald and Ransomware\n\nJonald opens a suspicious email attachment. Suddenly, his files become completely inaccessible.' },
+  { speaker: 'JONALD', text: '"No! My project files! I can\'t open anything!"' },
+  { speaker: 'CYBERZERO', text: 'This appears to be ransomware — malware that locks your files and demands payment to restore access.' },
+  { speaker: 'CYBERZERO', text: 'The best defense: back up files regularly, avoid suspicious attachments, and always keep your software updated.' },
+  // Final Chapter: Virtual Classroom
+  { speaker: 'NARRATOR', text: 'After completing all training missions, the four students gather inside CyberZerØ\'s virtual classroom.' },
+  { speaker: 'CYBERZERO', text: 'Excellent work, everyone. What have you learned today?' },
+  { speaker: 'ACE', text: '"How to spot phishing — check the sender, verify links, and never rush."' },
+  { speaker: 'NISHREN', text: '"How to avoid malware — only download from trusted sources."' },
+  { speaker: 'PHILLIP', text: '"How to recognize social engineering — never share passwords, always verify."' },
+  { speaker: 'JONALD', text: '"How to protect my files from ransomware — back up everything!"' },
+  { speaker: 'CYBERZERO', text: 'Excellent. Knowledge is your strongest defense. The more you know, the safer you become.' },
+  { speaker: 'ACE', text: '"So cybersecurity isn\'t only for experts?"' },
+  { speaker: 'CYBERZERO', text: 'Correct. Cybersecurity is for everyone — especially students like you.' },
+  { speaker: 'NARRATOR', text: 'The four students successfully complete their school project — and gain something far more valuable: the knowledge to stay safe online.\n\n— CyberZerØ: Learn. Detect. Defend. —' }
 ];
 
 const vnState = {
@@ -992,6 +1510,14 @@ function vnInit() {
   vnState.done = false;
   vnState.typing = false;
   if (vnState.typingTimer) clearTimeout(vnState.typingTimer);
+  const bgBackdrop = document.getElementById('vn-bg-backdrop');
+  if (bgBackdrop) {
+    bgBackdrop.style.backgroundImage = "url('assets/01Cover.png')";
+  }
+  const vcallStage = document.getElementById('vn-videocall-stage');
+  if (vcallStage) vcallStage.classList.add('hidden');
+  const welcomeOv = document.getElementById('overlay-welcome');
+  if (welcomeOv) welcomeOv.classList.remove('vn-mode-videocall');
   vnPlayLine(0);
 }
 
@@ -1019,22 +1545,138 @@ function vnPlayLine(index) {
   const line = VN_DIALOGUE[index];
   if (!line) return;
 
-  const textEl    = document.getElementById('vn-text');
-  const cursorEl  = document.getElementById('vn-cursor');
-  const speakerEl = document.getElementById('vn-speaker-name');
-  const hintEl    = document.getElementById('vn-advance-hint');
-  const indEl     = document.getElementById('vn-line-indicator');
-  const charEl    = document.getElementById('vn-character');
+  const textEl        = document.getElementById('vn-text');
+  const cursorEl      = document.getElementById('vn-cursor');
+  const speakerEl     = document.getElementById('vn-speaker-name');
+  const hintEl        = document.getElementById('vn-advance-hint');
+  const indEl         = document.getElementById('vn-line-indicator');
+  const charEl        = document.getElementById('vn-character');
+  const spriteEl      = document.getElementById('vn-char-sprite');
+  const charArea      = document.getElementById('vn-character-area');
+
+  const vcallStage    = document.getElementById('vn-videocall-stage');
+  const vcallWrapper  = document.getElementById('vcall-aspect-wrapper');
+  const welcomeOv     = document.getElementById('overlay-welcome');
+  const bgBackdrop    = document.getElementById('vn-bg-backdrop');
+  const avatarWrap    = document.getElementById('vn-speaker-avatar-wrap');
+  const avatarImg     = document.getElementById('vn-speaker-avatar');
+  const speakerStatus = document.getElementById('vn-speaker-status');
+  const newsBanner    = document.getElementById('vcall-news-banner');
 
   speakerEl.textContent = line.speaker;
   indEl.textContent = `${index + 1} / ${VN_DIALOGUE.length}`;
   hintEl.classList.remove('visible');
   cursorEl.classList.remove('visible');
   textEl.textContent = '';
-  if (charEl) charEl.classList.add('vn-speaking');
 
-  // Update the speaker display element too
-  document.getElementById('vn-speaker-name').textContent = line.speaker;
+  const imgSrc = VN_CHARACTER_MAP[line.speaker] || null;
+  const isVideoCall = (line.scene === 'videocall');
+
+  if (isVideoCall) {
+    // ── CHAPTER 1 VIDEO CALL SCENE (assets/Chapter1.png) ──
+    if (vcallStage) vcallStage.classList.remove('hidden');
+    if (welcomeOv) welcomeOv.classList.add('vn-mode-videocall');
+
+    // Hide large central sprite so the 4 video streams in Chapter1.png are completely visible
+    if (charArea) {
+      charArea.style.opacity = '0';
+      charArea.style.display = 'none';
+      if (charEl) charEl.classList.remove('vn-speaking');
+    }
+
+    // 4 speaker quadrants on Chapter1.png:
+    // Top-Left: Nishren | Top-Right: Ace | Bottom-Left: Phillip | Bottom-Right: Jonald
+    const quads = {
+      'NISHREN': document.getElementById('vcall-quad-nishren'),
+      'ACE':     document.getElementById('vcall-quad-ace'),
+      'PHILLIP': document.getElementById('vcall-quad-phillip'),
+      'JONALD':  document.getElementById('vcall-quad-jonald')
+    };
+
+    Object.values(quads).forEach(q => q && q.classList.remove('active-speaker'));
+
+    const activeQuad = quads[line.speaker];
+    if (activeQuad) {
+      activeQuad.classList.add('active-speaker');
+      if (vcallWrapper) vcallWrapper.classList.add('has-active-speaker');
+
+      // Show speaker avatar and video call status
+      if (avatarWrap) avatarWrap.classList.remove('hidden');
+      if (avatarImg && imgSrc) avatarImg.src = imgSrc;
+      if (speakerStatus) {
+        speakerStatus.classList.remove('hidden');
+        speakerStatus.textContent = `🟢 ${line.speaker} • SPEAKING ON CALL`;
+      }
+      if (typeof AudioManager !== 'undefined') {
+        AudioManager.playExamChoice();
+      }
+    } else {
+      // Narrator speaking during the call — keep all 4 tiles equally visible
+      if (vcallWrapper) vcallWrapper.classList.remove('has-active-speaker');
+      if (avatarWrap) avatarWrap.classList.add('hidden');
+      if (speakerStatus) speakerStatus.classList.add('hidden');
+    }
+
+    // Breaking news banner on video call
+    if (newsBanner) {
+      if (line.newsAlert) {
+        newsBanner.classList.remove('hidden');
+        if (typeof AudioManager !== 'undefined') AudioManager.playWrong();
+      } else {
+        newsBanner.classList.add('hidden');
+      }
+    }
+
+    // Dynamic duration counter
+    const durEl = document.getElementById('vcall-duration');
+    if (durEl) {
+      const sec = 245 + Math.max(0, (index - 5) * 6);
+      const m = String(Math.floor(sec / 60)).padStart(2, '0');
+      const s = String(sec % 60).padStart(2, '0');
+      durEl.textContent = `${m}:${s}`;
+    }
+  } else {
+    // ── STANDARD STORY SCENE ──
+    if (vcallStage) vcallStage.classList.add('hidden');
+    if (welcomeOv) welcomeOv.classList.remove('vn-mode-videocall');
+    if (avatarWrap) avatarWrap.classList.add('hidden');
+    if (speakerStatus) speakerStatus.classList.add('hidden');
+    if (newsBanner) newsBanner.classList.add('hidden');
+
+    if (bgBackdrop) {
+      bgBackdrop.style.backgroundImage = "url('assets/01Cover.png')";
+    }
+
+    // Dynamic character image swap
+    if (spriteEl && charArea) {
+      if (imgSrc) {
+        charArea.style.opacity = '0';
+        charArea.style.transition = 'opacity 0.35s ease';
+        spriteEl.innerHTML = `<img src="${imgSrc}" alt="${line.speaker}" class="vn-char-img" />`;
+        charArea.style.display = 'flex';
+        requestAnimationFrame(() => {
+          requestAnimationFrame(() => { charArea.style.opacity = '1'; });
+        });
+        if (charEl) charEl.classList.add('vn-speaking');
+      } else {
+        charArea.style.opacity = '0';
+        charArea.style.display = 'none';
+        if (charEl) charEl.classList.remove('vn-speaking');
+      }
+    }
+  }
+
+  // ── Speaker name colour by role ───────────────────────────
+  const colours = {
+    'CYBERZERO': 'var(--accent-cyan)',
+    'NARRATOR':  'var(--accent-blue)',
+    'ACE':       '#f9a825',
+    'NISHREN':   '#81c784',
+    'PHILLIP':   '#ba68c8',
+    'JONALD':    '#e57373',
+    'SYSTEM':    'var(--accent-cyan)',
+  };
+  speakerEl.style.color = colours[line.speaker] || 'var(--accent-cyan)';
 
   if (vnState.typingTimer) clearTimeout(vnState.typingTimer);
   vnState.typing = true;
@@ -1042,16 +1684,21 @@ function vnPlayLine(index) {
 
   function typeNextChar() {
     if (vnState.charIndex < line.text.length) {
-      textEl.textContent += line.text[vnState.charIndex];
+      const ch = line.text[vnState.charIndex];
+      textEl.textContent += ch;
       vnState.charIndex++;
+      // Play a soft typing blip for visible (non-space/newline) characters
+      if (typeof AudioManager !== 'undefined' && ch.trim().length > 0) {
+        AudioManager.playNarratorTyping();
+      }
       vnState.typingTimer = setTimeout(typeNextChar, line.speed);
     } else {
       vnState.typing = false;
-      if (charEl) charEl.classList.remove('vn-speaking');
+      if (charEl && charArea && charArea.style.display !== 'none') charEl.classList.remove('vn-speaking');
       cursorEl.classList.add('visible');
       hintEl.classList.add('visible');
       const hint = hintEl.querySelector('span:first-child');
-      hint.textContent = (index === VN_DIALOGUE.length - 1) ? 'Watch the Demo →' : 'Click to continue';
+      hint.textContent = (index === VN_DIALOGUE.length - 1) ? 'Start Phishing Demo ➔' : 'Click to continue';
       if (index === VN_DIALOGUE.length - 1) vnState.done = true;
     }
   }
@@ -1068,12 +1715,13 @@ function vnAdvance() {
     const cursorEl = document.getElementById('vn-cursor');
     const hintEl   = document.getElementById('vn-advance-hint');
     const charEl   = document.getElementById('vn-character');
+    const charArea = document.getElementById('vn-character-area');
     textEl.textContent = line.text;
-    if (charEl) charEl.classList.remove('vn-speaking');
+    if (charEl && charArea && charArea.style.display !== 'none') charEl.classList.remove('vn-speaking');
     cursorEl.classList.add('visible');
     hintEl.classList.add('visible');
     const hint = hintEl.querySelector('span:first-child');
-    hint.textContent = (vnState.lineIndex === VN_DIALOGUE.length - 1) ? 'Watch the Demo →' : 'Click to continue';
+    hint.textContent = (vnState.lineIndex === VN_DIALOGUE.length - 1) ? 'Start Phishing Demo ➔' : 'Click to continue';
     if (vnState.lineIndex === VN_DIALOGUE.length - 1) vnState.done = true;
     return;
   }
@@ -1093,6 +1741,10 @@ function vnSkip() {
 
 function vnFinish() {
   vnState.done = true;
+  const vcallStage = document.getElementById('vn-videocall-stage');
+  if (vcallStage) vcallStage.classList.add('hidden');
+  const welcomeOv = document.getElementById('overlay-welcome');
+  if (welcomeOv) welcomeOv.classList.remove('vn-mode-videocall');
   // Go straight to the interactive demo — no training slides
   startDemo();
 }
@@ -1188,7 +1840,7 @@ const DEMO_SCRIPT = [
     step: 2,
     label: 'Flag Sender',
     objective: 'Flag the fake sender address',
-    speech: `🔴 <strong>RED FLAG #1 — FAKE SENDER</strong><br><br><em>security@bpi-secure-login.example</em> isn't the real bank domain (<em>@bpi.com.ph</em>) — it's a lookalike built to fool you.<br><br>First, click 🚩 <strong>Flag Evidence</strong> to turn on flag mode, then flag it →`,
+    speech: `🔴 <strong>RED FLAG #1 — FAKE SENDER</strong><br><br><em>bpi.security.verification@gmail.com</em> uses a free public <strong>@gmail.com</strong> address instead of the official bank domain (<em>@bpi.com.ph</em>)! Legitimate banks NEVER email you from Gmail.<br><br>First, click 🚩 <strong>Flag Evidence</strong> to turn on flag mode, then flag it →`,
     btn: 'Flag It & Continue →',
     action: 'flag-sender'
   },
@@ -1212,7 +1864,7 @@ const DEMO_SCRIPT = [
     step: 5,
     label: 'Flag Link',
     objective: 'Flag the mismatched link',
-    speech: `🕵️ <strong>CAUGHT IT.</strong><br><br>The real destination is <em>bpi-account-security.example</em> — a fake login page built to steal credentials.<br><br>Flagging it as evidence #3 →`,
+    speech: `🕵️ <strong>CAUGHT IT.</strong><br><br>The real destination is <em>https://bpi-online-security.com/login</em> — a fake phishing portal built to steal banking credentials.<br><br>Flagging it as evidence #3 →`,
     btn: 'Flag It & Continue →',
     action: 'flag-link'
   },
@@ -1343,6 +1995,8 @@ function resetDemoVisuals() {
   }
 
   // Evidence panel
+  const evPanel = document.getElementById('gdemo-evidence-panel');
+  if (evPanel) evPanel.classList.remove('hidden');
   updateDemoEvidencePanel([]);
 }
 
@@ -1422,7 +2076,7 @@ function executeDemoAction(action, callback) {
                 clickEffect(() => {
                   const sender = document.getElementById('gdemo-sender');
                   sender.classList.add('gdemo-flagged');
-                  gdemoFlags.push({ icon: '🚩', label: 'FAKE SENDER', text: 'security@bpi-secure-login.example' });
+                  gdemoFlags.push({ icon: '🚩', label: 'FAKE SENDER', text: 'bpi.security.verification@gmail.com' });
                   updateDemoEvidencePanel(gdemoFlags);
                   hideCursor();
                   setTimeout(re, 500);
@@ -1464,7 +2118,7 @@ function executeDemoAction(action, callback) {
         clickEffect(() => {
           const link = document.getElementById('gdemo-link');
           link.classList.add('gdemo-flagged');
-          gdemoFlags.push({ icon: '🚩', label: 'SUSPICIOUS LINK', text: 'https://bpi-account-security.example/login' });
+          gdemoFlags.push({ icon: '🚩', label: 'SUSPICIOUS LINK', text: 'https://bpi-online-security.com/login' });
           updateDemoEvidencePanel(gdemoFlags);
           hideCursor();
           setTimeout(re, 500);
@@ -1528,6 +2182,9 @@ function executeDemoAction(action, callback) {
       flagBtn.classList.remove('active');
       flagBtn.disabled = true;
       flagBtn.style.opacity = '0.4';
+
+      const evPanel = document.getElementById('gdemo-evidence-panel');
+      if (evPanel) evPanel.classList.add('hidden');
 
       // Show legit email with fade-in
       legitEmail.classList.remove('hidden');
@@ -1624,25 +2281,32 @@ function animateCursorTo(targetId, cb) {
   const cursor = document.getElementById('gdemo-cursor');
   const workspace = document.getElementById('gdemo-workspace') || document.querySelector('.gdemo-workspace');
   const target = document.getElementById(targetId);
-  if (!target || !workspace) { if (cb) cb(); return; }
+  if (!target || !workspace || !cursor) { if (cb) cb(); return; }
 
-  const wsRect = workspace.getBoundingClientRect();
-  const tRect = target.getBoundingClientRect();
-
-  // Point precisely at the target with fingertip aligned, steady and fixed
-  const left = tRect.left - wsRect.left + (tRect.width / 2) - 12;
-  const top = tRect.top - wsRect.top + (tRect.height / 2);
-
-  cursor.classList.add('visible');
-  cursor.style.left = left + 'px';
-  cursor.style.top = top + 'px';
+  // Ensure target is scrolled into view if needed
+  if (typeof target.scrollIntoView === 'function') {
+    target.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+  }
 
   setTimeout(() => {
-    // pulse highlight target
-    target.classList.add('gdemo-highlight-pulse');
-    setTimeout(() => target.classList.remove('gdemo-highlight-pulse'), 700);
-    if (cb) cb();
-  }, 700);
+    const wsRect = workspace.getBoundingClientRect();
+    const tRect = target.getBoundingClientRect();
+
+    // Point precisely at the target with fingertip aligned, steady and fixed
+    const left = tRect.left - wsRect.left + (tRect.width / 2) - 12;
+    const top = tRect.top - wsRect.top + (tRect.height / 2);
+
+    cursor.classList.add('visible');
+    cursor.style.left = left + 'px';
+    cursor.style.top = top + 'px';
+
+    setTimeout(() => {
+      // pulse highlight target
+      target.classList.add('gdemo-highlight-pulse');
+      setTimeout(() => target.classList.remove('gdemo-highlight-pulse'), 700);
+      if (cb) cb();
+    }, 700);
+  }, 100);
 }
 
 function clickEffect(cb) {
@@ -1694,10 +2358,12 @@ function startMission() {
   gameState.emailResults = [];
   gameState.currentFolder = 'inbox';
   gameState.trashedSentIds = [];
+  gameState.readSentIds = [];
 
   hideAllOverlays();
   renderEmailList();
   updateHUD();
+  updateFolderCounts();
   updateAppLockStates();
 
   document.getElementById('hud').classList.remove('hidden');
@@ -1895,14 +2561,30 @@ function switchGmailFolder(folder) {
 }
 
 function updateFolderCounts() {
+  const inboxBadge = document.getElementById('inbox-count');
   const sentBadge = document.getElementById('sent-count');
   const trashBadge = document.getElementById('trash-count');
-  if (sentBadge) {
-    const activeCount = SENT_EMAILS.filter(e => !gameState.trashedSentIds.includes(e.id)).length;
-    sentBadge.textContent = activeCount;
+
+  // Inbox badge: count remaining uncompleted/uninvestigated emails
+  if (inboxBadge) {
+    const remainingInbox = EMAILS.filter(e => !gameState.emailResults.some(r => r.emailId === e.id)).length;
+    inboxBadge.textContent = remainingInbox;
+    inboxBadge.style.display = remainingInbox > 0 ? 'inline-block' : 'none';
   }
+
+  // Sent badge: count unread/unopened sent emails (excluding trashed ones)
+  if (sentBadge) {
+    if (!gameState.readSentIds) gameState.readSentIds = [];
+    const unreadSent = SENT_EMAILS.filter(e => !gameState.trashedSentIds.includes(e.id) && !gameState.readSentIds.includes(e.id)).length;
+    sentBadge.textContent = unreadSent;
+    sentBadge.style.display = unreadSent > 0 ? 'inline-block' : 'none';
+  }
+
+  // Trash badge: count trashed items
   if (trashBadge) {
-    trashBadge.textContent = gameState.trashedSentIds.length;
+    const trashCount = gameState.trashedSentIds ? gameState.trashedSentIds.length : 0;
+    trashBadge.textContent = trashCount;
+    trashBadge.style.display = trashCount > 0 ? 'inline-block' : 'none';
   }
 }
 
@@ -1984,14 +2666,20 @@ function renderSentOrTrashList(items, folder) {
     const avatarColors = ['#5c6bc0', '#00897b'];
     const avatarColor = avatarColors[idx % avatarColors.length];
 
+    const isRead = (folder === 'sent') ? (gameState.readSentIds && gameState.readSentIds.includes(email.id)) : true;
     const item = document.createElement('div');
-    item.className = 'email-list-item read';
+    item.className = `email-list-item ${isRead ? 'read' : 'unread'}`;
 
     let actionBtn = '';
     if (folder === 'sent') {
       actionBtn = `<button class="email-action-btn email-delete-btn" title="Delete" onclick="event.stopPropagation(); deleteSentEmail(${email.id})">🗑</button>`;
     } else {
       actionBtn = `<button class="email-action-btn email-restore-btn" title="Restore" onclick="event.stopPropagation(); restoreSentEmail(${email.id})">↩ Restore</button>`;
+    }
+
+    let dotHtml = '';
+    if (!isRead && folder === 'sent') {
+      dotHtml = `<div class="email-status-dot"></div>`;
     }
 
     item.innerHTML = `
@@ -2003,6 +2691,7 @@ function renderSentOrTrashList(items, folder) {
       </div>
       <div class="email-list-meta">
         <span class="email-list-time">${email.time}</span>
+        ${dotHtml}
         ${actionBtn}
       </div>`;
 
@@ -2016,6 +2705,15 @@ function renderSentOrTrashList(items, folder) {
 function openSentOrTrashEmail(id, folder) {
   const email = SENT_EMAILS.find(e => e.id === id);
   if (!email) return;
+
+  // If opening a sent email, mark as read/seen and update folder badges
+  if (folder === 'sent') {
+    if (!gameState.readSentIds) gameState.readSentIds = [];
+    if (!gameState.readSentIds.includes(id)) {
+      gameState.readSentIds.push(id);
+    }
+    updateFolderCounts();
+  }
 
   // Switch view: list -> reading pane (same visual treatment as Inbox)
   document.getElementById('email-list-view').classList.remove('active');
@@ -2081,12 +2779,14 @@ function deleteSentEmail(id) {
     gameState.trashedSentIds.push(id);
   }
   showToast('🗑 Moved to Trash', 'success');
+  updateFolderCounts();
   renderEmailList();
 }
 
 function restoreSentEmail(id) {
   gameState.trashedSentIds = gameState.trashedSentIds.filter(x => x !== id);
   showToast('↩ Restored to Sent', 'success');
+  updateFolderCounts();
   renderEmailList();
 }
 
@@ -2169,7 +2869,7 @@ function renderEmailContent(email) {
     </div>
     <div class="email-meta-row">
       <span class="email-meta-label">TO</span>
-      <span class="email-meta-value" style="color:var(--text-muted)">me@company.example</span>
+      <span class="email-meta-value" style="color:var(--text-muted)">me@cybercorp.com</span>
     </div>
     <div class="email-meta-row">
       <span class="email-meta-label">DATE</span>
@@ -2216,6 +2916,7 @@ function renderEmailContent(email) {
       link.dataset.destination = part.destination;
       link.textContent = part.text;
       link.setAttribute('onclick', 'handleEmailLinkClick(event, this)');
+      link.setAttribute('oncontextmenu', 'handleEmailLinkRightClick(event, this)');
       wrap.appendChild(link);
       body.appendChild(wrap);
     }
@@ -2243,13 +2944,24 @@ function handleFlaggableClick(el) {
   placeFlag(el);
 }
 
-function handleEmailLinkClick(event, el) {
+function handleEmailLinkRightClick(event, el) {
   event.preventDefault();
   const destination = el.dataset.destination;
   if (destination) {
     showLinkPopup(el, destination);
-  } else if (gameState.flagModeActive) {
+  }
+}
+
+function handleEmailLinkClick(event, el) {
+  event.preventDefault();
+  const destination = el.dataset.destination;
+  if (gameState.flagModeActive) {
     placeFlag(el);
+    return;
+  }
+  if (destination) {
+    // Directly open the phishing website in the browser app
+    openSuspiciousSite(destination);
   }
 }
 
@@ -2299,8 +3011,19 @@ function openInBrowser() {
 
 function openSuspiciousSite(url) {
   openApp('browser');
-  navigateBrowser(url);
   focusWindow('browser');
+
+  if (!browserTabs || browserTabs.length === 0) {
+    initBrowserTabs();
+  }
+
+  const activeTab = getActiveTab();
+  if (activeTab && (activeTab.url === 'https://www.google.com' || activeTab.url === '') && activeTab.history.length <= 1) {
+    navigateBrowser(url);
+  } else {
+    // Add new tab when open other site like a real desktop browser!
+    createNewBrowserTab(url);
+  }
 }
 
 // ═══════════════════════════════════════════════════════════
@@ -2359,6 +3082,7 @@ function placeFlag(el) {
 
   el.classList.add('flagged');
   renderEvidencePanel();
+  if (typeof AudioManager !== 'undefined') AudioManager.playFlagChirp();
   showToast(`🚩 Flagged: ${flag.label}`, 'success');
 }
 
@@ -2486,8 +3210,10 @@ function submitReport(isPhishing) {
       gameState.correctDecisions++;
       if (isPhishing) gameState.phishingDetected++;
       else gameState.legitimateDetected++;
+      if (typeof AudioManager !== 'undefined') AudioManager.playCorrect();
     } else {
       emailScore -= 50;
+      if (typeof AudioManager !== 'undefined') AudioManager.playWrong();
     }
 
     // Evidence scoring (only matters for phishing emails)
@@ -2554,6 +3280,7 @@ function submitReport(isPhishing) {
     }
 
     updateHUD();
+    updateFolderCounts();
     showCapybaraResult(result, email);
   } finally {
     isSubmittingReport = false;
@@ -2757,6 +3484,7 @@ function finishMission() {
   // Update sticky note to Malware points system for Chapter 2
   updateStickyNoteForPhase('malware');
   showOverlay('overlay-results');
+  if (typeof AudioManager !== 'undefined') AudioManager.playMissionComplete();
 }
 
 // ═══════════════════════════════════════════════════════════
@@ -2776,6 +3504,9 @@ function playAgain() {
   gameState.emailResults = [];
   gameState.currentEmailFlags = [];
   gameState.flagModeActive = false;
+  gameState.currentFolder = 'inbox';
+  gameState.trashedSentIds = [];
+  gameState.readSentIds = [];
   gameState.trainingSlide = 0;
   gameState.demoStep = 0;
   gdemoStep = 0;
@@ -2813,13 +3544,18 @@ function playAgain() {
   updateHUD();
 
   // Reset browser
-  document.getElementById('browser-content').innerHTML = BROWSER_HOME_HTML;
-  document.getElementById('browser-url-input').value = '';
-  document.getElementById('browser-security').textContent = '⚠️ Not Secure';
-  document.getElementById('browser-security').className = 'browser-security-indicator';
+  browserTabs = [];
+  browserActiveTabId = 0;
+  browserTabCounter = 0;
   browserHistory = [];
   browserCurrentIdx = -1;
   browserBypassed = new Set();
+  document.getElementById('browser-content').innerHTML = BROWSER_HOME_HTML;
+  document.getElementById('browser-url-input').value = '';
+  document.getElementById('browser-security').textContent = '🔒 Secure';
+  document.getElementById('browser-security').className = 'browser-security-indicator secure';
+  const strip = document.getElementById('browser-tabs-strip');
+  if (strip) strip.innerHTML = '';
 
   showOverlay('overlay-welcome');
   vnInit();
@@ -2832,6 +3568,403 @@ function playAgain() {
 let browserHistory = [];
 let browserCurrentIdx = -1;
 let browserBypassed = new Set(); // URLs the player chose to "Proceed (unsafe)" past the cert warning
+
+// ── MULTI-TAB SYSTEM ──────────────────────────────────────
+// Each tab: { id, url, title, icon, history, histIdx }
+let browserTabs = [];
+let browserActiveTabId = 0;
+let browserTabCounter = 0;
+
+function initBrowserTabs() {
+  browserTabs = [];
+  browserTabCounter = 0;
+  browserActiveTabId = 0;
+  const homeTab = createTabObj('https://www.google.com', 'Google', '🌐');
+  browserTabs.push(homeTab);
+  browserActiveTabId = homeTab.id;
+  renderTabStrip();
+  renderActiveTab();
+}
+
+function createTabObj(url, title, icon) {
+  return {
+    id: ++browserTabCounter,
+    url: url,
+    title: title,
+    icon: icon,
+    history: [url],
+    histIdx: 0
+  };
+}
+
+function getActiveTab() {
+  return browserTabs.find(t => t.id === browserActiveTabId) || null;
+}
+
+function switchTab(tabId) {
+  browserActiveTabId = tabId;
+  renderTabStrip();
+  renderActiveTab();
+}
+
+function closeTab(tabId, event) {
+  if (event) event.stopPropagation();
+  const idx = browserTabs.findIndex(t => t.id === tabId);
+  if (idx === -1) return;
+  browserTabs.splice(idx, 1);
+  if (browserTabs.length === 0) {
+    // Re-open a blank tab
+    initBrowserTabs();
+    return;
+  }
+  if (browserActiveTabId === tabId) {
+    const newIdx = Math.min(idx, browserTabs.length - 1);
+    browserActiveTabId = browserTabs[newIdx].id;
+  }
+  renderTabStrip();
+  renderActiveTab();
+}
+
+function createNewBrowserTab(url) {
+  url = url || 'https://www.google.com';
+  const tab = createTabObj(url, 'New Tab', '🌐');
+  browserTabs.push(tab);
+  browserActiveTabId = tab.id;
+  renderTabStrip();
+  renderPageIntoTab(tab, url);
+}
+
+function renderTabStrip() {
+  const strip = document.getElementById('browser-tabs-strip');
+  if (!strip) return;
+  strip.innerHTML = browserTabs.map(tab => `
+    <div class="browser-tab${tab.id === browserActiveTabId ? ' active' : ''}" onclick="switchTab(${tab.id})" title="${tab.url}">
+      <span class="browser-tab-favicon">${tab.icon}</span>
+      <span class="browser-tab-title">${escapeHtml(tab.title)}</span>
+      <button class="browser-tab-close" onclick="closeTab(${tab.id}, event)" title="Close tab">✕</button>
+    </div>
+  `).join('') +
+  `<button class="browser-new-tab-btn" onclick="createNewBrowserTab()" title="New Tab">+</button>`;
+}
+
+function renderActiveTab() {
+  const tab = getActiveTab();
+  if (!tab) return;
+  const urlInput = document.getElementById('browser-url-input');
+  if (urlInput) urlInput.value = tab.url === 'https://www.google.com' ? '' : tab.url;
+  // Sync global history vars for back/forward
+  browserHistory = tab.history;
+  browserCurrentIdx = tab.histIdx;
+  updateBrowserNavBtns();
+  _applyPageToContent(tab.url);
+}
+
+function renderPageIntoTab(tab, url) {
+  tab.url = url;
+  // Update tab history
+  tab.history = tab.history.slice(0, tab.histIdx + 1);
+  if (tab.history[tab.histIdx] !== url) {
+    tab.history.push(url);
+    tab.histIdx = tab.history.length - 1;
+  }
+  browserHistory = tab.history;
+  browserCurrentIdx = tab.histIdx;
+  const urlInput = document.getElementById('browser-url-input');
+  if (urlInput) urlInput.value = url === 'https://www.google.com' ? '' : url;
+  updateBrowserNavBtns();
+  _applyPageToContent(url);
+  // Update tab title/icon from security indicator side effect
+  const tabTitle = document.getElementById('browser-tab-title-fake');
+  renderTabStrip();
+}
+
+function extractHostFromUrl(url) {
+  if (!url) return 'this site';
+  try {
+    const u = new URL(url);
+    return u.hostname || url;
+  } catch (e) {
+    let clean = (url || '').replace(/^https?:\/\//i, '').trim();
+    clean = clean.split('/')[0].split('?')[0].split('#')[0];
+    return clean || url;
+  }
+}
+
+function getPhishingSiteForUrl(url) {
+  if (!url) return null;
+  const lower = url.toLowerCase();
+  if (lower.includes('bpi-online-security.com')) {
+    return {
+      key: 'https://bpi-online-security.com/login',
+      title: 'BPI Online — Security Verification',
+      icon: '🏦',
+      html: FAKE_SITES['https://bpi-online-security.com/login']
+    };
+  }
+  if (lower.includes('paypal-account-check.com')) {
+    return {
+      key: 'https://paypal-account-check.com/login',
+      title: 'Log in to your PayPal account',
+      icon: '🅿️',
+      html: FAKE_SITES['https://paypal-account-check.com/login']
+    };
+  }
+  if (lower.includes('gcash-claim-rewards.com')) {
+    return {
+      key: 'https://gcash-claim-rewards.com/verify',
+      title: 'GCash — Claim Rewards Portal',
+      icon: '📱',
+      html: FAKE_SITES['https://gcash-claim-rewards.com/verify']
+    };
+  }
+  return null;
+}
+
+function renderChromeDnsError(url) {
+  const hostname = extractHostFromUrl(url);
+  return `
+    <div class="chrome-error-page">
+      <div class="chrome-error-container">
+        <div class="chrome-error-icon" aria-hidden="true">
+          <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="#5f6368" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+            <polyline points="14 2 14 8 20 8"></polyline>
+            <line x1="12" y1="18" x2="12" y2="12"></line>
+            <line x1="9" y1="15" x2="15" y2="15"></line>
+          </svg>
+        </div>
+        <h1 class="chrome-error-heading">This site can’t be reached</h1>
+        <p class="chrome-error-msg">
+          Check if there is a typo in <strong class="chrome-error-domain">${escapeHtml(hostname)}</strong>.
+        </p>
+        <div class="chrome-error-suggestions">
+          <ul class="chrome-error-list">
+            <li>If spelling is correct, try <a href="#" class="chrome-diag-link" onclick="openNetworkDiagnostics('${escapeHtml(hostname)}'); return false;">running Windows Network Diagnostics</a>.</li>
+          </ul>
+        </div>
+        <div class="chrome-error-actions">
+          <button class="chrome-reload-btn" id="chrome-reload-btn" onclick="triggerChromeReload('${escapeHtml(url)}')">
+            <span class="chrome-reload-icon">🔄</span> Reload
+          </button>
+        </div>
+        <div class="chrome-error-code">DNS_PROBE_FINISHED_NXDOMAIN</div>
+      </div>
+    </div>
+  `;
+}
+
+function triggerChromeReload(url) {
+  const btn = document.getElementById('chrome-reload-btn');
+  const tab = getActiveTab();
+  const security = document.getElementById('browser-security');
+
+  if (btn) {
+    btn.classList.add('loading');
+    btn.innerHTML = '<span class="chrome-reload-spinner"></span> Reloading...';
+    btn.disabled = true;
+  }
+
+  if (tab) {
+    tab.icon = '🔄';
+    tab.title = 'Connecting...';
+    renderTabStrip();
+  }
+
+  if (security) {
+    security.textContent = '🔄 Resolving host...';
+    security.className = 'browser-security-indicator';
+  }
+
+  if (typeof AudioManager !== 'undefined') AudioManager.playClick();
+
+  setTimeout(() => {
+    if (tab) {
+      _applyPageToContent(url);
+    }
+  }, 650);
+}
+
+function openNetworkDiagnostics(host) {
+  showToast(`🔍 Windows Network Diagnostics: Internet connection is active, but "${host}" cannot be found on the DNS server (DNS_PROBE_FINISHED_NXDOMAIN).`, 'warning');
+  if (typeof AudioManager !== 'undefined') AudioManager.playWrong();
+}
+
+function renderLegitSite(url) {
+  const host = extractHostFromUrl(url).toLowerCase();
+  if (host.includes('bpi.com.ph')) {
+    return `
+      <div class="legitsite">
+        <div class="legitsite-header" style="background:#8a0011;color:white;">
+          <div style="font-size:20px;font-weight:800;">🏦 BPI Online (Official)</div>
+          <div style="font-size:12px;opacity:0.9;">bpi.com.ph • Official Portal</div>
+        </div>
+        <div class="legitsite-body">
+          <div class="legitsite-advisory-banner">
+            <div class="legitsite-advisory-title">🛡️ OFFICIAL BPI SECURITY ADVISORY</div>
+            <p style="margin:6px 0 0 0;font-size:13.5px;line-height:1.5;">
+              BPI will <strong>NEVER</strong> send emails, SMS, or messages with links asking you to log in, verify your account, or provide your password or One-Time PIN (OTP). The official BPI portal is strictly <strong>bpi.com.ph</strong>.
+            </p>
+          </div>
+          <h2 style="font-size:22px;color:#1e293b;margin-bottom:12px;">Welcome to Bank of the Philippine Islands</h2>
+          <p style="color:#475569;line-height:1.6;font-size:14px;">This is the legitimate, authentic Bank of the Philippine Islands online banking portal. Notice the secure padlock icon (🔒) and the official domain name in the address bar.</p>
+          <div style="margin-top:20px;padding:16px;background:#f8fafc;border-radius:8px;border:1px solid #e2e8f0;">
+            <h4 style="margin:0 0 8px 0;color:#0f172a;">How to Spot Fake BPI Websites:</h4>
+            <ul style="margin:0;padding-left:20px;color:#475569;font-size:13.5px;line-height:1.6;">
+              <li>Look for typos in the domain like <code>bpi-online-security.com</code> or <code>bpi-verify.com</code>.</li>
+              <li>Official BPI domain will always end in <strong>.bpi.com.ph</strong>.</li>
+              <li>Fake sites create false urgency claiming your account will be locked in 30 minutes.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    `;
+  }
+  if (host.includes('paypal.com')) {
+    return `
+      <div class="legitsite">
+        <div class="legitsite-header" style="background:#003087;color:white;">
+          <div style="font-size:20px;font-weight:800;">🅿️ PayPal (Official)</div>
+          <div style="font-size:12px;opacity:0.9;">paypal.com • Official Site</div>
+        </div>
+        <div class="legitsite-body">
+          <div class="legitsite-advisory-banner">
+            <div class="legitsite-advisory-title">🛡️ OFFICIAL PAYPAL SECURITY NOTICE</div>
+            <p style="margin:6px 0 0 0;font-size:13.5px;line-height:1.5;">
+              Always verify you are on <strong>https://www.paypal.com</strong>. Legitimate PayPal communications will always address you by your real full name, never "Dear Customer" or "Dear User".
+            </p>
+          </div>
+          <h2 style="font-size:22px;color:#1e293b;margin-bottom:12px;">PayPal Security &amp; Safety Center</h2>
+          <p style="color:#475569;line-height:1.6;font-size:14px;">You have reached the authentic PayPal website. Protection against phishing and identity theft starts with verifying the domain name.</p>
+        </div>
+      </div>
+    `;
+  }
+  if (host.includes('gcash.com')) {
+    return `
+      <div class="legitsite">
+        <div class="legitsite-header" style="background:#005cfc;color:white;">
+          <div style="font-size:20px;font-weight:800;">📱 GCash (Official)</div>
+          <div style="font-size:12px;opacity:0.9;">gcash.com • Official Site</div>
+        </div>
+        <div class="legitsite-body">
+          <div class="legitsite-advisory-banner">
+            <div class="legitsite-advisory-title">🛡️ GCASH TRUST &amp; SECURITY REMINDER</div>
+            <p style="margin:6px 0 0 0;font-size:13.5px;line-height:1.5;">
+              <strong>NEVER share your MPIN or OTP.</strong> GCash will never send SMS or emails with links asking for your 4-digit MPIN or One-Time PIN.
+            </p>
+          </div>
+          <h2 style="font-size:22px;color:#1e293b;margin-bottom:12px;">GCash Security Center</h2>
+          <p style="color:#475569;line-height:1.6;font-size:14px;">Authentic GCash services are accessed through the official mobile app and <strong>gcash.com</strong>.</p>
+        </div>
+      </div>
+    `;
+  }
+  return renderGenericSite(url);
+}
+
+function _applyPageToContent(url) {
+  const content = document.getElementById('browser-content');
+  const security = document.getElementById('browser-security');
+  const tab = getActiveTab();
+  if (!content) return;
+
+  function setTabMeta(title, icon, secText, secClass) {
+    if (tab) { tab.title = title; tab.icon = icon; }
+    if (security) { security.textContent = secText; security.className = 'browser-security-indicator' + (secClass ? ' ' + secClass : ''); }
+    renderTabStrip();
+  }
+
+  const isGoogleHome = url === 'https://www.google.com' || url === '';
+  const isGoogleSearch = /^https:\/\/www\.google\.com\/search\?q=/i.test(url);
+
+  // 1. Google Homepage
+  if (isGoogleHome) {
+    setTabMeta('Google', '🌐', '🔒 Secure', 'secure');
+    content.innerHTML = BROWSER_HOME_HTML;
+    return;
+  }
+
+  // 2. Real Phishing Website Examples (Directly displayed from email links or URLs)
+  const phishSite = getPhishingSiteForUrl(url);
+  if (phishSite) {
+    setTabMeta(phishSite.title, phishSite.icon, '⚠️ Not Secure', 'not-secure');
+    content.innerHTML = phishSite.html;
+    return;
+  }
+
+  // 3. Google Search Results
+  if (isGoogleSearch) {
+    const q = decodeURIComponent(url.split('q=')[1] || '');
+    setTabMeta(`${q} — Google Search`, '🔍', '🔒 Secure', 'secure');
+    content.innerHTML = renderGoogleResults(q);
+    return;
+  }
+
+  // 4. Legitimate Bank & Service Portals
+  if (/bpi\.com\.ph|paypal\.com|gcash\.com/i.test(url)) {
+    const legitTitle = /bpi/i.test(url) ? 'BPI Online — Bank of the Philippine Islands' : (/paypal/i.test(url) ? 'PayPal — Official Security Center' : 'GCash — Official Site');
+    const legitIcon = /bpi/i.test(url) ? '🏦' : (/paypal/i.test(url) ? '🅿️' : '📱');
+    setTabMeta(legitTitle, legitIcon, '🔒 Secure', 'secure');
+    content.innerHTML = renderLegitSite(url);
+    return;
+  }
+
+  // 5. Official Threat Intel & Cybersecurity Guides
+  if (/malware|trojan|ransomware|threat-intel/i.test(url)) {
+    setTabMeta('Malware Intel & Defense | CISA', '🦠', '🔒 Secure', 'secure');
+    content.innerHTML = renderMalwareIntelSite();
+    return;
+  }
+
+  if (/cisa\.gov/i.test(url)) {
+    setTabMeta('CISA — Cyber Defense Agency', '🛡️', '🔒 Secure', 'secure');
+    content.innerHTML = renderCisaHomeSite();
+    return;
+  }
+
+  if (/consumer\.ftc\.gov|how-recognize-phishing/i.test(url)) {
+    setTabMeta('How to Recognize Phishing | FTC', '🎣', '🔒 Secure', 'secure');
+    content.innerHTML = renderPhishingGuideSite();
+    return;
+  }
+
+  if (/wikipedia\.org/i.test(url)) {
+    setTabMeta('Wikipedia, the free encyclopedia', '📖', '🔒 Secure', 'secure');
+    content.innerHTML = renderGenericSite(url);
+    return;
+  }
+
+  // 6. IMPROPER / NON-EXISTENT DOMAIN: Chrome "This site can't be reached" (DNS_PROBE_FINISHED_NXDOMAIN)
+  const displayHost = extractHostFromUrl(url);
+  setTabMeta(displayHost, '📄', '⚠️ Not Secure', 'not-secure');
+  content.innerHTML = renderChromeDnsError(url);
+}
+
+function openBrowserDefault() {
+  openApp('browser');
+  focusWindow('browser');
+  if (!browserTabs || browserTabs.length === 0) {
+    initBrowserTabs();
+  }
+}
+
+function handlePhishingSubmit(domain, brand) {
+  showToast(`🚨 PHISHING DETECTED! You just submitted credentials to "${domain}" — a fake ${brand} portal. Your credentials would now be stolen. Always verify the domain in the address bar!`, 'warning');
+  if (typeof AudioManager !== 'undefined') AudioManager.playWrong();
+
+  // Flash the security indicator red
+  const security = document.getElementById('browser-security');
+  if (security) {
+    security.textContent = '🚨 PHISHING DETECTED';
+    security.style.color = '#f28b82';
+    security.style.fontWeight = '900';
+    setTimeout(() => {
+      security.textContent = '⚠️ Not Secure';
+      security.style.color = '';
+      security.style.fontWeight = '';
+    }, 4000);
+  }
+}
 
 function escapeHtml(str) {
   const div = document.createElement('div');
@@ -2866,6 +3999,11 @@ function submitHomeSearch() {
   if (input) browserGo(input.value);
 }
 
+function submitBrowserUrl() {
+  const input = document.getElementById('browser-url-input');
+  if (input) browserGo(input.value);
+}
+
 function browserGo(raw) {
   const trimmed = (raw || '').trim();
   if (!trimmed) return;
@@ -2879,62 +4017,343 @@ function browserGo(raw) {
   navigateBrowser(url);
 }
 
+function updateBrowserNavBtns() {
+  const backBtn = document.getElementById('browser-back');
+  const fwdBtn = document.getElementById('browser-forward');
+  const tab = getActiveTab();
+  if (tab) {
+    if (backBtn) backBtn.disabled = (tab.histIdx <= 0);
+    if (fwdBtn) fwdBtn.disabled = (tab.histIdx >= tab.history.length - 1);
+  } else {
+    if (backBtn) backBtn.disabled = true;
+    if (fwdBtn) fwdBtn.disabled = true;
+  }
+}
+
 function navigateBrowser(url) {
-  const urlInput = document.getElementById('browser-url-input');
-  if (urlInput) urlInput.value = url;
-
-  browserHistory = browserHistory.slice(0, browserCurrentIdx + 1);
-  browserHistory.push(url);
-  browserCurrentIdx = browserHistory.length - 1;
-
-  renderBrowserPage(url);
+  const tab = getActiveTab();
+  if (!tab) {
+    createNewBrowserTab(url);
+    return;
+  }
+  renderPageIntoTab(tab, url);
 }
 
+// Compatibility alias — renderBrowserPage now delegates to tab system
 function renderBrowserPage(url) {
-  const content = document.getElementById('browser-content');
-  const security = document.getElementById('browser-security');
-
-  const isGoogleSearch = /^https:\/\/www\.google\.com\/search\?q=/i.test(url);
-  const isKnownUnsafe = Object.prototype.hasOwnProperty.call(FAKE_SITES, url);
-
-  if (isKnownUnsafe && !browserBypassed.has(url)) {
-    security.textContent = '⚠️ Not secure';
-    security.className = 'browser-security-indicator';
-    content.innerHTML = renderPrivacyWarning(url);
-    return;
-  }
-
-  if (isKnownUnsafe && browserBypassed.has(url)) {
-    security.textContent = '⚠️ Not Secure';
-    security.className = 'browser-security-indicator';
-    content.innerHTML = FAKE_SITES[url];
-    return;
-  }
-
-  if (isGoogleSearch) {
-    security.textContent = '🔒 Secure';
-    security.className = 'browser-security-indicator secure';
-    const q = decodeURIComponent(url.split('q=')[1] || '');
-    content.innerHTML = renderGoogleResults(q);
-    return;
-  }
-
-  // Any other real-looking address — not one of the game's simulated
-  // phishing pages, so it renders as an ordinary, safe website. Emails
-  // reference real-world domains (bank sites, Wikipedia, news orgs, etc.)
-  // as part of legitimate messages, and players need to be able to open
-  // those to compare them against the phishing links — a dead-end
-  // "site can't be reached" error broke that investigation flow.
-  security.textContent = '🔒 Secure';
-  security.className = 'browser-security-indicator secure';
-  content.innerHTML = renderGenericSite(url);
+  navigateBrowser(url);
 }
 
-// A generic, safe-looking mock webpage for any address that isn't one of
-// the game's simulated phishing sites. Gives Wikipedia a bit of special
-// flavor since it's the site referenced in the mock search results, and
-// falls back to a generic "brochure" page for everything else so no typed
-// or clicked address ever dead-ends.
+function browserBack() {
+  const tab = getActiveTab();
+  if (!tab || tab.histIdx <= 0) return;
+  tab.histIdx--;
+  const url = tab.history[tab.histIdx];
+  tab.url = url;
+  browserHistory = tab.history;
+  browserCurrentIdx = tab.histIdx;
+  const urlInput = document.getElementById('browser-url-input');
+  if (urlInput) urlInput.value = url === 'https://www.google.com' ? '' : url;
+  updateBrowserNavBtns();
+  _applyPageToContent(url);
+}
+
+function browserForward() {
+  const tab = getActiveTab();
+  if (!tab || tab.histIdx >= tab.history.length - 1) return;
+  tab.histIdx++;
+  const url = tab.history[tab.histIdx];
+  tab.url = url;
+  browserHistory = tab.history;
+  browserCurrentIdx = tab.histIdx;
+  const urlInput = document.getElementById('browser-url-input');
+  if (urlInput) urlInput.value = url === 'https://www.google.com' ? '' : url;
+  updateBrowserNavBtns();
+  _applyPageToContent(url);
+}
+
+function browserRefresh() {
+  const tab = getActiveTab();
+  if (tab) triggerChromeReload(tab.url);
+}
+
+function browserGoHome() {
+  const tab = getActiveTab();
+  if (tab) {
+    renderPageIntoTab(tab, 'https://www.google.com');
+  } else {
+    initBrowserTabs();
+  }
+  const urlInput = document.getElementById('browser-url-input');
+  if (urlInput) urlInput.value = '';
+}
+
+
+// ── AUTHENTIC MALWARE THREAT INTELLIGENCE WEBSITE ──
+function renderMalwareIntelSite() {
+  return `
+    <div class="malwaresite">
+      <div class="intel-banner">
+        <div class="intel-banner-left">
+          <span class="intel-banner-shield">🛡️</span>
+          <div>
+            <div class="intel-banner-title">CYBERSECURITY &amp; INFRASTRUCTURE SECURITY AGENCY</div>
+            <div class="intel-banner-sub">NATIONAL THREAT ASSESSMENT DIVISION • OFFICIAL BULLETIN</div>
+          </div>
+        </div>
+        <div class="intel-banner-badge">THREAT ADVISORY: ACTIVE MALWARE CAMPAIGNS</div>
+      </div>
+
+      <div class="intel-content">
+        <div class="intel-breadcrumbs">
+          <a href="#" onclick="browserGoHome()">Home</a> › 
+          <a href="#" onclick="browserGo('https://www.cisa.gov')">CISA</a> › 
+          <span>Malware Threat Intel &amp; Defense</span>
+        </div>
+
+        <h1 class="intel-h1">Malware Defense &amp; Threat Intelligence Guide</h1>
+        <div class="intel-meta-bar">
+          <span>📅 Updated: September 2026</span>
+          <span>🏷️ Category: Threat Intelligence</span>
+          <span>⏱️ 5 min read</span>
+          <span class="verified-tag">✔ Verified Cyber Intelligence</span>
+        </div>
+
+        <div class="intel-alert-box">
+          <strong>⚠️ Critical Threat Notice:</strong> Over 70% of organizational and student workstation breaches originate from deceptive file downloads and malicious email attachments. Attackers use social engineering to convince users to execute trojan droppers.
+        </div>
+
+        <div class="intel-section">
+          <h2>1. What is Malware?</h2>
+          <p>
+            <strong>Malware</strong> (short for <em>malicious software</em>) is an overarching term for code or programs intentionally crafted to damage, disrupt, steal, or gain unauthorized access to computer systems, data, and networks.
+          </p>
+          <p>
+            Unlike legitimate software, malware executes unauthorized tasks without the user's informed consent. Modern cyber threats frequently combine social engineering with multi-stage payloads.
+          </p>
+        </div>
+
+        <div class="intel-section">
+          <h2>2. Major Classifications of Malware</h2>
+          <div class="intel-cards-grid">
+            <div class="intel-threat-card card-trojan">
+              <div class="threat-card-header">
+                <span class="threat-card-name">🦠 Trojan Horse</span>
+                <span class="threat-card-tag">High Danger</span>
+              </div>
+              <p class="threat-card-desc">
+                Disguised as beneficial, free, or legitimate software (converters, games, PDF viewers). Once executed by the victim, it silently deploys backdoors, disables security software, or downloads secondary malware droppers.
+              </p>
+              <div class="threat-card-case">
+                <strong>Field Case (Chapter 3):</strong> Nishren downloaded a "free project tool" online. Moments later, his machine slowed down as the trojan installed unauthorized remote access tools.
+              </div>
+            </div>
+
+            <div class="intel-threat-card card-ransom">
+              <div class="threat-card-header">
+                <span class="threat-card-name">🔒 Ransomware</span>
+                <span class="threat-card-tag" style="background:#fee2e2;color:#b91c1c">Critical Danger</span>
+              </div>
+              <p class="threat-card-desc">
+                Infiltrates the operating system and encrypts user documents, spreadsheets, and databases using strong military-grade cryptography (.locked, .crypted). Attackers demand cryptocurrency payments for the decryption key.
+              </p>
+              <div class="threat-card-case">
+                <strong>Field Case (Chapter 5):</strong> Jonald opened an infected invoice file, triggering instant file encryption across his school workstation.
+              </div>
+            </div>
+
+            <div class="intel-threat-card card-spyware">
+              <div class="threat-card-header">
+                <span class="threat-card-name">🕵️ Spyware &amp; Keyloggers</span>
+                <span class="threat-card-tag" style="background:#ede9fe;color:#6d28d9">Stealth Threat</span>
+              </div>
+              <p class="threat-card-desc">
+                Operates invisibly in background memory, logging every keystroke, capturing browser cookies, stealing passwords, and streaming screen captures to adversary command-and-control servers.
+              </p>
+              <div class="threat-card-case">
+                <strong>Threat Vector:</strong> Often bundled inside cracked pirated utilities and unauthorized browser extensions.
+              </div>
+            </div>
+
+            <div class="intel-threat-card card-worm">
+              <div class="threat-card-header">
+                <span class="threat-card-name">🪱 Worms &amp; Botnets</span>
+                <span class="threat-card-tag" style="background:#e0f2fe;color:#0369a1">Network Threat</span>
+              </div>
+              <p class="threat-card-desc">
+                Self-replicating malicious programs that automatically propagate across network shares, open ports, and USB storage without requiring human interaction, enlisting computers into distributed botnets.
+              </p>
+              <div class="threat-card-case">
+                <strong>Threat Vector:</strong> Exploits unpatched system vulnerabilities and weak default administrative credentials.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="intel-section">
+          <h2>3. Common Infection Vectors &amp; Deceptive Disguises</h2>
+          <ul class="intel-list">
+            <li>
+              <strong>Double File Extensions:</strong> Files named <code>project_document.pdf.exe</code> or <code>receipt.docx.scr</code>. Operating systems hide known extensions by default, tricking users into double-clicking executables.
+            </li>
+            <li>
+              <strong>Compressed Archive Droppers (.zip, .iso, .vhd):</strong> Attackers place malicious scripts (<code>.vbs</code>, <code>.bat</code>, <code>.ps1</code>) inside archives to evade automatic web and email gateway scanners.
+            </li>
+            <li>
+              <strong>Unverified "Free" Download Mirrors:</strong> Downloading tools, games, or patches from third-party forums or suspicious file-hosters rather than official vendor repositories.
+            </li>
+            <li>
+              <strong>Macro-Enabled Documents:</strong> Microsoft Office files prompting users to "Enable Editing" or "Enable Macros" to execute embedded VBA downloader scripts.
+            </li>
+          </ul>
+        </div>
+
+        <div class="intel-section">
+          <h2>4. Practical Malware Defense Checklist</h2>
+          <div class="defense-steps-box">
+            <div class="defense-step">
+              <span class="step-num">1</span>
+              <div>
+                <strong>Enable File Name Extensions:</strong> Always configure your file manager to display full file extensions so disguised executables (<code>.exe</code>, <code>.scr</code>) are immediately visible.
+              </div>
+            </div>
+            <div class="defense-step">
+              <span class="step-num">2</span>
+              <div>
+                <strong>Inspect Digital Signatures &amp; File Hashes:</strong> Legitimate software from reputable vendors carries valid digital certificates. Unsigned executables should never be run without verification.
+              </div>
+            </div>
+            <div class="defense-step">
+              <span class="step-num">3</span>
+              <div>
+                <strong>Employ Active Real-Time Heuristic Protection:</strong> Keep your anti-virus software (such as ShieldAV) active with real-time heuristic monitoring and updated threat signature databases.
+              </div>
+            </div>
+            <div class="defense-step">
+              <span class="step-num">4</span>
+              <div>
+                <strong>Maintain Offline / Cold Backups:</strong> Keep regular backups on disconnected external storage to guarantee recovery in the event of a ransomware attack.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="intel-footer-nav">
+          <button class="google-btn" onclick="browserGo('https://www.google.com/search?q=phishing+defense+guide')">🔍 Search Phishing Intelligence</button>
+          <button class="google-btn" onclick="browserGo('https://www.cisa.gov')">🛡️ CISA Cyber Defense Home</button>
+          <button class="google-btn" onclick="browserGoHome()">🏠 Return to Google</button>
+        </div>
+      </div>
+    </div>`;
+}
+
+// ── CISA HOMEPAGE ──
+function renderCisaHomeSite() {
+  return `
+    <div class="cisasite">
+      <div class="intel-banner">
+        <div class="intel-banner-left">
+          <span class="intel-banner-shield">🛡️</span>
+          <div>
+            <div class="intel-banner-title">CYBERSECURITY &amp; INFRASTRUCTURE SECURITY AGENCY</div>
+            <div class="intel-banner-sub">AMERICA'S CYBER DEFENSE AGENCY • DEFEND TODAY, SECURE TOMORROW</div>
+          </div>
+        </div>
+        <div class="intel-banner-badge" style="background:#16a34a;color:#fff;border-color:#16a34a">SHIELDS UP: OPERATIONAL</div>
+      </div>
+
+      <div class="intel-content">
+        <div class="intel-breadcrumbs">
+          <a href="#" onclick="browserGoHome()">Home</a> › 
+          <span>Official Cybersecurity Portal</span>
+        </div>
+
+        <h1 class="intel-h1">National Cyber Defense &amp; Digital Safety Resource Center</h1>
+        <div class="intel-meta-bar">
+          <span>Official Government Source (cisa.gov)</span>
+          <span>🛡️ Cybersecurity Advisories</span>
+          <span class="verified-tag">✔ Authenticated Domain</span>
+        </div>
+
+        <div class="intel-section">
+          <h2>Shields Up: 4 Essential Steps for Every Digital Citizen</h2>
+          <p>Cybersecurity is not just for technical experts. Following these four foundational habits prevents over 90% of opportunistic cyber attacks:</p>
+          <div class="defense-steps-box">
+            <div class="defense-step">
+              <span class="step-num">1</span>
+              <div><strong>Enable Multi-Factor Authentication (MFA):</strong> MFA makes it 99% harder for adversaries to compromise your accounts even if your password is stolen.</div>
+            </div>
+            <div class="defense-step">
+              <span class="step-num">2</span>
+              <div><strong>Recognize and Report Phishing:</strong> Think before you click. Be suspicious of unsolicited requests for personal info, urgency, and strange sender emails.</div>
+            </div>
+            <div class="defense-step">
+              <span class="step-num">3</span>
+              <div><strong>Update Your Software:</strong> Enable automatic operating system and browser updates to patch known vulnerabilities before attackers exploit them.</div>
+            </div>
+            <div class="defense-step">
+              <span class="step-num">4</span>
+              <div><strong>Use Strong, Unique Passwords:</strong> Never reuse passwords across email, banking, and school portals. Use passphrases or a password manager.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="intel-section">
+          <h2>Featured Security Bulletins</h2>
+          <ul class="intel-list">
+            <li><strong>Malware &amp; Software Dropper Advisory:</strong> <a href="#" onclick="browserGo('https://www.cisa.gov/topics/malware'); return false;" style="color:#0284c7;font-weight:700;">Read the complete Malware Intel &amp; Classification Guide ➔</a></li>
+            <li><strong>Phishing &amp; Social Engineering Trends:</strong> <a href="#" onclick="browserGo('https://www.consumer.ftc.gov/articles/how-recognize-phishing'); return false;" style="color:#0284c7;font-weight:700;">How to identify deceptive phishing domains and fake sender headers ➔</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>`;
+}
+
+// ── FTC PHISHING RECOGNITION GUIDE ──
+function renderPhishingGuideSite() {
+  return `
+    <div class="cisasite">
+      <div class="intel-banner" style="background:#1e3a8a;border-bottom-color:#60a5fa">
+        <div class="intel-banner-left">
+          <span class="intel-banner-shield">🎣</span>
+          <div>
+            <div class="intel-banner-title">FEDERAL TRADE COMMISSION • CONSUMER ADVICE</div>
+            <div class="intel-banner-sub">OFFICIAL FRAUD &amp; PHISHING PREVENTION DIVISION</div>
+          </div>
+        </div>
+        <div class="intel-banner-badge" style="background:#2563eb;color:#fff;border-color:#60a5fa">CONSUMER SECURITY GUIDE</div>
+      </div>
+
+      <div class="intel-content">
+        <div class="intel-breadcrumbs">
+          <a href="#" onclick="browserGoHome()">Home</a> › 
+          <span>How to Recognize and Avoid Phishing Scams</span>
+        </div>
+
+        <h1 class="intel-h1">How to Spot Phishing Emails &amp; Deceptive Links</h1>
+        <div class="intel-meta-bar">
+          <span>Federal Trade Commission (consumer.ftc.gov)</span>
+          <span class="verified-tag">✔ Official Advisory</span>
+        </div>
+
+        <div class="intel-section">
+          <h2>The 4 Red Flags of Phishing Emails</h2>
+          <ul class="intel-list">
+            <li><strong>1. Deceptive Sender Addresses:</strong> The sender name might say "IT Support" or "Bank Security", but the actual email address is <code>support@accounts-verification-service.com</code> instead of the legitimate organization domain.</li>
+            <li><strong>2. Artificial &amp; High Urgency:</strong> Demands immediate action: "Your account will be suspended within 1 hour!" Designed to induce panic so the victim clicks before thinking.</li>
+            <li><strong>3. Hidden Link Mismatches:</strong> The visible text says <code>https://www.paypal.com</code>, but hovering over the link reveals the actual destination leads to an untrusted external server.</li>
+            <li><strong>4. Unexpected Attachments:</strong> Invoices or order confirmations with file names ending in <code>.zip</code>, <code>.exe</code>, or <code>.pdf.exe</code> containing malware droppers.</li>
+          </ul>
+        </div>
+
+        <div class="intel-footer-nav">
+          <button class="google-btn" onclick="browserGo('https://www.cisa.gov/topics/malware')">🦠 Learn About Malware Threats</button>
+          <button class="google-btn" onclick="browserGoHome()">🏠 Return to Google Home</button>
+        </div>
+      </div>
+    </div>`;
+}
+
 function renderGenericSite(url) {
   let hostname, pathname;
   try {
@@ -2960,9 +4379,11 @@ function renderGenericSite(url) {
           <h1>${escapeHtml(title)}</h1>
           <p class="wikisite-sub">From Wikipedia, the free encyclopedia</p>
           <hr/>
-          <p><strong>${escapeHtml(title)}</strong> is a form of social engineering in which an attacker impersonates a trustworthy sender or organization to trick a target into revealing sensitive information, such as login credentials or financial details, or into installing malware.</p>
-          <p>Common techniques include spoofed sender addresses, urgent or threatening language designed to rush a decision, and links whose visible text does not match their actual destination.</p>
-          <p class="wikisite-note">This is a simulated Wikipedia page for training purposes — content is illustrative, not a live article.</p>
+          <p><strong>${escapeHtml(title)}</strong> is a prominent subject in cybersecurity and digital forensics. Understanding the anatomy of modern threats allows students and detectives to detect and mitigate unauthorized system intrusions.</p>
+          <p>Key defensive practices include inspecting domain names, verifying SSL certificate validity, and quarantining suspicious attachments in isolated sandboxes.</p>
+          <div style="margin-top:20px;padding:12px;background:#f0f9ff;border-radius:6px;border:1px solid #bae6fd;">
+            <strong>Related Intelligence:</strong> <a href="#" onclick="browserGo('https://www.cisa.gov/topics/malware'); return false;" style="color:#0284c7;font-weight:700;">Explore CISA Malware &amp; Threat Intelligence ➔</a>
+          </div>
         </div>
       </div>`;
   }
@@ -2976,96 +4397,137 @@ function renderGenericSite(url) {
       <div class="genericsite-header">
         <span class="genericsite-logo">${escapeHtml(capitalized.charAt(0))}</span>
         <span class="genericsite-name">${escapeHtml(capitalized)}</span>
-        <nav class="genericsite-nav"><a href="#" onclick="return false;">Home</a><a href="#" onclick="return false;">About</a><a href="#" onclick="return false;">Contact</a></nav>
+        <nav class="genericsite-nav"><a href="#" onclick="browserGoHome()">Search</a><a href="#" onclick="browserGo('https://www.cisa.gov/topics/malware')">Threat Intel</a></nav>
       </div>
       <div class="genericsite-body">
-        <h2>Welcome to ${escapeHtml(capitalized)}</h2>
-        <p>${escapeHtml(displayHost)} — this page loaded successfully and looks like an ordinary website.</p>
-        <p class="genericsite-note">This is a simulated page for training purposes — content is illustrative, not a real website.</p>
-      </div>
-    </div>`;
-}
-
-// Chrome-style "Your connection is not private" certificate warning
-function renderPrivacyWarning(url) {
-  let hostname;
-  try { hostname = new URL(url).hostname; } catch (e) { hostname = url; }
-  const safeUrl = escapeHtml(url);
-  return `
-    <div class="cert-warning">
-      <div class="cert-warning-icon">✕</div>
-      <h1>Your connection is not private</h1>
-      <p>Attackers might be trying to steal your information from <strong>${escapeHtml(hostname)}</strong> (for example, passwords, messages, or credit cards). <a href="#" onclick="return false;">Learn more</a></p>
-      <p class="cert-code">NET::ERR_CERT_AUTHORITY_INVALID</p>
-      <button class="cert-back-btn" onclick="browserBackToSafety()">Back to safety</button>
-      <div class="cert-advanced">
-        <button class="cert-advanced-toggle" onclick="toggleCertAdvanced(this)">Advanced ▾</button>
-        <div class="cert-advanced-body hidden">
-          <p>This server could not prove that it is <strong>${escapeHtml(hostname)}</strong>; its security certificate is not trusted by your computer's operating system. This may be caused by a misconfiguration or an attacker intercepting your connection.</p>
-          <a href="#" class="cert-proceed-link" onclick="browserProceedUnsafe('${safeUrl}'); return false;">Proceed to ${escapeHtml(hostname)} (unsafe)</a>
+        <h2>${escapeHtml(capitalized)} Secure Portal</h2>
+        <p>You have navigated to <strong>${escapeHtml(displayHost)}</strong>. This authenticated website is functioning normally.</p>
+        <div style="margin-top:20px;padding:14px;background:#f8fafc;border-radius:8px;border:1px solid #e2e8f0;">
+          <h4>Cyber Threat Research Links:</h4>
+          <p style="margin:8px 0;"><a href="#" onclick="browserGo('https://www.cisa.gov/topics/malware'); return false;" style="color:#0284c7;">🦠 View Official Malware Encyclopedia &amp; Trojan Analysis</a></p>
+          <p style="margin:8px 0;"><a href="#" onclick="browserGo('https://www.consumer.ftc.gov/articles/how-recognize-phishing'); return false;" style="color:#0284c7;">🎣 View FTC Phishing Recognition Guidelines</a></p>
         </div>
       </div>
     </div>`;
 }
 
-function toggleCertAdvanced(btn) {
-  const body = btn.nextElementSibling;
-  const nowHidden = !body.classList.contains('hidden');
-  body.classList.toggle('hidden');
-  btn.textContent = nowHidden ? 'Advanced ▾' : 'Advanced ▴';
-}
-
-function browserProceedUnsafe(url) {
-  browserBypassed.add(url);
-  renderBrowserPage(url);
-}
-
-function browserBackToSafety() {
-  if (browserCurrentIdx > 0) {
-    browserBack();
-  } else {
-    browserGoHome();
-  }
-}
-
-function browserGoHome() {
-  browserHistory = [];
-  browserCurrentIdx = -1;
-  const urlInput = document.getElementById('browser-url-input');
-  if (urlInput) urlInput.value = '';
-  document.getElementById('browser-content').innerHTML = BROWSER_HOME_HTML;
-  const security = document.getElementById('browser-security');
-  security.textContent = '⚠️ Not Secure';
-  security.className = 'browser-security-indicator';
-}
-
-// A simple mock Google results page — not connected to any real search engine
 function renderGoogleResults(query) {
   const q = escapeHtml(query);
-  const mockResults = [
-    {
-      url: 'www.consumer.ftc.gov › articles › how-recognize-phishing',
-      link: 'https://www.consumer.ftc.gov/articles/how-recognize-phishing',
-      title: 'How to Recognize and Avoid Phishing Scams',
-      desc: `Learn the tell-tale signs of a phishing email or text message: mismatched sender addresses, urgent threats, and links that don't go where they claim to.`
-    },
-    {
-      url: 'www.cisa.gov › news-events › news › avoiding-social-engineering',
-      link: 'https://www.cisa.gov/news-events/news/avoiding-social-engineering',
-      title: 'Avoiding Social Engineering and Phishing Attacks | CISA',
-      desc: `Attackers use email or malicious websites to solicit personal information by posing as a trustworthy organization.`
-    },
-    {
-      url: 'en.wikipedia.org › wiki › Phishing',
-      link: 'https://en.wikipedia.org/wiki/Phishing',
-      title: 'Phishing - Wikipedia',
-      desc: `Phishing is a form of social engineering where attackers deceive people into revealing sensitive information or installing malware.`
-    }
-  ];
+  const qLower = query.toLowerCase();
 
-  // Results are clickable — each one navigates the browser to a real-looking
-  // address, which renderGenericSite() (or the Wikipedia special-case) will
-  // render, so clicking a search result never dead-ends.
+  let mockResults = [];
+
+  if (/malware|trojan|virus|spyware|worm|download/i.test(qLower)) {
+    mockResults = [
+      {
+        url: 'www.cisa.gov › topics › malware-and-ransomware',
+        link: 'https://www.cisa.gov/topics/malware',
+        title: 'Malware Threat Intelligence & Defense Guide | CISA',
+        desc: `Comprehensive official threat advisory on Trojans, Ransomware, Spyware, Worms, and how adversaries disguise executables (.exe, .scr) as harmless documents.`
+      },
+      {
+        url: 'www.cisa.gov › news-events › news › safe-software-downloads',
+        link: 'https://www.cisa.gov/topics/malware#trojans',
+        title: 'Trojan Horses: The Danger of "Free Software" Downloads | Cyber Academy',
+        desc: `Learn why downloading free utilities and game tools from online forums leads to Trojan dropper infections and system compromise.`
+      },
+      {
+        url: 'www.consumer.ftc.gov › articles › ransomware-protection',
+        link: 'https://www.cisa.gov/topics/malware#ransomware',
+        title: 'Ransomware Prevention & Recovery Best Practices | CISA & FTC',
+        desc: `Protecting personal and organizational files from cryptographic ransomware lockouts. Real-world mitigation and cold backup advice.`
+      },
+      {
+        url: 'www.sans.org › resources › glossary › malware',
+        link: 'https://www.cisa.gov/topics/malware',
+        title: 'Malware Classifications & Threat Categories | SANS Institute',
+        desc: `Authoritative cybersecurity glossary covering all major malware families, attack vectors, and prevention frameworks.`
+      }
+    ];
+  } else if (/phishing|email|scam|spoof/i.test(qLower)) {
+    mockResults = [
+      {
+        url: 'www.consumer.ftc.gov › articles › how-recognize-phishing',
+        link: 'https://www.consumer.ftc.gov/articles/how-recognize-phishing',
+        title: 'How to Recognize and Avoid Phishing Scams | Federal Trade Commission',
+        desc: `Learn the 4 tell-tale signs of a phishing email: mismatched sender addresses, artificial urgency, deceptive hyperlinks, and generic greetings.`
+      },
+      {
+        url: 'www.cisa.gov › news-events › news › avoiding-social-engineering',
+        link: 'https://www.cisa.gov',
+        title: 'Avoiding Social Engineering and Phishing Attacks | CISA',
+        desc: `Attackers use email or malicious websites to solicit personal information by posing as a trustworthy organization.`
+      },
+      {
+        url: 'www.ic3.gov › resources › phishing-prevention',
+        link: 'https://www.consumer.ftc.gov/articles/how-recognize-phishing',
+        title: 'Phishing & Email Spoofing | FBI Internet Crime Complaint Center',
+        desc: `Report phishing and email spoofing attacks. FBI guidance on identifying lookalike sender addresses and fake login pages.`
+      }
+    ];
+  } else if (/ransomware|encrypt|decrypt|ransom/i.test(qLower)) {
+    mockResults = [
+      {
+        url: 'www.cisa.gov › stopransomware',
+        link: 'https://www.cisa.gov/topics/malware#ransomware',
+        title: 'Stop Ransomware | CISA',
+        desc: `Official joint advisory on ransomware prevention, detection, and recovery. Includes offline backup strategies and incident response playbooks.`
+      },
+      {
+        url: 'www.consumer.ftc.gov › topics › ransomware-protection',
+        link: 'https://www.cisa.gov/topics/malware',
+        title: 'Ransomware Protection & Recovery Guide | FTC Consumer Advice',
+        desc: `Step-by-step guidance on protecting files from ransomware encryption and recovering after an attack without paying a ransom.`
+      }
+    ];
+  } else if (/cybersecurity|cyber security|cyber defense|infosec/i.test(qLower)) {
+    mockResults = [
+      {
+        url: 'www.cisa.gov',
+        link: 'https://www.cisa.gov',
+        title: 'Cybersecurity & Infrastructure Security Agency (CISA)',
+        desc: `America's Cyber Defense Agency — providing resources, advisories, and guidelines to defend national and personal digital infrastructure.`
+      },
+      {
+        url: 'www.consumer.ftc.gov › privacy-identity-online-security',
+        link: 'https://www.consumer.ftc.gov/articles/how-recognize-phishing',
+        title: 'Online Security & Identity Protection Tips | FTC',
+        desc: `Expert advice on cybersecurity hygiene, password safety, phishing awareness, and protecting your digital identity online.`
+      }
+    ];
+  } else {
+    // Unknown query — show Google no-results page
+    return `
+      <div class="gresults">
+        <div class="gresults-header">
+          <div class="gresults-logo" onclick="browserGoHome()"><span style="color:#4285F4">G</span><span style="color:#EA4335">o</span><span style="color:#FBBC05">o</span><span style="color:#4285F4">g</span><span style="color:#34A853">l</span><span style="color:#EA4335">e</span></div>
+          <div class="gresults-search-form">
+            <input type="text" class="gresults-search-input" id="gresults-search-input" value="${q}" placeholder="Search Google..." onkeydown="if(event.key==='Enter'){browserGo(this.value);}" />
+            <button class="gresults-search-btn" onclick="browserGo(document.getElementById('gresults-search-input').value)">Search</button>
+          </div>
+        </div>
+        <div class="google-noresult-container">
+          <div class="google-noresult-icon">🔍</div>
+          <div class="google-noresult-heading">Your search — <em>${q}</em> — did not match any documents.</div>
+          <div class="google-noresult-suggestions">
+            <p>Suggestions:</p>
+            <ul>
+              <li>Make sure that all words are spelled correctly.</li>
+              <li>Try different keywords.</li>
+              <li>Try more general keywords.</li>
+              <li>Try fewer keywords.</li>
+            </ul>
+          </div>
+          <div class="google-noresult-tips">
+            💡 <strong>Detective Tip:</strong> This browser is optimized for cybersecurity topics. Try searching for
+            <a href="#" onclick="browserGo('https://www.google.com/search?q=malware'); return false;" style="color:#1a73e8;">malware</a>,
+            <a href="#" onclick="browserGo('https://www.google.com/search?q=phishing'); return false;" style="color:#1a73e8;">phishing</a>, or
+            <a href="#" onclick="browserGo('https://www.google.com/search?q=ransomware'); return false;" style="color:#1a73e8;">ransomware</a>.
+          </div>
+        </div>
+      </div>`;
+  }
+
   const items = mockResults.map(r => `
     <div class="gresult-item">
       <div class="gresult-url">${r.url}</div>
@@ -3076,44 +4538,15 @@ function renderGoogleResults(query) {
   return `
     <div class="gresults">
       <div class="gresults-header">
-        <div class="gresults-logo"><span style="color:#4285F4">G</span><span style="color:#EA4335">o</span><span style="color:#FBBC05">o</span><span style="color:#4285F4">g</span><span style="color:#34A853">l</span><span style="color:#EA4335">e</span></div>
-        <div class="gresults-query">${q}</div>
+        <div class="gresults-logo" onclick="browserGoHome()"><span style="color:#4285F4">G</span><span style="color:#EA4335">o</span><span style="color:#FBBC05">o</span><span style="color:#4285F4">g</span><span style="color:#34A853">l</span><span style="color:#EA4335">e</span></div>
+        <div class="gresults-search-form">
+          <input type="text" class="gresults-search-input" id="gresults-search-input" value="${q}" placeholder="Search Google or enter query..." onkeydown="if(event.key==='Enter'){browserGo(this.value);}" />
+          <button class="gresults-search-btn" onclick="browserGo(document.getElementById('gresults-search-input').value)">Search</button>
+        </div>
       </div>
-      <div class="gresults-stats">About ${(Math.floor(Math.random()*9)+1)},${Math.floor(Math.random()*900+100)},000 results (simulated)</div>
+      <div class="gresults-stats">About ${(Math.floor(Math.random()*9)+1)},${Math.floor(Math.random()*900+100)},000 results (0.${Math.floor(Math.random()*9)+1}${Math.floor(Math.random()*9)} seconds)</div>
       ${items}
-      <div class="gresults-empty">This is a simulated search — results are for training purposes only.</div>
     </div>`;
-}
-
-function browserBack() {
-  if (browserCurrentIdx > 0) {
-    browserCurrentIdx--;
-    const url = browserHistory[browserCurrentIdx];
-    // Render only — do NOT call navigateBrowser() here. navigateBrowser()
-    // truncates history to the current index and then pushes the url again,
-    // which duplicates the entry we just navigated back to. That duplicate
-    // then makes every subsequent Back press land on the same duplicated
-    // entry instead of moving further back, so Back appeared to get "stuck".
-    const urlInput = document.getElementById('browser-url-input');
-    if (urlInput) urlInput.value = url;
-    renderBrowserPage(url);
-  } else if (browserCurrentIdx === 0) {
-    // The home page isn't stored in browserHistory, so index 0 is the
-    // first site the player visited. There's nothing earlier to go back
-    // to except home — without this, Back silently did nothing here.
-    browserGoHome();
-  }
-}
-
-function browserRefresh() {
-  if (browserCurrentIdx >= 0) {
-    // Same fix as browserBack(): re-render the current entry without
-    // routing through navigateBrowser(), which would push a duplicate
-    // history entry every time Reload is pressed.
-    renderBrowserPage(browserHistory[browserCurrentIdx]);
-  } else {
-    browserGoHome();
-  }
 }
 
 function returnToGmail() {
@@ -3132,6 +4565,7 @@ function showToast(message, type) {
   toast.textContent = message;
   toast.className = `toast ${type}`;
   toast.classList.remove('hidden');
+  if (typeof AudioManager !== 'undefined') AudioManager.playNotification();
   if (toastTimeout) clearTimeout(toastTimeout);
   toastTimeout = setTimeout(() => toast.classList.add('hidden'), 3000);
 }
@@ -4245,6 +5679,7 @@ function quarantineFile(fileId) {
     displayScanResult(file);
 
     showToast(`🛡️ Neutralized ${file.name}! (+100 points)`, 'success');
+    if (typeof AudioManager !== 'undefined') AudioManager.playCorrect();
 
     if (gameState.malwareQuarantined >= TOTAL_MALWARE_COUNT) {
       setTimeout(finishMalwareMission, 1000);
@@ -4253,6 +5688,7 @@ function quarantineFile(fileId) {
     gameState.malwareFalsePositives++;
     gameState.score = Math.max(0, gameState.score - 25);
     updateHUD();
+    if (typeof AudioManager !== 'undefined') AudioManager.playWrong();
     showToast(`⚠️ False Positive! "${file.name}" is a clean, legitimate file (−25 pts).`, 'warning');
   }
 }
@@ -4306,6 +5742,7 @@ function finishMalwareMission() {
   if (rankLabelEl) rankLabelEl.textContent = rankLabel;
 
   showOverlay('overlay-malware-results');
+  if (typeof AudioManager !== 'undefined') AudioManager.playMissionComplete();
 }
 
 function restartEntireGame() {
@@ -4321,7 +5758,18 @@ function restartEntireGame() {
 
 function startFromTitleMenu() {
   closeOverlay('overlay-title-menu');
+  if (typeof AudioManager !== 'undefined') {
+    AudioManager.playNotification();
+  }
+  // Show the Game Intro Briefing (Narrator-led) first before going to the exam
+  showOverlay('overlay-game-intro');
+  showToast('🎙️ Narrator: Welcome to CyberZerØ Simulation.', 'info');
+}
+
+function proceedFromIntroToExam() {
+  closeOverlay('overlay-game-intro');
   showOverlay('overlay-pre-assessment');
+
   const shell = document.getElementById('exam-paper-shell');
   if (shell) shell.scrollIntoView({ behavior: 'smooth', block: 'start' });
 
@@ -4390,6 +5838,1337 @@ function initTitleParticles() {
 }
 
 // ═══════════════════════════════════════════════════════════
+// AUDIO ENGINE (Web Audio API Synthesizer & Sound System)
+// ═══════════════════════════════════════════════════════════
+
+const AudioManager = (() => {
+  let ctx = null;
+
+  // Settings with defaults
+  const settings = {
+    masterVolume: 80,
+    clicksVolume: 85,
+    sfxVolume: 80,
+    typingVolume: 75,
+    masterMuted: false,
+    clicksMuted: false,
+    sfxMuted: false,
+    typingMuted: false
+  };
+
+  // Load persisted settings
+  try {
+    const saved = localStorage.getItem('cyberzero_audio_settings');
+    if (saved) {
+      Object.assign(settings, JSON.parse(saved));
+    }
+  } catch (e) {
+    console.warn('Audio settings localStorage access failed:', e);
+  }
+
+  function saveSettings() {
+    try {
+      localStorage.setItem('cyberzero_audio_settings', JSON.stringify(settings));
+    } catch (e) {}
+  }
+
+  function getContext() {
+    if (!ctx) {
+      const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+      if (AudioContextClass) {
+        ctx = new AudioContextClass();
+      }
+    }
+    if (ctx && ctx.state === 'suspended') {
+      ctx.resume().catch(() => {});
+    }
+    return ctx;
+  }
+
+  function unlock() {
+    getContext();
+  }
+
+  function getEffectiveClickGain() {
+    if (settings.masterMuted || settings.clicksMuted) return 0;
+    return (settings.masterVolume / 100) * (settings.clicksVolume / 100);
+  }
+
+  function getEffectiveSfxGain() {
+    if (settings.masterMuted || settings.sfxMuted) return 0;
+    return (settings.masterVolume / 100) * (settings.sfxVolume / 100);
+  }
+
+  function getEffectiveTypingGain() {
+    if (settings.masterMuted || settings.typingMuted) return 0;
+    return (settings.masterVolume / 100) * (settings.typingVolume / 100);
+  }
+
+  // Realistic mechanical mouse click sound
+  function playMouseClick() {
+    const effGain = getEffectiveClickGain();
+    if (effGain <= 0.001) return;
+    const ac = getContext();
+    if (!ac) return;
+
+    try {
+      const now = ac.currentTime;
+      // Slight pitch variance for natural organic feel
+      const pitchVariance = 0.96 + Math.random() * 0.08;
+
+      // 1. High transient snap (contact click)
+      const osc = ac.createOscillator();
+      const oscGain = ac.createGain();
+      osc.type = 'triangle';
+      osc.frequency.setValueAtTime(2600 * pitchVariance, now);
+      osc.frequency.exponentialRampToValueAtTime(320 * pitchVariance, now + 0.009);
+
+      oscGain.gain.setValueAtTime(0.38 * effGain, now);
+      oscGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.011);
+
+      const highpass = ac.createBiquadFilter();
+      highpass.type = 'highpass';
+      highpass.frequency.setValueAtTime(1400, now);
+
+      osc.connect(highpass);
+      highpass.connect(oscGain);
+      oscGain.connect(ac.destination);
+
+      osc.start(now);
+      osc.stop(now + 0.012);
+
+      // 2. Plastic casing resonant body "thump"
+      const bodyOsc = ac.createOscillator();
+      const bodyGain = ac.createGain();
+      bodyOsc.type = 'sine';
+      bodyOsc.frequency.setValueAtTime(190 * pitchVariance, now);
+      bodyOsc.frequency.exponentialRampToValueAtTime(65 * pitchVariance, now + 0.018);
+
+      bodyGain.gain.setValueAtTime(0.2 * effGain, now);
+      bodyGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.02);
+
+      bodyOsc.connect(bodyGain);
+      bodyGain.connect(ac.destination);
+
+      bodyOsc.start(now);
+      bodyOsc.stop(now + 0.021);
+
+      // 3. Crisp white noise micro-impulse
+      const bufferSize = Math.floor(ac.sampleRate * 0.005);
+      const buffer = ac.createBuffer(1, bufferSize, ac.sampleRate);
+      const data = buffer.getChannelData(0);
+      for (let i = 0; i < bufferSize; i++) {
+        data[i] = (Math.random() * 2 - 1) * Math.exp(-i / (bufferSize * 0.3));
+      }
+      const noise = ac.createBufferSource();
+      noise.buffer = buffer;
+
+      const noiseFilter = ac.createBiquadFilter();
+      noiseFilter.type = 'bandpass';
+      noiseFilter.frequency.setValueAtTime(3400, now);
+      noiseFilter.Q.setValueAtTime(2.2, now);
+
+      const noiseGain = ac.createGain();
+      noiseGain.gain.setValueAtTime(0.24 * effGain, now);
+      noiseGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.006);
+
+      noise.connect(noiseFilter);
+      noiseFilter.connect(noiseGain);
+      noiseGain.connect(ac.destination);
+
+      noise.start(now);
+      noise.stop(now + 0.007);
+    } catch (err) {}
+  }
+
+  // Brief slider tick
+  function playSliderTick() {
+    const effGain = getEffectiveClickGain();
+    if (effGain <= 0.001) return;
+    const ac = getContext();
+    if (!ac) return;
+
+    try {
+      const now = ac.currentTime;
+      const osc = ac.createOscillator();
+      const gain = ac.createGain();
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(1600, now);
+      gain.gain.setValueAtTime(0.08 * effGain, now);
+      gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.006);
+      osc.connect(gain);
+      gain.connect(ac.destination);
+      osc.start(now);
+      osc.stop(now + 0.007);
+    } catch (e) {}
+  }
+
+  // Window Open/Close Cyber Swoosh
+  function playWindowSound(isOpen) {
+    const effGain = getEffectiveSfxGain();
+    if (effGain <= 0.001) return;
+    const ac = getContext();
+    if (!ac) return;
+
+    try {
+      const now = ac.currentTime;
+      const osc = ac.createOscillator();
+      const gain = ac.createGain();
+      osc.type = 'sine';
+
+      if (isOpen) {
+        osc.frequency.setValueAtTime(240, now);
+        osc.frequency.exponentialRampToValueAtTime(640, now + 0.12);
+        gain.gain.setValueAtTime(0.001, now);
+        gain.gain.linearRampToValueAtTime(0.18 * effGain, now + 0.03);
+        gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.13);
+      } else {
+        osc.frequency.setValueAtTime(540, now);
+        osc.frequency.exponentialRampToValueAtTime(180, now + 0.1);
+        gain.gain.setValueAtTime(0.15 * effGain, now);
+        gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.11);
+      }
+
+      osc.connect(gain);
+      gain.connect(ac.destination);
+      osc.start(now);
+      osc.stop(now + 0.14);
+    } catch (e) {}
+  }
+
+  // Flag Chirp / Radar Ping
+  function playFlagChirp() {
+    const effGain = getEffectiveSfxGain();
+    if (effGain <= 0.001) return;
+    const ac = getContext();
+    if (!ac) return;
+
+    try {
+      const now = ac.currentTime;
+      [880, 1320].forEach((freq, idx) => {
+        const osc = ac.createOscillator();
+        const gain = ac.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(freq, now + idx * 0.04);
+        gain.gain.setValueAtTime(0.18 * effGain, now + idx * 0.04);
+        gain.gain.exponentialRampToValueAtTime(0.0001, now + idx * 0.04 + 0.08);
+        osc.connect(gain);
+        gain.connect(ac.destination);
+        osc.start(now + idx * 0.04);
+        osc.stop(now + idx * 0.04 + 0.09);
+      });
+    } catch (e) {}
+  }
+
+  // Toast / System Notification Chime
+  function playNotification() {
+    const effGain = getEffectiveSfxGain();
+    if (effGain <= 0.001) return;
+    const ac = getContext();
+    if (!ac) return;
+
+    try {
+      const now = ac.currentTime;
+      [587.33, 880].forEach((freq, idx) => {
+        const osc = ac.createOscillator();
+        const gain = ac.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(freq, now + idx * 0.06);
+        gain.gain.setValueAtTime(0.15 * effGain, now + idx * 0.06);
+        gain.gain.exponentialRampToValueAtTime(0.0001, now + idx * 0.06 + 0.16);
+        osc.connect(gain);
+        gain.connect(ac.destination);
+        osc.start(now + idx * 0.06);
+        osc.stop(now + idx * 0.06 + 0.18);
+      });
+    } catch (e) {}
+  }
+
+  // Cyber Victory / Pass Chime
+  function playChime(isPositive = true) {
+    const effGain = getEffectiveSfxGain();
+    if (effGain <= 0.001) return;
+    const ac = getContext();
+    if (!ac) return;
+
+    try {
+      const now = ac.currentTime;
+      const notes = isPositive ? [523.25, 659.25, 783.99, 1046.50] : [587.33, 440];
+      notes.forEach((freq, idx) => {
+        const osc = ac.createOscillator();
+        const gain = ac.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(freq, now + idx * 0.07);
+        gain.gain.setValueAtTime(0.18 * effGain, now + idx * 0.07);
+        gain.gain.exponentialRampToValueAtTime(0.0001, now + idx * 0.07 + 0.22);
+        osc.connect(gain);
+        gain.connect(ac.destination);
+        osc.start(now + idx * 0.07);
+        osc.stop(now + idx * 0.07 + 0.24);
+      });
+    } catch (e) {}
+  }
+
+  // Warning / Wrong Verdict Alert Sound
+  function playAlert() {
+    const effGain = getEffectiveSfxGain();
+    if (effGain <= 0.001) return;
+    const ac = getContext();
+    if (!ac) return;
+
+    try {
+      const now = ac.currentTime;
+      const osc = ac.createOscillator();
+      const gain = ac.createGain();
+      osc.type = 'sawtooth';
+      osc.frequency.setValueAtTime(220, now);
+      osc.frequency.linearRampToValueAtTime(130, now + 0.16);
+
+      const filter = ac.createBiquadFilter();
+      filter.type = 'lowpass';
+      filter.frequency.setValueAtTime(550, now);
+
+      gain.gain.setValueAtTime(0.16 * effGain, now);
+      gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.18);
+
+      osc.connect(filter);
+      filter.connect(gain);
+      gain.connect(ac.destination);
+
+      osc.start(now);
+      osc.stop(now + 0.19);
+    } catch (e) {}
+  }
+
+  // Keyboard / input field typing sound — mechanical clatter
+  function playTypingKey() {
+    const effGain = getEffectiveTypingGain();
+    if (effGain <= 0.001) return;
+    const ac = getContext();
+    if (!ac) return;
+    try {
+      const now = ac.currentTime;
+      // Randomise pitch slightly so rapid typing sounds natural
+      const pitchVar = 0.90 + Math.random() * 0.22;
+
+      // Sharp high-click transient
+      const osc = ac.createOscillator();
+      const oscGain = ac.createGain();
+      osc.type = 'square';
+      osc.frequency.setValueAtTime(3200 * pitchVar, now);
+      osc.frequency.exponentialRampToValueAtTime(480 * pitchVar, now + 0.007);
+      oscGain.gain.setValueAtTime(0.22 * effGain, now);
+      oscGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.009);
+      const hp = ac.createBiquadFilter();
+      hp.type = 'highpass';
+      hp.frequency.setValueAtTime(1800, now);
+      osc.connect(hp); hp.connect(oscGain); oscGain.connect(ac.destination);
+      osc.start(now); osc.stop(now + 0.01);
+
+      // Soft body thud
+      const body = ac.createOscillator();
+      const bodyGain = ac.createGain();
+      body.type = 'sine';
+      body.frequency.setValueAtTime(160 * pitchVar, now);
+      body.frequency.exponentialRampToValueAtTime(55 * pitchVar, now + 0.014);
+      bodyGain.gain.setValueAtTime(0.12 * effGain, now);
+      bodyGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.015);
+      body.connect(bodyGain); bodyGain.connect(ac.destination);
+      body.start(now); body.stop(now + 0.016);
+    } catch (e) {}
+  }
+
+  // Narrator / typewriter text animation sound — soft electronic taptap
+  function playNarratorTyping() {
+    const effGain = getEffectiveTypingGain();
+    if (effGain <= 0.001) return;
+    const ac = getContext();
+    if (!ac) return;
+    try {
+      const now = ac.currentTime;
+      const pitchVar = 0.92 + Math.random() * 0.18;
+
+      // Soft sine blip — like an old terminal cursor blink
+      const osc = ac.createOscillator();
+      const gain = ac.createGain();
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(900 * pitchVar, now);
+      osc.frequency.exponentialRampToValueAtTime(560 * pitchVar, now + 0.008);
+      gain.gain.setValueAtTime(0.07 * effGain, now);
+      gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.01);
+      osc.connect(gain); gain.connect(ac.destination);
+      osc.start(now); osc.stop(now + 0.011);
+    } catch (e) {}
+  }
+
+  // Correct Answer / Verdict Sound — Uplifting Cyber Chime
+  function playCorrect() {
+    const effGain = getEffectiveSfxGain();
+    if (effGain <= 0.001) return;
+    const ac = getContext();
+    if (!ac) return;
+
+    try {
+      const now = ac.currentTime;
+      // Dual-oscillator chime: G5 (783.99Hz) -> C6 (1046.50Hz) -> E6 (1318.51Hz)
+      const notes = [
+        { freq: 783.99, delay: 0.0, duration: 0.25 },
+        { freq: 1046.50, delay: 0.08, duration: 0.35 },
+        { freq: 1318.51, delay: 0.16, duration: 0.50 }
+      ];
+
+      notes.forEach(note => {
+        const osc = ac.createOscillator();
+        const gain = ac.createGain();
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(note.freq, now + note.delay);
+
+        gain.gain.setValueAtTime(0.22 * effGain, now + note.delay);
+        gain.gain.exponentialRampToValueAtTime(0.0001, now + note.delay + note.duration);
+
+        osc.connect(gain);
+        gain.connect(ac.destination);
+        osc.start(now + note.delay);
+        osc.stop(now + note.delay + note.duration + 0.02);
+      });
+    } catch (e) {}
+  }
+
+  // Wrong Answer / Verdict Sound — Harsh Error Buzz
+  function playWrong() {
+    const effGain = getEffectiveSfxGain();
+    if (effGain <= 0.001) return;
+    const ac = getContext();
+    if (!ac) return;
+
+    try {
+      const now = ac.currentTime;
+      // Double low saw-pulse drop: Eb3 (155.56Hz) -> C3 (130.81Hz)
+      const pulses = [
+        { freq: 185.00, endFreq: 130.81, delay: 0.0, duration: 0.16 },
+        { freq: 155.56, endFreq: 110.00, delay: 0.18, duration: 0.22 }
+      ];
+
+      pulses.forEach(p => {
+        const osc = ac.createOscillator();
+        const gain = ac.createGain();
+        const filter = ac.createBiquadFilter();
+
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(p.freq, now + p.delay);
+        osc.frequency.exponentialRampToValueAtTime(p.endFreq, now + p.delay + p.duration);
+
+        filter.type = 'lowpass';
+        filter.frequency.setValueAtTime(700, now + p.delay);
+
+        gain.gain.setValueAtTime(0.22 * effGain, now + p.delay);
+        gain.gain.exponentialRampToValueAtTime(0.0001, now + p.delay + p.duration);
+
+        osc.connect(filter);
+        filter.connect(gain);
+        gain.connect(ac.destination);
+
+        osc.start(now + p.delay);
+        osc.stop(now + p.delay + p.duration + 0.02);
+      });
+    } catch (e) {}
+  }
+
+  // Mission Complete Fanfare Sound — Triumphant Victory Arpeggio
+  function playMissionComplete() {
+    const effGain = getEffectiveSfxGain();
+    if (effGain <= 0.001) return;
+    const ac = getContext();
+    if (!ac) return;
+
+    try {
+      const now = ac.currentTime;
+      // Triumphant cyber arpeggio: C5, E5, G5, C6, G5, C6, E6 sustain chord
+      const seq = [
+        { freq: 523.25, time: 0.0, dur: 0.15 },
+        { freq: 659.25, time: 0.10, dur: 0.15 },
+        { freq: 783.99, time: 0.20, dur: 0.15 },
+        { freq: 1046.50, time: 0.30, dur: 0.22 },
+        { freq: 783.99, time: 0.42, dur: 0.15 },
+        { freq: 1046.50, time: 0.52, dur: 0.25 },
+        { freq: 1318.51, time: 0.65, dur: 0.85 },
+        { freq: 1567.98, time: 0.65, dur: 0.85 }
+      ];
+
+      seq.forEach(s => {
+        const osc = ac.createOscillator();
+        const gain = ac.createGain();
+
+        osc.type = s.time >= 0.65 ? 'triangle' : 'sine';
+        osc.frequency.setValueAtTime(s.freq, now + s.time);
+
+        const vol = s.time >= 0.65 ? 0.25 : 0.20;
+        gain.gain.setValueAtTime(vol * effGain, now + s.time);
+        gain.gain.exponentialRampToValueAtTime(0.0001, now + s.time + s.dur);
+
+        osc.connect(gain);
+        gain.connect(ac.destination);
+        osc.start(now + s.time);
+        osc.stop(now + s.time + s.dur + 0.02);
+      });
+    } catch (e) {}
+  }
+
+  // Exam Paper Option Selection Sound — Tactile Pencil Mark / Bubble Pop
+  function playExamChoice() {
+    const effGain = getEffectiveClickGain();
+    if (effGain <= 0.001) return;
+    const ac = getContext();
+    if (!ac) return;
+
+    try {
+      const now = ac.currentTime;
+      const pitchVar = 0.95 + Math.random() * 0.10;
+
+      // Soft paper-pencil bubble pop
+      const osc = ac.createOscillator();
+      const gain = ac.createGain();
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(860 * pitchVar, now);
+      osc.frequency.exponentialRampToValueAtTime(430 * pitchVar, now + 0.04);
+      gain.gain.setValueAtTime(0.20 * effGain, now);
+      gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.045);
+      osc.connect(gain);
+      gain.connect(ac.destination);
+      osc.start(now);
+      osc.stop(now + 0.05);
+
+      // Light pencil graphite scratch transient
+      const click = ac.createOscillator();
+      const clickGain = ac.createGain();
+      click.type = 'triangle';
+      click.frequency.setValueAtTime(2600 * pitchVar, now);
+      click.frequency.exponentialRampToValueAtTime(1100 * pitchVar, now + 0.016);
+      clickGain.gain.setValueAtTime(0.12 * effGain, now);
+      clickGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.018);
+      click.connect(clickGain);
+      clickGain.connect(ac.destination);
+      click.start(now);
+      click.stop(now + 0.02);
+    } catch (e) {}
+  }
+
+  return {
+    settings,
+    unlock,
+    saveSettings,
+    playMouseClick,
+    playSliderTick,
+    playWindowSound,
+    playFlagChirp,
+    playNotification,
+    playChime,
+    playAlert,
+    playCorrect,
+    playWrong,
+    playMissionComplete,
+    playTypingKey,
+    playNarratorTyping,
+    playExamChoice
+  };
+})();
+
+// ═══════════════════════════════════════════════════════════
+// DESKTOP VOLUME FLYOUT CONTROLS
+// ═══════════════════════════════════════════════════════════
+
+function getVolumeSpeakerIcon(volume, isMuted) {
+  if (isMuted || volume === 0) return '🔇';
+  if (volume < 25) return '🔈';
+  if (volume <= 60) return '🔉';
+  return '🔊';
+}
+
+function updateVolumeUI() {
+  const s = AudioManager.settings;
+  const masterIcon = getVolumeSpeakerIcon(s.masterVolume, s.masterMuted);
+
+  // Sliders
+  const masterSlider = document.getElementById('slider-master-volume');
+  const clicksSlider = document.getElementById('slider-clicks-volume');
+  const sfxSlider = document.getElementById('slider-sfx-volume');
+
+  if (masterSlider) {
+    masterSlider.value = s.masterVolume;
+    masterSlider.style.setProperty('--fill-pct', `${s.masterVolume}%`);
+  }
+  if (clicksSlider) {
+    clicksSlider.value = s.clicksVolume;
+    clicksSlider.style.setProperty('--fill-pct', `${s.clicksVolume}%`);
+  }
+  if (sfxSlider) {
+    sfxSlider.value = s.sfxVolume;
+    sfxSlider.style.setProperty('--fill-pct', `${s.sfxVolume}%`);
+  }
+  const typingSlider = document.getElementById('slider-typing-volume');
+  if (typingSlider) {
+    typingSlider.value = s.typingVolume;
+    typingSlider.style.setProperty('--fill-pct', `${s.typingVolume}%`);
+  }
+
+  // Numeric text
+  const masterVal = document.getElementById('volume-master-val');
+  const clicksVal = document.getElementById('volume-clicks-val');
+  const sfxVal = document.getElementById('volume-sfx-val');
+  const typingVal = document.getElementById('volume-typing-val');
+
+  if (masterVal) masterVal.textContent = s.masterMuted ? 'Muted' : `${s.masterVolume}%`;
+  if (clicksVal) clicksVal.textContent = s.clicksMuted ? 'Muted' : `${s.clicksVolume}%`;
+  if (sfxVal) sfxVal.textContent = s.sfxMuted ? 'Muted' : `${s.sfxVolume}%`;
+  if (typingVal) typingVal.textContent = s.typingMuted ? 'Muted' : `${s.typingVolume}%`;
+
+  // Master mute icon and tray icons
+  const muteMasterIcon = document.getElementById('mute-master-icon');
+  const trayVolIcon = document.getElementById('tray-volume-icon');
+  const flyoutHeaderIcon = document.getElementById('flyout-header-icon');
+  const masterMuteBtn = document.getElementById('btn-master-mute');
+
+  if (muteMasterIcon) muteMasterIcon.textContent = masterIcon;
+  if (trayVolIcon) trayVolIcon.textContent = masterIcon;
+  if (flyoutHeaderIcon) flyoutHeaderIcon.textContent = masterIcon;
+
+  // Close volume flyout and start menu when clicking outside
+  document.addEventListener('click', (e) => {
+    const flyout = document.getElementById('desktop-volume-flyout');
+    const trayBtn = document.getElementById('tray-volume-btn');
+    if (flyout && !flyout.contains(e.target) && trayBtn && !trayBtn.contains(e.target)) {
+      closeVolumeFlyout();
+    }
+
+    const startMenu = document.getElementById('desktop-start-menu');
+    const startBtn = document.getElementById('start-btn');
+    if (startMenu && !startMenu.contains(e.target) && startBtn && !startBtn.contains(e.target)) {
+      closeStartMenu();
+    }
+  });
+
+  if (masterMuteBtn) {
+    if (s.masterMuted || s.masterVolume === 0) masterMuteBtn.classList.add('muted');
+    else masterMuteBtn.classList.remove('muted');
+  }
+
+  // Clicks mute button
+  const clicksMuteBtn = document.getElementById('btn-clicks-mute');
+  const clicksMuteIcon = document.getElementById('mute-clicks-icon');
+  if (clicksMuteBtn) {
+    if (s.clicksMuted) {
+      clicksMuteBtn.classList.add('muted');
+      if (clicksMuteIcon) clicksMuteIcon.textContent = '🔇';
+    } else {
+      clicksMuteBtn.classList.remove('muted');
+      if (clicksMuteIcon) clicksMuteIcon.textContent = '🖱️';
+    }
+  }
+
+  // SFX mute button
+  const sfxMuteBtn = document.getElementById('btn-sfx-mute');
+  const sfxMuteIcon = document.getElementById('mute-sfx-icon');
+  if (sfxMuteBtn) {
+    if (s.sfxMuted) {
+      sfxMuteBtn.classList.add('muted');
+      if (sfxMuteIcon) sfxMuteIcon.textContent = '🔇';
+    } else {
+      sfxMuteBtn.classList.remove('muted');
+      if (sfxMuteIcon) sfxMuteIcon.textContent = '⚡';
+    }
+  }
+
+  // Typing mute button
+  const typingMuteBtn = document.getElementById('btn-typing-mute');
+  const typingMuteIcon = document.getElementById('mute-typing-icon');
+  if (typingMuteBtn) {
+    if (s.typingMuted) {
+      typingMuteBtn.classList.add('muted');
+      if (typingMuteIcon) typingMuteIcon.textContent = '🔇';
+    } else {
+      typingMuteBtn.classList.remove('muted');
+      if (typingMuteIcon) typingMuteIcon.textContent = '⌨️';
+    }
+  }
+
+  // Update tray button tooltip
+  const trayBtn = document.getElementById('tray-volume-btn');
+  if (trayBtn) {
+    trayBtn.title = s.masterMuted ? 'Sound (Muted)' : `Sound (${s.masterVolume}%)`;
+  }
+}
+
+function toggleVolumeFlyout(event) {
+  if (event) event.stopPropagation();
+  AudioManager.unlock();
+  const flyout = document.getElementById('desktop-volume-flyout');
+  const trayBtn = document.getElementById('tray-volume-btn');
+  if (!flyout) return;
+
+  const isHidden = flyout.classList.contains('hidden');
+
+  if (isHidden) {
+    closeNetworkFlyout();
+    closeCalendarFlyout();
+    const startMenu = document.getElementById('desktop-start-menu');
+    if (startMenu && !startMenu.classList.contains('hidden')) toggleStartMenu();
+
+    flyout.classList.remove('flyout-global', 'hidden');
+    if (trayBtn) trayBtn.classList.add('active');
+    updateVolumeUI();
+    AudioManager.playMouseClick();
+  } else {
+    closeVolumeFlyout();
+  }
+}
+
+function closeVolumeFlyout(event) {
+  if (event) event.stopPropagation();
+  const flyout = document.getElementById('desktop-volume-flyout');
+  const trayBtn = document.getElementById('tray-volume-btn');
+  if (flyout) flyout.classList.add('hidden');
+  if (trayBtn) trayBtn.classList.remove('active');
+}
+
+// ═══════════════════════════════════════════════════════════
+// NETWORK & QUICK SETTINGS FLYOUT CONTROLS
+// ═══════════════════════════════════════════════════════════
+
+let networkSettings = {
+  wifi: true,
+  bluetooth: true,
+  airplane: false,
+  guard: true,
+  currentSsid: 'CYBER-NET (WPA3-Enterprise)'
+};
+
+function toggleNetworkFlyout(event) {
+  if (event) event.stopPropagation();
+  if (typeof AudioManager !== 'undefined') AudioManager.unlock();
+  const flyout = document.getElementById('desktop-network-flyout');
+  const trayBtn = document.getElementById('tray-wifi-btn');
+  if (!flyout) return;
+
+  const isHidden = flyout.classList.contains('hidden');
+  if (isHidden) {
+    closeVolumeFlyout();
+    closeCalendarFlyout();
+    const startMenu = document.getElementById('desktop-start-menu');
+    if (startMenu && !startMenu.classList.contains('hidden')) toggleStartMenu();
+
+    flyout.classList.remove('hidden');
+    if (trayBtn) trayBtn.classList.add('active');
+    updateNetworkUI();
+    if (typeof AudioManager !== 'undefined') AudioManager.playMouseClick();
+  } else {
+    closeNetworkFlyout();
+  }
+}
+
+function closeNetworkFlyout(event) {
+  if (event) event.stopPropagation();
+  const flyout = document.getElementById('desktop-network-flyout');
+  const trayBtn = document.getElementById('tray-wifi-btn');
+  if (flyout) flyout.classList.add('hidden');
+  if (trayBtn) trayBtn.classList.remove('active');
+}
+
+function updateNetworkUI() {
+  const tileWifi = document.getElementById('tile-wifi');
+  const tileWifiStatus = document.getElementById('tile-wifi-status');
+  const tileWifiBadge = document.getElementById('tile-wifi-badge');
+  const trayWifiIcon = document.getElementById('tray-wifi-icon');
+  const wifiList = document.getElementById('wifi-networks-list');
+
+  const tileBt = document.getElementById('tile-bluetooth');
+  const tileBtStatus = document.getElementById('tile-bt-status');
+  const tileBtBadge = document.getElementById('tile-bt-badge');
+
+  const tileAir = document.getElementById('tile-airplane');
+  const tileAirStatus = document.getElementById('tile-airplane-status');
+  const tileAirBadge = document.getElementById('tile-airplane-badge');
+
+  const tileGuard = document.getElementById('tile-guard');
+  const tileGuardStatus = document.getElementById('tile-guard-status');
+  const tileGuardBadge = document.getElementById('tile-guard-badge');
+
+  if (networkSettings.airplane) {
+    if (trayWifiIcon) trayWifiIcon.textContent = '✈️';
+    if (tileAir) tileAir.classList.add('active');
+    if (tileAirStatus) tileAirStatus.textContent = 'Active (Transmitters off)';
+    if (tileAirBadge) tileAirBadge.textContent = 'ON';
+
+    if (tileWifi) tileWifi.classList.remove('active');
+    if (tileWifiStatus) tileWifiStatus.textContent = 'Disabled by Airplane Mode';
+    if (tileWifiBadge) tileWifiBadge.textContent = 'OFF';
+
+    if (tileBt) tileBt.classList.remove('active');
+    if (tileBtStatus) tileBtStatus.textContent = 'Disabled';
+    if (tileBtBadge) tileBtBadge.textContent = 'OFF';
+
+    if (wifiList) wifiList.style.opacity = '0.35';
+    return;
+  }
+
+  // Airplane is OFF
+  if (tileAir) tileAir.classList.remove('active');
+  if (tileAirStatus) tileAirStatus.textContent = 'Off';
+  if (tileAirBadge) tileAirBadge.textContent = 'OFF';
+
+  if (wifiList) wifiList.style.opacity = '1';
+
+  // Wi-Fi
+  if (networkSettings.wifi) {
+    if (trayWifiIcon) trayWifiIcon.textContent = '📶';
+    if (tileWifi) tileWifi.classList.add('active');
+    if (tileWifiStatus) tileWifiStatus.textContent = networkSettings.currentSsid ? networkSettings.currentSsid.split(' ')[0] : 'Connected';
+    if (tileWifiBadge) tileWifiBadge.textContent = 'ON';
+  } else {
+    if (trayWifiIcon) trayWifiIcon.textContent = '🚫';
+    if (tileWifi) tileWifi.classList.remove('active');
+    if (tileWifiStatus) tileWifiStatus.textContent = 'Turned Off';
+    if (tileWifiBadge) tileWifiBadge.textContent = 'OFF';
+  }
+
+  // Bluetooth
+  if (networkSettings.bluetooth) {
+    if (tileBt) tileBt.classList.add('active');
+    if (tileBtStatus) tileBtStatus.textContent = 'Detective Headset';
+    if (tileBtBadge) tileBtBadge.textContent = 'ON';
+  } else {
+    if (tileBt) tileBt.classList.remove('active');
+    if (tileBtStatus) tileBtStatus.textContent = 'Off';
+    if (tileBtBadge) tileBtBadge.textContent = 'OFF';
+  }
+
+  // Guard
+  if (networkSettings.guard) {
+    if (tileGuard) tileGuard.classList.add('active');
+    if (tileGuardStatus) tileGuardStatus.textContent = 'Secured';
+    if (tileGuardBadge) tileGuardBadge.textContent = 'ON';
+  } else {
+    if (tileGuard) tileGuard.classList.remove('active');
+    if (tileGuardStatus) tileGuardStatus.textContent = 'Paused';
+    if (tileGuardBadge) tileGuardBadge.textContent = 'OFF';
+  }
+}
+
+function toggleWifiSetting() {
+  if (networkSettings.airplane) {
+    showToast('✈️ Turn off Airplane Mode first to enable Wi-Fi.', 'warning');
+    return;
+  }
+  networkSettings.wifi = !networkSettings.wifi;
+  updateNetworkUI();
+  if (typeof AudioManager !== 'undefined') AudioManager.playMouseClick();
+  showToast(networkSettings.wifi ? '📶 Wi-Fi turned On. Connected to CYBER-NET.' : '📶 Wi-Fi turned Off.', networkSettings.wifi ? 'success' : 'info');
+}
+
+function toggleBluetoothSetting() {
+  if (networkSettings.airplane) {
+    showToast('✈️ Turn off Airplane Mode first to enable Bluetooth.', 'warning');
+    return;
+  }
+  networkSettings.bluetooth = !networkSettings.bluetooth;
+  updateNetworkUI();
+  if (typeof AudioManager !== 'undefined') AudioManager.playMouseClick();
+  showToast(networkSettings.bluetooth ? '📡 Bluetooth On • Detective Headset Connected.' : '📡 Bluetooth Off.', networkSettings.bluetooth ? 'success' : 'info');
+}
+
+function toggleAirplaneSetting() {
+  networkSettings.airplane = !networkSettings.airplane;
+  updateNetworkUI();
+  if (typeof AudioManager !== 'undefined') AudioManager.playMouseClick();
+  showToast(networkSettings.airplane ? '✈️ Airplane Mode Activated — Wireless transmitters suspended.' : '✈️ Airplane Mode Disabled — Wireless restored.', networkSettings.airplane ? 'warning' : 'success');
+}
+
+function toggleGuardSetting() {
+  networkSettings.guard = !networkSettings.guard;
+  updateNetworkUI();
+  if (typeof AudioManager !== 'undefined') AudioManager.playMouseClick();
+  showToast(networkSettings.guard ? '🛡️ Cyber Defense Shield Active.' : '⚠️ Cyber Defense Shield Paused.', networkSettings.guard ? 'success' : 'warning');
+}
+
+function toggleCybernetConnect() {
+  const btn = document.getElementById('btn-cybernet-action');
+  const cyberItem = document.getElementById('wifi-item-cybernet');
+  if (networkSettings.currentSsid === 'CYBER-NET (WPA3-Enterprise)') {
+    networkSettings.currentSsid = null;
+    if (btn) { btn.textContent = 'Connect'; btn.className = 'wifi-net-action-btn connect'; }
+    if (cyberItem) cyberItem.classList.remove('connected');
+    showToast('🔌 Disconnected from CYBER-NET.', 'info');
+  } else {
+    networkSettings.currentSsid = 'CYBER-NET (WPA3-Enterprise)';
+    if (btn) { btn.textContent = 'Disconnect'; btn.className = 'wifi-net-action-btn disconnect'; }
+    if (cyberItem) cyberItem.classList.add('connected');
+    showToast('📶 Connected to CYBER-NET (WPA3-Enterprise).', 'success');
+  }
+  updateNetworkUI();
+}
+
+function connectToWifi(ssid) {
+  networkSettings.currentSsid = ssid;
+  showToast(`📶 Connected to ${ssid}. Encrypted gateway established.`, 'success');
+  updateNetworkUI();
+}
+
+function warnPublicWifi() {
+  if (typeof AudioManager !== 'undefined') AudioManager.playAlert();
+  showToast('⚠️ SECURITY WARNING: Free_Public_Unsecured lacks encryption! Man-in-the-Middle (MITM) attacks can intercept passwords. Never connect without a VPN.', 'warning');
+}
+
+function refreshWifiNetworks() {
+  const btn = document.querySelector('.flyout-refresh-btn');
+  if (btn) btn.textContent = '⏳ Scanning...';
+  if (typeof AudioManager !== 'undefined') AudioManager.playSliderTick();
+  setTimeout(() => {
+    if (btn) btn.textContent = '🔄 Scan';
+    showToast('📡 Wi-Fi scan complete. 4 access points in range.', 'info');
+  }, 600);
+}
+
+// ═══════════════════════════════════════════════════════════
+// CALENDAR & NOTIFICATIONS FLYOUT CONTROLS
+// ═══════════════════════════════════════════════════════════
+
+let calCurrentDate = new Date();
+let calSelectedDay = calCurrentDate.getDate();
+
+function toggleCalendarFlyout(event) {
+  if (event) event.stopPropagation();
+  if (typeof AudioManager !== 'undefined') AudioManager.unlock();
+  const flyout = document.getElementById('desktop-calendar-flyout');
+  const clockBtn = document.getElementById('taskbar-clock-btn');
+  if (!flyout) return;
+
+  const isHidden = flyout.classList.contains('hidden');
+  if (isHidden) {
+    closeVolumeFlyout();
+    closeNetworkFlyout();
+    const startMenu = document.getElementById('desktop-start-menu');
+    if (startMenu && !startMenu.classList.contains('hidden')) toggleStartMenu();
+
+    flyout.classList.remove('hidden');
+    if (clockBtn) clockBtn.classList.add('active');
+    updateClock();
+    renderCalendar(calCurrentDate.getFullYear(), calCurrentDate.getMonth());
+    if (typeof AudioManager !== 'undefined') AudioManager.playMouseClick();
+  } else {
+    closeCalendarFlyout();
+  }
+}
+
+function closeCalendarFlyout(event) {
+  if (event) event.stopPropagation();
+  const flyout = document.getElementById('desktop-calendar-flyout');
+  const clockBtn = document.getElementById('taskbar-clock-btn');
+  if (flyout) flyout.classList.add('hidden');
+  if (clockBtn) clockBtn.classList.remove('active');
+}
+
+function renderCalendar(year, month) {
+  const monthNames = [
+    'January', 'February', 'March', 'April', 'May', 'June',
+    'July', 'August', 'September', 'October', 'November', 'December'
+  ];
+  const titleEl = document.getElementById('cal-nav-month-year');
+  if (titleEl) titleEl.textContent = `${monthNames[month]} ${year}`;
+
+  const gridEl = document.getElementById('cal-grid');
+  if (!gridEl) return;
+  gridEl.innerHTML = '';
+
+  const firstDayIndex = new Date(year, month, 1).getDay();
+  const daysInMonth = new Date(year, month + 1, 0).getDate();
+  const daysInPrevMonth = new Date(year, month, 0).getDate();
+
+  const realToday = new Date();
+  const isCurrentMonth = (realToday.getFullYear() === year && realToday.getMonth() === month);
+
+  // Previous month padding days
+  for (let i = firstDayIndex - 1; i >= 0; i--) {
+    const dayNum = daysInPrevMonth - i;
+    const dayEl = document.createElement('div');
+    dayEl.className = 'cal-day other-month';
+    dayEl.textContent = dayNum;
+    gridEl.appendChild(dayEl);
+  }
+
+  // Days of current month
+  for (let d = 1; d <= daysInMonth; d++) {
+    const dayEl = document.createElement('div');
+    dayEl.className = 'cal-day';
+    if (isCurrentMonth && d === realToday.getDate()) {
+      dayEl.classList.add('today');
+    } else if (d === calSelectedDay) {
+      dayEl.classList.add('selected');
+    }
+    dayEl.textContent = d;
+    dayEl.onclick = () => {
+      calSelectedDay = d;
+      renderCalendar(year, month);
+      if (typeof AudioManager !== 'undefined') AudioManager.playSliderTick();
+    };
+    gridEl.appendChild(dayEl);
+  }
+
+  // Next month padding days to fill full week rows
+  const totalSlots = firstDayIndex + daysInMonth;
+  const remaining = (7 - (totalSlots % 7)) % 7;
+  for (let n = 1; n <= remaining; n++) {
+    const dayEl = document.createElement('div');
+    dayEl.className = 'cal-day other-month';
+    dayEl.textContent = n;
+    gridEl.appendChild(dayEl);
+  }
+}
+
+function navCalendar(delta) {
+  calCurrentDate.setMonth(calCurrentDate.getMonth() + delta);
+  renderCalendar(calCurrentDate.getFullYear(), calCurrentDate.getMonth());
+  if (typeof AudioManager !== 'undefined') AudioManager.playSliderTick();
+}
+
+function resetCalendarToToday() {
+  calCurrentDate = new Date();
+  calSelectedDay = calCurrentDate.getDate();
+  renderCalendar(calCurrentDate.getFullYear(), calCurrentDate.getMonth());
+  if (typeof AudioManager !== 'undefined') AudioManager.playMouseClick();
+  showToast('📅 Jumped to today\'s date.', 'info');
+}
+
+// Notifications handling
+function dismissNotification(id) {
+  const card = document.getElementById(id);
+  if (card) {
+    card.style.opacity = '0';
+    card.style.transform = 'translateX(20px)';
+    setTimeout(() => {
+      card.remove();
+      updateNotifCount();
+    }, 200);
+  }
+}
+
+function clearAllNotifications() {
+  const list = document.getElementById('notif-list');
+  if (list) {
+    list.innerHTML = `
+      <div style="text-align:center;padding:24px 10px;color:var(--text-muted);font-size:12px;">
+        <div style="font-size:24px;margin-bottom:6px;">🛡️</div>
+        <div>No new notifications</div>
+        <div style="font-size:10px;margin-top:2px;color:var(--accent-cyan);">Cyber Crime Bureau terminal secure</div>
+      </div>`;
+  }
+  const badge = document.getElementById('notif-count-badge');
+  if (badge) badge.textContent = '0';
+  if (typeof AudioManager !== 'undefined') AudioManager.playMouseClick();
+  showToast('🧹 All notifications cleared.', 'info');
+}
+
+function updateNotifCount() {
+  const list = document.getElementById('notif-list');
+  const count = list ? list.querySelectorAll('.notif-card').length : 0;
+  const badge = document.getElementById('notif-count-badge');
+  if (badge) badge.textContent = count;
+  if (count === 0) {
+    clearAllNotifications();
+  }
+}
+
+// ═══════════════════════════════════════════════════════════
+// WINDOWS START MENU CONTROLS
+// ═══════════════════════════════════════════════════════════
+
+function toggleStartMenu(event) {
+  if (event) event.stopPropagation();
+  if (typeof AudioManager !== 'undefined') AudioManager.unlock();
+  const menu = document.getElementById('desktop-start-menu');
+  const startBtn = document.getElementById('start-btn');
+  if (!menu) return;
+
+  const isHidden = menu.classList.contains('hidden');
+  if (isHidden) {
+    closeVolumeFlyout();
+    closeNetworkFlyout();
+    closeCalendarFlyout();
+    menu.classList.remove('hidden');
+    if (startBtn) startBtn.classList.add('active');
+    if (typeof AudioManager !== 'undefined') AudioManager.playWindowSound();
+
+    const input = document.getElementById('start-search-input');
+    if (input) {
+      input.value = '';
+      filterStartMenuApps('');
+      setTimeout(() => input.focus(), 60);
+    }
+    const nameInput = document.getElementById('exam-input-name');
+    const nameDisplay = document.getElementById('start-user-name');
+    if (nameDisplay && nameInput && nameInput.value.trim()) {
+      nameDisplay.textContent = nameInput.value.trim();
+    }
+  } else {
+    closeStartMenu();
+  }
+}
+
+function closeStartMenu(event) {
+  if (event) event.stopPropagation();
+  const menu = document.getElementById('desktop-start-menu');
+  const startBtn = document.getElementById('start-btn');
+  if (menu) menu.classList.add('hidden');
+  if (startBtn) startBtn.classList.remove('active');
+
+  const pMenu = document.getElementById('start-power-dropdown');
+  if (pMenu) pMenu.classList.add('hidden');
+}
+
+function filterStartMenuApps(query) {
+  const q = query.toLowerCase().trim();
+  const tiles = document.querySelectorAll('.start-app-tile');
+  tiles.forEach(tile => {
+    const text = tile.textContent.toLowerCase();
+    tile.style.display = (!q || text.includes(q)) ? 'flex' : 'none';
+  });
+}
+
+function startMenuOpenApp(appName) {
+  closeStartMenu();
+  if (typeof AudioManager !== 'undefined') {
+    AudioManager.unlock();
+    if (!isAppLocked(appName)) {
+      AudioManager.playWindowSound(true);
+    } else {
+      AudioManager.playWrong();
+    }
+  }
+  taskbarClick(appName);
+}
+
+function startMenuAction(action) {
+  closeStartMenu();
+  if (typeof AudioManager !== 'undefined') {
+    AudioManager.unlock();
+    AudioManager.playWindowSound(true);
+  }
+  if (action === 'exam') {
+    showOverlay('overlay-pre-assessment');
+  } else if (action === 'volume') {
+    toggleVolumeFlyout();
+  } else if (action === 'notes' || action === 'sticky_note') {
+    toggleStickyNote();
+  }
+}
+
+function startMenuFileClick(fileType) {
+  closeStartMenu();
+  if (typeof AudioManager !== 'undefined') {
+    AudioManager.unlock();
+    AudioManager.playWindowSound(true);
+  }
+  if (fileType === 'malware_sample') {
+    showToast('📄 Opened suspicious_invoice.pdf.exe in analysis buffer!', 'info');
+  } else if (fileType === 'case_log') {
+    showToast('📋 Case 001 log loaded.', 'info');
+  }
+}
+
+function togglePowerMenu(event) {
+  if (event) event.stopPropagation();
+  const pMenu = document.getElementById('start-power-dropdown');
+  if (pMenu) pMenu.classList.toggle('hidden');
+}
+
+function startMenuPower(action) {
+  closeStartMenu();
+  if (action === 'restart') {
+    restartEntireGame();
+  } else if (action === 'lock') {
+    showOverlay('overlay-title-menu');
+    showToast('🔒 Terminal Locked.', 'info');
+  } else if (action === 'title') {
+    showOverlay('overlay-title-menu');
+  }
+}
+
+function onMasterVolumeInput(val) {
+  const num = parseInt(val, 10);
+  AudioManager.settings.masterVolume = num;
+  if (AudioManager.settings.masterMuted && num > 0) {
+    AudioManager.settings.masterMuted = false;
+  }
+  AudioManager.saveSettings();
+  updateVolumeUI();
+  AudioManager.playSliderTick();
+}
+
+function onClicksVolumeInput(val) {
+  const num = parseInt(val, 10);
+  AudioManager.settings.clicksVolume = num;
+  if (AudioManager.settings.clicksMuted && num > 0) {
+    AudioManager.settings.clicksMuted = false;
+  }
+  AudioManager.saveSettings();
+  updateVolumeUI();
+  AudioManager.playMouseClick();
+}
+
+function onSfxVolumeInput(val) {
+  const num = parseInt(val, 10);
+  AudioManager.settings.sfxVolume = num;
+  if (AudioManager.settings.sfxMuted && num > 0) {
+    AudioManager.settings.sfxMuted = false;
+  }
+  AudioManager.saveSettings();
+  updateVolumeUI();
+  AudioManager.playSliderTick();
+}
+
+function toggleMasterMute() {
+  AudioManager.settings.masterMuted = !AudioManager.settings.masterMuted;
+  AudioManager.saveSettings();
+  updateVolumeUI();
+  if (!AudioManager.settings.masterMuted) {
+    AudioManager.playMouseClick();
+  }
+}
+
+function toggleClicksMute() {
+  AudioManager.settings.clicksMuted = !AudioManager.settings.clicksMuted;
+  AudioManager.saveSettings();
+  updateVolumeUI();
+  if (!AudioManager.settings.clicksMuted) {
+    AudioManager.playMouseClick();
+  }
+}
+
+function toggleSfxMute() {
+  AudioManager.settings.sfxMuted = !AudioManager.settings.sfxMuted;
+  AudioManager.saveSettings();
+  updateVolumeUI();
+  if (!AudioManager.settings.sfxMuted) {
+    AudioManager.playChime(true);
+  }
+}
+
+function onTypingVolumeInput(val) {
+  const num = parseInt(val, 10);
+  AudioManager.settings.typingVolume = num;
+  if (AudioManager.settings.typingMuted && num > 0) {
+    AudioManager.settings.typingMuted = false;
+  }
+  AudioManager.saveSettings();
+  updateVolumeUI();
+  AudioManager.playTypingKey();
+}
+
+function toggleTypingMute() {
+  AudioManager.settings.typingMuted = !AudioManager.settings.typingMuted;
+  AudioManager.saveSettings();
+  updateVolumeUI();
+  if (!AudioManager.settings.typingMuted) {
+    AudioManager.playTypingKey();
+  }
+}
+
+function testMouseClickSound() {
+  AudioManager.unlock();
+  AudioManager.playMouseClick();
+}
+
+function testChimeSound() {
+  AudioManager.unlock();
+  AudioManager.playChime(true);
+}
+
+function testTypingSound() {
+  AudioManager.unlock();
+  AudioManager.playTypingKey();
+}
+
+function testCorrectSound() {
+  AudioManager.unlock();
+  AudioManager.playCorrect();
+}
+
+function testWrongSound() {
+  AudioManager.unlock();
+  AudioManager.playWrong();
+}
+
+function testMissionCompleteSound() {
+  AudioManager.unlock();
+  AudioManager.playMissionComplete();
+}
+
+// Close flyouts when clicking outside
+document.addEventListener('click', (e) => {
+  // Volume flyout
+  const flyout = document.getElementById('desktop-volume-flyout');
+  const trayBtn = document.getElementById('tray-volume-btn');
+  if (flyout && !flyout.classList.contains('hidden')) {
+    if (!flyout.contains(e.target) && (!trayBtn || !trayBtn.contains(e.target))) {
+      closeVolumeFlyout();
+    }
+  }
+
+  // Network & Quick Settings flyout
+  const netFlyout = document.getElementById('desktop-network-flyout');
+  const wifiBtn = document.getElementById('tray-wifi-btn');
+  if (netFlyout && !netFlyout.classList.contains('hidden')) {
+    if (!netFlyout.contains(e.target) && (!wifiBtn || !wifiBtn.contains(e.target))) {
+      closeNetworkFlyout();
+    }
+  }
+
+  // Calendar & Notifications flyout
+  const calFlyout = document.getElementById('desktop-calendar-flyout');
+  const clockBtn = document.getElementById('taskbar-clock-btn');
+  if (calFlyout && !calFlyout.classList.contains('hidden')) {
+    if (!calFlyout.contains(e.target) && (!clockBtn || !clockBtn.contains(e.target))) {
+      closeCalendarFlyout();
+    }
+  }
+});
+
+// Automatic tactile mouse click sound on interactive elements
+document.addEventListener('pointerdown', (e) => {
+  if (typeof AudioManager !== 'undefined') {
+    AudioManager.unlock();
+
+    // Prevent double clicking inside the volume slider thumb itself during drag
+    if (e.target && e.target.classList && e.target.classList.contains('cyber-slider')) {
+      return;
+    }
+
+    const interactive = e.target.closest(
+      'button, a, input, select, textarea, label, [role="button"], ' +
+      '.desktop-icon, .taskbar-app-btn, .tray-btn, .tray-icon, .win-btn, .tab-item, ' +
+      '.browser-tab, .email-item, .email-row, .choice-card, .btn-primary, ' +
+      '.btn-ghost, .btn-danger, .btn-success, .btn-title-play, .btn-title-exit, ' +
+      '.vn-btn, .sn-action-btn, .sticky-note-tape, .custom-checkbox, .flag-pill, ' +
+      '.flag-opt, .link-hover-btn, .vol-test-btn, .file-item, .av-btn'
+    );
+
+    if (interactive) {
+      AudioManager.playMouseClick();
+    }
+  }
+}, true);
+
+// Keyboard typing sound on input/textarea keydown
+document.addEventListener('keydown', (e) => {
+  if (typeof AudioManager === 'undefined') return;
+  const tag = e.target && e.target.tagName;
+  if (tag === 'INPUT' || tag === 'TEXTAREA') {
+    // Ignore modifier-only keys, arrows, shift, ctrl, alt, meta, tab, escape
+    if (e.key.length === 1 || e.key === 'Backspace' || e.key === 'Delete' || e.key === 'Enter') {
+      AudioManager.playTypingKey();
+    }
+  }
+}, true);
+
+// ═══════════════════════════════════════════════════════════
 // INIT
 // ═══════════════════════════════════════════════════════════
 
@@ -4401,5 +7180,6 @@ window.addEventListener('DOMContentLoaded', () => {
   renderEmailList();
   initStickyNote();
   updateAppLockStates();
+  updateVolumeUI();
 });
 
