@@ -429,7 +429,9 @@ const appState = {
   gmail: { open: false, minimized: false, maximized: false, hasBeenPositioned: false },
   browser: { open: false, minimized: false, maximized: false, hasBeenPositioned: false },
   folder: { open: false, minimized: false, maximized: false, hasBeenPositioned: false },
-  antivirus: { open: false, minimized: false, maximized: false, hasBeenPositioned: false }
+  antivirus: { open: false, minimized: false, maximized: false, hasBeenPositioned: false },
+  comms: { open: false, minimized: false, maximized: false, hasBeenPositioned: false },
+  ransomware: { open: false, minimized: false, maximized: false, hasBeenPositioned: false }
 };
 
 // ═══════════════════════════════════════════════════════════
@@ -438,22 +440,36 @@ const appState = {
 
 function isAppLocked(appName) {
   if (appName === 'folder' || appName === 'antivirus') {
-    const emailsDone = gameState.emailResults && gameState.emailResults.length >= EMAILS.length;
-    return !emailsDone && gameState.phase !== 'malware';
+    const malCat = CATEGORIES.find(c => c.id === 'malware');
+    return malCat ? !malCat.unlocked : true;
+  }
+  if (appName === 'comms') {
+    const socCat = CATEGORIES.find(c => c.id === 'social_engineering');
+    return socCat ? !socCat.unlocked : true;
+  }
+  if (appName === 'ransomware') {
+    const rwCat = CATEGORIES.find(c => c.id === 'ransomware');
+    return rwCat ? !rwCat.unlocked : true;
   }
   return false;
 }
 
 function updateAppLockStates() {
-  const isLocked = isAppLocked('folder');
-  const remaining = EMAILS.length - (gameState.emailResults ? gameState.emailResults.length : 0);
-  ['folder', 'antivirus'].forEach(appName => {
+  const appsToCheck = [
+    { name: 'folder', req: 'Chapter 1 (Phishing)' },
+    { name: 'antivirus', req: 'Chapter 1 (Phishing)' },
+    { name: 'comms', req: 'Chapter 2 (Malware)' },
+    { name: 'ransomware', req: 'Chapter 3 (Social Engineering)' }
+  ];
+
+  appsToCheck.forEach(({ name: appName, req }) => {
+    const isLocked = isAppLocked(appName);
     const icon = document.getElementById(`icon-${appName}`);
     const taskbarBtn = document.getElementById(`taskbar-${appName}`);
     const startCard = document.getElementById(`start-app-${appName}`);
     const startBadge = document.getElementById(`start-badge-${appName}`);
     const recItem = document.getElementById(`rec-app-${appName}`);
-    const titleText = isLocked ? `🔒 Locked — Complete all 5 email investigations in Gmail first (${remaining} remaining)` : '';
+    const titleText = isLocked ? `🔒 Locked — Complete ${req} first to unlock` : '';
 
     if (icon) {
       if (isLocked) {
@@ -589,13 +605,32 @@ function minimizeApp(appName) {
 function toggleMaximize(appName) {
   const win = document.getElementById(`win-${appName}`);
   const state = appState[appName];
+  const maxBtn = win.querySelector('.win-maximize');
   if (state.maximized) {
+    // Restore to saved size/position
     state.maximized = false;
     win.classList.remove('maximized');
+    if (state._savedPos) {
+      win.style.left   = state._savedPos.left;
+      win.style.top    = state._savedPos.top;
+      win.style.width  = state._savedPos.width;
+      win.style.height = state._savedPos.height;
+    }
+    if (maxBtn) maxBtn.textContent = '□';
   } else {
+    // Save current position/size before maximizing
+    const rect = win.getBoundingClientRect();
+    state._savedPos = {
+      left:   win.style.left   || rect.left + 'px',
+      top:    win.style.top    || rect.top  + 'px',
+      width:  win.style.width  || rect.width  + 'px',
+      height: win.style.height || rect.height + 'px'
+    };
     state.maximized = true;
     win.classList.add('maximized');
+    if (maxBtn) maxBtn.textContent = '❐';
   }
+  focusWindow(appName);
 }
 
 function focusWindow(appName) {
@@ -641,7 +676,7 @@ function minimizeApp_restore(appName) {
 
 function updateTaskbar() {
   updateAppLockStates();
-  ['gmail', 'browser', 'folder', 'antivirus'].forEach(appName => {
+  ['gmail', 'browser', 'folder', 'antivirus', 'comms', 'ransomware'].forEach(appName => {
     const btn = document.getElementById(`taskbar-${appName}`);
     if (!btn) return;
     const state = appState[appName];
@@ -1111,39 +1146,45 @@ function submitPreAssessment() {
   );
 }
 
-function proceedFromPreAssessmentToVN() {
+function proceedFromPreAssessmentToCategories() {
+  const nameInput = document.getElementById('exam-input-name');
+  const playerName = (nameInput && nameInput.value.trim()) ? nameInput.value.trim() : 'Ace';
+  if (!gameState.playerName || gameState.playerName === 'Student') {
+    gameState.playerName = playerName;
+  }
   closeOverlay('overlay-pre-assessment');
-  showOverlay('overlay-welcome');
-  vnInit();
-  showToast('📖 Pre-assessment done! Follow the story of Ace and friends with CyberZerØ.', 'success');
+  openCategoryHub();
+  showToast('📁 Pre-assessment completed! Select your threat category to begin.', 'success');
+}
+
+function proceedFromPreAssessmentToVN() {
+  proceedFromPreAssessmentToCategories();
 }
 
 function skipPreAssessment() {
   const nameInput = document.getElementById('exam-input-name');
   const playerName = (nameInput && nameInput.value.trim()) ? nameInput.value.trim() : 'Ace';
-  if (!gameState.playerName) {
+  if (!gameState.playerName || gameState.playerName === 'Student') {
     gameState.playerName = playerName;
   }
   if (typeof AudioManager !== 'undefined') {
     AudioManager.playExamChoice();
   }
   closeOverlay('overlay-pre-assessment');
-  showOverlay('overlay-welcome');
-  vnInit();
-  showToast('⏩ Assessment skipped — starting CyberZerØ story.', 'info');
+  openCategoryHub();
+  showToast('⏩ Assessment skipped — welcome to the Threat Categories Hub.', 'info');
 }
 
 function skipPreAssessmentFromIntro() {
-  if (!gameState.playerName) {
+  if (!gameState.playerName || gameState.playerName === 'Student') {
     gameState.playerName = 'Ace';
   }
   if (typeof AudioManager !== 'undefined') {
     AudioManager.playNotification();
   }
   closeOverlay('overlay-game-intro');
-  showOverlay('overlay-welcome');
-  vnInit();
-  showToast('⏩ Assessment skipped — starting CyberZerØ story.', 'info');
+  openCategoryHub();
+  showToast('⏩ Assessment skipped — choose your threat category.', 'info');
 }
 
 function retakePreAssessment() {
@@ -1166,13 +1207,308 @@ function openPreAssessment() {
 }
 
 // ═══════════════════════════════════════════════════════════
-// VISUAL NOVEL INTRO ENGINE
+// THREAT CATEGORIES & PROGRESSION SYSTEM
 // ═══════════════════════════════════════════════════════════
 
-// ── Speaker → character image map (uses assets/ folder)
+const CATEGORIES = [
+  {
+    id: 'phishing',
+    num: 1,
+    title: 'Phishing Detection',
+    subtitle: 'Email Spoofing & Fake Links',
+    char: 'Ace',
+    charImg: 'assets/Ace.png',
+    accent: '#00e5ff',
+    desc: 'Inspect sender domains, false urgency, and fake login links to detect email phishing.',
+    specs: {
+      threatType: 'Email Phishing & Credential Theft',
+      app: '📧 Gmail & 🌐 Browser',
+      objective: '5 Emails Investigated'
+    },
+    unlocked: true,
+    completed: false,
+    score: 0,
+    rank: null
+  },
+  {
+    id: 'malware',
+    num: 2,
+    title: 'Malware Hunter',
+    subtitle: 'Trojans, Extensions & Droppers',
+    char: 'Nishren',
+    charImg: 'assets/Nishren.png',
+    accent: '#00e676',
+    desc: 'Spot disguised double extensions, scan files, and quarantine malware using Anti-Virus.',
+    specs: {
+      threatType: 'Trojans & Script Droppers',
+      app: '📂 Folder & 🛡️ Anti-Virus',
+      objective: '4 Malware Quarantined'
+    },
+    unlocked: false,
+    completed: false,
+    score: 0,
+    rank: null
+  },
+  {
+    id: 'social_engineering',
+    num: 3,
+    title: 'Social Engineering Defense',
+    subtitle: 'Vishing, Smishing & Pretexting',
+    char: 'Phillip',
+    charImg: 'assets/Phillip.png',
+    accent: '#ea80fc',
+    desc: 'Analyze phone calls (vishing), SMS alerts (smishing), and pretexting impersonation scams.',
+    specs: {
+      threatType: 'Vishing, Smishing & Spoofed DMs',
+      app: '📱 Comms Center',
+      objective: '4 Intercepts Resolved'
+    },
+    unlocked: false,
+    completed: false,
+    score: 0,
+    rank: null
+  },
+  {
+    id: 'ransomware',
+    num: 4,
+    title: 'Ransomware Incident Response',
+    subtitle: 'Crypto Extortion & Backup Recovery',
+    char: 'Jonald',
+    charImg: 'assets/Jonald.png',
+    accent: '#ff5252',
+    desc: 'Isolate infected storage nodes, kill rogue droppers, and restore encrypted files from backups.',
+    specs: {
+      threatType: 'Crypto-Ransomware Extortion',
+      app: '🔒 Ransomware Console',
+      objective: '100% Vault Recovered'
+    },
+    unlocked: false,
+    completed: false,
+    score: 0,
+    rank: null
+  }
+];
+
+let activeCategoryStory = 'phishing';
+
+function openCategoryHub() {
+  // Called from exam/title flow
+  _openCategoryHubInternal(false);
+}
+
+function openCategoryHubFromDesktop() {
+  // Called from desktop icon or taskbar
+  _openCategoryHubInternal(true);
+}
+
+function _openCategoryHubInternal(fromDesktop) {
+  hideAllOverlays();
+  renderCategoryHub();
+  showOverlay('overlay-category-select');
+  updateAppLockStates();
+  const label = document.getElementById('cat-hub-back-label');
+  if (label) label.textContent = fromDesktop ? 'BACK TO DESKTOP' : 'TITLE MENU';
+  const btn = document.getElementById('cat-hub-back-btn');
+  if (btn) btn.dataset.fromDesktop = fromDesktop ? '1' : '0';
+  if (typeof AudioManager !== 'undefined') {
+    AudioManager.playWindowSound(true);
+  }
+}
+
+function closeCategoryHubBack() {
+  const btn = document.getElementById('cat-hub-back-btn');
+  const fromDesktop = btn && btn.dataset.fromDesktop === '1';
+  closeCategoryHub();
+  if (!fromDesktop) {
+    showOverlay('overlay-title-menu');
+  }
+}
+
+function closeCategoryHub() {
+  closeOverlay('overlay-category-select');
+}
+
+function renderCategoryHub() {
+  const nameEl = document.getElementById('cat-hub-player-name');
+  if (nameEl) nameEl.textContent = gameState.playerName || 'Ace';
+
+  const completedCount = CATEGORIES.filter(c => c.completed).length;
+  const progEl = document.getElementById('cat-hub-progress-text');
+  if (progEl) progEl.textContent = `${completedCount} / 4 Modules Completed`;
+
+  const totalScore = CATEGORIES.reduce((sum, c) => sum + (c.score || 0), 0);
+  const scoreEl = document.getElementById('cat-hub-score-val');
+  if (scoreEl) scoreEl.textContent = `${totalScore} pts`;
+
+  const gridEl = document.getElementById('cat-cards-grid');
+  if (!gridEl) return;
+
+  gridEl.innerHTML = CATEGORIES.map((cat, idx) => {
+    let statusClass = 'cat-status-locked';
+    let statusLabel = '🔒 Locked';
+    let btnClass = 'cat-card-btn cat-btn-locked';
+    let btnText = `🔒 Chapter ${cat.num}`;
+    let prevChap = cat.num > 1 ? cat.num - 1 : 1;
+    let btnAction = `showToast('🔒 Complete Chapter ${prevChap} first to unlock ${cat.title}!', 'warning')`;
+
+    if (cat.completed) {
+      statusClass = 'cat-status-completed';
+      statusLabel = `✓ Done (${cat.rank || 'S'})`;
+      btnClass = 'cat-card-btn cat-btn-play';
+      btnText = `🔄 Replay Chapter ${cat.num}`;
+      btnAction = `startCategoryChapter('${cat.id}')`;
+    } else if (cat.unlocked) {
+      statusClass = 'cat-status-unlocked';
+      statusLabel = '● UNLOCKED';
+      btnClass = 'cat-card-btn cat-btn-play';
+      btnText = `▶ PLAY CHAPTER ${cat.num}`;
+      btnAction = `startCategoryChapter('${cat.id}')`;
+    }
+
+    const cardClass = `cat-card ${cat.completed ? 'completed' : ''} ${!cat.unlocked ? 'locked' : ''}`;
+
+    return `
+      <div class="${cardClass}" style="--card-accent: ${cat.accent}"
+           data-char="${cat.char}"
+           data-catid="${cat.id}"
+           onclick="selectCategoryCard(this, '${cat.id}')"
+           onmouseenter="previewCategoryCard('${cat.char}')"
+           onmouseleave="resetCategoryCard()">
+        <div class="cat-card-top">
+          <span class="cat-num-tag">CHAPTER 0${cat.num}</span>
+          <span class="cat-status-badge ${statusClass}">${statusLabel}</span>
+        </div>
+
+        <div class="cat-char-frame">
+          <div class="cat-char-img-wrap">
+            <img src="${cat.charImg}" alt="${cat.char}" class="cat-char-img" />
+          </div>
+          <div class="cat-char-name">${cat.char}</div>
+        </div>
+
+        <div class="cat-card-body">
+          <h3 class="cat-card-title">${cat.title}</h3>
+          <p class="cat-card-desc">${cat.desc}</p>
+
+          <div class="cat-card-specs">
+            <div class="cat-spec-item"><span>Threat:</span> <strong>${cat.specs.threatType}</strong></div>
+            <div class="cat-spec-item"><span>App:</span> <strong>${cat.specs.app || cat.specs.environment}</strong></div>
+            <div class="cat-spec-item"><span>Goal:</span> <strong>${cat.specs.objective}</strong></div>
+            ${cat.score ? `<div class="cat-spec-item" style="color:${cat.accent}"><span>Score:</span> <strong>${cat.score} pts</strong></div>` : ''}
+          </div>
+
+          <button class="${btnClass}" onclick="event.stopPropagation(); ${btnAction}">
+            ${btnText}
+          </button>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+// Called when a card is clicked — adds flash + selected state, updates Character chip
+function selectCategoryCard(cardEl, catId) {
+  const cat = CATEGORIES.find(c => c.id === catId);
+  if (!cat) return;
+
+  // Remove selected from all cards
+  document.querySelectorAll('.cat-card').forEach(c => {
+    c.classList.remove('selected', 'select-flash');
+  });
+
+  // Add flash animation then selected state
+  cardEl.classList.add('select-flash');
+  setTimeout(() => {
+    cardEl.classList.remove('select-flash');
+    cardEl.classList.add('selected');
+  }, 450);
+
+  // Update Character: chip to the clicked card's character
+  const nameEl = document.getElementById('cat-hub-player-name');
+  if (nameEl) {
+    nameEl.style.transition = 'opacity 0.18s ease';
+    nameEl.style.opacity = '0';
+    setTimeout(() => {
+      nameEl.textContent = cat.char;
+      nameEl.style.opacity = '1';
+    }, 180);
+  }
+}
+
+// Called on mouseenter — preview the character name in the chip
+function previewCategoryCard(charName) {
+  const nameEl = document.getElementById('cat-hub-player-name');
+  // Only preview if no card is currently selected
+  const hasSelected = document.querySelector('.cat-card.selected');
+  if (nameEl && !hasSelected) {
+    nameEl.textContent = charName;
+  }
+}
+
+// Called on mouseleave — restore default only if no card is selected
+function resetCategoryCard() {
+  const hasSelected = document.querySelector('.cat-card.selected');
+  if (!hasSelected) {
+    const nameEl = document.getElementById('cat-hub-player-name');
+    if (nameEl) nameEl.textContent = gameState.playerName || 'Ace';
+  }
+}
+
+function startCategoryChapter(categoryId) {
+  closeCategoryHub();
+  playCategoryStory(categoryId);
+}
+
+function proceedToNextCategory(nextCatId) {
+  closeOverlay('overlay-results');
+  closeOverlay('overlay-malware-results');
+  closeOverlay('overlay-social-results');
+  closeOverlay('overlay-ransomware-results');
+
+  const cat = CATEGORIES.find(c => c.id === nextCatId);
+  if (cat && cat.unlocked) {
+    playCategoryStory(nextCatId);
+  } else {
+    openCategoryHub();
+  }
+}
+
+function returnToTitleFromCategories() {
+  closeCategoryHub();
+  showOverlay('overlay-title-menu');
+}
+
+function retakeExamFromCategories() {
+  closeCategoryHub();
+  openPreAssessment();
+}
+
+function completeCategory(catId, score, rank) {
+  const idx = CATEGORIES.findIndex(c => c.id === catId);
+  if (idx !== -1) {
+    CATEGORIES[idx].completed = true;
+    CATEGORIES[idx].score = Math.max(CATEGORIES[idx].score || 0, score || 0);
+    CATEGORIES[idx].rank = rank || 'S';
+
+    // Unlock next category in sequence
+    if (idx + 1 < CATEGORIES.length) {
+      CATEGORIES[idx + 1].unlocked = true;
+      showToast(`🎉 Unlocked Chapter ${idx + 2}: ${CATEGORIES[idx + 1].title}!`, 'success');
+    }
+  }
+  updateAppLockStates();
+  renderCategoryHub();
+}
+
+// ═══════════════════════════════════════════════════════════
+// VISUAL NOVEL INTRO & CHAPTER STORY ENGINE
+// ═══════════════════════════════════════════════════════════
+
 const VN_CHARACTER_MAP = {
-  'NARRATOR':    null,                          // no sprite — narrator is text only
+  'NARRATOR':    null,
   'CYBERZERO':   'assets/CyberZerØ.png',
+  'ZERO':        'assets/CyberZerØ.png',
+  'AI GUIDE ZERO':'assets/CyberZerØ.png',
   'ACE':         'assets/Ace.png',
   'ACE (ALT)':   'assets/Ace1.png',
   'NISHREN':     'assets/Nishren.png',
@@ -1184,317 +1520,347 @@ const VN_CHARACTER_MAP = {
   'SYSTEM':      null,
 };
 
-const VN_DIALOGUE = [
+const VN_STORIES = {
+  prologue: [
+    {
+      speaker: 'ZERO',
+      tag: '🤖 AI CYBER GUIDE & NARRATOR',
+      bg: 'assets/Cover.png',
+      text: 'Greetings, Detective. Welcome to CYBERZERØ — an interactive cybersecurity simulation where you will transform from zero knowledge into an alert cyber defender.',
+      speed: 24,
+      scene: 'story'
+    },
+    {
+      speaker: 'ZERO',
+      tag: '🤖 AI CYBER GUIDE & NARRATOR',
+      bg: 'assets/Cover.png',
+      text: 'I am CyberZerØ — or simply Zero. As your personal AI Guide and Narrator, I will mentor you through real-world digital investigations and teach you how to protect yourself online.',
+      speed: 24,
+      scene: 'story'
+    },
+    {
+      speaker: 'ZERO',
+      tag: '🤖 AI CYBER GUIDE & NARRATOR',
+      bg: 'assets/Cover.png',
+      text: 'Today, students rely heavily on online learning, school portals, and digital communications. But malicious adversaries constantly deploy deceptive traps to compromise student accounts and devices.',
+      speed: 24,
+      scene: 'story'
+    },
+    {
+      speaker: 'ZERO',
+      tag: '🤖 AI CYBER GUIDE & NARRATOR',
+      bg: 'assets/Cover.png',
+      text: 'In our simulation, you will join four senior high school friends — Ace, Nishren, Phillip, and Jonald — as they encounter four major categories of cyber threats.',
+      speed: 24,
+      scene: 'story'
+    },
+    {
+      speaker: 'ACE',
+      tag: '🎓 STUDENT • CHAPTER 1 DEFENDER',
+      bg: 'assets/01Cover.png',
+      text: '"Hey! I\'m Ace. In Chapter 1, I received an urgent email claiming my school account was suspended. Zero taught me how to inspect fake sender domains, spot false urgency, and uncover Phishing scams!"',
+      speed: 26,
+      mood: 'happy',
+      scene: 'story'
+    },
+    {
+      speaker: 'NISHREN',
+      tag: '🎓 STUDENT • CHAPTER 2 DEFENDER',
+      bg: 'assets/01Cover.png',
+      text: '"Hi, I\'m Nishren! In Chapter 2, I downloaded what looked like a class syllabus, but it was disguised as bonus_payroll.pdf.exe! With Zero\'s guidance, you\'ll hunt and quarantine hidden Malware."',
+      speed: 26,
+      mood: 'happy',
+      scene: 'story'
+    },
+    {
+      speaker: 'PHILLIP',
+      tag: '🎓 STUDENT • CHAPTER 3 DEFENDER',
+      bg: 'assets/01Cover.png',
+      text: '"I\'m Phillip. In Chapter 3, attackers impersonated school IT staff via urgent phone calls (Vishing) and text messages (Smishing). Together, we must defend against Social Engineering manipulation!"',
+      speed: 26,
+      mood: 'happy',
+      scene: 'story'
+    },
+    {
+      speaker: 'JONALD',
+      tag: '🎓 STUDENT • CHAPTER 4 DEFENDER',
+      bg: 'assets/01Cover.png',
+      text: '"And I\'m Jonald. In Chapter 4, our entire group project was encrypted by a Bitcoin extortionist! Zero guided us through isolating the network and restoring clean backups to defeat Ransomware."',
+      speed: 26,
+      mood: 'happy',
+      scene: 'story'
+    },
+    {
+      speaker: 'ZERO',
+      tag: '🤖 AI CYBER GUIDE & NARRATOR',
+      bg: 'assets/Cover.png',
+      text: 'To neutralize these threats, you will operate our simulated Desktop Environment: inspecting inboxes in Gmail, searching the Web Browser, examining files in Folder Explorer, running ShieldAV Anti-Virus, and taking command in the Incident Console.',
+      speed: 24,
+      scene: 'story'
+    },
+    {
+      speaker: 'ZERO',
+      tag: '🤖 AI CYBER GUIDE & NARRATOR',
+      bg: 'assets/Cover.png',
+      text: 'Now, before I deploy you into the live simulation workstations, there is a crucial first requirement.',
+      speed: 24,
+      scene: 'story'
+    },
+    {
+      speaker: 'ZERO',
+      tag: '🤖 AI CYBER GUIDE & NARRATOR',
+      bg: 'assets/Cover.png',
+      text: 'To tailor your training and accurately measure your learning journey from zero knowledge to cyber awareness, we need to know your baseline knowledge of cyber threats.',
+      speed: 24,
+      scene: 'story'
+    },
+    {
+      speaker: 'ZERO',
+      tag: '🤖 AI CYBER GUIDE & NARRATOR',
+      bg: 'assets/Cover.png',
+      text: 'You will now take our official 10-Question Cyber Threat Pre-Assessment Exam. Write your name on the test paper, analyze each question carefully, and do your best.\n\nDetective... are you ready?',
+      speed: 24,
+      scene: 'story'
+    }
+  ],
 
-  // ── GAME INTRODUCTION (Narrator-led) ──────────────────────
-  {
-    speaker: 'NARRATOR',
-    text: 'Welcome to CyberZerØ — a web simulation game created for enhancing cybersecurity knowledge and awareness for students.',
-    speed: 28,
-    mood: 'neutral',
-    scene: 'intro'
-  },
-  {
-    speaker: 'NARRATOR',
-    text: 'In this simulation, you will explore realistic digital environments where every link, download, and message carries real security consequences.',
-    speed: 26,
-    mood: 'neutral',
-    scene: 'intro'
-  },
-  {
-    speaker: 'NARRATOR',
-    text: 'You will learn to identify deceptive phishing emails, detect malicious downloads, recognize social engineering, and defend systems from ransomware.',
-    speed: 26,
-    mood: 'neutral',
-    scene: 'intro'
-  },
-  {
-    speaker: 'NARRATOR',
-    text: 'From Zero Knowledge to Cyber Awareness. Your mission: Learn. Detect. Defend.',
-    speed: 28,
-    mood: 'neutral',
-    scene: 'intro'
-  },
-  {
-    speaker: 'NARRATOR',
-    text: 'Now, follow the story of four students — Ace, Nishren, Phillip, and Jonald — as their journey into the cyber world begins.',
-    speed: 26,
-    mood: 'neutral',
-    scene: 'intro'
-  },
+  phishing: [
+    {
+      speaker: 'NARRATOR',
+      text: 'CHAPTER 1: The Video Call & Phishing Threat\n\nAfter school, four senior high school friends — Ace, Nishren, Phillip, and Jonald — connect on a video call to finish their group project.',
+      speed: 26,
+      scene: 'chapter1_intro'
+    },
+    {
+      speaker: 'ACE',
+      text: '"Alright team! Let\'s finish this project before the deadline!"',
+      speed: 28,
+      mood: 'happy',
+      scene: 'videocall'
+    },
+    {
+      speaker: 'PHILLIP',
+      text: '"You said that last week."',
+      speed: 28,
+      mood: 'neutral',
+      scene: 'videocall'
+    },
+    {
+      speaker: 'JONALD',
+      text: '"And then disappeared for three hours."',
+      speed: 28,
+      mood: 'neutral',
+      scene: 'videocall'
+    },
+    {
+      speaker: 'NISHREN',
+      text: '"You mean gaming."',
+      speed: 28,
+      mood: 'happy',
+      scene: 'videocall'
+    },
+    {
+      speaker: 'ACE',
+      text: '"Researching games!" Everyone laughs.',
+      speed: 28,
+      mood: 'happy',
+      scene: 'videocall'
+    },
+    {
+      speaker: 'NARRATOR',
+      text: '📺 BREAKING NEWS: "Cyber threats targeting students continue to increase as online learning activities expand."',
+      speed: 26,
+      mood: 'neutral',
+      scene: 'videocall',
+      newsAlert: true
+    },
+    {
+      speaker: 'CYBERZERO',
+      text: 'Hello, students. I am CyberZerØ — your AI Guide for Cybersecurity Knowledge and Awareness.\n\nLearn. Detect. Defend.',
+      speed: 26,
+      mood: 'neutral',
+      scene: 'story'
+    },
+    {
+      speaker: 'ACE',
+      text: '"Wait, I just received an urgent email saying my school account will be suspended in 30 minutes! Should I click the link?"',
+      speed: 28,
+      mood: 'worried',
+      scene: 'story'
+    },
+    {
+      speaker: 'CYBERZERO',
+      text: 'Stop, Ace! Check the sender address and hover over the link. Attackers use urgency to make you panic. Let\'s investigate together on your desktop!',
+      speed: 26,
+      mood: 'neutral',
+      scene: 'story'
+    }
+  ],
 
-  // ── CHAPTER 1 — THE VIDEO CALL ───────────────────────────
-  {
-    speaker: 'NARRATOR',
-    text: 'CHAPTER 1: The Video Call\n\nAfter school, four friends connect to a video call to work on their school project.',
-    speed: 28,
-    mood: 'neutral',
-    scene: 'chapter1_intro'
-  },
-  {
-    speaker: 'ACE',
-    text: '"Alright team! Let\'s finish this project before the deadline!"',
-    speed: 28,
-    mood: 'happy',
-    scene: 'videocall'
-  },
-  {
-    speaker: 'PHILLIP',
-    text: '"You said that last week."',
-    speed: 28,
-    mood: 'neutral',
-    scene: 'videocall'
-  },
-  {
-    speaker: 'JONALD',
-    text: '"And then disappeared for three hours."',
-    speed: 28,
-    mood: 'neutral',
-    scene: 'videocall'
-  },
-  {
-    speaker: 'ACE',
-    text: '"I was researching."',
-    speed: 28,
-    mood: 'neutral',
-    scene: 'videocall'
-  },
-  {
-    speaker: 'NISHREN',
-    text: '"You mean gaming."',
-    speed: 28,
-    mood: 'happy',
-    scene: 'videocall'
-  },
-  {
-    speaker: 'ACE',
-    text: '"Researching games."',
-    speed: 28,
-    mood: 'happy',
-    scene: 'videocall'
-  },
-  {
-    speaker: 'NARRATOR',
-    text: 'Everyone laughs.\n\nAs they continue discussing their project, a breaking news alert suddenly appears on screen.',
-    speed: 26,
-    mood: 'neutral',
-    scene: 'videocall'
-  },
-  {
-    speaker: 'NARRATOR',
-    text: '📺 BREAKING NEWS: "Cyber threats targeting students continue to increase as learning activities move online."',
-    speed: 26,
-    mood: 'neutral',
-    scene: 'videocall',
-    newsAlert: true
-  },
-  {
-    speaker: 'PHILLIP',
-    text: '"Students are getting targeted now?"',
-    speed: 28,
-    mood: 'worried',
-    scene: 'videocall'
-  },
-  {
-    speaker: 'JONALD',
-    text: '"Imagine losing our entire project."',
-    speed: 28,
-    mood: 'worried',
-    scene: 'videocall'
-  },
-  {
-    speaker: 'ACE',
-    text: '"That would be terrible."',
-    speed: 28,
-    mood: 'neutral',
-    scene: 'videocall'
-  },
-  {
-    speaker: 'NISHREN',
-    text: '"Good thing we\'re smart."',
-    speed: 28,
-    mood: 'happy',
-    scene: 'videocall'
-  },
-  {
-    speaker: 'PHILLIP',
-    text: '"Those are famous last words."',
-    speed: 28,
-    mood: 'neutral',
-    scene: 'videocall'
-  },
-  {
-    speaker: 'NARRATOR',
-    text: 'Everyone laughs again.',
-    speed: 28,
-    mood: 'neutral',
-    scene: 'videocall'
-  },
+  malware: [
+    {
+      speaker: 'NARRATOR',
+      text: 'CHAPTER 2: Nishren and the Disguised Software\n\nFollowing Ace\'s phishing investigation, Nishren searches online for free tools to compile the group project files.',
+      speed: 26,
+      scene: 'story'
+    },
+    {
+      speaker: 'NISHREN',
+      text: '"I found a free file compression tool online! It says \'bonus_payroll.pdf.exe\'. Let me double-click it..."',
+      speed: 28,
+      mood: 'happy',
+      scene: 'story'
+    },
+    {
+      speaker: 'CYBERZERO',
+      text: 'Warning! Notice the double extension: .pdf.exe! Windows executes the .exe binary, launching a hidden Trojan onto your system.',
+      speed: 26,
+      mood: 'neutral',
+      scene: 'story'
+    },
+    {
+      speaker: 'NISHREN',
+      text: '"Uh-oh... my computer is slowing down and suspicious script files (.vbs) appeared in my Downloads folder!"',
+      speed: 28,
+      mood: 'worried',
+      scene: 'story'
+    },
+    {
+      speaker: 'CYBERZERO',
+      text: 'Open the Folder app and ShieldAV Anti-Virus. Inspect true file extensions, run diagnostic scans, and quarantine all 4 malware threats!',
+      speed: 26,
+      mood: 'neutral',
+      scene: 'story'
+    }
+  ],
 
-  // ── SCENE 2 — CYBERZERO ADVERTISEMENT ───────────────────
-  {
-    speaker: 'NARRATOR',
-    text: 'A new advertisement suddenly appears. Futuristic music begins playing. A glowing AI mascot appears on screen.',
-    speed: 26,
-    mood: 'neutral',
-    scene: 'story'
-  },
-  {
-    speaker: 'CYBERZERO',
-    text: '"Cyber threats are becoming more common every day."\n\nPhishing. Malware. Social Engineering. Ransomware.',
-    speed: 26,
-    mood: 'neutral',
-    scene: 'story'
-  },
-  {
-    speaker: 'CYBERZERO',
-    text: 'Hello, students. I am CyberZerØ — your AI Guide for Cybersecurity Knowledge and Awareness.',
-    speed: 26,
-    mood: 'neutral',
-    scene: 'story'
-  },
-  {
-    speaker: 'CYBERZERO',
-    text: 'My mission is to help students recognize cyber threats and stay safe online.',
-    speed: 26,
-    mood: 'neutral',
-    scene: 'story'
-  },
-  {
-    speaker: 'CYBERZERO',
-    text: 'Learn. Detect. Defend.',
-    speed: 32,
-    mood: 'neutral',
-    scene: 'story'
-  },
-  {
-    speaker: 'NISHREN',
-    text: '"That looks like a game trailer."',
-    speed: 28,
-    mood: 'happy',
-    scene: 'story'
-  },
-  {
-    speaker: 'PHILLIP',
-    text: '"I\'d play it."',
-    speed: 28,
-    mood: 'happy',
-    scene: 'story'
-  },
-  {
-    speaker: 'ACE',
-    text: '"Looks cool."',
-    speed: 28,
-    mood: 'happy',
-    scene: 'story'
-  },
-  {
-    speaker: 'JONALD',
-    text: '"Hopefully we never need it."',
-    speed: 28,
-    mood: 'neutral',
-    scene: 'story'
-  },
-  {
-    speaker: 'NARRATOR',
-    text: 'The four friends continue working on their project.\n\nBut over the next few days, each student encounters a different cyber threat.',
-    speed: 26,
-    mood: 'neutral',
-    scene: 'story'
-  },
+  social_engineering: [
+    {
+      speaker: 'NARRATOR',
+      text: 'CHAPTER 3: Phillip and Social Engineering\n\nWith the malware contained, Phillip receives an unexpected phone call and urgent text messages.',
+      speed: 26,
+      scene: 'story'
+    },
+    {
+      speaker: 'PHILLIP',
+      text: '"Someone claiming to be Academy IT Support called asking for my password and MFA code for an \'emergency server migration\'!"',
+      speed: 28,
+      mood: 'worried',
+      scene: 'story'
+    },
+    {
+      speaker: 'CYBERZERO',
+      text: 'That is Vishing (Voice Phishing)! Attackers use authority and fake urgency to manipulate victims into handing over credentials.',
+      speed: 26,
+      mood: 'neutral',
+      scene: 'story'
+    },
+    {
+      speaker: 'PHILLIP',
+      text: '"I also received an SMS with a fake banking link (Smishing) and a DM from someone pretending to be Nishren asking for project logins!"',
+      speed: 28,
+      mood: 'neutral',
+      scene: 'story'
+    },
+    {
+      speaker: 'CYBERZERO',
+      text: 'Open the Comms Defense Center. Inspect incoming voice transcripts, SMS alerts, and messages. Flag social engineering attacks and verify legitimate communications.',
+      speed: 26,
+      mood: 'neutral',
+      scene: 'story'
+    }
+  ],
 
-  // ── CHAPTER 2 — ACE & PHISHING ───────────────────────────
-  {
-    speaker: 'NARRATOR',
-    text: 'CHAPTER 2: Ace and the Phishing Email\n\nThe next morning, Ace receives an urgent email.',
-    speed: 28,
-    mood: 'neutral',
-    scene: 'story'
-  },
-  {
-    speaker: 'ACE',
-    text: '"What?! My school account will be suspended? I better click this link..."',
-    speed: 28,
-    mood: 'worried',
-    scene: 'story'
-  },
-  {
-    speaker: 'ACE',
-    text: '"Wait... CyberZerØ mentioned something about phishing."',
-    speed: 28,
-    mood: 'neutral',
-    scene: 'story'
-  },
-  {
-    speaker: 'CYBERZERO',
-    text: 'Warning detected. This email contains signs of phishing.',
-    speed: 26,
-    mood: 'neutral',
-    scene: 'story'
-  },
-  {
-    speaker: 'ACE',
-    text: '"So it\'s fake?"',
-    speed: 28,
-    mood: 'worried',
-    scene: 'story'
-  },
-  {
-    speaker: 'CYBERZERO',
-    text: 'Most likely. Let\'s investigate. Can you find the suspicious clues?',
-    speed: 26,
-    mood: 'neutral',
-    scene: 'story'
-  },
-  {
-    speaker: 'ACE',
-    text: '"The sender address looks strange — it\'s not from an official domain."',
-    speed: 28,
-    mood: 'neutral',
-    scene: 'story'
-  },
-  {
-    speaker: 'CYBERZERO',
-    text: 'Lesson learned: Check the sender. Verify links. Avoid urgent requests. Now it\'s your turn to investigate.',
-    speed: 26,
-    mood: 'neutral',
-    scene: 'story'
-  }
-];
+  ransomware: [
+    {
+      speaker: 'NARRATOR',
+      text: 'CHAPTER 4: Jonald and the Ransomware Extortion\n\nOn the night before final project submission, Jonald checks the team\'s shared project drive.',
+      speed: 26,
+      scene: 'story'
+    },
+    {
+      speaker: 'JONALD',
+      text: '"NO! All our project files are locked with a .locky extension! A ransom note popped up demanding Bitcoin payment!"',
+      speed: 28,
+      mood: 'worried',
+      scene: 'story'
+    },
+    {
+      speaker: 'CYBERZERO',
+      text: 'Don\'t panic, Jonald, and NEVER pay the ransom! We have incident response procedures and immutable cloud backups.',
+      speed: 26,
+      mood: 'neutral',
+      scene: 'story'
+    },
+    {
+      speaker: 'JONALD',
+      text: '"How do we stop it from spreading to the rest of the school network?"',
+      speed: 28,
+      mood: 'worried',
+      scene: 'story'
+    },
+    {
+      speaker: 'CYBERZERO',
+      text: 'Open the Incident Console. Isolate compromised storage nodes, terminate malicious background dropper processes, and restore clean snapshots to achieve 100% recovery!',
+      speed: 26,
+      mood: 'neutral',
+      scene: 'story'
+    }
+  ],
 
-// Archived script chapters for subsequent game expansions
-const ARCHIVED_EXPANSION_CHAPTERS = [
-  // Chapter 3: Nishren and Malware
-  { speaker: 'NARRATOR', text: 'CHAPTER 3: Nishren and Malware\n\nNishren discovers a free software tool online that he thinks will help with the school project.' },
-  { speaker: 'NISHREN', text: '"This will help our project! Let me download it."' },
-  { speaker: 'NARRATOR', text: 'He downloads the file. Moments later, his computer slows down and strange errors begin to appear.' },
-  { speaker: 'NISHREN', text: '"Uh-oh. Something\'s wrong..."' },
-  { speaker: 'CYBERZERO', text: 'This software may contain malware. Malicious programs disguise themselves as useful tools to gain access to your system.' },
-  { speaker: 'CYBERZERO', text: 'Lesson learned: Download from trusted websites only. Verify publishers. Scan files before opening.' },
-  // Chapter 4: Phillip and Social Engineering
-  { speaker: 'NARRATOR', text: 'CHAPTER 4: Phillip and Social Engineering\n\nPhillip receives an unexpected phone call from someone claiming to be from his school\'s IT department.' },
-  { speaker: 'PHILLIP', text: '"We need your password to verify your account," the caller says. They sound very official...' },
-  { speaker: 'NARRATOR', text: 'Then Phillip remembers what CyberZerØ taught him.' },
-  { speaker: 'PHILLIP', text: '"Wait... legitimate staff would never ask for my password over a call."' },
-  { speaker: 'CYBERZERO', text: 'Exactly, Phillip. That is social engineering — manipulating people into giving up sensitive information.' },
-  { speaker: 'CYBERZERO', text: 'Lesson learned: Verify identities through official channels. Never share your password. Think before you respond.' },
-  // Chapter 5: Jonald and Ransomware
-  { speaker: 'NARRATOR', text: 'CHAPTER 5: Jonald and Ransomware\n\nJonald opens a suspicious email attachment. Suddenly, his files become completely inaccessible.' },
-  { speaker: 'JONALD', text: '"No! My project files! I can\'t open anything!"' },
-  { speaker: 'CYBERZERO', text: 'This appears to be ransomware — malware that locks your files and demands payment to restore access.' },
-  { speaker: 'CYBERZERO', text: 'The best defense: back up files regularly, avoid suspicious attachments, and always keep your software updated.' },
-  // Final Chapter: Virtual Classroom
-  { speaker: 'NARRATOR', text: 'After completing all training missions, the four students gather inside CyberZerØ\'s virtual classroom.' },
-  { speaker: 'CYBERZERO', text: 'Excellent work, everyone. What have you learned today?' },
-  { speaker: 'ACE', text: '"How to spot phishing — check the sender, verify links, and never rush."' },
-  { speaker: 'NISHREN', text: '"How to avoid malware — only download from trusted sources."' },
-  { speaker: 'PHILLIP', text: '"How to recognize social engineering — never share passwords, always verify."' },
-  { speaker: 'JONALD', text: '"How to protect my files from ransomware — back up everything!"' },
-  { speaker: 'CYBERZERO', text: 'Excellent. Knowledge is your strongest defense. The more you know, the safer you become.' },
-  { speaker: 'ACE', text: '"So cybersecurity isn\'t only for experts?"' },
-  { speaker: 'CYBERZERO', text: 'Correct. Cybersecurity is for everyone — especially students like you.' },
-  { speaker: 'NARRATOR', text: 'The four students successfully complete their school project — and gain something far more valuable: the knowledge to stay safe online.\n\n— CyberZerØ: Learn. Detect. Defend. —' }
-];
+  grand_finale: [
+    {
+      speaker: 'NARRATOR',
+      text: 'FINAL CHAPTER: The Virtual Classroom\n\nAfter successfully neutralizing all threats across Phishing, Malware, Social Engineering, and Ransomware, the four students gather in CyberZerØ\'s virtual classroom.',
+      speed: 26,
+      scene: 'story'
+    },
+    {
+      speaker: 'CYBERZERO',
+      text: 'Outstanding work, Ace, Nishren, Phillip, and Jonald! What have we learned on our cybersecurity journey?',
+      speed: 26,
+      mood: 'neutral',
+      scene: 'story'
+    },
+    {
+      speaker: 'ACE',
+      text: '"How to spot phishing: verify sender addresses, never rush, and hover over every link!"',
+      speed: 28,
+      mood: 'happy',
+      scene: 'story'
+    },
+    {
+      speaker: 'NISHREN',
+      text: '"How to stop malware: check hidden file extensions, avoid unverified downloads, and scan with Anti-Virus!"',
+      speed: 28,
+      mood: 'happy',
+      scene: 'story'
+    },
+    {
+      speaker: 'PHILLIP',
+      text: '"How to defend against social engineering: never share passwords or MFA codes over calls or SMS!"',
+      speed: 28,
+      mood: 'happy',
+      scene: 'story'
+    },
+    {
+      speaker: 'JONALD',
+      text: '"How to respond to ransomware: isolate infected shares immediately and restore from immutable backups!"',
+      speed: 28,
+      mood: 'happy',
+      scene: 'story'
+    },
+    {
+      speaker: 'CYBERZERO',
+      text: 'Knowledge is your strongest shield. Cybersecurity is for everyone — especially students.\n\n— CyberZerØ: Learn. Detect. Defend. —',
+      speed: 26,
+      mood: 'neutral',
+      scene: 'story'
+    }
+  ]
+};
+
+let VN_DIALOGUE = VN_STORIES.phishing;
 
 const vnState = {
   lineIndex: 0,
@@ -1504,6 +1870,14 @@ const vnState = {
   done: false
 };
 
+function playCategoryStory(categoryId) {
+  activeCategoryStory = categoryId;
+  VN_DIALOGUE = VN_STORIES[categoryId] || VN_STORIES.phishing;
+  hideAllOverlays();
+  showOverlay('overlay-welcome');
+  vnInit();
+}
+
 function vnInit() {
   vnSpawnParticles();
   vnState.lineIndex = 0;
@@ -1512,7 +1886,21 @@ function vnInit() {
   if (vnState.typingTimer) clearTimeout(vnState.typingTimer);
   const bgBackdrop = document.getElementById('vn-bg-backdrop');
   if (bgBackdrop) {
-    bgBackdrop.style.backgroundImage = "url('assets/01Cover.png')";
+    if (activeCategoryStory === 'prologue') {
+      bgBackdrop.style.backgroundImage = "url('assets/Cover.png')";
+    } else {
+      bgBackdrop.style.backgroundImage = "url('assets/01Cover.png')";
+    }
+  }
+  const skipBtn = document.getElementById('vn-skip-btn');
+  if (skipBtn) {
+    if (activeCategoryStory === 'prologue') {
+      skipBtn.textContent = 'Skip to Assessment ⏩';
+      skipBtn.title = 'Skip the intro and start the Pre-Assessment Exam';
+    } else {
+      skipBtn.textContent = 'Skip ⏩';
+      skipBtn.title = 'Skip dialogue';
+    }
   }
   const vcallStage = document.getElementById('vn-videocall-stage');
   if (vcallStage) vcallStage.classList.add('hidden');
@@ -1573,19 +1961,15 @@ function vnPlayLine(index) {
   const isVideoCall = (line.scene === 'videocall');
 
   if (isVideoCall) {
-    // ── CHAPTER 1 VIDEO CALL SCENE (assets/Chapter1.png) ──
     if (vcallStage) vcallStage.classList.remove('hidden');
     if (welcomeOv) welcomeOv.classList.add('vn-mode-videocall');
 
-    // Hide large central sprite so the 4 video streams in Chapter1.png are completely visible
     if (charArea) {
       charArea.style.opacity = '0';
       charArea.style.display = 'none';
       if (charEl) charEl.classList.remove('vn-speaking');
     }
 
-    // 4 speaker quadrants on Chapter1.png:
-    // Top-Left: Nishren | Top-Right: Ace | Bottom-Left: Phillip | Bottom-Right: Jonald
     const quads = {
       'NISHREN': document.getElementById('vcall-quad-nishren'),
       'ACE':     document.getElementById('vcall-quad-ace'),
@@ -1600,24 +1984,22 @@ function vnPlayLine(index) {
       activeQuad.classList.add('active-speaker');
       if (vcallWrapper) vcallWrapper.classList.add('has-active-speaker');
 
-      // Show speaker avatar and video call status
       if (avatarWrap) avatarWrap.classList.remove('hidden');
       if (avatarImg && imgSrc) avatarImg.src = imgSrc;
       if (speakerStatus) {
         speakerStatus.classList.remove('hidden');
         speakerStatus.textContent = `🟢 ${line.speaker} • SPEAKING ON CALL`;
+        speakerStatus.style.color = '#00e676';
       }
       if (typeof AudioManager !== 'undefined') {
         AudioManager.playExamChoice();
       }
     } else {
-      // Narrator speaking during the call — keep all 4 tiles equally visible
       if (vcallWrapper) vcallWrapper.classList.remove('has-active-speaker');
       if (avatarWrap) avatarWrap.classList.add('hidden');
       if (speakerStatus) speakerStatus.classList.add('hidden');
     }
 
-    // Breaking news banner on video call
     if (newsBanner) {
       if (line.newsAlert) {
         newsBanner.classList.remove('hidden');
@@ -1627,7 +2009,6 @@ function vnPlayLine(index) {
       }
     }
 
-    // Dynamic duration counter
     const durEl = document.getElementById('vcall-duration');
     if (durEl) {
       const sec = 245 + Math.max(0, (index - 5) * 6);
@@ -1636,23 +2017,35 @@ function vnPlayLine(index) {
       durEl.textContent = `${m}:${s}`;
     }
   } else {
-    // ── STANDARD STORY SCENE ──
     if (vcallStage) vcallStage.classList.add('hidden');
     if (welcomeOv) welcomeOv.classList.remove('vn-mode-videocall');
     if (avatarWrap) avatarWrap.classList.add('hidden');
-    if (speakerStatus) speakerStatus.classList.add('hidden');
     if (newsBanner) newsBanner.classList.add('hidden');
 
-    if (bgBackdrop) {
-      bgBackdrop.style.backgroundImage = "url('assets/01Cover.png')";
+    if (line.tag && speakerStatus) {
+      speakerStatus.classList.remove('hidden');
+      speakerStatus.textContent = line.tag;
+      speakerStatus.style.color = (line.speaker === 'ZERO' || line.speaker === 'CYBERZERO' || line.speaker === 'AI GUIDE ZERO') ? 'var(--accent-cyan)' : '#a7f3d0';
+    } else if (speakerStatus) {
+      speakerStatus.classList.add('hidden');
     }
 
-    // Dynamic character image swap
+    if (line.bg && bgBackdrop) {
+      bgBackdrop.style.backgroundImage = `url('${line.bg}')`;
+    } else if (bgBackdrop) {
+      if (activeCategoryStory === 'prologue') {
+        bgBackdrop.style.backgroundImage = "url('assets/Cover.png')";
+      } else {
+        bgBackdrop.style.backgroundImage = "url('assets/01Cover.png')";
+      }
+    }
+
     if (spriteEl && charArea) {
       if (imgSrc) {
         charArea.style.opacity = '0';
         charArea.style.transition = 'opacity 0.35s ease';
-        spriteEl.innerHTML = `<img src="${imgSrc}" alt="${line.speaker}" class="vn-char-img" />`;
+        const isAIZero = (line.speaker === 'ZERO' || line.speaker === 'CYBERZERO' || line.speaker === 'AI GUIDE ZERO');
+        spriteEl.innerHTML = `<img src="${imgSrc}" alt="${line.speaker}" class="vn-char-img ${isAIZero ? 'ai-zero' : ''}" />`;
         charArea.style.display = 'flex';
         requestAnimationFrame(() => {
           requestAnimationFrame(() => { charArea.style.opacity = '1'; });
@@ -1666,15 +2059,16 @@ function vnPlayLine(index) {
     }
   }
 
-  // ── Speaker name colour by role ───────────────────────────
   const colours = {
-    'CYBERZERO': 'var(--accent-cyan)',
-    'NARRATOR':  'var(--accent-blue)',
-    'ACE':       '#f9a825',
-    'NISHREN':   '#81c784',
-    'PHILLIP':   '#ba68c8',
-    'JONALD':    '#e57373',
-    'SYSTEM':    'var(--accent-cyan)',
+    'CYBERZERO':     'var(--accent-cyan)',
+    'ZERO':          '#00f0ff',
+    'AI GUIDE ZERO': '#00f0ff',
+    'NARRATOR':      'var(--accent-blue)',
+    'ACE':           '#f9a825',
+    'NISHREN':       '#81c784',
+    'PHILLIP':       '#ba68c8',
+    'JONALD':        '#e57373',
+    'SYSTEM':        'var(--accent-cyan)',
   };
   speakerEl.style.color = colours[line.speaker] || 'var(--accent-cyan)';
 
@@ -1687,7 +2081,6 @@ function vnPlayLine(index) {
       const ch = line.text[vnState.charIndex];
       textEl.textContent += ch;
       vnState.charIndex++;
-      // Play a soft typing blip for visible (non-space/newline) characters
       if (typeof AudioManager !== 'undefined' && ch.trim().length > 0) {
         AudioManager.playNarratorTyping();
       }
@@ -1698,7 +2091,17 @@ function vnPlayLine(index) {
       cursorEl.classList.add('visible');
       hintEl.classList.add('visible');
       const hint = hintEl.querySelector('span:first-child');
-      hint.textContent = (index === VN_DIALOGUE.length - 1) ? 'Start Phishing Demo ➔' : 'Click to continue';
+      
+      let nextLabel = 'Click to continue';
+      if (index === VN_DIALOGUE.length - 1) {
+        if (activeCategoryStory === 'prologue') nextLabel = '📝 Start Pre-Assessment Exam ➔';
+        else if (activeCategoryStory === 'phishing') nextLabel = 'Start Phishing Demo ➔';
+        else if (activeCategoryStory === 'malware') nextLabel = 'Start Malware Lab ➔';
+        else if (activeCategoryStory === 'social_engineering') nextLabel = 'Start Social Defense Lab ➔';
+        else if (activeCategoryStory === 'ransomware') nextLabel = 'Start Ransomware Console ➔';
+        else if (activeCategoryStory === 'grand_finale') nextLabel = 'View Master Certificate ➔';
+      }
+      hint.textContent = nextLabel;
       if (index === VN_DIALOGUE.length - 1) vnState.done = true;
     }
   }
@@ -1708,7 +2111,6 @@ function vnPlayLine(index) {
 function vnAdvance() {
   const line = VN_DIALOGUE[vnState.lineIndex];
   if (vnState.typing) {
-    // Skip typewriter — show full line immediately
     if (vnState.typingTimer) clearTimeout(vnState.typingTimer);
     vnState.typing = false;
     const textEl   = document.getElementById('vn-text');
@@ -1721,11 +2123,21 @@ function vnAdvance() {
     cursorEl.classList.add('visible');
     hintEl.classList.add('visible');
     const hint = hintEl.querySelector('span:first-child');
-    hint.textContent = (vnState.lineIndex === VN_DIALOGUE.length - 1) ? 'Start Phishing Demo ➔' : 'Click to continue';
+    
+    let nextLabel = 'Click to continue';
+    if (vnState.lineIndex === VN_DIALOGUE.length - 1) {
+      if (activeCategoryStory === 'prologue') nextLabel = '📝 Start Pre-Assessment Exam ➔';
+      else if (activeCategoryStory === 'phishing') nextLabel = 'Start Phishing Demo ➔';
+      else if (activeCategoryStory === 'malware') nextLabel = 'Start Malware Lab ➔';
+      else if (activeCategoryStory === 'social_engineering') nextLabel = 'Start Social Defense Lab ➔';
+      else if (activeCategoryStory === 'ransomware') nextLabel = 'Start Ransomware Console ➔';
+      else if (activeCategoryStory === 'grand_finale') nextLabel = 'View Master Certificate ➔';
+    }
+    hint.textContent = nextLabel;
     if (vnState.lineIndex === VN_DIALOGUE.length - 1) vnState.done = true;
     return;
   }
-  // Advance to next line or go straight to demo
+
   if (vnState.done || vnState.lineIndex >= VN_DIALOGUE.length - 1) {
     vnFinish();
   } else {
@@ -1745,8 +2157,23 @@ function vnFinish() {
   if (vcallStage) vcallStage.classList.add('hidden');
   const welcomeOv = document.getElementById('overlay-welcome');
   if (welcomeOv) welcomeOv.classList.remove('vn-mode-videocall');
-  // Go straight to the interactive demo — no training slides
-  startDemo();
+  closeOverlay('overlay-welcome');
+
+  if (activeCategoryStory === 'prologue') {
+    proceedFromIntroToExam();
+  } else if (activeCategoryStory === 'phishing') {
+    startDemo();
+  } else if (activeCategoryStory === 'malware') {
+    startMalwareDemo();
+  } else if (activeCategoryStory === 'social_engineering') {
+    startSocialEngineeringMission();
+  } else if (activeCategoryStory === 'ransomware') {
+    startRansomwareMission();
+  } else if (activeCategoryStory === 'grand_finale') {
+    showGrandCertificate();
+  } else {
+    openCategoryHub();
+  }
 }
 
 // ═══════════════════════════════════════════════════════════
@@ -3480,6 +3907,7 @@ function finishMission() {
   document.getElementById('results-rank').textContent = rank;
   document.getElementById('results-rank').className = `results-rank-circle ${rankClass}`;
   document.getElementById('results-rank-label').textContent = rankLabel;
+  completeCategory('phishing', gameState.score, rank);
   updateAppLockStates();
   // Update sticky note to Malware points system for Chapter 2
   updateStickyNoteForPhase('malware');
@@ -5741,8 +6169,511 @@ function finishMalwareMission() {
   if (rankEl) rankEl.textContent = rank;
   if (rankLabelEl) rankLabelEl.textContent = rankLabel;
 
+  completeCategory('malware', gameState.score, rank);
   showOverlay('overlay-malware-results');
   if (typeof AudioManager !== 'undefined') AudioManager.playMissionComplete();
+}
+
+// ═══════════════════════════════════════════════════════════
+// CHAPTER 3: SOCIAL ENGINEERING LAB (PHILLIP)
+// ═══════════════════════════════════════════════════════════
+
+const COMMS_ITEMS = [
+  {
+    id: 'vishing_1',
+    type: 'vishing',
+    icon: '📞',
+    channel: 'Voice Call',
+    sender: 'Academy IT Support',
+    address: 'Internal Ext 9921',
+    time: '2:15 PM',
+    subject: 'Emergency Server Migration — Password Verification',
+    audioTranscript: '"Hello Phillip, this is Academy IT Support. We are performing an emergency server migration right now. We need you to state your account password and read out the 6-digit MFA code sent to your phone immediately so we can preserve your profile."',
+    isSocialEngineering: true,
+    threatVector: 'Vishing (Voice Call Impersonation)',
+    tactic: 'Fake Authority & Urgent Credential Harvesting',
+    explanation: 'Legitimate IT support will NEVER call asking for your password or SMS verification code. Attackers use phone calls to create urgent psychological pressure.',
+    resolved: false,
+    playerVerdict: null
+  },
+  {
+    id: 'smishing_1',
+    type: 'smishing',
+    icon: '💬',
+    channel: 'SMS Alert',
+    sender: 'BPI Security Alerts',
+    address: '+63-917-000-8812',
+    time: '2:30 PM',
+    subject: 'Unusual Sign-in Detected',
+    messageText: 'BPI SECURITY ALERT: Unusual sign-in attempt from Cebu. Your mobile banking access will be closed in 15 mins. Reactivate now at https://bpi-mobile-verify.cc/login',
+    isSocialEngineering: true,
+    threatVector: 'Smishing (SMS Phishing Link)',
+    tactic: 'False Urgency & Spoofed Shortcode',
+    explanation: 'Banks do not send SMS texts with urgent login links from generic mobile numbers. The link domain (.cc) is deceptive.',
+    resolved: false,
+    playerVerdict: null
+  },
+  {
+    id: 'impersonate_1',
+    type: 'impersonation',
+    icon: '👥',
+    channel: 'Direct Message',
+    sender: 'Nishren (Backup)',
+    address: 'nishren.backup@tempmail.io',
+    time: '2:45 PM',
+    subject: 'Lost Project Files — Send Login',
+    messageText: 'Hey Phillip! My PC crashed and I lost our project files. Can you send me your student portal password real quick so I can copy the research slides before class?',
+    isSocialEngineering: true,
+    threatVector: 'Pretexting & Identity Impersonation',
+    tactic: 'Friend Impersonation & Credential Sharing',
+    explanation: 'Attackers create fake lookalike accounts of classmates or friends using temporary email services (@tempmail.io) to trick victims into sharing credentials.',
+    resolved: false,
+    playerVerdict: null
+  },
+  {
+    id: 'legit_comm_1',
+    type: 'legitimate',
+    icon: '🛡️',
+    channel: 'Official Notice',
+    sender: 'Cyber Academy Registrar',
+    address: '292900 (Verified Shortcode)',
+    time: '3:00 PM',
+    subject: 'Midterm Submission Schedule',
+    messageText: 'Official Notice: The midterm project submission portal opens next Monday at 8:00 AM on the official school portal. No login credentials will ever be requested via SMS.',
+    isSocialEngineering: false,
+    threatVector: 'Safe Communication',
+    tactic: 'Standard Information Broadcast',
+    explanation: 'Contains no urgent threats, asks for zero credentials, and includes standard security disclaimers.',
+    resolved: false,
+    playerVerdict: null
+  }
+];
+
+let selectedCommId = 'vishing_1';
+
+function startSocialEngineeringMission() {
+  closeOverlay('overlay-results');
+  closeOverlay('overlay-malware-results');
+  closeOverlay('overlay-social-results');
+  gameState.phase = 'social_engineering';
+
+  COMMS_ITEMS.forEach(c => {
+    c.resolved = false;
+    c.playerVerdict = null;
+  });
+
+  selectedCommId = 'vishing_1';
+  openApp('comms');
+
+  const winComms = document.getElementById('win-comms');
+  if (winComms) {
+    winComms.style.left = '80px';
+    winComms.style.top = '60px';
+  }
+
+  renderCommsFeed();
+  selectCommItem('vishing_1');
+  showToast('📱 Chapter 3: Investigate all 4 incoming communications and expose social engineering attacks!', 'info');
+}
+
+function renderCommsFeed() {
+  const listEl = document.getElementById('comms-msg-list');
+  if (!listEl) return;
+
+  const resolvedCount = COMMS_ITEMS.filter(c => c.resolved).length;
+  const badgeEl = document.getElementById('comms-badge-count');
+  const filterBadge = document.getElementById('comms-filter-badge');
+  if (badgeEl) badgeEl.textContent = 4 - resolvedCount;
+  if (filterBadge) filterBadge.textContent = `${resolvedCount} / 4 Resolved`;
+
+  listEl.innerHTML = COMMS_ITEMS.map(item => {
+    const isActive = item.id === selectedCommId;
+    let statusPill = '<span class="comm-status-pill comm-pill-pending">⏳ Pending</span>';
+    if (item.resolved) {
+      statusPill = item.playerVerdict === 'flagged'
+        ? '<span class="comm-status-pill comm-pill-blocked">🚩 Blocked (Threat)</span>'
+        : '<span class="comm-status-pill comm-pill-safe">✓ Verified Safe</span>';
+    }
+
+    const preview = item.audioTranscript || item.messageText || item.subject;
+
+    return `
+      <div class="comm-item-row ${isActive ? 'active' : ''} ${item.resolved ? 'resolved' : ''}" onclick="selectCommItem('${item.id}')">
+        <div class="comm-item-icon">${item.icon}</div>
+        <div class="comm-item-content">
+          <div class="comm-item-top">
+            <span class="comm-item-sender">${item.sender}</span>
+            <span class="comm-item-time">${item.time}</span>
+          </div>
+          <div class="comm-item-preview">${preview}</div>
+          ${statusPill}
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+function selectCommItem(commId) {
+  selectedCommId = commId;
+  renderCommsFeed();
+
+  const item = COMMS_ITEMS.find(c => c.id === commId);
+  const emptyState = document.getElementById('comms-empty-state');
+  const detailView = document.getElementById('comms-detail-view');
+
+  if (!item || !detailView) return;
+  if (emptyState) emptyState.classList.add('hidden');
+  detailView.classList.remove('hidden');
+
+  let bodyContent = '';
+  if (item.type === 'vishing') {
+    bodyContent = `
+      <div class="comm-audio-box">
+        <div style="display:flex;justify-content:space-between;align-items:center;">
+          <span style="font-size:12px;font-weight:700;color:#ea80fc">🎙️ VOICE CALL RECORDING • DURATION: 0:42</span>
+          <span style="font-size:11px;color:var(--text-muted)">AUDIO PLAYBACK</span>
+        </div>
+        <div class="comm-audio-wave">
+          <span class="comm-audio-bar"></span>
+          <span class="comm-audio-bar"></span>
+          <span class="comm-audio-bar"></span>
+          <span class="comm-audio-bar"></span>
+          <span class="comm-audio-bar"></span>
+          <span class="comm-audio-bar"></span>
+          <span class="comm-audio-bar"></span>
+          <span class="comm-audio-bar"></span>
+        </div>
+        <div class="comm-transcript-box">
+          <strong>Automated Transcript:</strong><br>${item.audioTranscript}
+        </div>
+      </div>
+    `;
+  } else {
+    bodyContent = `
+      <div class="comm-sms-bubble">
+        <strong>${item.channel}:</strong><br>
+        ${item.messageText}
+      </div>
+    `;
+  }
+
+  let actionHtml = '';
+  if (!item.resolved) {
+    actionHtml = `
+      <div class="comm-actions-bar">
+        <button class="comm-btn-flag" onclick="flagCommItem('${item.id}', true)">
+          🚩 FLAG AS SOCIAL ENGINEERING ATTACK (+100)
+        </button>
+        <button class="comm-btn-safe" onclick="flagCommItem('${item.id}', false)">
+          ✓ VERIFY AS SAFE COMMUNICATION (+50)
+        </button>
+      </div>
+    `;
+  } else {
+    actionHtml = `
+      <div style="background:rgba(0,0,0,0.3);padding:12px;border-radius:8px;border:1px solid ${item.isSocialEngineering ? 'rgba(255,82,82,0.3)' : 'rgba(0,230,118,0.3)'};font-size:12px">
+        <strong style="color:${item.isSocialEngineering ? '#ff5252' : '#00e676'}">${item.isSocialEngineering ? '⚠️ Threat Analysis Verdict:' : '✓ Safe Verification Verdict:'}</strong>
+        <p style="margin:4px 0 0;color:#b0bec5">${item.explanation}</p>
+      </div>
+    `;
+  }
+
+  detailView.innerHTML = `
+    <div class="comm-header-card">
+      <div class="comm-header-badge">${item.channel} • INTERCEPT ID: ${item.id.toUpperCase()}</div>
+      <div class="comm-header-title">${item.subject}</div>
+      <div class="comm-meta-grid">
+        <div><span>FROM:</span> <strong>${item.sender}</strong></div>
+        <div><span>ADDRESS:</span> <strong>${item.address}</strong></div>
+        <div><span>TIME:</span> <strong>${item.time}</strong></div>
+        <div><span>TACTIC:</span> <strong>${item.tactic}</strong></div>
+      </div>
+    </div>
+
+    ${bodyContent}
+    ${actionHtml}
+  `;
+}
+
+function flagCommItem(commId, playerFlaggedThreat) {
+  const item = COMMS_ITEMS.find(c => c.id === commId);
+  if (!item || item.resolved) return;
+
+  item.resolved = true;
+  item.playerVerdict = playerFlaggedThreat ? 'flagged' : 'verified';
+
+  if (playerFlaggedThreat === item.isSocialEngineering) {
+    gameState.score += 100;
+    if (typeof AudioManager !== 'undefined') AudioManager.playCorrect();
+    showToast(`🎯 Correct! ${item.threatVector} identified (+100 pts).`, 'success');
+  } else {
+    gameState.score = Math.max(0, gameState.score - 25);
+    if (typeof AudioManager !== 'undefined') AudioManager.playWrong();
+    showToast(`⚠️ Incorrect assessment! Review the CyberZerØ analysis (-25 pts).`, 'warning');
+  }
+
+  renderCommsFeed();
+  selectCommItem(commId);
+  updateHUD();
+
+  // Check if all 4 communications resolved
+  if (COMMS_ITEMS.every(c => c.resolved)) {
+    setTimeout(finishSocialEngineeringMission, 1200);
+  }
+}
+
+function finishSocialEngineeringMission() {
+  const blocked = COMMS_ITEMS.filter(c => c.isSocialEngineering && c.playerVerdict === 'flagged').length;
+  document.getElementById('res-social-blocked').textContent = `${blocked} / 3 Threats Blocked`;
+  document.getElementById('res-social-score').textContent = gameState.score;
+
+  const rank = blocked >= 3 ? 'S' : 'A';
+  const rankEl = document.getElementById('social-results-rank');
+  const labelEl = document.getElementById('social-results-rank-label');
+  if (rankEl) rankEl.textContent = rank;
+  if (labelEl) labelEl.textContent = rank === 'S' ? 'SOCIAL DEFENSE MASTER' : 'COMMUNICATIONS GUARDIAN';
+
+  completeCategory('social_engineering', gameState.score, rank);
+  showOverlay('overlay-social-results');
+  if (typeof AudioManager !== 'undefined') AudioManager.playMissionComplete();
+}
+
+// ═══════════════════════════════════════════════════════════
+// CHAPTER 4: RANSOMWARE INCIDENT CONSOLE (JONALD)
+// ═══════════════════════════════════════════════════════════
+
+const RANSOMWARE_NODES = [
+  {
+    id: 'node_db',
+    name: 'Shared Project Database (NAS-01)',
+    icon: '🗄️',
+    path: '/mnt/vault/project_db.enc',
+    status: 'infected',
+    threatName: 'Crypto.Locky.Payload',
+    details: 'Files encrypted with .locky extension. Extortion demand left on volume.',
+    actionPhase: 'isolate' // isolate -> restore -> clean
+  },
+  {
+    id: 'node_dropper',
+    name: 'Presentation Assets (Drive E:)',
+    icon: '📊',
+    path: '/srv/assets/crypt_dropper.exe',
+    status: 'infected',
+    threatName: 'Ransom.Dropper.Process (PID 4092)',
+    details: 'Active malicious process detected attempting lateral network infection.',
+    actionPhase: 'kill' // kill -> clean
+  },
+  {
+    id: 'node_repo',
+    name: 'Source Code Repository (Git-Srv)',
+    icon: '💻',
+    path: '/var/git/cyberzero_core.locked',
+    status: 'infected',
+    threatName: 'Ransom.Crypt.Payload',
+    details: 'Repository volume locked by ransomware key. Encryption active.',
+    actionPhase: 'isolate' // isolate -> restore -> clean
+  },
+  {
+    id: 'node_logs',
+    name: 'System Security Audit Logs (SysLog-04)',
+    icon: '📜',
+    path: '/var/log/audit.log',
+    status: 'clean',
+    threatName: 'Clean & Verified',
+    details: 'Write-once immutable audit log stream. Uncompromised.',
+    actionPhase: 'verify'
+  }
+];
+
+function startRansomwareMission() {
+  closeOverlay('overlay-results');
+  closeOverlay('overlay-malware-results');
+  closeOverlay('overlay-social-results');
+  closeOverlay('overlay-ransomware-results');
+  gameState.phase = 'ransomware';
+
+  RANSOMWARE_NODES.forEach((n, idx) => {
+    if (idx === 3) {
+      n.status = 'clean';
+      n.actionPhase = 'verify';
+    } else {
+      n.status = 'infected';
+      n.actionPhase = idx === 1 ? 'kill' : 'isolate';
+    }
+  });
+
+  openApp('ransomware');
+  const winRw = document.getElementById('win-ransomware');
+  if (winRw) {
+    winRw.style.left = '60px';
+    winRw.style.top = '50px';
+  }
+
+  const logsEl = document.getElementById('rw-term-logs');
+  if (logsEl) {
+    logsEl.innerHTML = `
+      <div class="rw-log-line rw-log-alert">[ALERT] Ransomware signature detected in project storage subsystem!</div>
+      <div class="rw-log-line rw-log-warn">[WARN] Immediate action required: Isolate nodes and kill malicious payload droppers.</div>
+      <div class="rw-log-line">[SYS] Emergency Immutable Cloud Backup connected at time.cyberacademy.gov</div>
+    `;
+  }
+
+  renderRansomwareNodes();
+  showToast('🔒 Chapter 4: Respond to ransomware, isolate infected drives, and restore the vault!', 'warning');
+}
+
+function renderRansomwareNodes() {
+  const grid = document.getElementById('rw-nodes-grid');
+  if (!grid) return;
+
+  const restoredCount = RANSOMWARE_NODES.filter(n => n.status === 'clean' || n.status === 'restored').length;
+  const pct = Math.round((restoredCount / RANSOMWARE_NODES.length) * 100);
+  const healthEl = document.getElementById('rw-health-pct');
+  if (healthEl) healthEl.textContent = `${pct}%`;
+
+  grid.innerHTML = RANSOMWARE_NODES.map(node => {
+    let statusClass = 'rw-status-infected';
+    let statusText = '🚨 INFECTED / ENCRYPTED';
+    let cardClass = 'infected';
+    let buttonsHtml = '';
+
+    if (node.status === 'clean' || node.status === 'restored') {
+      statusClass = 'rw-status-restored';
+      statusText = '✓ SECURED & RESTORED';
+      cardClass = 'restored';
+      buttonsHtml = '<span style="font-size:10px;color:#00e676;font-weight:700">✓ Immutable Snapshot Live</span>';
+    } else if (node.status === 'isolated') {
+      statusClass = 'rw-status-isolated';
+      statusText = '⚠️ ISOLATED FROM NETWORK';
+      cardClass = 'isolated';
+      buttonsHtml = `
+        <button class="rw-btn-action" onclick="executeNodeAction('${node.id}', 'restore')">
+          📦 RESTORE FROM IMMUTABLE BACKUP (+100)
+        </button>
+      `;
+    } else {
+      if (node.actionPhase === 'kill') {
+        buttonsHtml = `
+          <button class="rw-btn-action" style="border-color:#ff5252;color:#ff5252" onclick="executeNodeAction('${node.id}', 'kill')">
+            ⛔ TERMINATE PROCESS PID 4092 (+100)
+          </button>
+        `;
+      } else if (node.actionPhase === 'verify') {
+        buttonsHtml = `
+          <button class="rw-btn-action" onclick="executeNodeAction('${node.id}', 'verify')">
+            🔍 VERIFY AUDIT SIGNATURE (+50)
+          </button>
+        `;
+      } else {
+        buttonsHtml = `
+          <button class="rw-btn-action" onclick="executeNodeAction('${node.id}', 'isolate')">
+            🔒 ISOLATE COMPROMISED NODE
+          </button>
+        `;
+      }
+    }
+
+    return `
+      <div class="rw-node-card ${cardClass}">
+        <div>
+          <div class="rw-node-header">
+            <span class="rw-node-icon">${node.icon}</span>
+            <span class="rw-node-name">${node.name}</span>
+          </div>
+          <div class="rw-node-status ${statusClass}">${statusText}</div>
+          <p style="font-size:10px;color:#90a4ae;margin:0 0 6px">${node.details}</p>
+        </div>
+        <div class="rw-node-actions">
+          ${buttonsHtml}
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+function executeNodeAction(nodeId, action) {
+  const node = RANSOMWARE_NODES.find(n => n.id === nodeId);
+  if (!node) return;
+
+  if (action === 'isolate') {
+    node.status = 'isolated';
+    node.actionPhase = 'restore';
+    appendRwTerminalLog(`[CONTAINMENT] Node ${node.name} successfully severed from network.`, 'warn');
+    if (typeof AudioManager !== 'undefined') AudioManager.playExamChoice();
+    showToast(`🔒 Node isolated! Now deploy clean backup restoration.`, 'info');
+  } else if (action === 'restore') {
+    node.status = 'restored';
+    gameState.score += 100;
+    appendRwTerminalLog(`[RECOVERY] Immutable snapshot deployed to ${node.name}. 100% data integrity verified.`, 'success');
+    if (typeof AudioManager !== 'undefined') AudioManager.playCorrect();
+    showToast(`🎉 Clean snapshot restored without paying any ransom (+100 pts)!`, 'success');
+  } else if (action === 'kill') {
+    node.status = 'restored';
+    gameState.score += 100;
+    appendRwTerminalLog(`[KILL-SWITCH] Process PID 4092 (crypt_dropper.exe) terminated. Threat neutralized.`, 'success');
+    if (typeof AudioManager !== 'undefined') AudioManager.playCorrect();
+    showToast(`⛔ Malicious dropper process neutralized (+100 pts)!`, 'success');
+  } else if (action === 'verify') {
+    node.status = 'restored';
+    gameState.score += 50;
+    appendRwTerminalLog(`[AUDIT] Audit logs signature cryptographic SHA-256 verified. No tampering detected.`, 'success');
+    if (typeof AudioManager !== 'undefined') AudioManager.playCorrect();
+    showToast(`✓ Audit logs verified clean (+50 pts)!`, 'success');
+  }
+
+  renderRansomwareNodes();
+  updateHUD();
+
+  if (RANSOMWARE_NODES.every(n => n.status === 'clean' || n.status === 'restored')) {
+    appendRwTerminalLog(`[SUCCESS] 100% System Vault Recovery Achieved! ZERO dollars paid in ransom!`, 'success');
+    setTimeout(finishRansomwareMission, 1400);
+  }
+}
+
+function appendRwTerminalLog(msg, type = 'info') {
+  const logs = document.getElementById('rw-term-logs');
+  if (!logs) return;
+  const line = document.createElement('div');
+  line.className = `rw-log-line ${type === 'alert' ? 'rw-log-alert' : type === 'warn' ? 'rw-log-warn' : type === 'success' ? 'rw-log-success' : ''}`;
+  line.textContent = msg;
+  logs.appendChild(line);
+  logs.scrollTop = logs.scrollHeight;
+}
+
+function finishRansomwareMission() {
+  document.getElementById('res-rw-recovered').textContent = `100% (4 / 4 Nodes)`;
+  document.getElementById('res-rw-score').textContent = gameState.score;
+
+  const rank = 'S';
+  const rankEl = document.getElementById('ransomware-results-rank');
+  const labelEl = document.getElementById('ransomware-results-rank-label');
+  if (rankEl) rankEl.textContent = rank;
+  if (labelEl) labelEl.textContent = 'RANSOMWARE INCIDENT COMMANDER';
+
+  completeCategory('ransomware', gameState.score, rank);
+  showOverlay('overlay-ransomware-results');
+  if (typeof AudioManager !== 'undefined') AudioManager.playMissionComplete();
+}
+
+// ═══════════════════════════════════════════════════════════
+// GRAND VICTORY & ALL-MODULES MASTER CERTIFICATION
+// ═══════════════════════════════════════════════════════════
+
+function showGrandCertificate() {
+  hideAllOverlays();
+
+  const nameEl = document.getElementById('grand-cert-name');
+  if (nameEl) nameEl.textContent = gameState.playerName || 'Ace';
+
+  const totalScore = CATEGORIES.reduce((sum, c) => sum + (c.score || 0), 0) + gameState.score;
+  const scoreEl = document.getElementById('grand-total-score');
+  if (scoreEl) scoreEl.textContent = `${totalScore} pts`;
+
+  showOverlay('overlay-grand-results');
+  if (typeof AudioManager !== 'undefined') {
+    AudioManager.playMissionComplete();
+  }
+  showToast('🏆 CONGRATULATIONS! You completed all 4 CyberZerØ Threat Chapters!', 'success');
 }
 
 function restartEntireGame() {
@@ -5761,13 +6692,20 @@ function startFromTitleMenu() {
   if (typeof AudioManager !== 'undefined') {
     AudioManager.playNotification();
   }
-  // Show the Game Intro Briefing (Narrator-led) first before going to the exam
-  showOverlay('overlay-game-intro');
-  showToast('🎙️ Narrator: Welcome to CyberZerØ Simulation.', 'info');
+  // Launch the Visual Novel Prologue with AI Guide Zero
+  playCategoryStory('prologue');
+  showToast('🤖 AI Guide Zero: Welcome to CyberZerØ.', 'info');
+}
+
+function replayPrologueVN() {
+  closeOverlay('overlay-category-select');
+  playCategoryStory('prologue');
+  showToast('🎬 Replaying CyberZerØ Visual Novel Orientation.', 'info');
 }
 
 function proceedFromIntroToExam() {
   closeOverlay('overlay-game-intro');
+  closeOverlay('overlay-welcome');
   showOverlay('overlay-pre-assessment');
 
   const shell = document.getElementById('exam-paper-shell');

@@ -20,27 +20,46 @@
   <!-- Desktop wallpaper grid lines (CSS only) -->
   <div class="desktop-bg"></div>
 
-  <!-- Desktop Icons -->
+  <!-- Desktop Icons (2-Column Grid Layout) -->
   <div class="desktop-icons">
-    <div class="desktop-icon" id="icon-gmail" onclick="openApp('gmail')">
-      <div class="icon-img">📧</div>
-      <span>Gmail</span>
+    <!-- Column 1: Main / Unlocked Apps -->
+    <div class="desktop-icons-col">
+      <div class="desktop-icon" id="icon-categories" onclick="openCategoryHubFromDesktop()" title="Threat Categories Hub — Select chapters and track progress">
+        <div class="icon-img">🗂️</div>
+        <span>Categories</span>
+      </div>
+      <div class="desktop-icon" id="icon-gmail" onclick="openApp('gmail')" title="Gmail — Email Phishing Investigation (Ace)">
+        <div class="icon-img">📧</div>
+        <span>Gmail</span>
+      </div>
+      <div class="desktop-icon" id="icon-browser" onclick="openApp('browser')" title="Browser — Cyber-Net Web Search">
+        <div class="icon-img">🌐</div>
+        <span>Browser</span>
+      </div>
+      <div class="desktop-icon" id="icon-notes" onclick="toggleStickyNote()">
+        <div class="icon-img">📒</div>
+        <span>Sticky Notes</span>
+      </div>
     </div>
-    <div class="desktop-icon" id="icon-browser" onclick="openApp('browser')">
-      <div class="icon-img">🌐</div>
-      <span>Browser</span>
-    </div>
-    <div class="desktop-icon locked" id="icon-folder" onclick="openApp('folder')" title="🔒 Locked — Complete all 5 email investigations in Gmail first">
-      <div class="icon-img">📁</div>
-      <span>Folder</span>
-    </div>
-    <div class="desktop-icon locked" id="icon-antivirus" onclick="openApp('antivirus')" title="🔒 Locked — Complete all 5 email investigations in Gmail first">
-      <div class="icon-img">🛡️</div>
-      <span>Anti-Virus</span>
-    </div>
-    <div class="desktop-icon hidden" id="icon-notes" onclick="toggleStickyNote()">
-      <div class="icon-img">📒</div>
-      <span>Sticky Notes</span>
+
+    <!-- Column 2: Threat Progression / Locked Apps -->
+    <div class="desktop-icons-col">
+      <div class="desktop-icon locked" id="icon-folder" onclick="openApp('folder')" title="🔒 Locked — Complete Chapter 1 (Phishing) first">
+        <div class="icon-img">📂</div>
+        <span>Folder</span>
+      </div>
+      <div class="desktop-icon locked" id="icon-antivirus" onclick="openApp('antivirus')" title="🔒 Locked — Complete Chapter 1 (Phishing) first">
+        <div class="icon-img">🛡️</div>
+        <span>Anti-Virus</span>
+      </div>
+      <div class="desktop-icon locked" id="icon-comms" onclick="openApp('comms')" title="🔒 Locked — Complete Chapter 2 (Malware) first">
+        <div class="icon-img">📱</div>
+        <span>Comms</span>
+      </div>
+      <div class="desktop-icon locked" id="icon-ransomware" onclick="openApp('ransomware')" title="🔒 Locked — Complete Chapter 3 (Social Engineering) first">
+        <div class="icon-img">🔒</div>
+        <span>Ransomware</span>
+      </div>
     </div>
   </div>
 
@@ -362,6 +381,103 @@
     </div>
   </div>
 
+  <!-- ── COMMS CENTER WINDOW (SOCIAL ENGINEERING DEFENSE - PHILLIP) ── -->
+  <div id="win-comms" class="app-window hidden" data-app="comms">
+    <div class="win-titlebar" id="titlebar-comms">
+      <div class="win-title">
+        <span class="win-icon">📱</span>
+        <span>Comms Defense — Chapter 3: Social Engineering Incident Lab</span>
+      </div>
+      <div class="win-controls">
+        <button class="win-btn win-minimize" onclick="minimizeApp('comms')" title="Minimize">─</button>
+        <button class="win-btn win-maximize" onclick="toggleMaximize('comms')" title="Maximize">□</button>
+        <button class="win-btn win-close" onclick="closeApp('comms')" title="Close">✕</button>
+      </div>
+    </div>
+    <div class="win-body comms-body">
+      <!-- Left Sidebar: Communications Feed -->
+      <div class="comms-sidebar">
+        <div class="comms-sidebar-header">
+          <div class="comms-user-tag">
+            <span class="comms-avatar">🎭</span>
+            <div>
+              <div class="comms-user-name">Phillip's Device</div>
+              <div class="comms-user-status">🟢 Live Threat Intercept Active</div>
+            </div>
+          </div>
+        </div>
+        <div class="comms-filter-strip">
+          <span class="comms-filter-label">INCOMING TRANSMISSIONS</span>
+          <span class="comms-filter-badge" id="comms-filter-badge">4 Items</span>
+        </div>
+        <div class="comms-msg-list" id="comms-msg-list">
+          <!-- Rendered dynamically by script.js -->
+        </div>
+      </div>
+
+      <!-- Right Main Area: Selected Comm Analysis & Action -->
+      <div class="comms-main-area" id="comms-main-area">
+        <div class="comms-empty-state" id="comms-empty-state">
+          <div class="comms-empty-icon">📱</div>
+          <div class="comms-empty-title">Select a communication to inspect</div>
+          <div class="comms-empty-sub">Analyze sender credentials, caller identity, pretexting psychology, fake IT vishing calls, and urgent smishing links.</div>
+        </div>
+        <div class="comms-detail-view hidden" id="comms-detail-view">
+          <!-- Rendered dynamically by script.js -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── RANSOMWARE INCIDENT CONSOLE WINDOW (JONALD) ── -->
+  <div id="win-ransomware" class="app-window hidden" data-app="ransomware">
+    <div class="win-titlebar" id="titlebar-ransomware">
+      <div class="win-title">
+        <span class="win-icon">🔒</span>
+        <span>Incident Console — Chapter 4: Ransomware Response &amp; Vault Recovery</span>
+      </div>
+      <div class="win-controls">
+        <button class="win-btn win-minimize" onclick="minimizeApp('ransomware')" title="Minimize">─</button>
+        <button class="win-btn win-maximize" onclick="toggleMaximize('ransomware')" title="Maximize">□</button>
+        <button class="win-btn win-close" onclick="closeApp('ransomware')" title="Close">✕</button>
+      </div>
+    </div>
+    <div class="win-body ransomware-body">
+      <!-- Top Alert Banner -->
+      <div class="rw-banner" id="rw-banner">
+        <div class="rw-banner-icon">🚨</div>
+        <div class="rw-banner-info">
+          <div class="rw-banner-title">CRITICAL INCIDENT: RANSOMWARE EXTORTION DETECTED</div>
+          <div class="rw-banner-sub">Jonald's school project vault is under attack! Isolate infected storage nodes, kill active payload droppers, and restore immutable backups.</div>
+        </div>
+        <div class="rw-health-gauge">
+          <div class="rw-gauge-title">VAULT RECOVERY</div>
+          <div class="rw-gauge-val" id="rw-health-pct">0%</div>
+        </div>
+      </div>
+
+      <!-- Main Section: 4 Storage Nodes + Real-time Terminal -->
+      <div class="rw-grid-wrap">
+        <div class="rw-nodes-container">
+          <div class="rw-section-title">PROJECT STORAGE NODES &amp; SERVERS</div>
+          <div class="rw-nodes-grid" id="rw-nodes-grid">
+            <!-- Rendered dynamically by script.js -->
+          </div>
+        </div>
+
+        <div class="rw-terminal-panel">
+          <div class="rw-term-header">
+            <span>📟 Live Incident Response Console Log</span>
+            <span class="rw-term-pulse">● CONNECTED</span>
+          </div>
+          <div class="rw-term-logs" id="rw-term-logs">
+            <!-- Log entries rendered dynamically by script.js -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- ══════════════════════════════════════════════════════
        TASKBAR
   ══════════════════════════════════════════════════════ -->
@@ -377,17 +493,26 @@
       </button>
     </div>
     <div class="taskbar-apps">
-      <button class="taskbar-app-btn" id="taskbar-gmail" onclick="taskbarClick('gmail')" title="📧 Gmail — Email Phishing Investigation">
+      <button class="taskbar-app-btn" id="taskbar-categories" onclick="openCategoryHubFromDesktop()" title="🗂️ Threat Categories Hub">
+        <span>🗂️</span> Categories
+      </button>
+      <button class="taskbar-app-btn" id="taskbar-gmail" onclick="taskbarClick('gmail')" title="📧 Gmail — Email Phishing Investigation (Ace)">
         <span>📧</span> Gmail
       </button>
       <button class="taskbar-app-btn" id="taskbar-browser" onclick="taskbarClick('browser')" title="🌐 Browser — Cyber-Net Web Search">
         <span>🌐</span> Browser
       </button>
-      <button class="taskbar-app-btn locked" id="taskbar-folder" onclick="taskbarClick('folder')" title="📁 File Explorer — Complete all 5 email investigations to unlock">
-        <span>📁</span> Folder
+      <button class="taskbar-app-btn locked" id="taskbar-folder" onclick="taskbarClick('folder')" title="📂 Folder — Complete Chapter 1 (Phishing) to unlock">
+        <span>📂</span> Folder
       </button>
-      <button class="taskbar-app-btn locked" id="taskbar-antivirus" onclick="taskbarClick('antivirus')" title="🛡️ ShieldAV Anti-Virus — Complete all 5 email investigations to unlock">
+      <button class="taskbar-app-btn locked" id="taskbar-antivirus" onclick="taskbarClick('antivirus')" title="🛡️ ShieldAV Anti-Virus — Complete Chapter 1 (Phishing) to unlock">
         <span>🛡️</span> Anti-Virus
+      </button>
+      <button class="taskbar-app-btn locked" id="taskbar-comms" onclick="taskbarClick('comms')" title="📱 Comms Defense — Complete Chapter 2 (Malware) to unlock">
+        <span>📱</span> Comms
+      </button>
+      <button class="taskbar-app-btn locked" id="taskbar-ransomware" onclick="taskbarClick('ransomware')" title="🔒 Ransomware Console — Complete Chapter 3 (Social Engineering) to unlock">
+        <span>🔒</span> Ransomware
       </button>
     </div>
     <div class="taskbar-tray">
@@ -419,12 +544,18 @@
   <!-- Pinned Apps Section Header -->
   <div class="start-section-header">
     <span class="start-section-name">Pinned Apps</span>
-    <span class="start-all-apps-label">4 Apps</span>
+    <span class="start-all-apps-label">Threat Modules</span>
   </div>
 
   <!-- Clean Tile Grid -->
   <div class="start-apps-grid" id="start-apps-grid">
-    <div class="start-app-tile" onclick="startMenuOpenApp('gmail')" id="start-app-gmail" title="Open Gmail Client">
+    <div class="start-app-tile" onclick="openCategoryHubFromDesktop(); closeStartMenu();" id="start-app-categories" title="Open Threat Categories Hub">
+      <div class="start-tile-icon">🗂️</div>
+      <div class="start-tile-name">Categories</div>
+      <span class="start-tile-status active" id="start-badge-categories">Hub</span>
+    </div>
+
+    <div class="start-app-tile" onclick="startMenuOpenApp('gmail')" id="start-app-gmail" title="Open Gmail Client (Ace)">
       <div class="start-tile-icon">📧</div>
       <div class="start-tile-name">Gmail</div>
       <span class="start-tile-status active" id="start-badge-gmail">Open</span>
@@ -436,16 +567,28 @@
       <span class="start-tile-status" id="start-badge-browser">Ready</span>
     </div>
 
-    <div class="start-app-tile locked" onclick="startMenuOpenApp('folder')" id="start-app-folder" title="File Explorer (Complete Email Case to Unlock)">
-      <div class="start-tile-icon">📁</div>
+    <div class="start-app-tile locked" onclick="startMenuOpenApp('folder')" id="start-app-folder" title="File Explorer (Nishren / Malware)">
+      <div class="start-tile-icon">📂</div>
       <div class="start-tile-name">Explorer</div>
       <span class="start-tile-status lock" id="start-badge-folder">🔒 Locked</span>
     </div>
 
-    <div class="start-app-tile locked" onclick="startMenuOpenApp('antivirus')" id="start-app-antivirus" title="ShieldAV Anti-Virus (Complete Email Case to Unlock)">
+    <div class="start-app-tile locked" onclick="startMenuOpenApp('antivirus')" id="start-app-antivirus" title="ShieldAV Anti-Virus (Nishren / Malware)">
       <div class="start-tile-icon">🛡️</div>
       <div class="start-tile-name">ShieldAV</div>
       <span class="start-tile-status lock" id="start-badge-antivirus">🔒 Locked</span>
+    </div>
+
+    <div class="start-app-tile locked" onclick="startMenuOpenApp('comms')" id="start-app-comms" title="Comms Defense (Phillip / Social Eng)">
+      <div class="start-tile-icon">📱</div>
+      <div class="start-tile-name">Comms</div>
+      <span class="start-tile-status lock" id="start-badge-comms">🔒 Locked</span>
+    </div>
+
+    <div class="start-app-tile locked" onclick="startMenuOpenApp('ransomware')" id="start-app-ransomware" title="Incident Console (Jonald / Ransomware)">
+      <div class="start-tile-icon">🔒</div>
+      <div class="start-tile-name">Ransomware</div>
+      <span class="start-tile-status lock" id="start-badge-ransomware">🔒 Locked</span>
     </div>
   </div>
 
@@ -961,8 +1104,8 @@
         <button class="btn-primary intro-start-btn" onclick="proceedFromIntroToExam()">
           📝 START PRE-ASSESSMENT EXAM ➔
         </button>
-        <button type="button" class="intro-skip-btn" onclick="skipPreAssessmentFromIntro()" title="Skip the exam and start the CyberZerØ story immediately">
-          ⏩ Skip Exam &amp; Go to Story
+        <button type="button" class="intro-skip-btn" onclick="skipPreAssessmentFromIntro()" title="Skip the exam and choose your threat category immediately">
+          ⏩ Skip Exam &amp; Choose Category
         </button>
       </div>
     </div>
@@ -972,8 +1115,8 @@
 <!-- ── PRE-ASSESSMENT EXAM (Paper Test) ── -->
 <div id="overlay-pre-assessment" class="overlay">
   <!-- Single Skip Exam Button -->
-  <button type="button" class="exam-floating-skip-btn" id="btn-skip-exam" onclick="skipPreAssessment()" title="Skip the exam and start the CyberZerØ story">
-    Skip Exam ⏩
+  <button type="button" class="exam-floating-skip-btn" id="btn-skip-exam" onclick="skipPreAssessment()" title="Skip the exam and choose your threat category">
+    Skip Exam &amp; Choose Category ⏩
   </button>
 
   <div class="exam-desk-backdrop">
@@ -1045,8 +1188,8 @@
           <button type="button" class="btn-primary exam-submit-btn" id="btn-submit-exam" onclick="submitPreAssessment()">
             Submit
           </button>
-          <button type="button" class="btn-success exam-proceed-btn hidden" id="btn-proceed-vn" onclick="proceedFromPreAssessmentToVN()">
-            CONTINUE TO CYBERZERO STORY &amp; DEMO ➔
+          <button type="button" class="btn-success exam-proceed-btn hidden" id="btn-proceed-vn" onclick="proceedFromPreAssessmentToCategories()">
+            CHOOSE THREAT CATEGORY ➔
           </button>
         </div>
       </div>
@@ -1054,6 +1197,63 @@
     </div>
   </div>
 </div>
+
+<!-- ── THREAT CATEGORIES SELECTION HUB ── -->
+<div id="overlay-category-select" class="overlay">
+
+  <div class="cat-hub-container">
+    <!-- Cyber Decorative Framing -->
+    <div class="cat-cyber-grid"></div>
+    <div class="cat-corner cat-corner-tl"></div>
+    <div class="cat-corner cat-corner-tr"></div>
+    <div class="cat-corner cat-corner-bl"></div>
+    <div class="cat-corner cat-corner-br"></div>
+
+    <div class="cat-hub-shell">
+      <!-- Inside Top Bar: Back to Menu button & Replay VN -->
+      <div class="cat-hub-inner-topbar" style="display:flex;align-items:center;justify-content:space-between;width:100%;">
+        <button class="cat-top-btn" id="cat-hub-back-btn" onclick="closeCategoryHubBack()" title="Go back">
+          <span class="cat-top-btn-icon">◀</span>
+          <span id="cat-hub-back-label">BACK TO MENU</span>
+        </button>
+        <button class="cat-top-btn" id="cat-hub-replay-intro" onclick="replayPrologueVN()" title="Replay the Visual Novel introduction with AI Guide Zero" style="margin-left:auto;border-color:rgba(0,229,255,0.4);color:var(--accent-cyan)">
+          <span class="cat-top-btn-icon">🎬</span>
+          <span>REPLAY ZERO'S INTRO</span>
+        </button>
+      </div>
+
+      <!-- Header Banner -->
+      <div class="cat-hub-header">
+        <h1 class="cat-hub-title">CHOOSE THREAT CATEGORY</h1>
+        <p class="cat-hub-subtitle">
+          Select a category to begin simulation. Complete each chapter to unlock the next and follow the connected journey of Ace, Nishren, Phillip &amp; Jonald with CyberZerØ!
+        </p>
+
+        <!-- Stats Bar -->
+        <div class="cat-hub-stats-bar">
+          <div class="cat-stat-chip">
+            <span class="stat-lbl">Character:</span>
+            <strong id="cat-hub-player-name">Ace</strong>
+          </div>
+          <div class="cat-stat-chip">
+            <span class="stat-lbl">Progress:</span>
+            <strong id="cat-hub-progress-text">0 / 4 Modules Completed</strong>
+          </div>
+          <div class="cat-stat-chip">
+            <span class="stat-lbl">Overall Score:</span>
+            <strong id="cat-hub-score-val" style="color:var(--accent-cyan)">0 pts</strong>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4 Threat Category Cards Grid -->
+      <div class="cat-cards-grid" id="cat-cards-grid">
+        <!-- Dynamically rendered by renderCategoryHub() in script.js -->
+      </div>
+    </div>
+  </div>
+</div>
+
 
 <!-- ── WELCOME SCREEN (Visual Novel Intro) ── -->
 <div id="overlay-welcome" class="overlay">
@@ -1666,19 +1866,20 @@
     </div>
 
     <div class="results-actions" style="display:flex;gap:12px;margin-top:16px;justify-content:center;flex-wrap:wrap">
-      <button class="btn-primary" id="btn-next-malware" onclick="startMalwareDemo()">🛡️ NEXT MALWARE →</button>
-      <button class="btn-ghost" onclick="playAgain()">🔄 Replay Emails</button>
+      <button class="btn-primary" id="btn-next-malware" onclick="proceedToNextCategory('malware')">🦠 PROCEED TO CHAPTER 2 (MALWARE) →</button>
+      <button class="btn-ghost" onclick="openCategoryHub()">📁 Threat Categories Hub</button>
+      <button class="btn-ghost" onclick="playAgain()">🔄 Replay Phishing</button>
     </div>
   </div>
 </div>
 
-<!-- ── MALWARE MISSION RESULTS ── -->
+<!-- ── MALWARE MISSION RESULTS (CHAPTER 2 - NISHREN) ── -->
 <div id="overlay-malware-results" class="overlay">
   <div class="results-card">
     <div class="results-badge" style="background:rgba(0,230,118,0.2);color:var(--accent-green);border:1px solid rgba(0,230,118,0.4)">CHAPTER 2 COMPLETE</div>
     <div class="results-rank-circle rank-s" id="malware-results-rank">S</div>
     <div class="results-rank-label" id="malware-results-rank-label">MASTER MALWARE HUNTER</div>
-    <p style="color:var(--text-secondary);font-size:13px;margin:10px 0 16px">All 4 disguised malware threats in the folder were successfully quarantined and neutralized!</p>
+    <p style="color:var(--text-secondary);font-size:13px;margin:10px 0 16px">Nishren learned how to inspect disguised files, run Anti-Virus scans, and quarantine malware threats!</p>
     <div class="results-grid">
       <div class="results-stat">
         <span class="results-stat-label">Malware Quarantined</span>
@@ -1693,13 +1894,172 @@
         <span class="results-stat-value" id="res-malware-fp">0</span>
       </div>
       <div class="results-stat">
-        <span class="results-stat-label">Total Detective Score</span>
+        <span class="results-stat-label">Chapter Score</span>
         <span class="results-stat-value" id="res-malware-score" style="color:var(--accent-cyan)">0</span>
       </div>
     </div>
     <div style="display:flex;gap:12px;margin-top:20px;justify-content:center;flex-wrap:wrap">
-      <button class="btn-primary" onclick="restartEntireGame()">🔄 RESTART ADVENTURE</button>
-      <button class="btn-ghost" onclick="startMalwareDemo()">📖 Review Tutorial</button>
+      <button class="btn-primary" onclick="proceedToNextCategory('social_engineering')">🎭 PROCEED TO CHAPTER 3 (SOCIAL ENG) →</button>
+      <button class="btn-ghost" onclick="openCategoryHub()">📁 Threat Categories Hub</button>
+      <button class="btn-ghost" onclick="startMalwareMission()">🔄 Replay Malware</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── SOCIAL ENGINEERING MISSION RESULTS (CHAPTER 3 - PHILLIP) ── -->
+<div id="overlay-social-results" class="overlay">
+  <div class="results-card">
+    <div class="results-badge" style="background:rgba(234,128,252,0.2);color:#ea80fc;border:1px solid rgba(234,128,252,0.4)">CHAPTER 3 COMPLETE</div>
+    <div class="results-rank-circle rank-s" id="social-results-rank">S</div>
+    <div class="results-rank-label" id="social-results-rank-label">SOCIAL DEFENSE MASTER</div>
+    <p style="color:var(--text-secondary);font-size:13px;margin:10px 0 16px">Phillip identified fake IT calls (vishing), urgent SMS scams (smishing), and credential pretexting with CyberZerØ!</p>
+    <div class="results-grid">
+      <div class="results-stat">
+        <span class="results-stat-label">Threats Blocked</span>
+        <span class="results-stat-value" id="res-social-blocked" style="color:var(--accent-green)">3 / 3</span>
+      </div>
+      <div class="results-stat">
+        <span class="results-stat-label">Safe Verified</span>
+        <span class="results-stat-value">1 / 1</span>
+      </div>
+      <div class="results-stat">
+        <span class="results-stat-label">Vectors Neutralized</span>
+        <span class="results-stat-value" style="color:#ea80fc">Phishing / Vishing / Smishing</span>
+      </div>
+      <div class="results-stat">
+        <span class="results-stat-label">Chapter Score</span>
+        <span class="results-stat-value" id="res-social-score" style="color:var(--accent-cyan)">0</span>
+      </div>
+    </div>
+    <div style="display:flex;gap:12px;margin-top:20px;justify-content:center;flex-wrap:wrap">
+      <button class="btn-primary" onclick="proceedToNextCategory('ransomware')">🔒 PROCEED TO CHAPTER 4 (RANSOMWARE) →</button>
+      <button class="btn-ghost" onclick="openCategoryHub()">📁 Threat Categories Hub</button>
+      <button class="btn-ghost" onclick="startSocialEngineeringMission()">🔄 Replay Social Defense</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── RANSOMWARE MISSION RESULTS (CHAPTER 4 - JONALD) ── -->
+<div id="overlay-ransomware-results" class="overlay">
+  <div class="results-card">
+    <div class="results-badge" style="background:rgba(255,82,82,0.2);color:var(--accent-red);border:1px solid rgba(255,82,82,0.4)">CHAPTER 4 COMPLETE</div>
+    <div class="results-rank-circle rank-s" id="ransomware-results-rank">S</div>
+    <div class="results-rank-label" id="ransomware-results-rank-label">RANSOMWARE INCIDENT COMMANDER</div>
+    <p style="color:var(--text-secondary);font-size:13px;margin:10px 0 16px">Jonald contained the ransomware payload, isolated network shares, and restored all project data from clean backups!</p>
+    <div class="results-grid">
+      <div class="results-stat">
+        <span class="results-stat-label">Storage Recovered</span>
+        <span class="results-stat-value" id="res-rw-recovered" style="color:var(--accent-green)">100% (4 / 4 Nodes)</span>
+      </div>
+      <div class="results-stat">
+        <span class="results-stat-label">Processes Terminated</span>
+        <span class="results-stat-value">Crypt_Dropper.exe (PID 4092)</span>
+      </div>
+      <div class="results-stat">
+        <span class="results-stat-label">Extortion Ransom Paid</span>
+        <span class="results-stat-value" style="color:var(--accent-green)">$0 (Zero Ransom)</span>
+      </div>
+      <div class="results-stat">
+        <span class="results-stat-label">Chapter Score</span>
+        <span class="results-stat-value" id="res-rw-score" style="color:var(--accent-cyan)">0</span>
+      </div>
+    </div>
+    <div style="display:flex;gap:12px;margin-top:20px;justify-content:center;flex-wrap:wrap">
+      <button class="btn-primary" onclick="showGrandCertificate()">🏆 VIEW GRAND MASTER CERTIFICATE →</button>
+      <button class="btn-ghost" onclick="openCategoryHub()">📁 Threat Categories Hub</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── GRAND MASTER VICTORY CERTIFICATE (ALL 4 CHAPTERS COMPLETED) ── -->
+<div id="overlay-grand-results" class="overlay">
+  <div class="grand-cert-shell">
+    <div class="grand-cert-border">
+      <div class="grand-cert-inner">
+        <!-- Header -->
+        <div class="grand-cert-header">
+          <span class="grand-cert-seal">🛡️</span>
+          <div>
+            <div class="grand-cert-inst">CYBERZERØ ACADEMY OF CYBERSECURITY EXCELLENCE</div>
+            <div class="grand-cert-title">CERTIFIED CYBER DEFENDER</div>
+            <div class="grand-cert-subtitle">ALL 4 THREAT CATEGORIES CONQUERED &amp; NEUTRALIZED</div>
+          </div>
+        </div>
+
+        <p class="grand-cert-statement">
+          This certifies that Detective <strong id="grand-cert-name" style="color:#00e5ff">Ace</strong> has successfully guided <strong>Ace, Nishren, Phillip, and Jonald</strong> through all realistic threat simulations, demonstrating mastery over:
+        </p>
+
+        <!-- 4 Badges Matrix -->
+        <div class="grand-cert-matrix">
+          <div class="grand-cert-pill">
+            <span class="gcp-icon">🎣</span>
+            <span class="gcp-title">Phishing Detection</span>
+            <span class="gcp-char">Ace</span>
+          </div>
+          <div class="grand-cert-pill">
+            <span class="gcp-icon">🦠</span>
+            <span class="gcp-title">Malware Analysis</span>
+            <span class="gcp-char">Nishren</span>
+          </div>
+          <div class="grand-cert-pill">
+            <span class="gcp-icon">🎭</span>
+            <span class="gcp-title">Social Engineering</span>
+            <span class="gcp-char">Phillip</span>
+          </div>
+          <div class="grand-cert-pill">
+            <span class="gcp-icon">🔒</span>
+            <span class="gcp-title">Ransomware Response</span>
+            <span class="gcp-char">Jonald</span>
+          </div>
+        </div>
+
+        <!-- Score summary -->
+        <div class="grand-score-summary">
+          <div class="gss-item">
+            <span class="gss-lbl">TOTAL SCORE:</span>
+            <span class="gss-val" id="grand-total-score">0 pts</span>
+          </div>
+          <div class="gss-item">
+            <span class="gss-lbl">FINAL RANK:</span>
+            <span class="gss-val rank-s" id="grand-total-rank">RANK S • MASTER</span>
+          </div>
+        </div>
+
+        <!-- 4 Friends Photo Strip -->
+        <div class="grand-team-strip">
+          <div class="team-avatar-box">
+            <img src="assets/Ace.png" alt="Ace" class="team-avatar-img" />
+            <span class="team-name">Ace</span>
+          </div>
+          <div class="team-avatar-box">
+            <img src="assets/Nishren.png" alt="Nishren" class="team-avatar-img" />
+            <span class="team-name">Nishren</span>
+          </div>
+          <div class="team-avatar-box">
+            <img src="assets/Phillip.png" alt="Phillip" class="team-avatar-img" />
+            <span class="team-name">Phillip</span>
+          </div>
+          <div class="team-avatar-box">
+            <img src="assets/Jonald.png" alt="Jonald" class="team-avatar-img" />
+            <span class="team-name">Jonald</span>
+          </div>
+          <div class="team-avatar-box cyberzero-avatar-box">
+            <img src="assets/CyberZerØ.png" alt="CyberZerØ" class="team-avatar-img" />
+            <span class="team-name">CyberZerØ</span>
+          </div>
+        </div>
+
+        <div class="grand-cert-motto">
+          "Learn. Detect. Defend. Cybersecurity is for everyone — especially students."
+        </div>
+
+        <!-- Certificate Footer Actions -->
+        <div class="grand-cert-actions">
+          <button class="btn-primary" onclick="openCategoryHub()">📁 RETURN TO CATEGORIES HUB</button>
+          <button class="btn-ghost" onclick="restartEntireGame()">🔄 RESTART FULL ADVENTURE</button>
+        </div>
+      </div>
     </div>
   </div>
 </div>
