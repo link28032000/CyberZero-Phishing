@@ -1140,26 +1140,14 @@
           <span class="exam-score-lbl">SCORE</span>
         </div>
         <div class="exam-teacher-feedback">
-          <div class="exam-teacher-header">TEACHER REMARKS:</div>
-          <div class="exam-teacher-note" id="exam-teacher-note">"Outstanding cybersecurity baseline! You already think like a cyber-aware student. CyberZerØ is ready to guide you through the full simulation."</div>
-          <div class="exam-teacher-sig">— CyberZerØ, AI Cybersecurity Guide</div>
+          <div class="exam-teacher-header">NOTE:</div>
+          <div class="exam-teacher-note" id="exam-teacher-note"></div>
         </div>
       </div>
 
       <!-- Exam Paper Header -->
       <div class="exam-header">
-        <div class="exam-header-top">
-          <div class="exam-institution">
-            <span class="exam-seal">🛡️</span>
-            <div>
-              <div class="exam-inst-name">CYBERZERO STUDENT CYBERSECURITY ASSESSMENT</div>
-              <div class="exam-inst-sub">ENHANCING CYBERSECURITY KNOWLEDGE &amp; AWARENESS FOR STUDENTS • 2026</div>
-            </div>
-          </div>
-          <div class="exam-code-tag">FORM 10-DIAGNOSTIC</div>
-        </div>
-
-        <h1 class="exam-title">BASELINE THREAT EVALUATION: PHISHING &amp; MALWARE</h1>
+        <h1 class="exam-title">Pre-Assessment</h1>
         <p class="exam-desc"><strong>INSTRUCTIONS:</strong> Read each question carefully and choose the correct answer from the choices given below.</p>
 
         <div class="exam-student-fields">
@@ -2077,6 +2065,48 @@
 
 <!-- ── NOTIFICATION TOAST ── -->
 <div id="toast" class="toast hidden"></div>
+
+<!-- ── LOADING SCREEN (shown for 10s after clicking START) ── -->
+<div id="overlay-loading-screen">
+
+  <!-- Pixel-art style center layout -->
+  <div class="ls-pixel-wrap">
+
+    <!-- CYBERZERO header (small) -->
+    <div class="ls-pixel-brand">CYBER<span>ZER</span>Ø</div>
+
+    <!-- LOADING... title -->
+    <div class="ls-pixel-title" id="ls-pixel-title">LOADING<span class="ls-ellipsis">...</span></div>
+
+    <!-- Pixel block progress bar -->
+    <div class="ls-pixel-bar-outer">
+      <div class="ls-pixel-bar-inner" id="ls-pixel-bar-inner">
+        <!-- blocks injected by JS -->
+      </div>
+    </div>
+
+    <!-- Percentage -->
+    <div class="ls-pixel-pct" id="ls-pixel-pct">0%</div>
+
+    <!-- Knowledge tip card (1 random note per loading) -->
+    <div class="ls-tip-card" id="ls-tip-card">
+      <div class="ls-tip-label">
+        <div class="ls-tip-label-dot"></div>
+        <span id="ls-tip-category">CYBER KNOWLEDGE</span>
+      </div>
+      <div class="ls-tip-body-wrap" id="ls-tip-body-wrap">
+        <div class="ls-tip-row">
+          <div class="ls-tip-icon" id="ls-tip-icon">🎣</div>
+          <div>
+            <div class="ls-tip-title" id="ls-tip-title">Did You Know?</div>
+            <div class="ls-tip-body" id="ls-tip-body">Loading threat data…</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
 
 <script src="script.js"></script>
 </body>

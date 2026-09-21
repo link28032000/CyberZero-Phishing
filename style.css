@@ -4817,15 +4817,14 @@ p { line-height: 1.6; }
 }
 
 .exam-title {
-  font-size: 20px;
+  font-size: 22px;
   font-weight: 800;
   letter-spacing: 0.5px;
   text-align: center;
-  margin: 18px 0 8px;
+  margin: 0 0 12px;
   color: #0f172a;
-  border-top: 2px solid #1e293b;
-  border-bottom: 1px solid #cbd5e1;
-  padding: 10px 0;
+  border-bottom: 2px solid #1e293b;
+  padding: 6px 0 10px;
 }
 .exam-desc {
   font-size: 12px;
@@ -7948,3 +7947,281 @@ p { line-height: 1.6; }
   gap: 14px;
 }
 
+/* ══════════════════════════════════════════════════════════════
+   LOADING SCREEN OVERLAY — Pixel-art style
+   (shown for 10s after clicking START)
+══════════════════════════════════════════════════════════════ */
+
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
+#overlay-loading-screen {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  background: #050a16;
+  overflow: hidden;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 0.45s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.45s;
+}
+
+#overlay-loading-screen.ls-active {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+#overlay-loading-screen.ls-leaving {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Subtle scanline overlay for CRT feel */
+#overlay-loading-screen::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 3px,
+    rgba(0, 229, 255, 0.015) 3px,
+    rgba(0, 229, 255, 0.015) 4px
+  );
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Slow sweeping scan beam */
+#overlay-loading-screen::after {
+  content: '';
+  position: absolute;
+  left: 0; right: 0;
+  height: 120px;
+  background: linear-gradient(
+    180deg,
+    transparent 0%,
+    rgba(0, 229, 255, 0.03) 40%,
+    rgba(0, 229, 255, 0.07) 50%,
+    rgba(0, 229, 255, 0.03) 60%,
+    transparent 100%
+  );
+  animation: ls-beam 3s linear infinite;
+  pointer-events: none;
+  z-index: 1;
+}
+
+@keyframes ls-beam {
+  0%   { top: -120px; }
+  100% { top: 100%; }
+}
+
+/* ── Center content wrapper ── */
+.ls-pixel-wrap {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+  width: min(560px, 88vw);
+}
+
+/* ── Brand (small top label) ── */
+.ls-pixel-brand {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 6px;
+  color: rgba(0, 229, 255, 0.35);
+  text-transform: uppercase;
+  margin-bottom: 28px;
+}
+.ls-pixel-brand span { color: rgba(0,229,255,0.55); }
+
+/* ── LOADING... title ── */
+.ls-pixel-title {
+  font-family: 'Press Start 2P', 'JetBrains Mono', monospace;
+  font-size: clamp(18px, 4vw, 28px);
+  color: #00e5ff;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  margin-bottom: 36px;
+  text-shadow:
+    0 0 20px rgba(0, 229, 255, 0.7),
+    0 0 40px rgba(0, 229, 255, 0.3),
+    0 0 80px rgba(79, 195, 247, 0.2);
+  image-rendering: pixelated;
+}
+
+/* Blinking ellipsis */
+.ls-ellipsis {
+  animation: ls-blink-dots 1.2s steps(1) infinite;
+  color: rgba(0,229,255,0.7);
+}
+@keyframes ls-blink-dots {
+  0%, 66%  { opacity: 1; }
+  67%, 99% { opacity: 0; }
+}
+
+/* ── Pixel block progress bar ── */
+.ls-pixel-bar-outer {
+  width: 100%;
+  /* Chunky border like pixel-art sprite */
+  border: 3px solid #00e5ff;
+  box-shadow:
+    0 0 0 1px rgba(0,0,0,0.8),
+    0 0 12px rgba(0,229,255,0.4),
+    0 0 28px rgba(0,229,255,0.15),
+    inset 0 0 0 1px rgba(0,0,0,0.6);
+  padding: 4px;
+  background: #000913;
+  image-rendering: pixelated;
+  margin-bottom: 20px;
+}
+
+.ls-pixel-bar-inner {
+  display: flex;
+  flex-direction: row;
+  gap: 3px;
+  height: 22px;
+  align-items: stretch;
+}
+
+/* Each individual pixel block */
+.ls-pixel-block {
+  flex: 1;
+  background: transparent;
+  transition: background 0.06s steps(1);
+  image-rendering: pixelated;
+}
+
+.ls-pixel-block.lit {
+  background: #00e5ff;
+  box-shadow: 0 0 6px rgba(0,229,255,0.8), 0 0 2px #4fc3f7;
+}
+
+/* Leading edge glow block */
+.ls-pixel-block.lit-edge {
+  background: #ffffff;
+  box-shadow: 0 0 10px rgba(255,255,255,0.9), 0 0 20px rgba(0,229,255,1);
+}
+
+/* ── Percentage counter ── */
+.ls-pixel-pct {
+  font-family: 'Press Start 2P', 'JetBrains Mono', monospace;
+  font-size: clamp(14px, 3vw, 22px);
+  color: #e8f0fe;
+  letter-spacing: 2px;
+  margin-bottom: 44px;
+  text-shadow:
+    0 0 12px rgba(0, 229, 255, 0.5),
+    0 0 30px rgba(79, 195, 247, 0.2);
+}
+
+/* ── Knowledge tip card ── */
+.ls-tip-card {
+  width: 100%;
+  background: rgba(0, 229, 255, 0.04);
+  border: 1px solid rgba(0, 229, 255, 0.18);
+  border-left: 3px solid #00e5ff;
+  border-radius: 0 10px 10px 0;
+  padding: 16px 20px 16px;
+  min-height: 98px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 0 24px rgba(0,229,255,0.06);
+}
+
+/* Faint inner glow strip */
+.ls-tip-card::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 3px;
+  background: linear-gradient(180deg, #9c27b0, #00e5ff, #4fc3f7);
+  border-radius: 2px 0 0 2px;
+}
+
+.ls-tip-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 9px;
+  letter-spacing: 2px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: #00e5ff;
+  font-family: 'JetBrains Mono', monospace;
+}
+
+.ls-tip-label-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #00e5ff;
+  flex-shrink: 0;
+  animation: ls-dot-blink 1s steps(1) infinite;
+}
+
+@keyframes ls-dot-blink {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0; }
+}
+
+.ls-tip-counter {
+  margin-left: auto;
+  font-size: 9px;
+  color: rgba(0,229,255,0.4);
+  font-family: 'JetBrains Mono', monospace;
+}
+
+/* Smooth tip content wrapper and transitions */
+.ls-tip-body-wrap {
+  display: flex;
+  flex-direction: column;
+  transition: opacity 0.35s cubic-bezier(0.4, 0, 0.2, 1), transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.ls-tip-body-wrap.ls-tip-transitioning {
+  opacity: 0;
+  transform: translateY(5px);
+}
+
+.ls-tip-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.ls-tip-icon {
+  font-size: 20px;
+  line-height: 1;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.ls-tip-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: #e8f0fe;
+  line-height: 1.3;
+  margin-bottom: 4px;
+}
+
+.ls-tip-body {
+  font-size: 12px;
+  color: #90caf9;
+  line-height: 1.6;
+}

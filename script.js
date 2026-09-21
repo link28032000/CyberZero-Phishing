@@ -1043,11 +1043,6 @@ function renderPreAssessment() {
           stampEl.style.borderColor = '#c62828';
           stampEl.style.color = '#c62828';
         }
-        if (teacherNote) {
-          teacherNote.textContent = preAssessmentScore >= 9
-            ? '"Excellent! You already have strong cybersecurity instincts. Ace, Nishren, Phillip, and Jonald would be lucky to have you on their team. CyberZerØ will show you even more!"'
-            : '"Good start! You understand the basics well. Follow Ace and the team through CyberZerØ\'s simulation to sharpen your detection skills."';
-        }
       } else {
         if (stampTitle) stampTitle.textContent = 'EVALUATED';
         if (stampSub) stampSub.textContent = 'ACADEMY REMEDIATION REQUIRED';
@@ -1055,8 +1050,17 @@ function renderPreAssessment() {
           stampEl.style.borderColor = '#d84315';
           stampEl.style.color = '#d84315';
         }
-        if (teacherNote) {
-          teacherNote.textContent = '"Valuable diagnostic result. You will learn a lot as Ace, Nishren, Phillip, and Jonald face their cyber threats. Pay close attention to CyberZerØ\'s guidance throughout the simulation."';
+      }
+
+      if (teacherNote) {
+        if (preAssessmentScore >= 9) {
+          teacherNote.textContent = '"Excellent! Outstanding cybersecurity knowledge and awareness. You demonstrate strong threat detection instincts against phishing and malware."';
+        } else if (preAssessmentScore >= 7) {
+          teacherNote.textContent = '"Passed! Good cybersecurity knowledge and awareness. Continue practicing to maintain high vigilance against sophisticated cyber threats."';
+        } else if (preAssessmentScore >= 5) {
+          teacherNote.textContent = '"Needs improvement: You have basic familiarity, but you need more cybersecurity knowledge and awareness to consistently identify disguised links and deceptive files."';
+        } else {
+          teacherNote.textContent = '"Needs remediation: You need more cybersecurity knowledge and awareness. Pay close attention to the simulation lessons to build essential defense habits against phishing and malware."';
         }
       }
     }
@@ -6687,7 +6691,193 @@ function restartEntireGame() {
 // MAIN MENU / TITLE SCREEN CONTROLS
 // ═══════════════════════════════════════════════════════════
 
+
+// ── LOADING SCREEN KNOWLEDGE TIPS ──
+const LOADING_TIPS = [
+  {
+    category: 'PHISHING THREAT',
+    icon: '🎣',
+    title: 'Check the Sender\'s Email Domain',
+    body: 'Phishing emails often use free domains like Gmail or misspelled company names. A real bank like BPI will always use @bpi.com.ph — never @gmail.com or @bpi-support.com.'
+  },
+  {
+    category: 'PHISHING THREAT',
+    icon: '⏰',
+    title: 'Urgency Is a Red Flag',
+    body: '"You have 30 minutes before your account is locked!" Scammers create panic to stop you from thinking clearly. Legitimate organizations never threaten immediate account closures via email.'
+  },
+  {
+    category: 'PHISHING THREAT',
+    icon: '🔗',
+    title: 'Hover Before You Click Any Link',
+    body: 'A button may say "Verify My Account" but link to a fake site. Always check where a link actually leads — the real PayPal is paypal.com, not paypal-account-check.com or any lookalike domain.'
+  },
+  {
+    category: 'MALWARE DEFENSE',
+    icon: '🦠',
+    title: 'Malware Hides in Ordinary File Names',
+    body: 'Files like "Invoice_Final.pdf.exe" or "ResumeUpdate.docx" can secretly be malware. Always check real file extensions and never open attachments from unknown or unexpected senders.'
+  },
+  {
+    category: 'MALWARE DEFENSE',
+    icon: '🛡️',
+    title: 'Keep Your Anti-Virus Updated',
+    body: 'Malware databases are updated daily to catch new threats. An anti-virus with outdated definitions is like a lock with a missing key. Run regular scans and always keep your security software current.'
+  },
+  {
+    category: 'MALWARE DEFENSE',
+    icon: '📂',
+    title: 'Ransomware Encrypts Your Files for Money',
+    body: 'Ransomware is a type of malware that locks your files and demands payment to restore them. Never pay — there\'s no guarantee your files will be returned. Always maintain offline backups.'
+  },
+  {
+    category: 'SOCIAL ENGINEERING',
+    icon: '🎭',
+    title: 'Social Engineering Exploits Human Trust',
+    body: 'Attackers often impersonate IT support, HR, or authority figures to trick people into giving credentials. Always verify callers through official channels — never give your password over the phone.'
+  },
+  {
+    category: 'CYBER HYGIENE',
+    icon: '🔐',
+    title: 'Use Multi-Factor Authentication (MFA)',
+    body: 'Even if a phisher steals your password, MFA adds a second barrier. Enable it on all important accounts — email, banking, and social media. It\'s your best defense against credential theft.'
+  },
+  {
+    category: 'CYBER HYGIENE',
+    icon: '📱',
+    title: 'Never Share OTPs or MPINs on Websites',
+    body: 'GCash, BPI, and all legitimate services will NEVER ask for your 4-digit MPIN or 6-digit OTP through a website link. Any site that asks is a phishing scam — close it immediately.'
+  },
+  {
+    category: 'TYPOSQUAT ATTACK',
+    icon: '🔍',
+    title: 'Typosquatting Swaps Letters to Fool You',
+    body: 'Fake domains like "paypa1.com" (using digit 1 instead of letter l) look almost identical to real ones. Always read URLs carefully character by character before entering any sensitive information.'
+  }
+];
+
 function startFromTitleMenu() {
+  // Show the loading screen immediately
+  const ls = document.getElementById('overlay-loading-screen');
+  if (!ls) {
+    _doStartFromTitleMenu();
+    return;
+  }
+
+  // Pre-close title menu underneath
+  closeOverlay('overlay-title-menu');
+
+  // Activate loading overlay smoothly
+  ls.classList.remove('ls-leaving');
+  ls.classList.add('ls-active');
+
+  const titleEl = document.getElementById('ls-pixel-title');
+  if (titleEl) {
+    titleEl.innerHTML = 'LOADING<span class="ls-ellipsis">...</span>';
+  }
+
+  // ── Build pixel block bar ──
+  const BAR_BLOCKS = 28; // number of segments
+  const barInner = document.getElementById('ls-pixel-bar-inner');
+  if (barInner) {
+    barInner.innerHTML = '';
+    for (let i = 0; i < BAR_BLOCKS; i++) {
+      const block = document.createElement('div');
+      block.className = 'ls-pixel-block';
+      block.dataset.index = i;
+      barInner.appendChild(block);
+    }
+  }
+
+  // ── Live percent + pixel block animation (10 seconds) ──
+  const pctEl = document.getElementById('ls-pixel-pct');
+  const DURATION = 10000; // 10 seconds
+  let startTime = null;
+  let barAnimId = null;
+
+  function animateBar(ts) {
+    if (!startTime) startTime = ts;
+    const elapsed = ts - startTime;
+    const progress = Math.min(elapsed / DURATION, 1); // 0 → 1
+    const pct = Math.round(progress * 100);
+
+    // Update percentage text
+    if (pctEl) pctEl.textContent = pct + '%';
+
+    // Animate pixel blocks
+    if (barInner) {
+      const litCount = Math.round(progress * BAR_BLOCKS);
+      const blocks = barInner.querySelectorAll('.ls-pixel-block');
+      blocks.forEach((b, i) => {
+        if (i < litCount - 1) {
+          b.classList.add('lit');
+          b.classList.remove('lit-edge');
+        } else if (i === litCount - 1 && litCount > 0) {
+          // Leading edge block = bright white flash
+          b.classList.add('lit', 'lit-edge');
+        } else {
+          b.classList.remove('lit', 'lit-edge');
+        }
+      });
+    }
+
+    if (progress < 1) {
+      barAnimId = requestAnimationFrame(animateBar);
+    }
+  }
+  barAnimId = requestAnimationFrame(animateBar);
+
+  // ── Select 1 random note for this loading session (rotates every new load) ──
+  let tipIdx = Math.floor(Math.random() * LOADING_TIPS.length);
+  if (typeof window._lastLoadingTipIdx === 'number' && LOADING_TIPS.length > 1) {
+    while (tipIdx === window._lastLoadingTipIdx) {
+      tipIdx = Math.floor(Math.random() * LOADING_TIPS.length);
+    }
+  }
+  window._lastLoadingTipIdx = tipIdx;
+  const tip = LOADING_TIPS[tipIdx];
+
+  const catEl = document.getElementById('ls-tip-category');
+  const iconEl = document.getElementById('ls-tip-icon');
+  const tipTitleEl = document.getElementById('ls-tip-title');
+  const bodyEl = document.getElementById('ls-tip-body');
+
+  if (catEl) catEl.textContent = tip.category;
+  if (iconEl) iconEl.textContent = tip.icon;
+  if (tipTitleEl) tipTitleEl.textContent = tip.title;
+  if (bodyEl) bodyEl.textContent = tip.body;
+
+  // ── After 10 seconds: complete & smooth fade transition into game ──
+  setTimeout(() => {
+    if (barAnimId) cancelAnimationFrame(barAnimId);
+
+    // Final state: 100% full glow
+    if (pctEl) pctEl.textContent = '100%';
+    if (titleEl) {
+      titleEl.innerHTML = 'READY<span class="ls-ellipsis">!</span>';
+    }
+    if (barInner) {
+      barInner.querySelectorAll('.ls-pixel-block').forEach(b => {
+        b.classList.add('lit');
+        b.classList.remove('lit-edge');
+      });
+    }
+
+    // Launch game prologue
+    _doStartFromTitleMenu();
+
+    // Smoothly dissolve loading screen over 800ms
+    setTimeout(() => {
+      ls.classList.add('ls-leaving');
+      setTimeout(() => {
+        ls.classList.remove('ls-active', 'ls-leaving');
+      }, 800);
+    }, 300);
+
+  }, DURATION);
+}
+
+function _doStartFromTitleMenu() {
   closeOverlay('overlay-title-menu');
   if (typeof AudioManager !== 'undefined') {
     AudioManager.playNotification();
@@ -6696,6 +6886,7 @@ function startFromTitleMenu() {
   playCategoryStory('prologue');
   showToast('🤖 AI Guide Zero: Welcome to CyberZerØ.', 'info');
 }
+
 
 function replayPrologueVN() {
   closeOverlay('overlay-category-select');
