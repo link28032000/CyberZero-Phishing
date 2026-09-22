@@ -20,24 +20,19 @@
   <!-- Desktop wallpaper grid lines (CSS only) -->
   <div class="desktop-bg"></div>
 
-  <!-- Desktop Icons (2-Column Grid Layout) -->
   <div class="desktop-icons">
     <!-- Column 1: Main / Unlocked Apps -->
     <div class="desktop-icons-col">
-      <div class="desktop-icon" id="icon-categories" onclick="openCategoryHubFromDesktop()" title="Threat Categories Hub — Select chapters and track progress">
-        <div class="icon-img">🗂️</div>
-        <span>Categories</span>
-      </div>
       <div class="desktop-icon" id="icon-gmail" onclick="openApp('gmail')" title="Gmail — Email Phishing Investigation (Ace)">
-        <div class="icon-img">📧</div>
+        <div class="icon-img"><img src="assets/icons/apps/mail.svg" alt="Gmail" style="width:36px;height:36px;"></div>
         <span>Gmail</span>
       </div>
       <div class="desktop-icon" id="icon-browser" onclick="openApp('browser')" title="Browser — Cyber-Net Web Search">
-        <div class="icon-img">🌐</div>
+        <div class="icon-img"><img src="assets/icons/apps/browser.svg" alt="Browser" style="width:36px;height:36px;"></div>
         <span>Browser</span>
       </div>
       <div class="desktop-icon" id="icon-notes" onclick="toggleStickyNote()">
-        <div class="icon-img">📒</div>
+        <div class="icon-img"><img src="assets/icons/apps/note.svg" alt="Notes" style="width:36px;height:36px;"></div>
         <span>Sticky Notes</span>
       </div>
     </div>
@@ -45,20 +40,16 @@
     <!-- Column 2: Threat Progression / Locked Apps -->
     <div class="desktop-icons-col">
       <div class="desktop-icon locked" id="icon-folder" onclick="openApp('folder')" title="🔒 Locked — Complete Chapter 1 (Phishing) first">
-        <div class="icon-img">📂</div>
+        <div class="icon-img"><img src="assets/icons/apps/folder.svg" alt="Folder" style="width:36px;height:36px;"></div>
         <span>Folder</span>
       </div>
       <div class="desktop-icon locked" id="icon-antivirus" onclick="openApp('antivirus')" title="🔒 Locked — Complete Chapter 1 (Phishing) first">
-        <div class="icon-img">🛡️</div>
+        <div class="icon-img"><img src="assets/icons/apps/windows_defender.svg" alt="Anti-Virus" style="width:36px;height:36px;"></div>
         <span>Anti-Virus</span>
       </div>
       <div class="desktop-icon locked" id="icon-comms" onclick="openApp('comms')" title="🔒 Locked — Complete Chapter 2 (Malware) first">
-        <div class="icon-img">📱</div>
+        <div class="icon-img"><img src="assets/icons/apps/Smartphone.svg" alt="Comms" style="width:36px;height:36px;"></div>
         <span>Comms</span>
-      </div>
-      <div class="desktop-icon locked" id="icon-ransomware" onclick="openApp('ransomware')" title="🔒 Locked — Complete Chapter 3 (Social Engineering) first">
-        <div class="icon-img">🔒</div>
-        <span>Ransomware</span>
       </div>
     </div>
   </div>
@@ -493,34 +484,28 @@
       </button>
     </div>
     <div class="taskbar-apps">
-      <button class="taskbar-app-btn" id="taskbar-categories" onclick="openCategoryHubFromDesktop()" title="🗂️ Threat Categories Hub">
-        <span>🗂️</span> Categories
+      <button class="taskbar-app-btn" id="taskbar-gmail" onclick="taskbarClick('gmail')" title="Gmail — Email Phishing Investigation (Ace)">
+        <span><img src="assets/icons/apps/mail.svg" alt="Gmail" style="width:18px;height:18px;vertical-align:middle;"></span> Gmail
       </button>
-      <button class="taskbar-app-btn" id="taskbar-gmail" onclick="taskbarClick('gmail')" title="📧 Gmail — Email Phishing Investigation (Ace)">
-        <span>📧</span> Gmail
+      <button class="taskbar-app-btn" id="taskbar-browser" onclick="taskbarClick('browser')" title="Browser — Cyber-Net Web Search">
+        <span><img src="assets/icons/apps/browser.svg" alt="Browser" style="width:18px;height:18px;vertical-align:middle;"></span> Browser
       </button>
-      <button class="taskbar-app-btn" id="taskbar-browser" onclick="taskbarClick('browser')" title="🌐 Browser — Cyber-Net Web Search">
-        <span>🌐</span> Browser
+      <button class="taskbar-app-btn locked" id="taskbar-folder" onclick="taskbarClick('folder')" title="Folder — Complete Chapter 1 (Phishing) to unlock">
+        <span><img src="assets/icons/apps/folder.svg" alt="Folder" style="width:18px;height:18px;vertical-align:middle;"></span> Folder
       </button>
-      <button class="taskbar-app-btn locked" id="taskbar-folder" onclick="taskbarClick('folder')" title="📂 Folder — Complete Chapter 1 (Phishing) to unlock">
-        <span>📂</span> Folder
+      <button class="taskbar-app-btn locked" id="taskbar-antivirus" onclick="taskbarClick('antivirus')" title="ShieldAV Anti-Virus — Complete Chapter 1 (Phishing) to unlock">
+        <span><img src="assets/icons/apps/windows_defender.svg" alt="Anti-Virus" style="width:18px;height:18px;vertical-align:middle;"></span> Anti-Virus
       </button>
-      <button class="taskbar-app-btn locked" id="taskbar-antivirus" onclick="taskbarClick('antivirus')" title="🛡️ ShieldAV Anti-Virus — Complete Chapter 1 (Phishing) to unlock">
-        <span>🛡️</span> Anti-Virus
-      </button>
-      <button class="taskbar-app-btn locked" id="taskbar-comms" onclick="taskbarClick('comms')" title="📱 Comms Defense — Complete Chapter 2 (Malware) to unlock">
-        <span>📱</span> Comms
-      </button>
-      <button class="taskbar-app-btn locked" id="taskbar-ransomware" onclick="taskbarClick('ransomware')" title="🔒 Ransomware Console — Complete Chapter 3 (Social Engineering) to unlock">
-        <span>🔒</span> Ransomware
+      <button class="taskbar-app-btn locked" id="taskbar-comms" onclick="taskbarClick('comms')" title="Comms Defense — Complete Chapter 2 (Malware) to unlock">
+        <span><img src="assets/icons/apps/Smartphone.svg" alt="Comms" style="width:18px;height:18px;vertical-align:middle;"></span> Comms
       </button>
     </div>
     <div class="taskbar-tray">
       <button class="tray-btn" id="tray-volume-btn" onclick="toggleVolumeFlyout(event)" title="🔊 Sound &amp; Audio Volume Settings" aria-label="Speakers / Sound Settings">
-        <span id="tray-volume-icon" class="tray-icon">🔊</span>
+        <span id="tray-volume-icon" class="tray-icon"><img src="assets/icons/networks/audio.svg" alt="Sound" style="width:18px;height:18px;vertical-align:middle;"></span>
       </button>
       <button class="tray-btn" id="tray-wifi-btn" onclick="toggleNetworkFlyout(event)" title="📶 Cyber-Net Wi-Fi, Bluetooth &amp; Quick Settings" aria-label="Network &amp; Quick Settings">
-        <span id="tray-wifi-icon" class="tray-icon">📶</span>
+        <span id="tray-wifi-icon" class="tray-icon"><img src="assets/icons/networks/wi-fi.svg" alt="Wi-Fi" style="width:18px;height:18px;vertical-align:middle;"></span>
       </button>
       <button class="taskbar-clock" id="taskbar-clock-btn" onclick="toggleCalendarFlyout(event)" title="📅 View Calendar, Date in Words &amp; Notifications" aria-label="System Clock, Calendar and Notifications">
         <div id="taskbar-time" class="clock-time">10:42</div>
@@ -549,46 +534,34 @@
 
   <!-- Clean Tile Grid -->
   <div class="start-apps-grid" id="start-apps-grid">
-    <div class="start-app-tile" onclick="openCategoryHubFromDesktop(); closeStartMenu();" id="start-app-categories" title="Open Threat Categories Hub">
-      <div class="start-tile-icon">🗂️</div>
-      <div class="start-tile-name">Categories</div>
-      <span class="start-tile-status active" id="start-badge-categories">Hub</span>
-    </div>
-
     <div class="start-app-tile" onclick="startMenuOpenApp('gmail')" id="start-app-gmail" title="Open Gmail Client (Ace)">
-      <div class="start-tile-icon">📧</div>
+      <div class="start-tile-icon"><img src="assets/icons/apps/mail.svg" alt="Gmail" style="width:32px;height:32px;"></div>
       <div class="start-tile-name">Gmail</div>
       <span class="start-tile-status active" id="start-badge-gmail">Open</span>
     </div>
 
     <div class="start-app-tile" onclick="startMenuOpenApp('browser')" id="start-app-browser" title="Open Cyber Browser">
-      <div class="start-tile-icon">🌐</div>
+      <div class="start-tile-icon"><img src="assets/icons/apps/browser.svg" alt="Browser" style="width:32px;height:32px;"></div>
       <div class="start-tile-name">Browser</div>
       <span class="start-tile-status" id="start-badge-browser">Ready</span>
     </div>
 
     <div class="start-app-tile locked" onclick="startMenuOpenApp('folder')" id="start-app-folder" title="File Explorer (Nishren / Malware)">
-      <div class="start-tile-icon">📂</div>
+      <div class="start-tile-icon"><img src="assets/icons/apps/folder.svg" alt="Folder" style="width:32px;height:32px;"></div>
       <div class="start-tile-name">Explorer</div>
       <span class="start-tile-status lock" id="start-badge-folder">🔒 Locked</span>
     </div>
 
     <div class="start-app-tile locked" onclick="startMenuOpenApp('antivirus')" id="start-app-antivirus" title="ShieldAV Anti-Virus (Nishren / Malware)">
-      <div class="start-tile-icon">🛡️</div>
+      <div class="start-tile-icon"><img src="assets/icons/apps/windows_defender.svg" alt="ShieldAV" style="width:32px;height:32px;"></div>
       <div class="start-tile-name">ShieldAV</div>
       <span class="start-tile-status lock" id="start-badge-antivirus">🔒 Locked</span>
     </div>
 
     <div class="start-app-tile locked" onclick="startMenuOpenApp('comms')" id="start-app-comms" title="Comms Defense (Phillip / Social Eng)">
-      <div class="start-tile-icon">📱</div>
+      <div class="start-tile-icon"><img src="assets/icons/apps/Smartphone.svg" alt="Comms" style="width:32px;height:32px;"></div>
       <div class="start-tile-name">Comms</div>
       <span class="start-tile-status lock" id="start-badge-comms">🔒 Locked</span>
-    </div>
-
-    <div class="start-app-tile locked" onclick="startMenuOpenApp('ransomware')" id="start-app-ransomware" title="Incident Console (Jonald / Ransomware)">
-      <div class="start-tile-icon">🔒</div>
-      <div class="start-tile-name">Ransomware</div>
-      <span class="start-tile-status lock" id="start-badge-ransomware">🔒 Locked</span>
     </div>
   </div>
 
@@ -599,35 +572,35 @@
   </div>
   <div class="start-recommended-list" id="start-recommended-list">
     <div class="start-recommended-item" onclick="startMenuOpenApp('gmail')" title="Open Gmail Client">
-      <div class="rec-file-icon">📧</div>
+      <div class="rec-file-icon"><img src="assets/icons/apps/mail.svg" alt="Gmail" style="width:28px;height:28px;"></div>
       <div class="rec-file-info">
         <div class="rec-file-name">Gmail Client</div>
         <div class="rec-file-meta">Phishing Email Investigation • Available</div>
       </div>
     </div>
     <div class="start-recommended-item" onclick="startMenuOpenApp('browser')" title="Open Cyber Browser">
-      <div class="rec-file-icon">🌐</div>
+      <div class="rec-file-icon"><img src="assets/icons/apps/browser.svg" alt="Browser" style="width:28px;height:28px;"></div>
       <div class="rec-file-info">
         <div class="rec-file-name">Cyber Browser</div>
         <div class="rec-file-meta">Cyber-Net Web Engine • Available</div>
       </div>
     </div>
     <div class="start-recommended-item" onclick="startMenuAction('notes')" title="Toggle Case Sticky Notes">
-      <div class="rec-file-icon">📝</div>
+      <div class="rec-file-icon"><img src="assets/icons/apps/note.svg" alt="Notes" style="width:28px;height:28px;"></div>
       <div class="rec-file-info">
         <div class="rec-file-name">Case Sticky Notes</div>
         <div class="rec-file-meta">Scoring Rules &amp; Guide • Available</div>
       </div>
     </div>
     <div class="start-recommended-item hidden" id="rec-app-folder" onclick="startMenuOpenApp('folder')" title="Open File Explorer">
-      <div class="rec-file-icon">📁</div>
+      <div class="rec-file-icon"><img src="assets/icons/apps/folder.svg" alt="Folder" style="width:28px;height:28px;"></div>
       <div class="rec-file-info">
         <div class="rec-file-name">File Explorer</div>
         <div class="rec-file-meta">Quarantine &amp; File Inspection • Available</div>
       </div>
     </div>
     <div class="start-recommended-item hidden" id="rec-app-antivirus" onclick="startMenuOpenApp('antivirus')" title="Open ShieldAV Anti-Virus">
-      <div class="rec-file-icon">🛡️</div>
+      <div class="rec-file-icon"><img src="assets/icons/apps/windows_defender.svg" alt="ShieldAV" style="width:28px;height:28px;"></div>
       <div class="rec-file-info">
         <div class="rec-file-name">ShieldAV Anti-Virus</div>
         <div class="rec-file-meta">Real-Time Virus Shield • Available</div>
@@ -732,32 +705,13 @@
       </div>
     </div>
   </div>
-
-  <!-- Audio Test / Preview Buttons -->
-  <div class="volume-flyout-footer">
-    <button class="vol-test-btn" onclick="testMouseClickSound()" title="Test realistic mouse click sound">
-      🖱️ Click
-    </button>
-    <button class="vol-test-btn" onclick="testCorrectSound()" title="Test correct verdict sound">
-      🎯 Correct
-    </button>
-    <button class="vol-test-btn" onclick="testWrongSound()" title="Test wrong verdict sound">
-      ❌ Wrong
-    </button>
-    <button class="vol-test-btn" onclick="testMissionCompleteSound()" title="Test mission complete fanfare">
-      🏆 Victory
-    </button>
-    <button class="vol-test-btn" onclick="testTypingSound()" title="Test keyboard typing sound">
-      ⌨️ Typing
-    </button>
-  </div>
 </div>
 
 <!-- ── DESKTOP NETWORK & QUICK SETTINGS FLYOUT ── -->
 <div id="desktop-network-flyout" class="volume-flyout network-flyout hidden" role="dialog" aria-label="Network and Quick Settings">
   <div class="volume-flyout-header">
     <div class="volume-flyout-title">
-      <span class="v-title-icon" id="network-header-icon">📶</span>
+      <span class="v-title-icon" id="network-header-icon"><img src="assets/icons/networks/wi-fi.svg" alt="Network" style="width:20px;height:20px;vertical-align:middle;"></span>
       <span>Network &amp; Quick Settings</span>
     </div>
     <button class="volume-flyout-close" onclick="closeNetworkFlyout(event)" title="Close network menu">✕</button>
@@ -769,7 +723,7 @@
       <!-- Wi-Fi Tile -->
       <div class="quick-tile active" id="tile-wifi" onclick="toggleWifiSetting()" title="Click to toggle Wi-Fi">
         <div class="quick-tile-top">
-          <span class="quick-tile-icon" id="tile-wifi-icon">📶</span>
+          <span class="quick-tile-icon" id="tile-wifi-icon"><img src="assets/icons/networks/wi-fi.svg" alt="Wi-Fi" style="width:22px;height:22px;"></span>
           <span class="quick-tile-toggle-indicator" id="tile-wifi-badge">ON</span>
         </div>
         <div class="quick-tile-info">
@@ -781,7 +735,7 @@
       <!-- Bluetooth Tile -->
       <div class="quick-tile active" id="tile-bluetooth" onclick="toggleBluetoothSetting()" title="Click to toggle Bluetooth">
         <div class="quick-tile-top">
-          <span class="quick-tile-icon" id="tile-bt-icon">📡</span>
+          <span class="quick-tile-icon" id="tile-bt-icon"><img src="assets/icons/networks/bluetooth.svg" alt="Bluetooth" style="width:22px;height:22px;"></span>
           <span class="quick-tile-toggle-indicator" id="tile-bt-badge">ON</span>
         </div>
         <div class="quick-tile-info">
@@ -793,7 +747,7 @@
       <!-- Airplane Mode Tile -->
       <div class="quick-tile" id="tile-airplane" onclick="toggleAirplaneSetting()" title="Click to toggle Airplane Mode">
         <div class="quick-tile-top">
-          <span class="quick-tile-icon" id="tile-airplane-icon">✈️</span>
+          <span class="quick-tile-icon" id="tile-airplane-icon"><img src="assets/icons/networks/airlane mode.svg" alt="Airplane Mode" style="width:22px;height:22px;"></span>
           <span class="quick-tile-toggle-indicator" id="tile-airplane-badge">OFF</span>
         </div>
         <div class="quick-tile-info">
@@ -805,7 +759,7 @@
       <!-- Cyber Shield / Guard Tile -->
       <div class="quick-tile active" id="tile-guard" onclick="toggleGuardSetting()" title="Cyber Defense Guard">
         <div class="quick-tile-top">
-          <span class="quick-tile-icon" id="tile-guard-icon">🛡️</span>
+          <span class="quick-tile-icon" id="tile-guard-icon"><img src="assets/icons/apps/windows_defender.svg" alt="Cyber Shield" style="width:22px;height:22px;"></span>
           <span class="quick-tile-toggle-indicator" id="tile-guard-badge">ON</span>
         </div>
         <div class="quick-tile-info">
@@ -824,7 +778,7 @@
     <div class="wifi-networks-list" id="wifi-networks-list">
       <!-- Active Connected Network -->
       <div class="wifi-net-item connected" id="wifi-item-cybernet">
-        <div class="wifi-net-icon">📶</div>
+        <div class="wifi-net-icon"><img src="assets/icons/networks/wi-fi.svg" alt="Wi-Fi" style="width:20px;height:20px;"></div>
         <div class="wifi-net-details">
           <div class="wifi-net-name">CYBER-NET (WPA3-Enterprise)</div>
           <div class="wifi-net-meta">Connected, secured • 5.0 GHz • 1200 Mbps</div>
@@ -834,7 +788,7 @@
 
       <!-- Other detected networks -->
       <div class="wifi-net-item" id="wifi-item-academy" onclick="connectToWifi('HQ-CyberAcademy-Internal')">
-        <div class="wifi-net-icon">🔒</div>
+        <div class="wifi-net-icon"><img src="assets/icons/networks/wi-fi.svg" alt="Wi-Fi" style="width:20px;height:20px;"></div>
         <div class="wifi-net-details">
           <div class="wifi-net-name">HQ-CyberAcademy-Internal</div>
           <div class="wifi-net-meta">Secured (802.1X Detective Key)</div>
@@ -843,7 +797,7 @@
       </div>
 
       <div class="wifi-net-item" id="wifi-item-lab" onclick="connectToWifi('Lab-Investigation-Mesh')">
-        <div class="wifi-net-icon">🔒</div>
+        <div class="wifi-net-icon"><img src="assets/icons/networks/wi-fi.svg" alt="Wi-Fi" style="width:20px;height:20px;"></div>
         <div class="wifi-net-details">
           <div class="wifi-net-name">Lab-Investigation-Mesh</div>
           <div class="wifi-net-meta">Secured • Isolated Forensic Sandbox</div>
@@ -852,7 +806,7 @@
       </div>
 
       <div class="wifi-net-item warning-net" id="wifi-item-public" onclick="warnPublicWifi()">
-        <div class="wifi-net-icon">⚠️</div>
+        <div class="wifi-net-icon"><img src="assets/icons/networks/wi-fi.svg" alt="Wi-Fi" style="width:20px;height:20px;"></div>
         <div class="wifi-net-details">
           <div class="wifi-net-name">Free_Public_Unsecured</div>
           <div class="wifi-net-meta" style="color:var(--accent-red)">⚠️ Open • High Risk of Phishing / MITM!</div>
@@ -1214,15 +1168,11 @@
       <div class="cat-hub-header">
         <h1 class="cat-hub-title">CHOOSE THREAT CATEGORY</h1>
         <p class="cat-hub-subtitle">
-          Select a category to begin simulation. Complete each chapter to unlock the next and follow the connected journey of Ace, Nishren, Phillip &amp; Jonald with CyberZerØ!
+          Select a category to begin simulation. Complete each chapter to master cybersecurity defenses with CyberZerØ!
         </p>
 
         <!-- Stats Bar -->
         <div class="cat-hub-stats-bar">
-          <div class="cat-stat-chip">
-            <span class="stat-lbl">Character:</span>
-            <strong id="cat-hub-player-name">Ace</strong>
-          </div>
           <div class="cat-stat-chip">
             <span class="stat-lbl">Progress:</span>
             <strong id="cat-hub-progress-text">0 / 4 Modules Completed</strong>

@@ -557,8 +557,7 @@ function openApp(appName) {
   }
 }
 
-// Centers a window on the desktop, nudged left so the sticky note
-// (which now lives in the bottom-right corner) never overlaps it.
+// Centers a window on the desktop
 function centerWindow(appName) {
   const win = document.getElementById(`win-${appName}`);
   const desktop = document.getElementById('desktop');
@@ -570,13 +569,8 @@ function centerWindow(appName) {
   const viewportW = desktop.clientWidth;
   const viewportH = desktop.clientHeight - (taskbar ? taskbar.offsetHeight : 48);
 
-  const STICKY_NOTE_CLEARANCE = 280; // sticky note sits ~24-256px from the right
-
-  let left = Math.round((viewportW - w) / 2);
-  let top = Math.round((viewportH - h) / 2);
-
-  left = Math.min(left, Math.max(24, viewportW - STICKY_NOTE_CLEARANCE - w));
-  top = Math.max(24, top);
+  let left = Math.max(20, Math.round((viewportW - w) / 2));
+  let top = Math.max(20, Math.round((viewportH - h) / 2));
 
   win.style.left = left + 'px';
   win.style.top = top + 'px';
@@ -633,10 +627,25 @@ function toggleMaximize(appName) {
   focusWindow(appName);
 }
 
+let highestWindowZIndex = 120;
+
 function focusWindow(appName) {
+  if (!appName) return;
   document.querySelectorAll('.app-window').forEach(w => w.classList.remove('focused'));
   const win = document.getElementById(`win-${appName}`);
-  win.classList.add('focused');
+  if (win) {
+    win.classList.add('focused');
+    highestWindowZIndex += 2;
+    if (highestWindowZIndex > 450) {
+      const allWins = Array.from(document.querySelectorAll('.app-window'))
+        .sort((a, b) => (parseInt(a.style.zIndex || 100, 10)) - (parseInt(b.style.zIndex || 100, 10)));
+      allWins.forEach((w, idx) => {
+        w.style.zIndex = 110 + idx * 2;
+      });
+      highestWindowZIndex = 110 + allWins.length * 2;
+    }
+    win.style.zIndex = highestWindowZIndex;
+  }
   updateTaskbar();
 }
 
@@ -1218,16 +1227,16 @@ const CATEGORIES = [
   {
     id: 'phishing',
     num: 1,
-    title: 'Phishing Detection',
-    subtitle: 'Email Spoofing & Fake Links',
-    char: 'Ace',
-    charImg: 'assets/Ace.png',
+    chapterRange: '1–3',
+    chapterTag: 'CHAPTER 1–3',
+    title: 'Phishing, Online Scams & Suspicious Links',
+    subtitle: 'Chapters 1–3',
     accent: '#00e5ff',
-    desc: 'Inspect sender domains, false urgency, and fake login links to detect email phishing.',
+    desc: 'Detect deceptive phishing emails, fraudulent online scams, and suspicious links to prevent credential theft.',
     specs: {
-      threatType: 'Email Phishing & Credential Theft',
+      threatType: 'Email Phishing & Fake Links',
       app: '📧 Gmail & 🌐 Browser',
-      objective: '5 Emails Investigated'
+      objective: '5 Threats Analyzed'
     },
     unlocked: true,
     completed: false,
@@ -1237,16 +1246,16 @@ const CATEGORIES = [
   {
     id: 'malware',
     num: 2,
-    title: 'Malware Hunter',
-    subtitle: 'Trojans, Extensions & Droppers',
-    char: 'Nishren',
-    charImg: 'assets/Nishren.png',
+    chapterRange: '4–6',
+    chapterTag: 'CHAPTER 4–6',
+    title: 'Malware, Weak passwords & identity theft',
+    subtitle: 'Chapters 4–6',
     accent: '#00e676',
-    desc: 'Spot disguised double extensions, scan files, and quarantine malware using Anti-Virus.',
+    desc: 'Spot disguised malware infections, eliminate weak passwords, and defend against identity theft.',
     specs: {
-      threatType: 'Trojans & Script Droppers',
+      threatType: 'Malware & Password Breaches',
       app: '📂 Folder & 🛡️ Anti-Virus',
-      objective: '4 Malware Quarantined'
+      objective: '4 Threats Quarantined'
     },
     unlocked: false,
     completed: false,
@@ -1256,14 +1265,14 @@ const CATEGORIES = [
   {
     id: 'social_engineering',
     num: 3,
-    title: 'Social Engineering Defense',
-    subtitle: 'Vishing, Smishing & Pretexting',
-    char: 'Phillip',
-    charImg: 'assets/Phillip.png',
+    chapterRange: '7–9',
+    chapterTag: 'CHAPTER 7–9',
+    title: 'Unsafe Public Wifi, Social Engineering & Malicious Download',
+    subtitle: 'Chapters 7–9',
     accent: '#ea80fc',
-    desc: 'Analyze phone calls (vishing), SMS alerts (smishing), and pretexting impersonation scams.',
+    desc: 'Stay safe on public Wi-Fi networks, counter social engineering tactics, and block malicious file downloads.',
     specs: {
-      threatType: 'Vishing, Smishing & Spoofed DMs',
+      threatType: 'Wi-Fi Hijacking & Rogue Downloads',
       app: '📱 Comms Center',
       objective: '4 Intercepts Resolved'
     },
@@ -1275,16 +1284,16 @@ const CATEGORIES = [
   {
     id: 'ransomware',
     num: 4,
-    title: 'Ransomware Incident Response',
-    subtitle: 'Crypto Extortion & Backup Recovery',
-    char: 'Jonald',
-    charImg: 'assets/Jonald.png',
+    chapterRange: '10–12',
+    chapterTag: 'CHAPTER 10–12',
+    title: 'Account Security, Ransomware & Online Privacy',
+    subtitle: 'Chapters 10–12',
     accent: '#ff5252',
-    desc: 'Isolate infected storage nodes, kill rogue droppers, and restore encrypted files from backups.',
+    desc: 'Fortify overall account security, neutralize ransomware attacks, and safeguard your online privacy.',
     specs: {
-      threatType: 'Crypto-Ransomware Extortion',
-      app: '🔒 Ransomware Console',
-      objective: '100% Vault Recovered'
+      threatType: 'Ransomware & Privacy Exposure',
+      app: '🔒 Security Console',
+      objective: '100% Vault Secured'
     },
     unlocked: false,
     completed: false,
@@ -1333,9 +1342,6 @@ function closeCategoryHub() {
 }
 
 function renderCategoryHub() {
-  const nameEl = document.getElementById('cat-hub-player-name');
-  if (nameEl) nameEl.textContent = gameState.playerName || 'Ace';
-
   const completedCount = CATEGORIES.filter(c => c.completed).length;
   const progEl = document.getElementById('cat-hub-progress-text');
   if (progEl) progEl.textContent = `${completedCount} / 4 Modules Completed`;
@@ -1351,21 +1357,21 @@ function renderCategoryHub() {
     let statusClass = 'cat-status-locked';
     let statusLabel = '🔒 Locked';
     let btnClass = 'cat-card-btn cat-btn-locked';
-    let btnText = `🔒 Chapter ${cat.num}`;
-    let prevChap = cat.num > 1 ? cat.num - 1 : 1;
+    let btnText = `🔒 CHAPTER ${cat.chapterRange}`;
+    let prevChap = idx > 0 ? CATEGORIES[idx - 1].chapterRange : '1–3';
     let btnAction = `showToast('🔒 Complete Chapter ${prevChap} first to unlock ${cat.title}!', 'warning')`;
 
     if (cat.completed) {
       statusClass = 'cat-status-completed';
       statusLabel = `✓ Done (${cat.rank || 'S'})`;
       btnClass = 'cat-card-btn cat-btn-play';
-      btnText = `🔄 Replay Chapter ${cat.num}`;
+      btnText = `🔄 Replay Ch. ${cat.chapterRange}`;
       btnAction = `startCategoryChapter('${cat.id}')`;
     } else if (cat.unlocked) {
       statusClass = 'cat-status-unlocked';
       statusLabel = '● UNLOCKED';
       btnClass = 'cat-card-btn cat-btn-play';
-      btnText = `▶ PLAY CHAPTER ${cat.num}`;
+      btnText = `▶ PLAY CH. ${cat.chapterRange}`;
       btnAction = `startCategoryChapter('${cat.id}')`;
     }
 
@@ -1373,21 +1379,11 @@ function renderCategoryHub() {
 
     return `
       <div class="${cardClass}" style="--card-accent: ${cat.accent}"
-           data-char="${cat.char}"
            data-catid="${cat.id}"
-           onclick="selectCategoryCard(this, '${cat.id}')"
-           onmouseenter="previewCategoryCard('${cat.char}')"
-           onmouseleave="resetCategoryCard()">
+           onclick="selectCategoryCard(this, '${cat.id}')">
         <div class="cat-card-top">
-          <span class="cat-num-tag">CHAPTER 0${cat.num}</span>
+          <span class="cat-num-tag">${cat.chapterTag}</span>
           <span class="cat-status-badge ${statusClass}">${statusLabel}</span>
-        </div>
-
-        <div class="cat-char-frame">
-          <div class="cat-char-img-wrap">
-            <img src="${cat.charImg}" alt="${cat.char}" class="cat-char-img" />
-          </div>
-          <div class="cat-char-name">${cat.char}</div>
         </div>
 
         <div class="cat-card-body">
@@ -1410,7 +1406,7 @@ function renderCategoryHub() {
   }).join('');
 }
 
-// Called when a card is clicked — adds flash + selected state, updates Character chip
+// Called when a card is clicked — adds flash + selected state
 function selectCategoryCard(cardEl, catId) {
   const cat = CATEGORIES.find(c => c.id === catId);
   if (!cat) return;
@@ -1426,37 +1422,10 @@ function selectCategoryCard(cardEl, catId) {
     cardEl.classList.remove('select-flash');
     cardEl.classList.add('selected');
   }, 450);
-
-  // Update Character: chip to the clicked card's character
-  const nameEl = document.getElementById('cat-hub-player-name');
-  if (nameEl) {
-    nameEl.style.transition = 'opacity 0.18s ease';
-    nameEl.style.opacity = '0';
-    setTimeout(() => {
-      nameEl.textContent = cat.char;
-      nameEl.style.opacity = '1';
-    }, 180);
-  }
 }
 
-// Called on mouseenter — preview the character name in the chip
-function previewCategoryCard(charName) {
-  const nameEl = document.getElementById('cat-hub-player-name');
-  // Only preview if no card is currently selected
-  const hasSelected = document.querySelector('.cat-card.selected');
-  if (nameEl && !hasSelected) {
-    nameEl.textContent = charName;
-  }
-}
-
-// Called on mouseleave — restore default only if no card is selected
-function resetCategoryCard() {
-  const hasSelected = document.querySelector('.cat-card.selected');
-  if (!hasSelected) {
-    const nameEl = document.getElementById('cat-hub-player-name');
-    if (nameEl) nameEl.textContent = gameState.playerName || 'Ace';
-  }
-}
+function previewCategoryCard() {}
+function resetCategoryCard() {}
 
 function startCategoryChapter(categoryId) {
   closeCategoryHub();
@@ -1497,7 +1466,7 @@ function completeCategory(catId, score, rank) {
     // Unlock next category in sequence
     if (idx + 1 < CATEGORIES.length) {
       CATEGORIES[idx + 1].unlocked = true;
-      showToast(`🎉 Unlocked Chapter ${idx + 2}: ${CATEGORIES[idx + 1].title}!`, 'success');
+      showToast(`🎉 Unlocked Chapter ${CATEGORIES[idx + 1].chapterRange}: ${CATEGORIES[idx + 1].title}!`, 'success');
     }
   }
   updateAppLockStates();
@@ -3441,19 +3410,44 @@ function openInBrowser() {
 }
 
 function openSuspiciousSite(url) {
+  const win = document.getElementById('win-browser');
+  if (win) {
+    win.classList.remove('hidden', 'minimized');
+  }
+  if (appState.browser) {
+    appState.browser.open = true;
+    appState.browser.minimized = false;
+  }
+
   openApp('browser');
   focusWindow('browser');
+
+  // If browser is floating (not maximized), center it prominently so the user immediately sees it pop up
+  if (win && (!appState.browser || !appState.browser.maximized)) {
+    centerWindow('browser');
+  }
 
   if (!browserTabs || browserTabs.length === 0) {
     initBrowserTabs();
   }
 
-  const activeTab = getActiveTab();
-  if (activeTab && (activeTab.url === 'https://www.google.com' || activeTab.url === '') && activeTab.history.length <= 1) {
-    navigateBrowser(url);
+  const existingTab = browserTabs ? browserTabs.find(t => t.url === url) : null;
+  if (existingTab) {
+    switchTab(existingTab.id);
   } else {
-    // Add new tab when open other site like a real desktop browser!
-    createNewBrowserTab(url);
+    const activeTab = getActiveTab();
+    if (activeTab && (activeTab.url === 'https://www.google.com' || activeTab.url === '') && activeTab.history.length <= 1) {
+      navigateBrowser(url);
+    } else {
+      createNewBrowserTab(url);
+    }
+  }
+
+  // Visual pop-in animation to give responsive feedback
+  if (win) {
+    win.classList.remove('window-pop-in');
+    void win.offsetWidth;
+    win.classList.add('window-pop-in');
   }
 }
 
@@ -7558,7 +7552,11 @@ function updateVolumeUI() {
   const masterMuteBtn = document.getElementById('btn-master-mute');
 
   if (muteMasterIcon) muteMasterIcon.textContent = masterIcon;
-  if (trayVolIcon) trayVolIcon.textContent = masterIcon;
+  // Keep SVG img in tray — only apply muted visual state via CSS class
+  if (trayVolIcon) {
+    const isMuted = s.masterMuted || s.masterVolume === 0;
+    trayVolIcon.innerHTML = `<img src="assets/icons/networks/audio.svg" alt="Sound" style="width:18px;height:18px;vertical-align:middle;${isMuted ? 'opacity:0.4;' : ''}">`;
+  }
   if (flyoutHeaderIcon) flyoutHeaderIcon.textContent = masterIcon;
 
   // Close volume flyout and start menu when clicking outside
@@ -7722,7 +7720,7 @@ function updateNetworkUI() {
   const tileGuardBadge = document.getElementById('tile-guard-badge');
 
   if (networkSettings.airplane) {
-    if (trayWifiIcon) trayWifiIcon.textContent = '✈️';
+    if (trayWifiIcon) trayWifiIcon.innerHTML = '<img src="assets/icons/networks/airlane mode.svg" alt="Airplane Mode" style="width:18px;height:18px;vertical-align:middle;">';
     if (tileAir) tileAir.classList.add('active');
     if (tileAirStatus) tileAirStatus.textContent = 'Active (Transmitters off)';
     if (tileAirBadge) tileAirBadge.textContent = 'ON';
@@ -7748,12 +7746,12 @@ function updateNetworkUI() {
 
   // Wi-Fi
   if (networkSettings.wifi) {
-    if (trayWifiIcon) trayWifiIcon.textContent = '📶';
+    if (trayWifiIcon) trayWifiIcon.innerHTML = '<img src="assets/icons/networks/wi-fi.svg" alt="Wi-Fi" style="width:18px;height:18px;vertical-align:middle;">';
     if (tileWifi) tileWifi.classList.add('active');
     if (tileWifiStatus) tileWifiStatus.textContent = networkSettings.currentSsid ? networkSettings.currentSsid.split(' ')[0] : 'Connected';
     if (tileWifiBadge) tileWifiBadge.textContent = 'ON';
   } else {
-    if (trayWifiIcon) trayWifiIcon.textContent = '🚫';
+    if (trayWifiIcon) trayWifiIcon.innerHTML = '<img src="assets/icons/networks/wi-fi.svg" alt="Wi-Fi" style="width:18px;height:18px;vertical-align:middle;opacity:0.35;">';
     if (tileWifi) tileWifi.classList.remove('active');
     if (tileWifiStatus) tileWifiStatus.textContent = 'Turned Off';
     if (tileWifiBadge) tileWifiBadge.textContent = 'OFF';
