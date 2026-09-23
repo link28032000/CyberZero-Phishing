@@ -443,18 +443,7 @@ const appState = {
 // ═══════════════════════════════════════════════════════════
 
 function isAppLocked(appName) {
-  if (appName === 'folder' || appName === 'antivirus') {
-    const malCat = CATEGORIES.find(c => c.id === 'malware');
-    return malCat ? !malCat.unlocked : true;
-  }
-  if (appName === 'comms') {
-    const socCat = CATEGORIES.find(c => c.id === 'social_engineering');
-    return socCat ? !socCat.unlocked : true;
-  }
-  if (appName === 'ransomware') {
-    const rwCat = CATEGORIES.find(c => c.id === 'ransomware');
-    return rwCat ? !rwCat.unlocked : true;
-  }
+  // All apps are always unlocked — no chapter prerequisites required
   return false;
 }
 
@@ -1263,7 +1252,7 @@ const CATEGORIES = [
     desc: 'Detect deceptive phishing emails, fraudulent online scams, and suspicious links to prevent credential theft.',
     specs: {
       threatType: 'Email Phishing & Fake Links',
-      app: '📧 Gmail & 🌐 Browser',
+      app: '📧 Email & 🌐 Browser',
       objective: '5 Threats Analyzed'
     },
     unlocked: true,
@@ -1335,15 +1324,10 @@ let activeCategoryStory = 'phishing';
 function updateDesktopBackgroundForPhase(phase) {
   const desktop = document.getElementById('desktop');
   if (!desktop) return;
-  if (phase === 'social_engineering' || phase === 'chapter3') {
-    desktop.style.backgroundImage = "linear-gradient(rgba(10, 15, 30, 0.65), rgba(10, 15, 30, 0.75)), url('assets/background/Coffe shop.png')";
-    desktop.style.backgroundSize = "cover";
-    desktop.style.backgroundPosition = "center";
-  } else {
-    desktop.style.backgroundImage = "";
-    desktop.style.backgroundSize = "";
-    desktop.style.backgroundPosition = "";
-  }
+  // Always keep normal desktop background (CSS gradient), same as Chapter 1
+  desktop.style.backgroundImage = "";
+  desktop.style.backgroundSize = "";
+  desktop.style.backgroundPosition = "";
 }
 
 function openCategoryHub() {
@@ -1610,7 +1594,7 @@ const VN_STORIES = {
       speaker: 'ZERO',
       tag: '🤖 AI CYBER GUIDE & NARRATOR',
       bg: 'assets/Cover.png',
-      text: 'To neutralize these threats, you will operate our simulated Desktop Environment: inspecting inboxes in Gmail, searching the Web Browser, examining files in Folder Explorer, running ShieldAV Anti-Virus, and taking command in the Incident Console.',
+      text: 'To neutralize these threats, you will operate our simulated Desktop Environment: inspecting inboxes in Email, searching the Web Browser, examining files in Folder Explorer, running ShieldAV Anti-Virus, and taking command in the Incident Console.',
       speed: 24,
       scene: 'story'
     },
@@ -4174,6 +4158,55 @@ function getPhishingSiteForUrl(url) {
   return null;
 }
 
+function isInternetConnected() {
+  if (typeof networkSettings === 'undefined') return true;
+  if (networkSettings.airplane) return false;
+  if (!networkSettings.wifi) return false;
+  if (!networkSettings.currentSsid) return false;
+  return true;
+}
+
+function openWifiSettingsFromBrowser() {
+  openApp('wifi-settings');
+  focusWindow('wifi-settings');
+  if (typeof switchWifiSettingsTab === 'function') {
+    switchWifiSettingsTab('wifi');
+  }
+  showToast('📶 Opened Wi-Fi Settings — turn on Wi-Fi to reconnect.', 'info');
+}
+
+function renderChromeOfflineError(url) {
+  return `
+    <div class="chrome-error-page chrome-offline-page">
+      <div class="chrome-error-container">
+        <div class="chrome-error-icon chrome-dino-icon" aria-hidden="true">
+          <svg width="56" height="56" viewBox="0 0 48 48" fill="#5f6368" style="display:block;">
+            <path d="M30 4h14v4h2v8h-2v2h-6v4h6v2h-4v2h-4v2h-2v2h-2v4h2v2h4v2h-6v2h-2v2h-2v2h-2v2h-2v4h-2v4h-4v-4h2v-4h2v-2h2v-2h2v-2h2v-2h-2v-4h-2v-2h-2v-2h-2v-2h-2v-2h-2v-4h2v-2h2v-2h2v-4h2v-4h2v-2h2V4z M40 8h2v2h-2z"/>
+            <rect x="22" y="24" width="4" height="2" fill="#5f6368"/>
+            <rect x="20" y="32" width="2" height="6" fill="#5f6368"/>
+            <rect x="26" y="32" width="2" height="6" fill="#5f6368"/>
+          </svg>
+        </div>
+        <h1 class="chrome-error-heading">No internet</h1>
+        <div class="chrome-error-suggestions">
+          <p class="chrome-error-try" style="font-size:14px;color:#5f6368;margin-bottom:8px;font-weight:500;">Try:</p>
+          <ul class="chrome-error-list">
+            <li>Checking the network cables, modem, and router</li>
+            <li><a href="#" class="chrome-diag-link" onclick="openWifiSettingsFromBrowser(); return false;">Reconnecting to Wi-Fi</a></li>
+            <li><a href="#" class="chrome-diag-link" onclick="openNetworkDiagnostics('wifi'); return false;">Running Windows Network Diagnostics</a></li>
+          </ul>
+        </div>
+        <div class="chrome-error-actions">
+          <button class="chrome-reload-btn" id="chrome-reload-btn" onclick="triggerChromeReload('${escapeHtml(url)}')">
+            <span class="chrome-reload-icon">🔄</span> Reload
+          </button>
+        </div>
+        <div class="chrome-error-code">ERR_INTERNET_DISCONNECTED</div>
+      </div>
+    </div>
+  `;
+}
+
 function renderChromeDnsError(url) {
   const hostname = extractHostFromUrl(url);
   return `
@@ -4233,12 +4266,17 @@ function triggerChromeReload(url) {
 
   setTimeout(() => {
     if (tab) {
-      _applyPageToContent(url);
+      _applyPageToContent(url || tab.url);
     }
   }, 650);
 }
 
 function openNetworkDiagnostics(host) {
+  if (!isInternetConnected()) {
+    showToast('🔍 Windows Network Diagnostics: Your Wi-Fi network adapter is turned off or disconnected. Please reconnect to Wi-Fi to restore internet access (ERR_INTERNET_DISCONNECTED).', 'warning');
+    if (typeof AudioManager !== 'undefined') AudioManager.playWrong();
+    return;
+  }
   showToast(`🔍 Windows Network Diagnostics: Internet connection is active, but "${host}" cannot be found on the DNS server (DNS_PROBE_FINISHED_NXDOMAIN).`, 'warning');
   if (typeof AudioManager !== 'undefined') AudioManager.playWrong();
 }
@@ -4326,6 +4364,13 @@ function _applyPageToContent(url) {
     if (tab) { tab.title = title; tab.icon = icon; }
     if (security) { security.textContent = secText; security.className = 'browser-security-indicator' + (secClass ? ' ' + secClass : ''); }
     renderTabStrip();
+  }
+
+  // 0. OFFLINE CHECK: If Wi-Fi is turned off or disconnected
+  if (!isInternetConnected()) {
+    setTabMeta('No internet', '🦖', '⚠️ Disconnected', 'not-secure');
+    content.innerHTML = renderChromeOfflineError(url);
+    return;
   }
 
   const isGoogleHome = url === 'https://www.google.com' || url === '';
@@ -7796,6 +7841,26 @@ const LOADING_TIPS = [
   }
 ];
 
+// Simple beep for loading screen — bypasses AudioManager (may not be unlocked yet)
+function _playLoadingBeep(freq, gain, delay) {
+  try {
+    const AudioCtx = window.AudioContext || window.webkitAudioContext;
+    if (!AudioCtx) return;
+    const ac = new AudioCtx();
+    const osc = ac.createOscillator();
+    const g = ac.createGain();
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(freq, ac.currentTime + delay);
+    g.gain.setValueAtTime(gain, ac.currentTime + delay);
+    g.gain.exponentialRampToValueAtTime(0.0001, ac.currentTime + delay + 0.18);
+    osc.connect(g);
+    g.connect(ac.destination);
+    osc.start(ac.currentTime + delay);
+    osc.stop(ac.currentTime + delay + 0.2);
+    setTimeout(() => { try { ac.close(); } catch(e){} }, (delay + 0.3) * 1000);
+  } catch(e) {}
+}
+
 function startFromTitleMenu() {
   // Hide desktop immediately — prevents any flash of desktop behind overlays
   const desktop = document.getElementById('desktop');
@@ -7811,6 +7876,9 @@ function startFromTitleMenu() {
   // Activate loading overlay smoothly FIRST, then close title menu
   ls.classList.remove('ls-leaving');
   ls.classList.add('ls-active');
+
+  // Play start-of-loading beep
+  _playLoadingBeep(320, 0.12, 0);
 
   // Now safely close title menu — loading screen is already covering everything
   closeOverlay('overlay-title-menu');
@@ -7838,6 +7906,7 @@ function startFromTitleMenu() {
   const DURATION = 10000; // 10 seconds
   let startTime = null;
   let barAnimId = null;
+  let halfwayBeepFired = false;
 
   function animateBar(ts) {
     if (!startTime) startTime = ts;
@@ -7847,6 +7916,12 @@ function startFromTitleMenu() {
 
     // Update percentage text
     if (pctEl) pctEl.textContent = pct + '%';
+
+    // Midway beep at 50%
+    if (!halfwayBeepFired && pct >= 50) {
+      halfwayBeepFired = true;
+      _playLoadingBeep(520, 0.1, 0);
+    }
 
     // Animate pixel blocks
     if (barInner) {
@@ -7906,6 +7981,11 @@ function startFromTitleMenu() {
         b.classList.remove('lit-edge');
       });
     }
+
+    // Play success chime: three ascending beeps
+    _playLoadingBeep(440, 0.12, 0);
+    _playLoadingBeep(660, 0.12, 0.12);
+    _playLoadingBeep(880, 0.18, 0.24);
 
     // Launch game prologue
     _doStartFromTitleMenu();
@@ -8939,6 +9019,13 @@ function updateNetworkUI() {
       if (tileAvBadge) tileAvBadge.textContent = 'OFF';
     }
   }
+
+  // Live sync open browser with network status
+  if (typeof appState !== 'undefined' && appState.browser && appState.browser.open) {
+    if (typeof renderActiveTab === 'function') {
+      renderActiveTab();
+    }
+  }
 }
 
 function toggleWifiSetting() {
@@ -9420,6 +9507,15 @@ document.addEventListener('click', (e) => {
   if (calFlyout && !calFlyout.classList.contains('hidden')) {
     if (!calFlyout.contains(e.target) && (!clockBtn || !clockBtn.contains(e.target))) {
       closeCalendarFlyout();
+    }
+  }
+
+  // Start Power Dropdown
+  const pMenu = document.getElementById('start-power-dropdown');
+  const pWrap = document.querySelector('.start-power-wrap');
+  if (pMenu && !pMenu.classList.contains('hidden')) {
+    if (!pWrap || !pWrap.contains(e.target)) {
+      pMenu.classList.add('hidden');
     }
   }
 });

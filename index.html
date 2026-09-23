@@ -23,9 +23,9 @@
   <div class="desktop-icons">
     <!-- Column 1: Main / Unlocked Apps -->
     <div class="desktop-icons-col">
-      <div class="desktop-icon" id="icon-gmail" onclick="openApp('gmail')" title="Gmail — Email Phishing Investigation (Ace)">
-        <div class="icon-img"><img src="assets/icons/apps/mail.svg" alt="Gmail" style="width:36px;height:36px;"></div>
-        <span>Gmail</span>
+      <div class="desktop-icon" id="icon-gmail" onclick="openApp('gmail')" title="Email — Phishing Investigation (Ace)">
+        <div class="icon-img"><img src="assets/icons/apps/mail.svg" alt="Email" style="width:36px;height:36px;"></div>
+        <span>Email</span>
       </div>
       <div class="desktop-icon" id="icon-browser" onclick="openApp('browser')" title="Browser — Cyber-Net Web Search">
         <div class="icon-img"><img src="assets/icons/apps/browser.svg" alt="Browser" style="width:36px;height:36px;"></div>
@@ -89,12 +89,12 @@
     </div>
   </div>
 
-  <!-- ── GMAIL WINDOW ── -->
+  <!-- ── EMAIL WINDOW ── -->
   <div id="win-gmail" class="app-window hidden" data-app="gmail">
     <div class="win-titlebar" id="titlebar-gmail">
       <div class="win-title">
         <span class="win-icon">📧</span>
-        <span>Gmail</span>
+        <span>Email</span>
       </div>
       <div class="win-controls">
         <button class="win-btn win-minimize" onclick="minimizeApp('gmail')" title="Minimize">─</button>
@@ -103,10 +103,10 @@
       </div>
     </div>
     <div class="win-body gmail-body">
-      <!-- Gmail Sidebar -->
+      <!-- Email Sidebar -->
       <div class="gmail-sidebar">
         <div class="gmail-logo">
-          <span class="gmail-logo-g">G</span><span class="gmail-logo-mail">mail</span>
+          <span class="gmail-logo-g">E</span><span class="gmail-logo-mail">mail</span>
         </div>
         <button class="gmail-compose-btn" disabled>✏ Compose</button>
         <div class="gmail-nav">
@@ -748,8 +748,8 @@
       </button>
     </div>
     <div class="taskbar-apps">
-      <button class="taskbar-app-btn" id="taskbar-gmail" onclick="taskbarClick('gmail')" title="Gmail — Email Phishing Investigation (Ace)">
-        <span><img src="assets/icons/apps/mail.svg" alt="Gmail" style="width:18px;height:18px;vertical-align:middle;"></span> Gmail
+      <button class="taskbar-app-btn" id="taskbar-gmail" onclick="taskbarClick('gmail')" title="Email — Phishing Investigation (Ace)">
+        <span><img src="assets/icons/apps/mail.svg" alt="Email" style="width:18px;height:18px;vertical-align:middle;"></span> Email
       </button>
       <button class="taskbar-app-btn" id="taskbar-browser" onclick="taskbarClick('browser')" title="Browser — Cyber-Net Web Search">
         <span><img src="assets/icons/apps/browser.svg" alt="Browser" style="width:18px;height:18px;vertical-align:middle;"></span> Browser
@@ -791,95 +791,98 @@
     </div>
   </div>
 
-  <!-- Pinned Apps Section Header -->
-  <div class="start-section-header">
-    <span class="start-section-name">Pinned Apps</span>
-    <span class="start-all-apps-label">Threat Modules</span>
+  <!-- Scrollable Apps & Recommendations Body -->
+  <div class="start-menu-scroll-body">
+    <!-- Pinned Apps Section Header -->
+    <div class="start-section-header">
+      <span class="start-section-name">Pinned Apps</span>
+      <span class="start-all-apps-label">Threat Modules</span>
+    </div>
+
+    <!-- Clean Tile Grid -->
+    <div class="start-apps-grid" id="start-apps-grid">
+      <div class="start-app-tile" onclick="startMenuOpenApp('gmail')" id="start-app-gmail" title="Open Email Client (Ace)">
+        <div class="start-tile-icon"><img src="assets/icons/apps/mail.svg" alt="Email" style="width:32px;height:32px;"></div>
+        <div class="start-tile-name">Email</div>
+        <span class="start-tile-status active" id="start-badge-gmail">Open</span>
+      </div>
+
+      <div class="start-app-tile" onclick="startMenuOpenApp('browser')" id="start-app-browser" title="Open Cyber Browser">
+        <div class="start-tile-icon"><img src="assets/icons/apps/browser.svg" alt="Browser" style="width:32px;height:32px;"></div>
+        <div class="start-tile-name">Browser</div>
+        <span class="start-tile-status" id="start-badge-browser">Ready</span>
+      </div>
+
+      <div class="start-app-tile locked" onclick="startMenuOpenApp('folder')" id="start-app-folder" title="File Explorer (Nishren / Malware)">
+        <div class="start-tile-icon"><img src="assets/icons/apps/folder.svg" alt="Folder" style="width:32px;height:32px;"></div>
+        <div class="start-tile-name">Explorer</div>
+        <span class="start-tile-status lock" id="start-badge-folder">🔒 Locked</span>
+      </div>
+
+      <div class="start-app-tile locked" onclick="startMenuOpenApp('antivirus')" id="start-app-antivirus" title="ShieldAV Anti-Virus (Nishren / Malware)">
+        <div class="start-tile-icon"><img src="assets/icons/apps/windows_defender.svg" alt="ShieldAV" style="width:32px;height:32px;"></div>
+        <div class="start-tile-name">ShieldAV</div>
+        <span class="start-tile-status lock" id="start-badge-antivirus">🔒 Locked</span>
+      </div>
+
+      <div class="start-app-tile" onclick="startMenuOpenApp('comms')" id="start-app-comms" title="Phone Link">
+        <div class="start-tile-icon"><img src="assets/icons/apps/Smartphone.svg" alt="Phone Link" style="width:32px;height:32px;"></div>
+        <div class="start-tile-name">Phone Link</div>
+        <span class="start-tile-status" id="start-badge-comms">Ready</span>
+      </div>
+
+      <div class="start-app-tile" onclick="startMenuOpenApp('wifi-settings')" id="start-app-settings" title="Settings (Network &amp; Security)">
+        <div class="start-tile-icon"><img src="assets/icons/apps/settings.svg" alt="Settings" style="width:32px;height:32px;"></div>
+        <div class="start-tile-name">Settings</div>
+        <span class="start-tile-status" id="start-badge-settings">Ready</span>
+      </div>
+    </div>
+
+    <!-- Recommended Section Header -->
+    <div class="start-section-header" style="margin-top: 14px;">
+      <span class="start-section-name">Recommended</span>
+      <span class="start-all-apps-label">Available Apps</span>
+    </div>
+    <div class="start-recommended-list" id="start-recommended-list">
+      <div class="start-recommended-item" onclick="startMenuOpenApp('gmail')" title="Open Email Client">
+        <div class="rec-file-icon"><img src="assets/icons/apps/mail.svg" alt="Email" style="width:28px;height:28px;"></div>
+        <div class="rec-file-info">
+          <div class="rec-file-name">Email Client</div>
+          <div class="rec-file-meta">Phishing Email Investigation • Available</div>
+        </div>
+      </div>
+      <div class="start-recommended-item" onclick="startMenuOpenApp('browser')" title="Open Cyber Browser">
+        <div class="rec-file-icon"><img src="assets/icons/apps/browser.svg" alt="Browser" style="width:28px;height:28px;"></div>
+        <div class="rec-file-info">
+          <div class="rec-file-name">Cyber Browser</div>
+          <div class="rec-file-meta">Cyber-Net Web Engine • Available</div>
+        </div>
+      </div>
+      <div class="start-recommended-item" onclick="startMenuAction('notes')" title="Toggle Case Sticky Notes">
+        <div class="rec-file-icon"><img src="assets/icons/apps/note.svg" alt="Notes" style="width:28px;height:28px;"></div>
+        <div class="rec-file-info">
+          <div class="rec-file-name">Case Sticky Notes</div>
+          <div class="rec-file-meta">Scoring Rules &amp; Guide • Available</div>
+        </div>
+      </div>
+      <div class="start-recommended-item hidden" id="rec-app-folder" onclick="startMenuOpenApp('folder')" title="Open File Explorer">
+        <div class="rec-file-icon"><img src="assets/icons/apps/folder.svg" alt="Folder" style="width:28px;height:28px;"></div>
+        <div class="rec-file-info">
+          <div class="rec-file-name">File Explorer</div>
+          <div class="rec-file-meta">Quarantine &amp; File Inspection • Available</div>
+        </div>
+      </div>
+      <div class="start-recommended-item hidden" id="rec-app-antivirus" onclick="startMenuOpenApp('antivirus')" title="Open ShieldAV Anti-Virus">
+        <div class="rec-file-icon"><img src="assets/icons/apps/windows_defender.svg" alt="ShieldAV" style="width:28px;height:28px;"></div>
+        <div class="rec-file-info">
+          <div class="rec-file-name">ShieldAV Anti-Virus</div>
+          <div class="rec-file-meta">Real-Time Virus Shield • Available</div>
+        </div>
+      </div>
+    </div>
   </div>
 
-  <!-- Clean Tile Grid -->
-  <div class="start-apps-grid" id="start-apps-grid">
-    <div class="start-app-tile" onclick="startMenuOpenApp('gmail')" id="start-app-gmail" title="Open Gmail Client (Ace)">
-      <div class="start-tile-icon"><img src="assets/icons/apps/mail.svg" alt="Gmail" style="width:32px;height:32px;"></div>
-      <div class="start-tile-name">Gmail</div>
-      <span class="start-tile-status active" id="start-badge-gmail">Open</span>
-    </div>
-
-    <div class="start-app-tile" onclick="startMenuOpenApp('browser')" id="start-app-browser" title="Open Cyber Browser">
-      <div class="start-tile-icon"><img src="assets/icons/apps/browser.svg" alt="Browser" style="width:32px;height:32px;"></div>
-      <div class="start-tile-name">Browser</div>
-      <span class="start-tile-status" id="start-badge-browser">Ready</span>
-    </div>
-
-    <div class="start-app-tile locked" onclick="startMenuOpenApp('folder')" id="start-app-folder" title="File Explorer (Nishren / Malware)">
-      <div class="start-tile-icon"><img src="assets/icons/apps/folder.svg" alt="Folder" style="width:32px;height:32px;"></div>
-      <div class="start-tile-name">Explorer</div>
-      <span class="start-tile-status lock" id="start-badge-folder">🔒 Locked</span>
-    </div>
-
-    <div class="start-app-tile locked" onclick="startMenuOpenApp('antivirus')" id="start-app-antivirus" title="ShieldAV Anti-Virus (Nishren / Malware)">
-      <div class="start-tile-icon"><img src="assets/icons/apps/windows_defender.svg" alt="ShieldAV" style="width:32px;height:32px;"></div>
-      <div class="start-tile-name">ShieldAV</div>
-      <span class="start-tile-status lock" id="start-badge-antivirus">🔒 Locked</span>
-    </div>
-
-    <div class="start-app-tile" onclick="startMenuOpenApp('comms')" id="start-app-comms" title="Phone Link">
-      <div class="start-tile-icon"><img src="assets/icons/apps/Smartphone.svg" alt="Phone Link" style="width:32px;height:32px;"></div>
-      <div class="start-tile-name">Phone Link</div>
-      <span class="start-tile-status" id="start-badge-comms">Ready</span>
-    </div>
-
-    <div class="start-app-tile" onclick="startMenuOpenApp('wifi-settings')" id="start-app-settings" title="Settings (Network &amp; Security)">
-      <div class="start-tile-icon"><img src="assets/icons/apps/settings.svg" alt="Settings" style="width:32px;height:32px;"></div>
-      <div class="start-tile-name">Settings</div>
-      <span class="start-tile-status" id="start-badge-settings">Ready</span>
-    </div>
-  </div>
-
-  <!-- Recommended Section Header -->
-  <div class="start-section-header" style="margin-top: 14px;">
-    <span class="start-section-name">Recommended</span>
-    <span class="start-all-apps-label">Available Apps</span>
-  </div>
-  <div class="start-recommended-list" id="start-recommended-list">
-    <div class="start-recommended-item" onclick="startMenuOpenApp('gmail')" title="Open Gmail Client">
-      <div class="rec-file-icon"><img src="assets/icons/apps/mail.svg" alt="Gmail" style="width:28px;height:28px;"></div>
-      <div class="rec-file-info">
-        <div class="rec-file-name">Gmail Client</div>
-        <div class="rec-file-meta">Phishing Email Investigation • Available</div>
-      </div>
-    </div>
-    <div class="start-recommended-item" onclick="startMenuOpenApp('browser')" title="Open Cyber Browser">
-      <div class="rec-file-icon"><img src="assets/icons/apps/browser.svg" alt="Browser" style="width:28px;height:28px;"></div>
-      <div class="rec-file-info">
-        <div class="rec-file-name">Cyber Browser</div>
-        <div class="rec-file-meta">Cyber-Net Web Engine • Available</div>
-      </div>
-    </div>
-    <div class="start-recommended-item" onclick="startMenuAction('notes')" title="Toggle Case Sticky Notes">
-      <div class="rec-file-icon"><img src="assets/icons/apps/note.svg" alt="Notes" style="width:28px;height:28px;"></div>
-      <div class="rec-file-info">
-        <div class="rec-file-name">Case Sticky Notes</div>
-        <div class="rec-file-meta">Scoring Rules &amp; Guide • Available</div>
-      </div>
-    </div>
-    <div class="start-recommended-item hidden" id="rec-app-folder" onclick="startMenuOpenApp('folder')" title="Open File Explorer">
-      <div class="rec-file-icon"><img src="assets/icons/apps/folder.svg" alt="Folder" style="width:28px;height:28px;"></div>
-      <div class="rec-file-info">
-        <div class="rec-file-name">File Explorer</div>
-        <div class="rec-file-meta">Quarantine &amp; File Inspection • Available</div>
-      </div>
-    </div>
-    <div class="start-recommended-item hidden" id="rec-app-antivirus" onclick="startMenuOpenApp('antivirus')" title="Open ShieldAV Anti-Virus">
-      <div class="rec-file-icon"><img src="assets/icons/apps/windows_defender.svg" alt="ShieldAV" style="width:28px;height:28px;"></div>
-      <div class="rec-file-info">
-        <div class="rec-file-name">ShieldAV Anti-Virus</div>
-        <div class="rec-file-meta">Real-Time Virus Shield • Available</div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Windows 11 Profile & Power Footer Bar -->
+  <!-- Windows 11 Profile & Power Footer Bar (Always Fixed Below Available Apps) -->
   <div class="start-menu-footer">
     <div class="start-user-profile">
       <div class="start-avatar">👨‍🎓</div>
@@ -889,8 +892,11 @@
       </div>
     </div>
     <div class="start-power-wrap">
-      <button class="start-power-btn" onclick="togglePowerMenu(event)" title="Power &amp; Terminal Controls" aria-label="Power Options">
-        ⏻
+      <button class="start-power-btn" id="start-power-btn" onclick="togglePowerMenu(event)" title="Power &amp; Terminal Controls" aria-label="Power Options">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M18.36 6.64a9 9 0 1 1-12.73 0"></path>
+          <line x1="12" y1="2" x2="12" y2="12"></line>
+        </svg>
       </button>
       <div id="start-power-dropdown" class="power-dropdown hidden">
         <button onclick="startMenuPower('restart')">🔄 Restart Mission</button>
@@ -1135,7 +1141,7 @@
           <div class="notif-card-icon notif-icon-mail">📧</div>
           <div class="notif-card-content">
             <div class="notif-card-top">
-              <span class="notif-card-source">Gmail Client</span>
+              <span class="notif-card-source">Email Client</span>
               <span class="notif-card-time">12m ago</span>
             </div>
             <div class="notif-card-title">Ace's Urgent Email — Phishing Alert</div>
@@ -1743,7 +1749,7 @@
       <div class="gdemo-win-header">
         <div class="gdemo-win-title">
           <span class="win-icon">📧</span>
-          <span>Gmail — Phishing Investigation Tutorial</span>
+          <span>Email — Phishing Investigation Tutorial</span>
         </div>
         <span class="gdemo-phase-badge">EMAIL DEMO</span>
       </div>

@@ -1763,6 +1763,20 @@ p { line-height: 1.6; }
   stroke: #5f6368;
 }
 
+.chrome-dino-icon svg {
+  stroke: none !important;
+  fill: #5f6368;
+  width: 56px;
+  height: 56px;
+}
+
+.chrome-error-try {
+  font-size: 14px;
+  color: #5f6368;
+  margin: 0 0 10px 0;
+  font-weight: 500;
+}
+
 .chrome-error-heading {
   font-size: 22px;
   font-weight: 500;
@@ -6228,15 +6242,15 @@ p { line-height: 1.6; }
   z-index: 99995;
   width: 440px;
   max-width: calc(100vw - 24px);
-  max-height: calc(100vh - 80px);
+  max-height: calc(100vh - 72px);
   background: #0a1628;
   border: 1px solid rgba(79, 195, 247, 0.3);
   border-radius: 14px;
   box-shadow: 0 20px 50px rgba(0, 0, 0, 0.9), 0 0 28px rgba(79, 195, 247, 0.18);
   display: flex;
   flex-direction: column;
-  overflow: hidden;
-  padding: 16px 18px;
+  overflow: visible;
+  padding: 16px 18px 12px;
   color: var(--text-primary);
   opacity: 1;
   transform: translateY(0) scale(1);
@@ -6419,14 +6433,35 @@ p { line-height: 1.6; }
   color: var(--text-muted);
 }
 
-/* Windows 11 Profile & Power Footer Bar */
+/* Scrollable Apps & Recommendations Container */
+.start-menu-scroll-body {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding-right: 4px;
+  display: flex;
+  flex-direction: column;
+}
+.start-menu-scroll-body::-webkit-scrollbar {
+  width: 4px;
+}
+.start-menu-scroll-body::-webkit-scrollbar-thumb {
+  background: rgba(79, 195, 247, 0.25);
+  border-radius: 4px;
+}
+
+/* Windows 11 Profile & Power Footer Bar (Always Fixed Below Available Apps) */
 .start-menu-footer {
+  flex-shrink: 0;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-top: 14px;
-  padding-top: 12px;
-  border-top: 1px solid rgba(79, 195, 247, 0.14);
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid rgba(79, 195, 247, 0.16);
+  position: relative;
+  z-index: 10;
 }
 .start-user-profile {
   display: flex;
@@ -6477,12 +6512,12 @@ p { line-height: 1.6; }
   position: relative;
 }
 .start-power-btn {
-  background: rgba(244, 67, 54, 0.12);
-  border: 1px solid rgba(244, 67, 54, 0.3);
-  color: #ff8a80;
+  background: rgba(244, 67, 54, 0.16);
+  border: 1px solid rgba(244, 67, 54, 0.4);
+  color: #ff6e6e;
   font-size: 15px;
-  width: 34px;
-  height: 34px;
+  width: 36px;
+  height: 36px;
   border-radius: 50%;
   cursor: pointer;
   display: flex;
@@ -6490,11 +6525,15 @@ p { line-height: 1.6; }
   justify-content: center;
   transition: all 0.18s ease;
 }
+.start-power-btn svg {
+  display: block;
+}
 .start-power-btn:hover {
-  background: rgba(244, 67, 54, 0.28);
+  background: rgba(244, 67, 54, 0.32);
   color: #fff;
-  box-shadow: 0 0 12px rgba(244, 67, 54, 0.35);
-  transform: scale(1.05);
+  border-color: #ff5252;
+  box-shadow: 0 0 14px rgba(244, 67, 54, 0.45);
+  transform: scale(1.06);
 }
 .start-power-btn:active {
   transform: scale(0.95);
