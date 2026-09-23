@@ -435,7 +435,10 @@ const appState = {
   'wifi-settings': { open: false, minimized: false, maximized: false, hasBeenPositioned: false },
   'security-settings': { open: false, minimized: false, maximized: false, hasBeenPositioned: false },
   taskmanager: { open: false, minimized: false, maximized: false, hasBeenPositioned: false },
-  scanner: { open: false, minimized: false, maximized: false, hasBeenPositioned: false }
+  scanner: { open: false, minimized: false, maximized: false, hasBeenPositioned: false },
+  docviewer: { open: false, minimized: false, maximized: false, hasBeenPositioned: false },
+  imageviewer: { open: false, minimized: false, maximized: false, hasBeenPositioned: false },
+  videoplayer: { open: false, minimized: false, maximized: false, hasBeenPositioned: false }
 };
 
 // ═══════════════════════════════════════════════════════════
@@ -575,6 +578,11 @@ function centerWindow(appName) {
 
 function closeApp(appName) {
   const win = document.getElementById(`win-${appName}`);
+  if (!win) return;
+  if (appName === 'videoplayer') {
+    const vid = document.getElementById('videoplayer-video');
+    if (vid) vid.pause();
+  }
   appState[appName].open = false;
   appState[appName].minimized = false;
   appState[appName].maximized = false;
@@ -682,7 +690,7 @@ function minimizeApp_restore(appName) {
 
 function updateTaskbar() {
   updateAppLockStates();
-  ['gmail', 'browser', 'folder', 'antivirus', 'comms', 'ransomware', 'wifi-settings'].forEach(appName => {
+  ['gmail', 'browser', 'folder', 'antivirus', 'comms', 'ransomware', 'wifi-settings', 'docviewer', 'imageviewer', 'videoplayer'].forEach(appName => {
     const btn = document.getElementById(`taskbar-${appName}`);
     if (!btn) return;
     const state = appState[appName];
@@ -690,11 +698,16 @@ function updateTaskbar() {
 
     btn.classList.remove('open', 'active', 'minimized');
     if (state.open) {
+      btn.classList.remove('hidden');
       btn.classList.add('open');
       if (state.minimized) {
         btn.classList.add('minimized');
       } else if (win && win.classList.contains('focused')) {
         btn.classList.add('active');
+      }
+    } else {
+      if (appName === 'docviewer' || appName === 'imageviewer' || appName === 'videoplayer') {
+        btn.classList.add('hidden');
       }
     }
   });
@@ -822,6 +835,13 @@ function closeOverlay(id) {
 function hideAllOverlays() {
   document.querySelectorAll('.overlay').forEach(o => o.classList.remove('active'));
   document.getElementById('overlay-backdrop').classList.remove('active');
+  const av = document.getElementById('overlay-awareness-video');
+  if (av) {
+    av.classList.add('hidden');
+    av.classList.remove('active');
+    const vid = document.getElementById('awareness-real-video');
+    if (vid) vid.pause();
+  }
   // Only reveal desktop if the loading screen is NOT currently active
   const ls = document.getElementById('overlay-loading-screen');
   const loadingActive = ls && ls.classList.contains('ls-active');
@@ -2081,7 +2101,7 @@ function vnPlayLine(index) {
         if (activeCategoryStory === 'prologue') nextLabel = '📝 Start Pre-Assessment Exam ➔';
         else if (activeCategoryStory === 'phishing') nextLabel = 'Start Phishing Demo ➔';
         else if (activeCategoryStory === 'malware') nextLabel = 'Start Malware Lab ➔';
-        else if (activeCategoryStory === 'social_engineering') nextLabel = '🎬 Watch Awareness Video ➔';
+        else if (activeCategoryStory === 'social_engineering') nextLabel = '🎬 Start Social Engineering Mission ➔';
         else if (activeCategoryStory === 'ransomware') nextLabel = 'Start Ransomware Console ➔';
         else if (activeCategoryStory === 'grand_finale') nextLabel = 'View Master Certificate ➔';
       }
@@ -2113,7 +2133,7 @@ function vnAdvance() {
       if (activeCategoryStory === 'prologue') nextLabel = '📝 Start Pre-Assessment Exam ➔';
       else if (activeCategoryStory === 'phishing') nextLabel = 'Start Phishing Demo ➔';
       else if (activeCategoryStory === 'malware') nextLabel = 'Start Malware Lab ➔';
-      else if (activeCategoryStory === 'social_engineering') nextLabel = '🎬 Watch Awareness Video ➔';
+      else if (activeCategoryStory === 'social_engineering') nextLabel = '🎬 Start Social Engineering Mission ➔';
       else if (activeCategoryStory === 'ransomware') nextLabel = 'Start Ransomware Console ➔';
       else if (activeCategoryStory === 'grand_finale') nextLabel = 'View Master Certificate ➔';
     }
@@ -2150,7 +2170,7 @@ function vnFinish() {
   } else if (activeCategoryStory === 'malware') {
     startMalwareDemo();
   } else if (activeCategoryStory === 'social_engineering') {
-    startAwarenessVideo();
+    startGroup4Mission();
   } else if (activeCategoryStory === 'ransomware') {
     startRansomwareMission();
   } else if (activeCategoryStory === 'grand_finale') {
@@ -5194,7 +5214,8 @@ const FOLDER_FILES = [
     hash: '098f6bcd4621d373cade4e832627b4f6cf4c45a76e9c60e34c98f98c4f74d081',
     analysis: '✅ Standard digital photograph. Valid JFIF/EXIF header metadata, no steganographic or buffer overflow payload.',
     quarantined: false,
-    scanned: false
+    scanned: false,
+    mediaSrc: 'assets/background/Coffe shop.png'
   },
   {
     id: 'f7',
@@ -5229,6 +5250,24 @@ const FOLDER_FILES = [
     analysis: '✅ Standard Excel workbook. Clean formulas, digitally unsigned VBA macros disabled, zero malicious hooks.',
     quarantined: false,
     scanned: false
+  },
+  {
+    id: 'f9',
+    name: 'cyber_awareness_clip.mp4',
+    fakeExt: 'mp4',
+    realExt: 'mp4',
+    type: 'MP4 Video File (.mp4)',
+    size: '17.3 MB',
+    date: '9/6/2026 10:20 AM',
+    icon: '🎬',
+    isMalware: false,
+    threatName: 'Clean File',
+    threatCategory: 'SAFE',
+    hash: '7c91a6d40bf420404a011733cfb7b190d62c65bf0bcda32b57b277d9ad9f99aa',
+    analysis: '✅ Standard H.264 / AAC multimedia file. Verified digital container structure with no malicious buffer overflow triggers.',
+    quarantined: false,
+    scanned: false,
+    mediaSrc: 'assets/video/video3.mp4'
   }
 ];
 
@@ -5241,7 +5280,7 @@ const MALWARE_DEMO_SCRIPT = [
     step: 0,
     label: 'Welcome',
     objective: 'Meet your Chapter 2 malware hunting toolkit',
-    speech: `<strong>Welcome to Chapter 2, Student! 🛡️</strong><br><br>Cybercriminals aren't just sending phishing emails — they're slipping <strong>malicious payloads</strong> directly into file downloads.<br><br>I'll show you how to inspect files in your <strong>Folder</strong> and neutralize threats with <strong>Anti-Virus</strong>!`,
+    speech: `<strong>Welcome to Chapter 2, Investigator! 🛡️</strong><br><br>Attackers don't just rely on fake emails — they disguise <strong>dangerous malware payloads</strong> inside ordinary-looking downloads.<br><br>In this guided demo, you will learn how to inspect files in the <strong>Folder (Downloads)</strong> and neutralize threats using <strong>ShieldAV Anti-Virus</strong>!`,
     btn: "Let's Begin →",
     action: null
   },
@@ -5249,7 +5288,7 @@ const MALWARE_DEMO_SCRIPT = [
     step: 1,
     label: 'Inspect Folder',
     objective: 'Select a suspicious file in Downloads',
-    speech: `📁 <strong>STEP 1: INSPECT YOUR DOWNLOADS</strong><br><br>Attackers disguise files with innocent names like payroll or invoices.<br><br>Let's select <em style="color:var(--accent-orange)">bonus_payroll_sept.pdf.exe</em> from the Folder →`,
+    speech: `📁 <strong>STEP 1: INSPECT YOUR DOWNLOADS</strong><br><br>Attackers disguise files with convincing business names like payroll, invoices, or bonuses.<br><br>Let's select <em style="color:#ffab40;font-weight:700">bonus_payroll_sept.pdf.exe</em> from the file list on the right →`,
     btn: 'Select File →',
     action: 'select-file-1'
   },
@@ -5257,7 +5296,7 @@ const MALWARE_DEMO_SCRIPT = [
     step: 2,
     label: 'Double Extension',
     objective: 'Spot the fake extension trick',
-    speech: `🔍 <strong>CATCH THE DOUBLE EXTENSION TRICK</strong><br><br>Look closely at the actual extension: <span class="capy-code">.exe</span>!<br><br>Attackers put <em>.pdf</em> in the filename hoping you only see "pdf". But Windows executes the final extension: <strong>.exe</strong>. Opening this runs binary malware!`,
+    speech: `🔍 <strong>CATCH THE DOUBLE EXTENSION TRICK</strong><br><br>Look closely at the actual extension in the inspection panel: <span class="capy-code">.exe</span>!<br><br>Attackers append <em>.pdf</em> into the filename hoping you only notice the document name. But Windows executes the final extension: <strong>.exe</strong>. Opening this runs dangerous binary code!`,
     btn: 'Check Extension →',
     action: 'highlight-ext'
   },
@@ -5265,7 +5304,7 @@ const MALWARE_DEMO_SCRIPT = [
     step: 3,
     label: 'Send to AV',
     objective: 'Forward suspicious file to Anti-Virus',
-    speech: `⚡ <strong>STEP 2: SCAN BEFORE YOU OPEN</strong><br><br>Never double-click an unknown executable. Instead, click <strong>⚡ Scan with Anti-Virus</strong> to load it into the security engine →`,
+    speech: `⚡ <strong>STEP 2: SCAN BEFORE YOU OPEN</strong><br><br>Never open an unknown or unexpected executable. Instead, click <strong>⚡ Scan with Anti-Virus</strong> to load the file into the ShieldAV security engine →`,
     btn: 'Send to Anti-Virus →',
     action: 'send-to-av'
   },
@@ -5273,7 +5312,7 @@ const MALWARE_DEMO_SCRIPT = [
     step: 4,
     label: 'Enable Defense',
     objective: 'Turn ON Anti-Virus Protection',
-    speech: `🛡️ <strong>STEP 3: ACTIVATE REAL-TIME PROTECTION</strong><br><br>Notice the status banner: <span style="color:var(--accent-red);font-weight:700">⚠️ DEFENSE ENGINE DISABLED</span>!<br><br>Your Anti-Virus cannot scan or block malware while protection is turned off.<br><br>Click the <strong>PROTECTION [OFF]</strong> button to switch it <strong>ON</strong> →`,
+    speech: `🛡️ <strong>STEP 3: ACTIVATE REAL-TIME PROTECTION</strong><br><br>Notice the security status banner: <span style="color:#ff5252;font-weight:800">⚠️ DEFENSE ENGINE DISABLED</span>!<br><br>Your Anti-Virus cannot scan or block threats while protection is turned off.<br><br>Click the <strong>PROTECTION [OFF]</strong> switch to turn it <strong>ON</strong> →`,
     btn: 'Turn ON Anti-Virus →',
     action: 'turn-on-av'
   },
@@ -5281,7 +5320,7 @@ const MALWARE_DEMO_SCRIPT = [
     step: 5,
     label: 'Deep Scan',
     objective: 'Run heuristic & signature scan',
-    speech: `⚡ <strong>STEP 4: EXECUTE SIGNATURE SCAN</strong><br><br>Now that the engine is active, ShieldAV checks file signatures against virus databases and analyzes code routines.<br><br>Click <strong>⚡ Scan File</strong> to initiate the scan →`,
+    speech: `⚡ <strong>STEP 4: EXECUTE SIGNATURE SCAN</strong><br><br>Now that the engine is active, ShieldAV cross-references known malware hashes and heuristic threat signatures.<br><br>Click <strong>⚡ Scan File</strong> to initiate the scan →`,
     btn: 'Run Deep Scan →',
     action: 'run-av-scan'
   },
@@ -5289,7 +5328,7 @@ const MALWARE_DEMO_SCRIPT = [
     step: 6,
     label: 'Quarantine Threat',
     objective: 'Lock malware into the encrypted vault',
-    speech: `🚨 <strong>CONFIRMED THREAT — QUARANTINE!</strong><br><br>The scanner confirmed a critical backdoor trojan. Click <strong>🚩 QUARANTINE THREAT</strong> to lock it into the vault and earn <strong>+100 points</strong>!`,
+    speech: `🚨 <strong>CONFIRMED THREAT — QUARANTINE!</strong><br><br>ShieldAV detected a Trojan dropper payload. Click <strong>🚩 QUARANTINE THREAT</strong> to isolate the file into the secure vault and earn <strong>+100 points</strong>!`,
     btn: 'Quarantine Malware →',
     action: 'quarantine-threat'
   },
@@ -5297,7 +5336,7 @@ const MALWARE_DEMO_SCRIPT = [
     step: 7,
     label: 'Clean Files',
     objective: 'Identify safe legitimate files',
-    speech: `⚠️ <strong>BEWARE FALSE POSITIVES</strong><br><br>Do NOT quarantine every file! Quarantining a clean file costs you a <strong>−25 point penalty</strong>.<br><br>Let's check a safe company file: <em>project_roadmap_2026.docx</em> →`,
+    speech: `⚠️ <strong>BEWARE FALSE POSITIVES</strong><br><br>Do NOT quarantine every file you find! Quarantining a clean legitimate file incurs a <strong>−25 point penalty</strong>.<br><br>Let's inspect a safe business document: <em style="color:#00e5ff;font-weight:700">project_roadmap_2026.docx</em> →`,
     btn: 'Inspect Clean File →',
     action: 'select-clean-file'
   },
@@ -5305,7 +5344,7 @@ const MALWARE_DEMO_SCRIPT = [
     step: 8,
     label: 'Verify Safe',
     objective: 'Confirm clean scan verdict',
-    speech: `✅ <strong>CLEAN SCAN VERDICT</strong><br><br>Let's scan it in Anti-Virus to verify. ShieldAV checks for malicious macros and confirms it is completely safe.<br><br>Verdict: <strong>✓ NO ACTION NEEDED</strong>. Leave clean files alone so you don't lose points!`,
+    speech: `✅ <strong>CLEAN SCAN VERDICT</strong><br><br>ShieldAV scanned the document and verified clean headers with zero malicious macro payloads.<br><br>Verdict: <strong>✓ NO ACTION NEEDED</strong>. Leave verified clean files alone to protect your investigation score!`,
     btn: 'Verify Clean Scan →',
     action: 'scan-clean-file'
   },
@@ -5313,7 +5352,7 @@ const MALWARE_DEMO_SCRIPT = [
     step: 9,
     label: 'Briefing',
     objective: 'Start Chapter 2: Malware Hunter',
-    speech: `🏆 <strong>READY TO HUNT, STUDENT!</strong><br><br>📁 <strong>Check Files</strong> — Watch for double extensions (<em>.pdf.exe</em>), script droppers (<em>.vbs</em>), and suspicious executables (<em>.scr</em>, <em>.exe</em>).<br>🛡️ <strong>Anti-Virus Active</strong> — Keep Real-Time Protection ON to scan files and neutralize threats.<br><br><strong>Your Mission:</strong> 4 disguised malware threats are hidden in Downloads. Neutralize them all!`,
+    speech: `🏆 <strong>READY TO HUNT, INVESTIGATOR!</strong><br><br>📁 <strong>Folder (Downloads):</strong> Inspect files and watch for double extensions (<em>.pdf.exe</em>), script droppers (<em>.vbs</em>), and suspicious screensavers (<em>.scr</em>).<br><br>🛡️ <strong>ShieldAV:</strong> Keep Real-Time Protection ON, scan suspicious files, and quarantine all confirmed threats.<br><br><strong>Your Mission:</strong> 4 disguised malware threats are hidden in Downloads. Neutralize them all!`,
     btn: 'START HUNTING MALWARE →',
     action: 'done'
   }
@@ -5666,10 +5705,10 @@ function executeMalwareDemoAction(action, callback) {
             threatsList.innerHTML = `
               <div class="av-threat-item quarantined">
                 <div>
-                  <strong>bonus_payroll_sept.pdf.exe</strong>
-                  <div style="font-size:11px;color:var(--text-muted)">Trojan.Win32.DoubleExt • Quarantined into Vault</div>
+                  <strong style="color:#ffffff;font-size:13px">bonus_payroll_sept.pdf.exe</strong>
+                  <div style="font-size:12px;color:#cbd5e1;margin-top:2px">Trojan.Win32.DoubleExt • Quarantined into Vault</div>
                 </div>
-                <span style="color:#b388ff;font-weight:700;font-size:11px">🛡️ SECURED</span>
+                <span style="color:#c084fc;font-weight:800;font-size:11.5px">🛡️ SECURED</span>
               </div>`;
           }
 
@@ -5917,24 +5956,699 @@ function startMalwareMission() {
   showToast('📁 Chapter 2: Inspect files in Folder and use Anti-Virus to quarantine all 4 malware threats!', 'warning');
 }
 
+// ═══════════════════════════════════════════════════════════
+// REAL WINDOWS FILE EXPLORER & MULTI-VIEWER SYSTEM
+// ═══════════════════════════════════════════════════════════
+
+let currentExplorerFolder = 'downloads';
+let explorerViewMode = 'details'; // 'details' | 'grid'
+let previewPaneVisible = true;
+let explorerHistory = ['downloads'];
+let explorerHistoryIdx = 0;
+let explorerSortCol = 'name';
+let explorerSortAsc = true;
+
+// Additional folder virtual files for non-Downloads folders
+const EXPLORER_ADDITIONAL_FILES = {
+  documents: [
+    {
+      id: 'doc_arch',
+      name: 'project_architecture_notes.docx',
+      fakeExt: 'docx',
+      realExt: 'docx',
+      type: 'Microsoft Word Document',
+      size: '48 KB',
+      date: '9/6/2026 08:30 AM',
+      icon: '📄',
+      isMalware: false,
+      threatName: 'Clean File',
+      threatCategory: 'SAFE',
+      hash: 'a591a6d40bf420404a011733cfb7b190d62c65bf0bcda32b57b277d9ad9f146e',
+      analysis: '✅ Verified clean Word document. Normal Office OpenXML structure, zero macro scripts.',
+      quarantined: false,
+      scanned: true
+    },
+    {
+      id: 'doc_policy',
+      name: 'employee_security_policy.pdf',
+      fakeExt: 'pdf',
+      realExt: 'pdf',
+      type: 'Adobe Acrobat Document',
+      size: '220 KB',
+      date: '9/5/2026 04:15 PM',
+      icon: '📄',
+      isMalware: false,
+      threatName: 'Clean File',
+      threatCategory: 'SAFE',
+      hash: 'ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad',
+      analysis: '✅ Standard PDF document. No embedded JavaScript, exploits, or malicious streams.',
+      quarantined: false,
+      scanned: true
+    },
+    {
+      id: 'doc_ir',
+      name: 'cyber_incident_report_draft.docx',
+      fakeExt: 'docx',
+      realExt: 'docx',
+      type: 'Microsoft Word Document',
+      size: '62 KB',
+      date: '9/6/2026 09:10 AM',
+      icon: '📄',
+      isMalware: false,
+      threatName: 'Clean File',
+      threatCategory: 'SAFE',
+      hash: '9f83a45c71120404a011733cfb7b190d62c65bf0bcda32b57b277d9ad9fe018a',
+      analysis: '✅ Verified clean Word document. Contains incident timeline and forensic observations.',
+      quarantined: false,
+      scanned: false
+    }
+  ],
+  pictures: [
+    {
+      id: 'pic_retreat',
+      name: 'annual_team_retreat.jpg',
+      fakeExt: 'jpg',
+      realExt: 'jpg',
+      type: 'JPEG Image',
+      size: '1.2 MB',
+      date: '9/4/2026 02:22 PM',
+      icon: '🖼️',
+      isMalware: false,
+      threatName: 'Clean File',
+      threatCategory: 'SAFE',
+      hash: '098f6bcd4621d373cade4e832627b4f6cf4c45a76e9c60e34c98f98c4f74d081',
+      analysis: '✅ Standard digital photograph. Valid JFIF/EXIF header metadata, zero steganographic payloads.',
+      quarantined: false,
+      scanned: true,
+      mediaSrc: 'assets/background/Coffe shop.png'
+    },
+    {
+      id: 'pic_lab',
+      name: 'campus_cyber_lab_floorplan.png',
+      fakeExt: 'png',
+      realExt: 'png',
+      type: 'PNG Image',
+      size: '2.1 MB',
+      date: '9/2/2026 11:15 AM',
+      icon: '🖼️',
+      isMalware: false,
+      threatName: 'Clean File',
+      threatCategory: 'SAFE',
+      hash: '12384a6d40bf420404a011733cfb7b190d62c65bf0bcda32b57b277d9ad9fa90',
+      analysis: '✅ Clean architectural diagram of the school computer lab.',
+      quarantined: false,
+      scanned: false,
+      mediaSrc: 'assets/Cover.png'
+    },
+    {
+      id: 'pic_detective',
+      name: 'detective_badge_avatar.png',
+      fakeExt: 'png',
+      realExt: 'png',
+      type: 'PNG Image',
+      size: '1.1 MB',
+      date: '9/1/2026 08:00 AM',
+      icon: '🖼️',
+      isMalware: false,
+      threatName: 'Clean File',
+      threatCategory: 'SAFE',
+      hash: '89104a6d40bf420404a011733cfb7b190d62c65bf0bcda32b57b277d9ad9f9842',
+      analysis: '✅ Official Cyber Detective badge identification image.',
+      quarantined: false,
+      scanned: false,
+      mediaSrc: 'assets/Ace.png'
+    }
+  ],
+  videos: [
+    {
+      id: 'vid_awareness',
+      name: 'cyber_awareness_clip.mp4',
+      fakeExt: 'mp4',
+      realExt: 'mp4',
+      type: 'MP4 Video File (.mp4)',
+      size: '17.3 MB',
+      date: '9/6/2026 10:20 AM',
+      icon: '🎬',
+      isMalware: false,
+      threatName: 'Clean File',
+      threatCategory: 'SAFE',
+      hash: '7c91a6d40bf420404a011733cfb7b190d62c65bf0bcda32b57b277d9ad9f99aa',
+      analysis: '✅ Standard H.264 / AAC multimedia file. Verified digital container structure with no malicious buffer overflow triggers.',
+      quarantined: false,
+      scanned: false,
+      mediaSrc: 'assets/video/video3.mp4'
+    }
+  ],
+  desktop: [
+    {
+      id: 'desk_notes',
+      name: 'project_architecture_notes.docx',
+      fakeExt: 'docx',
+      realExt: 'docx',
+      type: 'Microsoft Word Document',
+      size: '48 KB',
+      date: '9/6/2026 08:30 AM',
+      icon: '📄',
+      isMalware: false,
+      threatName: 'Clean File',
+      threatCategory: 'SAFE',
+      hash: 'a591a6d40bf420404a011733cfb7b190d62c65bf0bcda32b57b277d9ad9f146e',
+      analysis: '✅ Verified clean Word document. Desktop shortcut to project documentation.',
+      quarantined: false,
+      scanned: true
+    },
+    {
+      id: 'desk_video',
+      name: 'cyber_awareness_clip.mp4',
+      fakeExt: 'mp4',
+      realExt: 'mp4',
+      type: 'MP4 Video File (.mp4)',
+      size: '17.3 MB',
+      date: '9/6/2026 10:20 AM',
+      icon: '🎬',
+      isMalware: false,
+      threatName: 'Clean File',
+      threatCategory: 'SAFE',
+      hash: '7c91a6d40bf420404a011733cfb7b190d62c65bf0bcda32b57b277d9ad9f99aa',
+      analysis: '✅ Verified clean video file shortcut.',
+      quarantined: false,
+      scanned: false,
+      mediaSrc: 'assets/video/video3.mp4'
+    }
+  ],
+  music: [
+    {
+      id: 'mus_theme',
+      name: 'cyberzero_main_theme.mp3',
+      fakeExt: 'mp3',
+      realExt: 'mp3',
+      type: 'MP3 Audio File (.mp3)',
+      size: '4.6 MB',
+      date: '9/6/2026 11:20 AM',
+      icon: '🎵',
+      isMalware: false,
+      threatName: 'Clean File',
+      threatCategory: 'SAFE',
+      hash: 'c4a89f012de940404a011733cfb7b190d62c65bf0bcda32b57b277d9ad9f91a0',
+      analysis: '✅ Verified clean MP3 audio stream (320 kbps). Clean acoustic ID3 tags, no malicious payload.',
+      quarantined: false,
+      scanned: true,
+      mediaSrc: 'assets/sounds/Hi - Wii.mp3',
+      artist: 'CyberZero OST • 320 kbps'
+    },
+    {
+      id: 'mus_lofi',
+      name: 'lofi_synthwave_study_session.mp3',
+      fakeExt: 'mp3',
+      realExt: 'mp3',
+      type: 'MP3 Audio File (.mp3)',
+      size: '3.8 MB',
+      date: '9/5/2026 03:40 PM',
+      icon: '🎵',
+      isMalware: false,
+      threatName: 'Clean File',
+      threatCategory: 'SAFE',
+      hash: 'b2195f012de940404a011733cfb7b190d62c65bf0bcda32b57b277d9ad9fe04b',
+      analysis: '✅ Verified clean stereo MP3 audio track. Zero obfuscated payloads in audio frame headers.',
+      quarantined: false,
+      scanned: true,
+      mediaSrc: 'assets/sounds/Hi - Wii.mp3',
+      artist: 'Lofi Cyber Lab • Chill Beats'
+    },
+    {
+      id: 'mus_investigation',
+      name: 'forensic_investigation_bgm.mp3',
+      fakeExt: 'mp3',
+      realExt: 'mp3',
+      type: 'MP3 Audio File (.mp3)',
+      size: '5.2 MB',
+      date: '9/4/2026 08:15 PM',
+      icon: '🎵',
+      isMalware: false,
+      threatName: 'Clean File',
+      threatCategory: 'SAFE',
+      hash: 'f7813a012de940404a011733cfb7b190d62c65bf0bcda32b57b277d9ad9f9391',
+      analysis: '✅ Standard MPEG-1 Audio Layer III file. Constant bit rate 320kbps, clean ID3 metadata.',
+      quarantined: false,
+      scanned: false,
+      mediaSrc: 'assets/sounds/Hi - Wii.mp3',
+      artist: 'Detective Focus Track'
+    },
+    {
+      id: 'mus_podcast',
+      name: 'zero_day_podcast_ep01.mp3',
+      fakeExt: 'mp3',
+      realExt: 'mp3',
+      type: 'MP3 Audio File (.mp3)',
+      size: '14.8 MB',
+      date: '9/2/2026 10:00 AM',
+      icon: '🎙️',
+      isMalware: false,
+      threatName: 'Clean File',
+      threatCategory: 'SAFE',
+      hash: 'e9184a012de940404a011733cfb7b190d62c65bf0bcda32b57b277d9ad9f116a',
+      analysis: '✅ Digital educational audio podcast: Episode 1 — Spotting Social Engineering & Double Extensions.',
+      quarantined: false,
+      scanned: true,
+      mediaSrc: 'assets/sounds/Hi - Wii.mp3',
+      artist: 'CyberZero Academy Podcast'
+    },
+    {
+      id: 'mus_synthwave',
+      name: 'synthwave_night_drive.mp3',
+      fakeExt: 'mp3',
+      realExt: 'mp3',
+      type: 'MP3 Audio File (.mp3)',
+      size: '6.1 MB',
+      date: '8/30/2026 06:12 PM',
+      icon: '🎵',
+      isMalware: false,
+      threatName: 'Clean File',
+      threatCategory: 'SAFE',
+      hash: 'a1b2c3d4e5f67890123456789abcdef0123456789abcdef0123456789abcdef0',
+      analysis: '✅ Verified clean synthwave track. Clean audio frames and standard ID3 tags.',
+      quarantined: false,
+      scanned: false,
+      mediaSrc: 'assets/sounds/Hi - Wii.mp3',
+      artist: 'Neon CyberDrive OST'
+    }
+  ],
+  usb: [
+    {
+      id: 'usb_rescue',
+      name: 'rescue_toolkit_v4.iso',
+      fakeExt: 'iso',
+      realExt: 'iso',
+      type: 'Disc Image File (.iso)',
+      size: '1.2 GB',
+      date: '9/5/2026 02:00 PM',
+      icon: '💿',
+      isMalware: false,
+      threatName: 'Clean File',
+      threatCategory: 'SAFE',
+      hash: '9a8b7c6d5e4f3a2b1c0d9e8f7a6b5c4d3e2f1a0b9c8d7e6f5a4b3c2d1e0f9a8b',
+      analysis: '✅ Verified clean offline recovery image. Includes memory forensics and rootkit diagnostic tools.',
+      quarantined: false,
+      scanned: true
+    },
+    {
+      id: 'usb_bodycam',
+      name: 'field_bodycam_evidence.mp4',
+      fakeExt: 'mp4',
+      realExt: 'mp4',
+      type: 'MP4 Video File (.mp4)',
+      size: '17.3 MB',
+      date: '9/6/2026 07:45 AM',
+      icon: '🎬',
+      isMalware: false,
+      threatName: 'Clean File',
+      threatCategory: 'SAFE',
+      hash: '7c91a6d40bf420404a011733cfb7b190d62c65bf0bcda32b57b277d9ad9f99aa',
+      analysis: '✅ Security camera / bodycam footage from campus server room perimeter.',
+      quarantined: false,
+      scanned: false,
+      mediaSrc: 'assets/video/video3.mp4'
+    },
+    {
+      id: 'usb_notes',
+      name: 'case_notes_encrypted.docx',
+      fakeExt: 'docx',
+      realExt: 'docx',
+      type: 'Microsoft Word Document',
+      size: '54 KB',
+      date: '9/6/2026 08:50 AM',
+      icon: '📄',
+      isMalware: false,
+      threatName: 'Clean File',
+      threatCategory: 'SAFE',
+      hash: '9f83a45c71120404a011733cfb7b190d62c65bf0bcda32b57b277d9ad9fe018a',
+      analysis: '✅ Clean Word document. Detective field log with timeline of Wi-Fi beacon anomalies.',
+      quarantined: false,
+      scanned: true
+    },
+    {
+      id: 'usb_diag',
+      name: 'usb_diagnostic_scan_log.txt',
+      fakeExt: 'txt',
+      realExt: 'txt',
+      type: 'Text Document (.txt)',
+      size: '8 KB',
+      date: '9/6/2026 09:30 AM',
+      icon: '📝',
+      isMalware: false,
+      threatName: 'Clean File',
+      threatCategory: 'SAFE',
+      hash: '4d3c2b1a0f9e8d7c6b5a4f3e2d1c0b9a8f7e6d5c4b3a2f1e0d9c8b7a6f5e4d3c',
+      analysis: '✅ Clean ASCII text log. Hardware diagnostics reported 0 bad sectors on flash storage.',
+      quarantined: false,
+      scanned: false
+    },
+    {
+      id: 'usb_firmware',
+      name: 'router_firmware_backup.bin',
+      fakeExt: 'bin',
+      realExt: 'bin',
+      type: 'Firmware Binary (.bin)',
+      size: '32.4 MB',
+      date: '9/3/2026 04:12 PM',
+      icon: '⚙️',
+      isMalware: false,
+      threatName: 'Clean File',
+      threatCategory: 'SAFE',
+      hash: '1a2b3c4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f9a0b1c2d3e4f5a6b7c8d9e0f1a2b',
+      analysis: '✅ SHA-256 verified vendor firmware backup for campus gateway router.',
+      quarantined: false,
+      scanned: true
+    },
+    {
+      id: 'usb_pcap',
+      name: 'network_traffic_dump.pcap',
+      fakeExt: 'pcap',
+      realExt: 'pcap',
+      type: 'Wireshark Capture (.pcap)',
+      size: '9.8 MB',
+      date: '9/6/2026 10:45 AM',
+      icon: '📊',
+      isMalware: false,
+      threatName: 'Clean File',
+      threatCategory: 'SAFE',
+      hash: '2b3c4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f9a0b1c2d3e4f5a6b7c8d9e0f1a2b3c',
+      analysis: '✅ Packet capture file containing 14,200 Ethernet frames from the local subnet.',
+      quarantined: false,
+      scanned: false
+    },
+    {
+      id: 'usb_autorun',
+      name: 'autorun.inf',
+      fakeExt: 'inf',
+      realExt: 'inf',
+      type: 'Setup Information (.inf)',
+      size: '1 KB',
+      date: '9/1/2026 08:00 AM',
+      icon: '⚙️',
+      isMalware: false,
+      threatName: 'Clean File',
+      threatCategory: 'SAFE',
+      hash: '3c4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f9a0b1c2d3e4f5a6b7c8d9e0f1a2b3c4d',
+      analysis: '✅ Standard USB volume label descriptor. No automatic executable launch triggers.',
+      quarantined: false,
+      scanned: true
+    }
+  ],
+  network: [
+    {
+      id: 'net_gw',
+      name: 'GATEWAY-CORE-SRV',
+      fakeExt: 'srv',
+      realExt: 'srv',
+      type: 'Domain Controller / Gateway',
+      size: '192.168.1.1',
+      date: 'Online • 99.9% Up',
+      icon: '🖥️',
+      isMalware: false,
+      threatName: 'Verified Server',
+      threatCategory: 'SAFE',
+      hash: 'NET-CORE-GATEWAY-AUTH-TOKEN-OK',
+      analysis: '✅ Academy Core Gateway & Firewall. Active Services: DNS, DHCP, Active Directory, SMB 3.1.1.',
+      quarantined: false,
+      scanned: true
+    },
+    {
+      id: 'net_nas',
+      name: 'CORP-NAS-STORAGE',
+      fakeExt: 'nas',
+      realExt: 'nas',
+      type: 'Network Attached Storage',
+      size: '192.168.1.20',
+      date: 'Online • RAID 6',
+      icon: '🗄️',
+      isMalware: false,
+      threatName: 'Verified Storage',
+      threatCategory: 'SAFE',
+      hash: 'NET-NAS-STORAGE-POOL-HASH-OK',
+      analysis: '✅ Enterprise NAS Storage Pool (RAID 6). Shared Volumes: \\\\CORP-NAS-STORAGE\\Public_Drop, \\\\Evidence_Vault.',
+      quarantined: false,
+      scanned: true
+    },
+    {
+      id: 'net_share_public',
+      name: '\\\\ACADEMY-SRV01\\Public_Drop',
+      fakeExt: 'share',
+      realExt: 'share',
+      type: 'SMB Network Shared Folder',
+      size: '4.8 GB used',
+      date: '9/6/2026 11:00 AM',
+      icon: '📁',
+      isMalware: false,
+      threatName: 'Clean Network Share',
+      threatCategory: 'SAFE',
+      hash: 'SMB-SHARE-PUBLIC-DROP-V2',
+      analysis: '✅ Read/Write department staging share. Used for distributing authorized coursework.',
+      quarantined: false,
+      scanned: true
+    },
+    {
+      id: 'net_detective',
+      name: 'DETECTIVE-DESK-WS01',
+      fakeExt: 'ws',
+      realExt: 'ws',
+      type: 'Windows 11 Workstation',
+      size: '192.168.1.105',
+      date: 'Online • Local',
+      icon: '💻',
+      isMalware: false,
+      threatName: 'Verified Host',
+      threatCategory: 'SAFE',
+      hash: 'NET-WS01-ENDPOINT-AUTH-OK',
+      analysis: '✅ Local endpoint workstation assigned to Nishren. Windows 11 Enterprise, Defender Real-Time: Enabled.',
+      quarantined: false,
+      scanned: true
+    },
+    {
+      id: 'net_printer',
+      name: 'LAB-HP-LASERJET-M404',
+      fakeExt: 'prt',
+      realExt: 'prt',
+      type: 'Network Laser Printer',
+      size: '192.168.1.50',
+      date: 'Ready • 85% Toner',
+      icon: '🖨️',
+      isMalware: false,
+      threatName: 'Verified Peripheral',
+      threatCategory: 'SAFE',
+      hash: 'HP-M404-NETWORK-IPP-OK',
+      analysis: '✅ Campus Computer Lab High-Capacity Laser Printer. Port 9100 / IPP enabled.',
+      quarantined: false,
+      scanned: true
+    },
+    {
+      id: 'net_mia',
+      name: 'MIA-SMARTPHONE-LINK',
+      fakeExt: 'mob',
+      realExt: 'mob',
+      type: 'Mobile Endpoint (Wi-Fi 6)',
+      size: '192.168.1.142',
+      date: 'Connected • 866M',
+      icon: '📱',
+      isMalware: false,
+      threatName: 'Authorized Device',
+      threatCategory: 'SAFE',
+      hash: 'MIA-PHONE-WIFI6-CLIENT-OK',
+      analysis: '✅ Mia\'s personal smartphone connected via the Campus Staff AP. Link Speed: 866 Mbps.',
+      quarantined: false,
+      scanned: true
+    },
+    {
+      id: 'net_share_vault',
+      name: '\\\\CORP-NAS-STORAGE\\Evidence_Vault',
+      fakeExt: 'share',
+      realExt: 'share',
+      type: 'Encrypted Network Share',
+      size: '1.2 TB used',
+      date: '9/6/2026 09:00 AM',
+      icon: '🗄️',
+      isMalware: false,
+      threatName: 'Restricted Storage',
+      threatCategory: 'SAFE',
+      hash: 'SMB-VAULT-AES256-GCM-OK',
+      analysis: '✅ Read-only encrypted evidence vault. Access governed by Kerberos ticket authentication.',
+      quarantined: false,
+      scanned: true
+    }
+  ],
+  thispc: [
+    {
+      id: 'pc_prog',
+      name: 'Program Files',
+      fakeExt: 'dir',
+      realExt: 'dir',
+      type: 'File Folder',
+      size: '24.5 GB',
+      date: '9/1/2026 08:00 AM',
+      icon: '📁',
+      isMalware: false,
+      threatName: 'System Folder',
+      threatCategory: 'SAFE',
+      hash: 'C-PROGRAM-FILES-DIR',
+      analysis: '✅ Core Windows 64-bit application binaries and runtime frameworks.',
+      quarantined: false,
+      scanned: true
+    },
+    {
+      id: 'pc_prog86',
+      name: 'Program Files (x86)',
+      fakeExt: 'dir',
+      realExt: 'dir',
+      type: 'File Folder',
+      size: '12.1 GB',
+      date: '9/1/2026 08:00 AM',
+      icon: '📁',
+      isMalware: false,
+      threatName: 'System Folder',
+      threatCategory: 'SAFE',
+      hash: 'C-PROGRAM-FILES-X86-DIR',
+      analysis: '✅ 32-bit legacy application directory.',
+      quarantined: false,
+      scanned: true
+    },
+    {
+      id: 'pc_win',
+      name: 'Windows',
+      fakeExt: 'dir',
+      realExt: 'dir',
+      type: 'System Folder',
+      size: '38.2 GB',
+      date: '9/1/2026 08:00 AM',
+      icon: '📁',
+      isMalware: false,
+      threatName: 'System Folder',
+      threatCategory: 'SAFE',
+      hash: 'C-WINDOWS-SYSTEM-ROOT',
+      analysis: '✅ Windows 11 Operating System files, system drivers, and kernel assemblies.',
+      quarantined: false,
+      scanned: true
+    },
+    {
+      id: 'pc_users',
+      name: 'Users',
+      fakeExt: 'dir',
+      realExt: 'dir',
+      type: 'File Folder',
+      size: '45.8 GB',
+      date: '9/1/2026 08:00 AM',
+      icon: '📁',
+      isMalware: false,
+      threatName: 'System Folder',
+      threatCategory: 'SAFE',
+      hash: 'C-USERS-PROFILES-DIR',
+      analysis: '✅ User profiles directory (C:\\Users\\Nishren).',
+      quarantined: false,
+      scanned: true
+    },
+    {
+      id: 'pc_suite',
+      name: 'CyberZero_Security_Suite',
+      fakeExt: 'dir',
+      realExt: 'dir',
+      type: 'Security Folder',
+      size: '2.4 GB',
+      date: '9/5/2026 09:00 AM',
+      icon: '🛡️',
+      isMalware: false,
+      threatName: 'Protected Suite',
+      threatCategory: 'SAFE',
+      hash: 'C-CYBERZERO-SECURITY-SUITE',
+      analysis: '✅ ShieldAV threat detection engine, quarantine database, and behavioral telemetry logs.',
+      quarantined: false,
+      scanned: true
+    },
+    {
+      id: 'pc_pagefile',
+      name: 'pagefile.sys',
+      fakeExt: 'sys',
+      realExt: 'sys',
+      type: 'System Paging File (.sys)',
+      size: '4.0 GB',
+      date: '9/6/2026 08:00 AM',
+      icon: '⚙️',
+      isMalware: false,
+      threatName: 'System File',
+      threatCategory: 'SAFE',
+      hash: 'C-PAGEFILE-SYS-KERNEL',
+      analysis: '✅ Virtual memory swap file managed automatically by the Windows kernel.',
+      quarantined: false,
+      scanned: true
+    },
+    {
+      id: 'pc_bootlog',
+      name: 'dump_system_boot.log',
+      fakeExt: 'log',
+      realExt: 'log',
+      type: 'Text Document (.log)',
+      size: '24 KB',
+      date: '9/6/2026 08:01 AM',
+      icon: '📝',
+      isMalware: false,
+      threatName: 'Clean Log',
+      threatCategory: 'SAFE',
+      hash: 'C-BOOT-LOG-DIGITAL-SIG',
+      analysis: '✅ Secure boot log. TPM 2.0 measurement hash: verified uncompromised.',
+      quarantined: false,
+      scanned: true
+    }
+  ]
+};
+
+function getExplorerCurrentFiles() {
+  if (currentExplorerFolder === 'downloads') {
+    return FOLDER_FILES;
+  }
+  return EXPLORER_ADDITIONAL_FILES[currentExplorerFolder] || [];
+}
+
+function getExplorerFileById(fileId) {
+  // First check FOLDER_FILES
+  let found = FOLDER_FILES.find(f => f.id === fileId);
+  if (found) return found;
+
+  // Check additional folder collections
+  for (const list of Object.values(EXPLORER_ADDITIONAL_FILES)) {
+    found = list.find(f => f.id === fileId);
+    if (found) return found;
+  }
+  return null;
+}
+
 function renderFolderFiles(filterQuery = '') {
   const list = document.getElementById('folder-file-list');
   if (!list) return;
   list.innerHTML = '';
 
+  // Update view mode class
+  list.className = `folder-file-list view-${explorerViewMode}`;
+
+  const currentFiles = getExplorerCurrentFiles();
   const q = filterQuery.toLowerCase().trim();
-  const filtered = FOLDER_FILES.filter(f => f.name.toLowerCase().includes(q) || f.type.toLowerCase().includes(q));
+  let filtered = currentFiles.filter(f => f.name.toLowerCase().includes(q) || f.type.toLowerCase().includes(q));
+
+  // Sort files
+  filtered.sort((a, b) => {
+    let valA = a[explorerSortCol] || '';
+    let valB = b[explorerSortCol] || '';
+    if (typeof valA === 'string') valA = valA.toLowerCase();
+    if (typeof valB === 'string') valB = valB.toLowerCase();
+    if (valA < valB) return explorerSortAsc ? -1 : 1;
+    if (valA > valB) return explorerSortAsc ? 1 : -1;
+    return 0;
+  });
 
   if (filtered.length === 0) {
-    list.innerHTML = '<div style="padding:20px;text-align:center;color:var(--text-muted);font-size:12px">No matching files found.</div>';
+    list.innerHTML = '<div style="padding:30px;text-align:center;color:var(--text-muted);font-size:12px;grid-column:1/-1"><div style="font-size:24px;margin-bottom:8px">🔍</div>No matching files found.</div>';
+    updateFolderStatusBar(0, null);
     return;
   }
 
   filtered.forEach(file => {
-    const row = document.createElement('div');
-    row.className = `folder-file-row ${file.id === gameState.selectedFolderFileId ? 'selected' : ''} ${file.quarantined ? 'quarantined' : ''}`;
-    row.onclick = () => selectFolderFile(file.id);
-
     let statusBadge = '<span class="badge-file-status badge-unscanned">Unscanned</span>';
     if (file.quarantined) {
       statusBadge = '<span class="badge-file-status badge-quarantined">🛡️ Quarantined</span>';
@@ -5944,27 +6658,274 @@ function renderFolderFiles(filterQuery = '') {
         : '<span class="badge-file-status badge-clean">✓ Safe</span>';
     }
 
-    row.innerHTML = `
-      <div class="file-name-cell">
-        <span class="file-icon">${file.icon}</span>
-        <span title="${file.name}">${file.name}</span>
-      </div>
-      <div>${file.date}</div>
-      <div>${file.type}</div>
-      <div>${file.size}</div>
-      <div>${statusBadge}</div>`;
+    if (explorerViewMode === 'details') {
+      const row = document.createElement('div');
+      row.className = `folder-file-row ${file.id === gameState.selectedFolderFileId ? 'selected' : ''} ${file.quarantined ? 'quarantined' : ''}`;
+      row.onclick = () => selectFolderFile(file.id);
+      row.ondblclick = () => openFileFromFolder(file.id);
 
-    list.appendChild(row);
+      row.innerHTML = `
+        <div class="file-name-cell">
+          <span class="file-icon">${file.icon}</span>
+          <span class="file-name-text" title="${file.name}">${file.name}</span>
+        </div>
+        <div>${file.date}</div>
+        <div>${file.type}</div>
+        <div>${file.size}</div>
+        <div>${statusBadge}</div>`;
+
+      list.appendChild(row);
+    } else {
+      // Large Icons Grid View
+      const card = document.createElement('div');
+      card.className = `grid-file-card ${file.id === gameState.selectedFolderFileId ? 'selected' : ''} ${file.quarantined ? 'quarantined' : ''}`;
+      card.onclick = () => selectFolderFile(file.id);
+      card.ondblclick = () => openFileFromFolder(file.id);
+
+      card.innerHTML = `
+        <div class="grid-card-icon">${file.icon}</div>
+        <div class="grid-card-name" title="${file.name}">${file.name}</div>
+        <div class="grid-card-tag">${file.size}</div>
+        <div style="margin-top:4px">${statusBadge}</div>`;
+
+      list.appendChild(card);
+    }
   });
+
+  const selectedFile = getExplorerFileById(gameState.selectedFolderFileId);
+  updateFolderStatusBar(filtered.length, selectedFile);
+}
+
+function updateFolderStatusBar(itemCount, selectedFile) {
+  const itemsEl = document.getElementById('explorer-status-items');
+  const selEl = document.getElementById('explorer-status-selected');
+  if (itemsEl) itemsEl.textContent = `${itemCount} item${itemCount === 1 ? '' : 's'}`;
+  if (selEl) {
+    if (selectedFile) {
+      selEl.textContent = `1 item selected (${selectedFile.size})`;
+    } else {
+      selEl.textContent = `0 items selected`;
+    }
+  }
 }
 
 function filterFolderFiles(val) {
   renderFolderFiles(val);
 }
 
+function clearFolderSearch() {
+  const inp = document.getElementById('folder-search-input');
+  if (inp) {
+    inp.value = '';
+    renderFolderFiles('');
+  }
+}
+
+function switchExplorerFolder(folderKey) {
+  currentExplorerFolder = folderKey;
+
+  // Update history
+  if (explorerHistory[explorerHistoryIdx] !== folderKey) {
+    explorerHistory = explorerHistory.slice(0, explorerHistoryIdx + 1);
+    explorerHistory.push(folderKey);
+    explorerHistoryIdx = explorerHistory.length - 1;
+  }
+
+  // Update sidebar active class
+  document.querySelectorAll('.explorer-sidebar .sidebar-item').forEach(el => el.classList.remove('active'));
+  const activeSidebarItem = document.getElementById(`sidebar-folder-${folderKey}`) || (folderKey === 'thispc' ? document.getElementById('sidebar-folder-c') : null);
+  if (activeSidebarItem) activeSidebarItem.classList.add('active');
+
+  // Update downloads badge count
+  const dlBadge = document.getElementById('downloads-badge');
+  if (dlBadge) dlBadge.textContent = FOLDER_FILES.length;
+
+  // Render Drive & Network Location Banners
+  const bannerEl = document.getElementById('explorer-banner-area');
+  if (bannerEl) {
+    if (folderKey === 'usb') {
+      bannerEl.classList.remove('hidden');
+      bannerEl.innerHTML = `
+        <div class="explorer-drive-banner">
+          <div class="edb-icon">💾</div>
+          <div class="edb-main">
+            <div class="edb-title-row">
+              <span class="edb-title">USB Drive (E:)</span>
+              <span class="edb-badge">FAT32 Removable Storage</span>
+            </div>
+            <div class="edb-bar"><div class="edb-bar-fill" style="width: 25%"></div></div>
+            <div class="edb-stats">1.8 GB used • 14.2 GB free of 16.0 GB</div>
+          </div>
+          <div class="edb-actions">
+            <button class="edb-btn" onclick="showToast('USB Drive is safely verified and ready to eject.', 'info')">⏏ Safely Eject</button>
+            <button class="edb-btn" onclick="showToast('Scanning USB Drive with ShieldAV... All files clean.', 'success')">🛡️ Scan USB</button>
+          </div>
+        </div>`;
+    } else if (folderKey === 'network') {
+      bannerEl.classList.remove('hidden');
+      bannerEl.innerHTML = `
+        <div class="explorer-network-banner">
+          <div class="enb-icon">🌐</div>
+          <div class="enb-main">
+            <div class="enb-title">
+              <span class="enb-status-dot"></span>
+              Network Infrastructure & Shares
+            </div>
+            <div class="enb-desc">Domain: <strong>CYBER-ACADEMY.LOCAL</strong> • Subnet: 192.168.1.0/24 • Protocol: SMB 3.1.1 (AES-128)</div>
+          </div>
+          <div class="enb-actions">
+            <button class="edb-btn" onclick="showToast('Refreshing network hosts... Discovered 7 active endpoints.', 'info'); renderFolderFiles();">🔄 Refresh</button>
+            <button class="edb-btn" onclick="showToast('Enter network path: \\\\\\\\ACADEMY-SRV01\\\\Public_Drop', 'info')">🔗 Map Network Drive</button>
+          </div>
+        </div>`;
+    } else if (folderKey === 'thispc') {
+      bannerEl.classList.remove('hidden');
+      bannerEl.innerHTML = `
+        <div class="explorer-drive-banner">
+          <div class="edb-icon">💻</div>
+          <div class="edb-main">
+            <div class="edb-title-row">
+              <span class="edb-title">Windows (C:)</span>
+              <span class="edb-badge">NTFS System Volume</span>
+            </div>
+            <div class="edb-bar"><div class="edb-bar-fill" style="width: 64%"></div></div>
+            <div class="edb-stats">330 GB used • 182 GB free of 512 GB (BitLocker: ON)</div>
+          </div>
+          <div class="edb-actions">
+            <button class="edb-btn" onclick="showToast('Drive C: Volume health optimal (0 errors detected).', 'success')">📊 Drive Health</button>
+            <button class="edb-btn" onclick="showToast('System volume optimization: TRIM executed.', 'info')">⚡ Optimize</button>
+          </div>
+        </div>`;
+    } else {
+      bannerEl.classList.add('hidden');
+      bannerEl.innerHTML = '';
+    }
+  }
+
+  // Update breadcrumb
+  const pathEl = document.getElementById('folder-active-path');
+  const tabTitle = document.getElementById('explorer-tab-title');
+  const searchInput = document.getElementById('folder-search-input');
+
+  const folderNames = {
+    downloads: 'This PC > Downloads',
+    documents: 'This PC > Documents',
+    pictures: 'This PC > Pictures',
+    videos: 'This PC > Videos',
+    desktop: 'This PC > Desktop',
+    music: 'This PC > Music',
+    thispc: 'This PC > Windows (C:)',
+    usb: 'This PC > USB Drive (E:)',
+    network: 'Network > CYBER-ACADEMY-LAN'
+  };
+
+  const label = folderNames[folderKey] || folderKey;
+  if (pathEl) pathEl.textContent = label;
+  if (tabTitle) {
+    if (folderKey === 'thispc') tabTitle.textContent = 'Windows (C:)';
+    else if (folderKey === 'usb') tabTitle.textContent = 'USB Drive (E:)';
+    else tabTitle.textContent = folderKey.charAt(0).toUpperCase() + folderKey.slice(1);
+  }
+  if (searchInput) searchInput.placeholder = `Search ${tabTitle?.textContent || 'files'}...`;
+
+  renderFolderFiles(searchInput?.value || '');
+}
+
+function explorerGoBack() {
+  if (explorerHistoryIdx > 0) {
+    explorerHistoryIdx--;
+    switchExplorerFolder(explorerHistory[explorerHistoryIdx]);
+  }
+}
+
+function explorerGoForward() {
+  if (explorerHistoryIdx < explorerHistory.length - 1) {
+    explorerHistoryIdx++;
+    switchExplorerFolder(explorerHistory[explorerHistoryIdx]);
+  }
+}
+
+function explorerGoUp() {
+  switchExplorerFolder('thispc');
+}
+
+function refreshExplorerFolder() {
+  renderFolderFiles(document.getElementById('folder-search-input')?.value || '');
+  showToast('📁 Folder refreshed', 'info');
+}
+
+function setExplorerViewMode(mode) {
+  explorerViewMode = mode;
+  document.getElementById('cmd-view-details')?.classList.toggle('active', mode === 'details');
+  document.getElementById('cmd-view-grid')?.classList.toggle('active', mode === 'grid');
+  document.getElementById('stat-btn-details')?.classList.toggle('active', mode === 'details');
+  document.getElementById('stat-btn-grid')?.classList.toggle('active', mode === 'grid');
+  renderFolderFiles(document.getElementById('folder-search-input')?.value || '');
+}
+
+function toggleExplorerPreviewPane() {
+  previewPaneVisible = !previewPaneVisible;
+  const pane = document.getElementById('folder-detail-pane');
+  const btn = document.getElementById('cmd-toggle-preview');
+  if (pane) pane.classList.toggle('collapsed', !previewPaneVisible);
+  if (btn) btn.classList.toggle('active', previewPaneVisible);
+}
+
+function sortExplorerFiles(col) {
+  if (explorerSortCol === col) {
+    explorerSortAsc = !explorerSortAsc;
+  } else {
+    explorerSortCol = col;
+    explorerSortAsc = true;
+  }
+  renderFolderFiles(document.getElementById('folder-search-input')?.value || '');
+}
+
+function createNewExplorerTab() {
+  showToast('📁 New File Explorer tab opened.', 'info');
+}
+
+function explorerNewItem() {
+  showToast('ℹ️ System policy: Creating new files is restricted in simulation sandbox.', 'info');
+}
+function explorerCut() { showToast('Selected file cut to clipboard', 'info'); }
+function explorerCopy() { showToast('Selected file copied to clipboard', 'info'); }
+function explorerRename() { showToast('Rename file: Access denied (File locked by system)', 'warning'); }
+function explorerDelete() {
+  if (gameState.selectedFolderFileId) {
+    quarantineFile(gameState.selectedFolderFileId);
+  } else {
+    showToast('Please select a file first.', 'warning');
+  }
+}
+
+function openSelectedExplorerFile() {
+  if (!gameState.selectedFolderFileId) {
+    showToast('⚠️ Please select a file from the list first.', 'warning');
+    return;
+  }
+  openFileFromFolder(gameState.selectedFolderFileId);
+}
+
+function scanSelectedExplorerFile() {
+  if (!gameState.selectedFolderFileId) {
+    showToast('⚠️ Please select a file from the list first.', 'warning');
+    return;
+  }
+  scanFileInAntivirus(gameState.selectedFolderFileId);
+}
+
+function quarantineSelectedExplorerFile() {
+  if (!gameState.selectedFolderFileId) {
+    showToast('⚠️ Please select a file from the list first.', 'warning');
+    return;
+  }
+  quarantineFile(gameState.selectedFolderFileId);
+}
+
 function selectFolderFile(fileId) {
   gameState.selectedFolderFileId = fileId;
-  const file = FOLDER_FILES.find(f => f.id === fileId);
+  const file = getExplorerFileById(fileId);
   renderFolderFiles(document.getElementById('folder-search-input')?.value || '');
 
   const emptyEl = document.getElementById('fdp-empty');
@@ -5978,6 +6939,82 @@ function selectFolderFile(fileId) {
   let analysisClass = 'suspicious';
   if (file.scanned) {
     analysisClass = file.isMalware ? 'threat' : 'clean';
+  }
+
+  // Generate In-Pane Live Preview Widget based on file type
+  let quickPreviewHtml = '';
+  const ext = file.realExt.toLowerCase();
+
+  if (ext === 'docx') {
+    quickPreviewHtml = `
+      <div class="fdp-quick-preview">
+        <div class="fdp-preview-doc-card">
+          <div class="fdp-preview-doc-title">📄 Microsoft Word Document</div>
+          <div class="fdp-preview-doc-snippet">
+            <strong>CyberZerØ Student Defense Architecture</strong><br>
+            Technical specifications & endpoint guidelines v2.4. Zero macro triggers found.
+          </div>
+        </div>
+        <button class="fdp-preview-open-btn" onclick="openFileFromFolder('${file.id}')">
+          <span>📂</span> Open in Microsoft Word
+        </button>
+      </div>`;
+  } else if (ext === 'jpg' || ext === 'png') {
+    const imgSrc = file.mediaSrc || 'assets/background/Coffe shop.png';
+    quickPreviewHtml = `
+      <div class="fdp-quick-preview">
+        <img class="fdp-preview-img" src="${imgSrc}" alt="${file.name}" />
+        <button class="fdp-preview-open-btn" onclick="openFileFromFolder('${file.id}')">
+          <span>🖼️</span> View in Photos App
+        </button>
+      </div>`;
+  } else if (ext === 'mp4') {
+    quickPreviewHtml = `
+      <div class="fdp-quick-preview">
+        <div class="fdp-preview-video-wrap">
+          <video class="fdp-preview-video" src="${file.mediaSrc || 'assets/video/video3.mp4'}" muted preload="metadata"></video>
+        </div>
+        <button class="fdp-preview-open-btn" onclick="openFileFromFolder('${file.id}')">
+          <span>🎬</span> Play in Media Player
+        </button>
+      </div>`;
+  } else if (ext === 'mp3' || ext === 'wav' || ext === 'ogg' || ext === 'm4a') {
+    quickPreviewHtml = `
+      <div class="fdp-quick-preview" style="background:linear-gradient(135deg, rgba(30,58,138,0.25), rgba(139,92,246,0.25)); border:1px solid rgba(139,92,246,0.3); border-radius:8px; padding:16px 12px; text-align:center;">
+        <div style="font-size:38px; margin-bottom:6px">🎵</div>
+        <div style="font-size:12px; font-weight:700; color:#00e5ff; word-break:break-all">${file.name}</div>
+        <div style="font-size:10.5px; color:#94a3b8; margin:4px 0 10px 0">${file.artist || 'CyberZero Soundtrack • 320 kbps MP3'}</div>
+        <button class="fdp-preview-open-btn" onclick="openFileFromFolder('${file.id}')">
+          <span>▶</span> Play in Media Player
+        </button>
+      </div>`;
+  } else if (ext === 'srv' || ext === 'nas' || ext === 'ws' || ext === 'prt' || ext === 'mob' || ext === 'share') {
+    quickPreviewHtml = `
+      <div class="fdp-quick-preview" style="background:rgba(59,130,246,0.12); border:1px solid rgba(59,130,246,0.3); border-radius:8px; padding:16px 12px; text-align:center;">
+        <div style="font-size:38px; margin-bottom:6px">${file.icon}</div>
+        <div style="font-size:12px; font-weight:700; color:#60a5fa">${file.name}</div>
+        <div style="font-size:10.5px; color:#94a3b8; margin:4px 0 10px 0">${file.type} • Status: ${file.date}</div>
+        <button class="fdp-preview-open-btn" onclick="openFileFromFolder('${file.id}')">
+          <span>🔗</span> Connect / Explore Resource
+        </button>
+      </div>`;
+  } else if (ext === 'iso' || ext === 'pcap' || ext === 'bin' || ext === 'inf' || ext === 'log') {
+    quickPreviewHtml = `
+      <div class="fdp-quick-preview" style="background:rgba(0,229,255,0.08); border:1px solid rgba(0,229,255,0.25); border-radius:8px; padding:16px 12px; text-align:center;">
+        <div style="font-size:38px; margin-bottom:6px">${file.icon}</div>
+        <div style="font-size:12px; font-weight:700; color:#00e5ff">${file.name}</div>
+        <div style="font-size:10.5px; color:#94a3b8; margin:4px 0 10px 0">${file.type} • ${file.size}</div>
+        <button class="fdp-preview-open-btn" onclick="openFileFromFolder('${file.id}')">
+          <span>📂</span> Inspect File
+        </button>
+      </div>`;
+  } else if (file.isMalware || ext === 'exe' || ext === 'scr' || ext === 'vbs') {
+    quickPreviewHtml = `
+      <div class="fdp-quick-preview" style="background:rgba(255,82,82,0.08);border-color:rgba(255,82,82,0.3)">
+        <div style="font-size:32px;margin-bottom:6px">⚠️</div>
+        <div style="font-size:11px;font-weight:700;color:#ff5252">UNTRUSTED EXECUTABLE BINARY</div>
+        <div style="font-size:10px;color:#94a3b8;margin-top:2px;text-align:center">Execution blocked by Defender SmartScreen</div>
+      </div>`;
   }
 
   let quarantineBtnHtml = '';
@@ -5996,14 +7033,20 @@ function selectFolderFile(fileId) {
       </div>
     </div>
 
+    ${quickPreviewHtml}
+
     <div class="fdp-meta-table">
       <div class="fdp-meta-row">
-        <span class="fdp-meta-label">SHA-256</span>
-        <span class="fdp-meta-val">${file.hash.slice(0, 16)}…</span>
+        <span class="fdp-meta-label">Date Modified</span>
+        <span class="fdp-meta-val">${file.date}</span>
       </div>
       <div class="fdp-meta-row">
         <span class="fdp-meta-label">Actual Ext</span>
         <span class="fdp-meta-val" style="color:${file.realExt === 'exe' || file.realExt === 'scr' || file.realExt === 'vbs' ? 'var(--accent-red)' : 'var(--accent-cyan)'}">.${file.realExt}</span>
+      </div>
+      <div class="fdp-meta-row">
+        <span class="fdp-meta-label">SHA-256</span>
+        <span class="fdp-meta-val">${file.hash.slice(0, 16)}…</span>
       </div>
       <div class="fdp-meta-row">
         <span class="fdp-meta-label">Status</span>
@@ -6016,6 +7059,7 @@ function selectFolderFile(fileId) {
     </div>
 
     <div class="fdp-actions">
+      <button class="btn-ghost btn-sm" style="width:100%;margin-bottom:2px" onclick="openFileFromFolder('${file.id}')">📂 Open File</button>
       <button class="btn-primary btn-sm" style="width:100%" onclick="scanFileInAntivirus('${file.id}')">⚡ Scan with Anti-Virus</button>
       ${quarantineBtnHtml}
     </div>`;
@@ -6037,6 +7081,530 @@ function scanFileInAntivirus(fileId) {
   focusWindow('antivirus');
   startActiveScan();
 }
+
+// ═══════════════════════════════════════════════════════════
+// OPEN FILE HANDLERS (DOCX, IMAGE, VIDEO, SMARTSCREEN)
+// ═══════════════════════════════════════════════════════════
+
+let smartscreenTargetFile = null;
+
+function openFileFromFolder(fileId) {
+  const file = getExplorerFileById(fileId);
+  if (!file) return;
+
+  if (file.quarantined) {
+    showToast(`🛡️ Access Denied: "${file.name}" is quarantined in the Anti-Virus security vault!`, 'warning');
+    if (typeof AudioManager !== 'undefined') AudioManager.playWrong();
+    return;
+  }
+
+  const ext = file.realExt.toLowerCase();
+
+  // 1. DANGEROUS MALWARE / EXECUTABLE / SCRIPT
+  if (file.isMalware || ext === 'exe' || ext === 'scr' || ext === 'vbs') {
+    showSmartScreenWarning(file);
+    return;
+  }
+
+  // 2. DOCX / WORD DOCUMENT
+  if (ext === 'docx' || ext === 'doc' || ext === 'txt' || ext === 'pdf' || ext === 'xlsx') {
+    openDocViewer(file);
+    return;
+  }
+
+  // 3. IMAGE FILES
+  if (ext === 'jpg' || ext === 'jpeg' || ext === 'png' || ext === 'gif' || ext === 'svg' || ext === 'webp') {
+    openImageViewer(file);
+    return;
+  }
+
+  // 4. AUDIO FILES (MP3, WAV, OGG, M4A)
+  if (ext === 'mp3' || ext === 'wav' || ext === 'ogg' || ext === 'm4a') {
+    openAudioPlayer(file);
+    return;
+  }
+
+  // 5. VIDEO FILES
+  if (ext === 'mp4' || ext === 'webm' || ext === 'mov' || ext === 'mkv') {
+    openVideoPlayer(file);
+    return;
+  }
+
+  // 6. NETWORK RESOURCES & SHARES
+  if (ext === 'srv' || ext === 'nas' || ext === 'ws' || ext === 'prt' || ext === 'mob' || ext === 'share') {
+    showToast(`🌐 Connected to ${file.name} (${file.size || 'Local Subnet'}). Resource active.`, 'success');
+    return;
+  }
+
+  // 7. DISK IMAGES & CAPTURES
+  if (ext === 'iso') {
+    showToast(`💿 Mounted "${file.name}" as virtual optical disc. Image clean.`, 'info');
+    return;
+  }
+  if (ext === 'pcap') {
+    showToast(`📊 Analyzed "${file.name}": 14,200 local packets verified clean.`, 'info');
+    return;
+  }
+  if (ext === 'bin' || ext === 'inf' || ext === 'sys' || ext === 'log') {
+    showToast(`⚙️ Inspected system file: "${file.name}" (${file.type}).`, 'info');
+    return;
+  }
+
+  showToast(`Opened "${file.name}" with default handler.`, 'info');
+}
+
+// ─── 1. MICROSOFT WORD (DOCX VIEWER) ────────────────────────
+function openDocViewer(file) {
+  const titleText = document.getElementById('docviewer-title-text');
+
+  // Text File / Diagnostic Log View
+  if (file.realExt === 'txt' || file.name.endsWith('.txt')) {
+    if (titleText) titleText.textContent = `Notepad — ${file.name}`;
+    const page = document.getElementById('docviewer-page-content');
+    if (page) {
+      page.innerHTML = `
+        <div style="font-family:var(--font-mono, monospace); font-size:12px; line-height:1.6; color:#0f172a; white-space:pre-wrap; padding:10px;">
+================================================================
+USB FLASH DRIVE HARDWARE DIAGNOSTIC REPORT
+Device: SanDisk Ultra USB 3.0 (16GB FAT32)
+Volume Serial Number: 84B2-79F1
+Scan Date: 2026-09-06 09:30:14 UTC
+================================================================
+[INFO] Bus Type: USB 3.2 Gen 1 (5.0 Gbps)
+[INFO] Controller: Phison PS2251-09 (Verified OEM Firmware)
+[INFO] Sector Size: 512 bytes | Cluster Size: 4096 bytes
+[INFO] Bad Blocks / Sectors: 0 (Health Status: 100% HEALTHY)
+[PASS] S.M.A.R.T. Self-Test Completed: PASSED
+[PASS] Integrity Hash Check: No Bit Rot Detected
+[PASS] File System Verification: 0 corrupt directory records
+----------------------------------------------------------------
+Security Telemetry (ShieldAV Storage Sentinel):
+[✓] Hidden partitions: None
+[✓] MBR / Boot Sector: Clean (Standard MS-DOS 5.0 boot record)
+[✓] Malicious autorun payload: NOT DETECTED
+================================================================
+Status: DEVICE HARDWARE IS HEALTHY AND AUTHORIZED FOR USE.
+================================================================
+        </div>`;
+    }
+    openApp('docviewer');
+    focusWindow('docviewer');
+    showToast(`📝 Opened "${file.name}" in Text Viewer.`, 'success');
+    return;
+  }
+
+  // Confidential Field Case Notes
+  if (file.id === 'usb_notes') {
+    if (titleText) titleText.textContent = `Microsoft Word — ${file.name}`;
+    const page = document.getElementById('docviewer-page-content');
+    if (page) {
+      page.innerHTML = `
+        <div class="word-doc-header-banner">
+          <div>
+            <div class="word-doc-title">CYBER INVESTIGATION FIELD NOTES</div>
+            <div class="word-doc-subtitle">Incident Case #2026-004 • Confidential Forensic Journal</div>
+          </div>
+          <div style="font-size:32px">🕵️</div>
+        </div>
+        <div class="word-doc-meta-strip">
+          <span><strong>Investigator:</strong> Nishren</span>
+          <span><strong>Location:</strong> Campus Library & Server Room Perimeter</span>
+          <span><strong>Security:</strong> AES-256 Passphrase Protected</span>
+        </div>
+        <h3 style="color:#1e40af;margin-top:0">Field Timeline</h3>
+        <p><strong>08:30 AM:</strong> Identified rogue Wi-Fi beacon emitting SSID "CAMPUS_FREE_STUDENT_WIFI" near cafeteria.</p>
+        <p><strong>08:45 AM:</strong> Packet capture initiated. Signal triangulation points to an unauthorized battery-powered ESP32/Pineapple access point.</p>
+        <p><strong>09:15 AM:</strong> Intercepted credential phishing templates targeting campus student portal logins.</p>
+        <div class="word-callout-box" style="margin-top:16px">
+          <strong>✓ Action Plan:</strong> Alert students not to connect to unencrypted networks; advise Ms. Santos in IT to locate physical transmitter.
+        </div>`;
+    }
+    openApp('docviewer');
+    focusWindow('docviewer');
+    showToast(`📄 Opened "${file.name}" in Microsoft Word.`, 'success');
+    return;
+  }
+
+  if (titleText) titleText.textContent = `Microsoft Word — ${file.name}`;
+
+  const page = document.getElementById('docviewer-page-content');
+  if (page) {
+    page.innerHTML = `
+      <div class="word-doc-header-banner">
+        <div>
+          <div class="word-doc-title">CYBERZERØ CAMPUS DEFENSE ARCHITECTURE</div>
+          <div class="word-doc-subtitle">High School Cyber Security Division • Technical Specification v2.6</div>
+        </div>
+        <div style="font-size:32px">🛡️</div>
+      </div>
+
+      <div class="word-doc-meta-strip">
+        <span><strong>Author:</strong> Nishren (Lead Investigator)</span>
+        <span><strong>Reviewer:</strong> Ms. Santos (IT Dept)</span>
+        <span><strong>Classification:</strong> VERIFIED CLEAN</span>
+        <span><strong>Status:</strong> Approved</span>
+      </div>
+
+      <h3 style="color:#1e40af;margin-top:0">1. Executive Overview</h3>
+      <p>This document outlines the multi-layered cyber defense architecture deployed across campus student workstations. The primary mission is early threat detection, neutralization of spear-phishing campaigns, and real-time endpoint malware quarantine.</p>
+
+      <h3 style="color:#1e40af">2. File Extension & Attachment Protocols</h3>
+      <p>Attackers commonly exploit default operating system configurations that conceal known extensions. A double-extension file such as <code>document.pdf.exe</code> is technically an executable binary. Staff and students must enforce full file extension visibility.</p>
+
+      <div class="word-callout-warning">
+        <strong>⚠️ MANDATORY MACRO SECURITY POLICY:</strong><br>
+        Legitimate official school documents will <strong>NEVER</strong> prompt users to "Enable Content", execute Visual Basic macros, or disable security sandboxing to read basic text. Any document demanding macro activation must be quarantined immediately.
+      </div>
+
+      <h3 style="color:#1e40af">3. Antivirus Integration & Digital Signatures</h3>
+      <p>All downloaded attachments undergo automated SHA-256 hashing. The cryptographic signature for this document is verified as:</p>
+      <div style="background:#f1f5f9;padding:8px 12px;border-radius:4px;font-family:var(--font-mono);font-size:10.5px;color:#0f172a;word-break:break-all">
+        SHA-256: a591a6d40bf420404a011733cfb7b190d62c65bf0bcda32b57b277d9ad9f146e (Clean)
+      </div>
+
+      <div class="word-callout-box" style="margin-top:20px">
+        <strong>✓ Document Verified:</strong> Clean Office OpenXML document structure. Zero obfuscated payloads or remote templates detected.
+      </div>`;
+  }
+
+  openApp('docviewer');
+  focusWindow('docviewer');
+  showToast(`📄 Opened "${file.name}" in Microsoft Word.`, 'success');
+}
+
+function scanCurrentDocumentInAV() {
+  if (gameState.selectedFolderFileId) {
+    scanFileInAntivirus(gameState.selectedFolderFileId);
+  } else {
+    showToast('Document already verified clean by ShieldAV.', 'success');
+  }
+}
+
+function setWordZoom(val) {
+  const page = document.getElementById('docviewer-page-content');
+  if (page) {
+    page.style.transform = `scale(${val / 100})`;
+    page.style.transformOrigin = 'top center';
+  }
+}
+
+// ─── 2. PHOTOS / IMAGE VIEWER ───────────────────────────────
+let imgViewerScale = 1;
+let imgViewerRotation = 0;
+
+function openImageViewer(file) {
+  const titleText = document.getElementById('imageviewer-title-text');
+  if (titleText) titleText.textContent = `Photos — ${file.name}`;
+
+  const imgEl = document.getElementById('imgviewer-display');
+  const imgSrc = file.mediaSrc || 'assets/background/Coffe shop.png';
+  if (imgEl) {
+    imgEl.src = imgSrc;
+    imgViewerScale = 1;
+    imgViewerRotation = 0;
+    imgEl.style.transform = `scale(${imgViewerScale}) rotate(${imgViewerRotation}deg)`;
+  }
+
+  // Populate Info Drawer
+  const infoList = document.getElementById('pinfo-list');
+  if (infoList) {
+    infoList.innerHTML = `
+      <div class="pinfo-row">
+        <span class="pinfo-label">File Name</span>
+        <span class="pinfo-val">${file.name}</span>
+      </div>
+      <div class="pinfo-row">
+        <span class="pinfo-label">Dimensions</span>
+        <span class="pinfo-val">1920 × 1080 px</span>
+      </div>
+      <div class="pinfo-row">
+        <span class="pinfo-label">File Size</span>
+        <span class="pinfo-val">${file.size}</span>
+      </div>
+      <div class="pinfo-row">
+        <span class="pinfo-label">Date Taken</span>
+        <span class="pinfo-val">${file.date}</span>
+      </div>
+      <div class="pinfo-row">
+        <span class="pinfo-label">Camera</span>
+        <span class="pinfo-val">Sony Alpha 7 IV (35mm, f/2.8)</span>
+      </div>
+      <div class="pinfo-row">
+        <span class="pinfo-label">Integrity</span>
+        <span class="pinfo-val" style="color:#00e676">✓ Clean JFIF/EXIF Header</span>
+      </div>`;
+  }
+
+  openApp('imageviewer');
+  focusWindow('imageviewer');
+  showToast(`🖼️ Opened "${file.name}" in Photos.`, 'success');
+}
+
+function imgViewerZoomIn() {
+  imgViewerScale = Math.min(3, imgViewerScale + 0.25);
+  _applyImgTransform();
+}
+function imgViewerZoomOut() {
+  imgViewerScale = Math.max(0.5, imgViewerScale - 0.25);
+  _applyImgTransform();
+}
+function imgViewerZoomReset() {
+  imgViewerScale = 1;
+  imgViewerRotation = 0;
+  _applyImgTransform();
+}
+function imgViewerRotateLeft() {
+  imgViewerRotation -= 90;
+  _applyImgTransform();
+}
+function imgViewerRotateRight() {
+  imgViewerRotation += 90;
+  _applyImgTransform();
+}
+function _applyImgTransform() {
+  const imgEl = document.getElementById('imgviewer-display');
+  const zoomStatus = document.getElementById('photos-status-zoom');
+  if (imgEl) {
+    imgEl.style.transform = `scale(${imgViewerScale}) rotate(${imgViewerRotation}deg)`;
+  }
+  if (zoomStatus) zoomStatus.textContent = `Zoom: ${Math.round(imgViewerScale * 100)}%`;
+}
+function toggleImageInfoDrawer() {
+  const drawer = document.getElementById('photos-info-drawer');
+  const btn = document.getElementById('btn-toggle-img-info');
+  if (drawer) drawer.classList.toggle('hidden');
+  if (btn) btn.classList.toggle('active', !drawer?.classList.contains('hidden'));
+}
+function scanCurrentImageInAV() {
+  if (gameState.selectedFolderFileId) {
+    scanFileInAntivirus(gameState.selectedFolderFileId);
+  } else {
+    showToast('Photo asset verified clean by ShieldAV.', 'success');
+  }
+}
+
+// ─── 3. MEDIA / VIDEO PLAYER ────────────────────────────────
+function openVideoPlayer(file) {
+  const titleText = document.getElementById('videoplayer-title-text');
+  if (titleText) titleText.textContent = `Media Player — ${file.name}`;
+
+  const audioStage = document.getElementById('vp-audio-stage');
+  if (audioStage) {
+    audioStage.classList.remove('vp-audio-playing');
+    audioStage.classList.add('hidden');
+  }
+
+  const vid = document.getElementById('videoplayer-video');
+  if (vid) {
+    vid.style.display = 'block';
+    vid.src = file.mediaSrc || 'assets/video/video3.mp4';
+    vid.currentTime = 0;
+    vid.volume = 1;
+
+    // Wire up events once
+    if (!vid._vpWired) {
+      vid._vpWired = true;
+      vid.addEventListener('timeupdate', _vpOnTimeUpdate);
+      vid.addEventListener('ended', _vpOnEnded);
+      vid.addEventListener('play', () => {
+        const btn = document.getElementById('vp-play-btn');
+        if (btn) btn.textContent = '⏸';
+        document.getElementById('vp-center-overlay')?.classList.add('hidden');
+        document.getElementById('vp-audio-stage')?.classList.add('vp-audio-playing');
+      });
+      vid.addEventListener('pause', () => {
+        const btn = document.getElementById('vp-play-btn');
+        if (btn) btn.textContent = '▶';
+        document.getElementById('vp-center-overlay')?.classList.remove('hidden');
+        document.getElementById('vp-audio-stage')?.classList.remove('vp-audio-playing');
+      });
+    }
+
+    vid.play().catch(() => {});
+  }
+
+  openApp('videoplayer');
+  focusWindow('videoplayer');
+  showToast(`🎬 Playing "${file.name}" in Media Player.`, 'success');
+}
+
+// ─── 4. MEDIA / AUDIO PLAYER (MP3 & MUSIC FILES) ────────────
+function openAudioPlayer(file) {
+  const titleText = document.getElementById('videoplayer-title-text');
+  if (titleText) titleText.textContent = `Media Player — ${file.name}`;
+
+  const vid = document.getElementById('videoplayer-video');
+  const audioStage = document.getElementById('vp-audio-stage');
+  const trackTitle = document.getElementById('vp-audio-track-title');
+  const artistName = document.getElementById('vp-audio-artist-name');
+
+  if (audioStage) {
+    audioStage.classList.remove('hidden');
+  }
+  if (trackTitle) trackTitle.textContent = file.name;
+  if (artistName) artistName.textContent = file.artist || 'CyberZero Audio Deck • 320 kbps MP3';
+
+  if (vid) {
+    vid.style.display = 'none';
+    vid.src = file.mediaSrc || 'assets/sounds/Hi - Wii.mp3';
+    vid.currentTime = 0;
+    vid.volume = 1;
+
+    if (!vid._vpWired) {
+      vid._vpWired = true;
+      vid.addEventListener('timeupdate', _vpOnTimeUpdate);
+      vid.addEventListener('ended', _vpOnEnded);
+      vid.addEventListener('play', () => {
+        const btn = document.getElementById('vp-play-btn');
+        if (btn) btn.textContent = '⏸';
+        document.getElementById('vp-center-overlay')?.classList.add('hidden');
+        document.getElementById('vp-audio-stage')?.classList.add('vp-audio-playing');
+      });
+      vid.addEventListener('pause', () => {
+        const btn = document.getElementById('vp-play-btn');
+        if (btn) btn.textContent = '▶';
+        document.getElementById('vp-center-overlay')?.classList.remove('hidden');
+        document.getElementById('vp-audio-stage')?.classList.remove('vp-audio-playing');
+      });
+    }
+
+    vid.play().catch(() => {
+      // Autoplay with user gesture
+    });
+  }
+
+  openApp('videoplayer');
+  focusWindow('videoplayer');
+  showToast(`🎵 Playing "${file.name}" in Media Player.`, 'success');
+}
+
+function vpTogglePlay() {
+  const vid = document.getElementById('videoplayer-video');
+  if (!vid) return;
+  if (vid.paused || vid.ended) {
+    vid.play().catch(() => {});
+  } else {
+    vid.pause();
+  }
+}
+
+function vpSkip(secs) {
+  const vid = document.getElementById('videoplayer-video');
+  if (!vid) return;
+  vid.currentTime = Math.max(0, Math.min(vid.duration || 0, vid.currentTime + secs));
+}
+
+function vpSeek(e) {
+  const vid = document.getElementById('videoplayer-video');
+  if (!vid || !vid.duration) return;
+  const container = document.getElementById('vp-progress-container');
+  if (!container) return;
+  const rect = container.getBoundingClientRect();
+  const pct = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
+  vid.currentTime = pct * vid.duration;
+}
+
+function _vpOnTimeUpdate() {
+  const vid = document.getElementById('videoplayer-video');
+  if (!vid) return;
+  const cur = vid.currentTime;
+  const dur = vid.duration || 0;
+
+  const timeEl = document.getElementById('vp-time-display');
+  if (timeEl) timeEl.textContent = `${_avFmtTime(cur)} / ${_avFmtTime(dur)}`;
+
+  const pct = dur > 0 ? (cur / dur) * 100 : 0;
+  const fillEl = document.getElementById('vp-progress-fill');
+  const thumbEl = document.getElementById('vp-progress-thumb');
+  if (fillEl) fillEl.style.width = `${pct}%`;
+  if (thumbEl) thumbEl.style.left = `${pct}%`;
+}
+
+function _vpOnEnded() {
+  const btn = document.getElementById('vp-play-btn');
+  if (btn) btn.textContent = '▶';
+  document.getElementById('vp-center-overlay')?.classList.remove('hidden');
+}
+
+function vpToggleMute() {
+  const vid = document.getElementById('videoplayer-video');
+  if (!vid) return;
+  vid.muted = !vid.muted;
+  const btn = document.getElementById('vp-mute-btn');
+  if (btn) btn.textContent = vid.muted ? '🔇' : '🔊';
+}
+
+function vpSetVolume(val) {
+  const vid = document.getElementById('videoplayer-video');
+  if (!vid) return;
+  vid.volume = parseFloat(val);
+  vid.muted = false;
+  const btn = document.getElementById('vp-mute-btn');
+  if (btn) btn.textContent = vid.volume === 0 ? '🔇' : '🔊';
+}
+
+function vpSetSpeed(speed) {
+  const vid = document.getElementById('videoplayer-video');
+  if (vid) vid.playbackRate = parseFloat(speed);
+}
+
+function vpToggleFullscreen() {
+  const stage = document.getElementById('vp-stage');
+  if (!stage) return;
+  if (!document.fullscreenElement) {
+    stage.requestFullscreen().catch(() => {});
+  } else {
+    document.exitFullscreen().catch(() => {});
+  }
+}
+
+function scanCurrentVideoInAV() {
+  if (gameState.selectedFolderFileId) {
+    scanFileInAntivirus(gameState.selectedFolderFileId);
+  } else {
+    showToast('Video file verified clean by ShieldAV.', 'success');
+  }
+}
+
+// ─── 4. WINDOWS DEFENDER SMARTSCREEN MODAL ──────────────────
+function showSmartScreenWarning(file) {
+  smartscreenTargetFile = file;
+
+  const modal = document.getElementById('modal-smartscreen');
+  const nameEl = document.getElementById('smartscreen-app-name');
+  const fmtEl = document.getElementById('smartscreen-app-format');
+  const sigEl = document.getElementById('smartscreen-app-sig');
+
+  if (nameEl) nameEl.textContent = file.name;
+  if (fmtEl) fmtEl.textContent = `${file.type} (.${file.realExt})`;
+  if (sigEl) sigEl.textContent = file.threatName || 'Unsigned Executable Binary';
+
+  if (modal) modal.classList.remove('hidden');
+  if (typeof AudioManager !== 'undefined') AudioManager.playWrong();
+}
+
+function closeSmartScreenModal() {
+  const modal = document.getElementById('modal-smartscreen');
+  if (modal) modal.classList.add('hidden');
+  smartscreenTargetFile = null;
+}
+
+function smartscreenScan() {
+  const file = smartscreenTargetFile;
+  closeSmartScreenModal();
+  if (file) {
+    scanFileInAntivirus(file.id);
+  }
+}
+
+function smartscreenQuarantine() {
+  const file = smartscreenTargetFile;
+  closeSmartScreenModal();
+  if (file) {
+    quarantineFile(file.id);
+  }
+}
+
 
 function toggleAntiVirusProtection() {
   gameState.antivirusProtection = !gameState.antivirusProtection;
@@ -6416,10 +7984,11 @@ let g4SelectedNetwork = null;
 let g4InfectionSymptoms = 0;
 let g4InfectionTimer = null;
 
-// ── 30-SECOND AI AWARENESS VIDEO CONTROLLER ──────────────────
-let awarenessVideoTimer = null;
-let awarenessVideoSec = 0;
-let awarenessVideoPlaying = false;
+// ── REAL VIDEO AWARENESS CONTROLLER ──────────────────────────
+
+function _avGetVideo() {
+  return document.getElementById('awareness-real-video');
+}
 
 function startAwarenessVideo() {
   hideAllOverlays();
@@ -6428,82 +7997,117 @@ function startAwarenessVideo() {
     ov.classList.remove('hidden');
     ov.classList.add('active');
   }
-  awarenessVideoSec = 0;
-  awarenessVideoPlaying = true;
-  updateAwarenessVideoUI();
 
-  if (awarenessVideoTimer) clearInterval(awarenessVideoTimer);
-  awarenessVideoTimer = setInterval(() => {
-    if (!awarenessVideoPlaying) return;
-    awarenessVideoSec++;
-    updateAwarenessVideoUI();
-    if (awarenessVideoSec >= 30) {
-      clearInterval(awarenessVideoTimer);
-      awarenessVideoTimer = null;
-      setTimeout(() => {
-        skipAwarenessVideo();
-      }, 1000);
-    }
-  }, 1000);
-}
+  const vid = _avGetVideo();
+  if (!vid) return;
 
-function updateAwarenessVideoUI() {
-  const timeEl = document.getElementById('vctrl-time-display');
-  const fillEl = document.getElementById('vctrl-progress-fill');
-  const playBtn = document.getElementById('vctrl-play-btn');
+  // Reset finished overlay
+  const finEl = document.getElementById('av-finished-overlay');
+  if (finEl) finEl.classList.add('hidden');
 
-  if (timeEl) {
-    const s = Math.min(30, awarenessVideoSec);
-    timeEl.textContent = `00:${String(s).padStart(2, '0')} / 00:30`;
-  }
-  if (fillEl) {
-    fillEl.style.width = `${(Math.min(30, awarenessVideoSec) / 30) * 100}%`;
-  }
-  if (playBtn) {
-    playBtn.textContent = awarenessVideoPlaying ? '⏸ Pause' : '▶ Play';
+  // Wire up events once
+  if (!vid._avWired) {
+    vid._avWired = true;
+
+    vid.addEventListener('timeupdate', _avOnTimeUpdate);
+    vid.addEventListener('ended', _avOnEnded);
+    vid.addEventListener('play', () => {
+      const btn = document.getElementById('av-play-btn');
+      if (btn) btn.textContent = '⏸';
+    });
+    vid.addEventListener('pause', () => {
+      const btn = document.getElementById('av-play-btn');
+      if (btn) btn.textContent = '▶';
+    });
   }
 
-  // Slide activation based on current time
-  const slides = document.querySelectorAll('.video-slide');
-  slides.forEach(slide => {
-    const start = parseInt(slide.getAttribute('data-start') || 0, 10);
-    const end = parseInt(slide.getAttribute('data-end') || 30, 10);
-    const isActive = awarenessVideoSec >= start && (awarenessVideoSec < end || (end === 30 && awarenessVideoSec >= 30));
-    slide.classList.toggle('active', isActive);
-  });
+  vid.currentTime = 0;
+  vid.volume = 1;
+  vid.play().catch(() => {});
 }
 
-function toggleAwarenessVideoPlay() {
-  awarenessVideoPlaying = !awarenessVideoPlaying;
-  updateAwarenessVideoUI();
+function _avFmtTime(s) {
+  const m = Math.floor(s / 60);
+  const sec = Math.floor(s % 60);
+  return `${m}:${String(sec).padStart(2, '0')}`;
 }
 
-function seekAwarenessVideo(e) {
-  const bar = e.currentTarget;
+function _avOnTimeUpdate() {
+  const vid = _avGetVideo();
+  if (!vid) return;
+  const cur = vid.currentTime;
+  const dur = vid.duration || 0;
+
+  const timeEl = document.getElementById('av-time');
+  if (timeEl) timeEl.textContent = `${_avFmtTime(cur)} / ${_avFmtTime(dur)}`;
+
+  const pct = dur > 0 ? (cur / dur) * 100 : 0;
+  const fillEl = document.getElementById('av-progress-fill');
+  if (fillEl) fillEl.style.width = `${pct}%`;
+  const thumbEl = document.getElementById('av-progress-thumb');
+  if (thumbEl) thumbEl.style.left = `${pct}%`;
+}
+
+function _avOnEnded() {
+  const finEl = document.getElementById('av-finished-overlay');
+  if (finEl) finEl.classList.remove('hidden');
+  const btn = document.getElementById('av-play-btn');
+  if (btn) btn.textContent = '▶';
+}
+
+function avTogglePlay() {
+  const vid = _avGetVideo();
+  if (!vid) return;
+  if (vid.paused || vid.ended) { vid.play().catch(() => {}); }
+  else { vid.pause(); }
+}
+
+function avSeek(e) {
+  const vid = _avGetVideo();
+  if (!vid || !vid.duration) return;
+  const bar = document.getElementById('av-progress-bar');
+  if (!bar) return;
   const rect = bar.getBoundingClientRect();
-  const clickX = e.clientX - rect.left;
-  const pct = Math.max(0, Math.min(1, clickX / rect.width));
-  awarenessVideoSec = Math.floor(pct * 30);
-  updateAwarenessVideoUI();
+  const pct = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
+  vid.currentTime = pct * vid.duration;
+}
+
+function avToggleMute() {
+  const vid = _avGetVideo();
+  if (!vid) return;
+  vid.muted = !vid.muted;
+  const btn = document.getElementById('av-mute-btn');
+  if (btn) btn.textContent = vid.muted ? '🔇' : '🔊';
+}
+
+function avSetVolume(val) {
+  const vid = _avGetVideo();
+  if (!vid) return;
+  vid.volume = parseFloat(val);
+  vid.muted = false;
+  const btn = document.getElementById('av-mute-btn');
+  if (btn) btn.textContent = vid.volume === 0 ? '🔇' : '🔊';
+}
+
+function closeAwarenessVideo() {
+  const vid = _avGetVideo();
+  if (vid) { vid.pause(); vid.currentTime = 0; }
+  const ov = document.getElementById('overlay-awareness-video');
+  if (ov) { ov.classList.add('hidden'); ov.classList.remove('active'); }
 }
 
 function skipAwarenessVideo() {
-  if (awarenessVideoTimer) {
-    clearInterval(awarenessVideoTimer);
-    awarenessVideoTimer = null;
-  }
-  awarenessVideoPlaying = false;
+  const vid = _avGetVideo();
+  if (vid) { vid.pause(); }
   const ov = document.getElementById('overlay-awareness-video');
-  if (ov) {
-    ov.classList.add('hidden');
-    ov.classList.remove('active');
-  }
+  if (ov) { ov.classList.add('hidden'); ov.classList.remove('active'); }
   startGroup4Mission();
 }
 
 function startSocialEngineeringMission() {
-  startAwarenessVideo();
+  startGroup4Mission();
 }
+
 
 function startGroup4Mission() {
   // Reset state

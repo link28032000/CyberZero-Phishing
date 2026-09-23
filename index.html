@@ -237,10 +237,15 @@
 
   <!-- ── FOLDER (FILE EXPLORER) WINDOW ── -->
   <div id="win-folder" class="app-window hidden" data-app="folder">
+    <!-- Window Titlebar with Tab Bar -->
     <div class="win-titlebar" id="titlebar-folder">
-      <div class="win-title">
-        <span class="win-icon">📁</span>
-        <span>Folder — Downloads</span>
+      <div class="explorer-tab-bar">
+        <div class="explorer-tab active" id="explorer-active-tab">
+          <span class="tab-icon">📁</span>
+          <span class="tab-title" id="explorer-tab-title">Downloads</span>
+          <button class="tab-close-btn" onclick="closeApp('folder')" title="Close Tab">✕</button>
+        </div>
+        <button class="explorer-tab-add" onclick="createNewExplorerTab()" title="New tab">+</button>
       </div>
       <div class="win-controls">
         <button class="win-btn win-minimize" onclick="minimizeApp('folder')" title="Minimize">─</button>
@@ -248,51 +253,466 @@
         <button class="win-btn win-close" onclick="closeApp('folder')" title="Close">✕</button>
       </div>
     </div>
+
     <div class="win-body folder-body">
-      <!-- Folder Toolbar -->
-      <div class="folder-toolbar">
-        <div class="folder-breadcrumb">
-          <span>📁 This PC</span>
-          <span class="breadcrumb-sep">›</span>
-          <span>Downloads</span>
-          <span class="breadcrumb-sep">›</span>
-          <span class="folder-active-path">Suspicious_Transfers</span>
+      <!-- Modern Command Bar / Ribbon -->
+      <div class="explorer-command-bar">
+        <div class="cmd-group">
+          <button class="cmd-btn" onclick="explorerNewItem()" title="New item">
+            <span class="cmd-icon">➕</span>
+            <span class="cmd-label">New</span>
+          </button>
         </div>
-        <div class="folder-search-box">
-          <span>🔍</span>
-          <input type="text" id="folder-search-input" placeholder="Search files..." oninput="filterFolderFiles(this.value)" />
+        <div class="cmd-divider"></div>
+        <div class="cmd-group">
+          <button class="cmd-btn" onclick="explorerCut()" title="Cut">
+            <span class="cmd-icon">✂️</span>
+          </button>
+          <button class="cmd-btn" onclick="explorerCopy()" title="Copy">
+            <span class="cmd-icon">📋</span>
+          </button>
+          <button class="cmd-btn" onclick="explorerRename()" title="Rename">
+            <span class="cmd-icon">🏷️</span>
+          </button>
+          <button class="cmd-btn" onclick="explorerDelete()" title="Delete">
+            <span class="cmd-icon">🗑️</span>
+          </button>
         </div>
-        <button class="btn-ghost btn-sm" onclick="startMalwareDemo()" title="How to Play Malware Tutorial" style="margin-left:auto;font-size:11px;padding:4px 10px;display:flex;align-items:center;gap:4px">❓ How to Play</button>
+        <div class="cmd-divider"></div>
+        <div class="cmd-group">
+          <button class="cmd-btn cmd-btn-accent" onclick="openSelectedExplorerFile()" title="Open selected file">
+            <span class="cmd-icon">📂</span>
+            <span class="cmd-label">Open</span>
+          </button>
+          <button class="cmd-btn cmd-btn-scan" onclick="scanSelectedExplorerFile()" title="Scan with ShieldAV">
+            <span class="cmd-icon">⚡</span>
+            <span class="cmd-label">Scan File</span>
+          </button>
+          <button class="cmd-btn cmd-btn-danger" onclick="quarantineSelectedExplorerFile()" title="Quarantine selected file">
+            <span class="cmd-icon">🛡️</span>
+            <span class="cmd-label">Quarantine</span>
+          </button>
+        </div>
+        <div class="cmd-spacer"></div>
+        <div class="cmd-group">
+          <button class="cmd-btn active" id="cmd-toggle-preview" onclick="toggleExplorerPreviewPane()" title="Toggle Preview Pane">
+            <span class="cmd-icon">👁️</span>
+            <span class="cmd-label">Preview</span>
+          </button>
+          <div class="cmd-view-switcher">
+            <button class="cmd-btn active" id="cmd-view-details" onclick="setExplorerViewMode('details')" title="Details View">
+              <span class="cmd-icon">📄</span>
+            </button>
+            <button class="cmd-btn" id="cmd-view-grid" onclick="setExplorerViewMode('grid')" title="Large Icons View">
+              <span class="cmd-icon">⊞</span>
+            </button>
+          </div>
+          <button class="cmd-btn cmd-btn-tutorial" onclick="startMalwareDemo()" title="How to Play Malware Tutorial">
+            <span class="cmd-icon">❓</span>
+            <span class="cmd-label">Tutorial</span>
+          </button>
+        </div>
       </div>
 
-      <!-- Folder Content (File Table + Inspection Pane) -->
+      <!-- Address Bar & Navigation Controls -->
+      <div class="explorer-nav-bar">
+        <div class="nav-arrows">
+          <button class="nav-arrow-btn" onclick="explorerGoBack()" title="Back">←</button>
+          <button class="nav-arrow-btn" onclick="explorerGoForward()" title="Forward">→</button>
+          <button class="nav-arrow-btn" onclick="explorerGoUp()" title="Up to This PC">↑</button>
+          <button class="nav-arrow-btn" onclick="refreshExplorerFolder()" title="Refresh">🔄</button>
+        </div>
+        <!-- Breadcrumb Address Bar -->
+        <div class="explorer-address-bar">
+          <span class="address-icon">📁</span>
+          <div class="explorer-breadcrumbs" id="explorer-breadcrumbs">
+            <span class="bc-item" onclick="switchExplorerFolder('thispc')">This PC</span>
+            <span class="bc-sep">›</span>
+            <span class="bc-item" onclick="switchExplorerFolder('downloads')">Downloads</span>
+            <span class="bc-sep">›</span>
+            <span class="bc-item current" id="folder-active-path">Suspicious_Transfers</span>
+          </div>
+        </div>
+        <!-- Search Box -->
+        <div class="explorer-search-box">
+          <span class="search-icon">🔍</span>
+          <input type="text" id="folder-search-input" placeholder="Search Downloads..." oninput="filterFolderFiles(this.value)" />
+          <button class="search-clear-btn" id="folder-search-clear" onclick="clearFolderSearch()" title="Clear">✕</button>
+        </div>
+      </div>
+
+      <!-- Main Explorer Area: Left Navigation Sidebar + File View + Preview Pane -->
       <div class="folder-main-area">
+        <!-- Left Navigation Sidebar -->
+        <div class="explorer-sidebar">
+          <div class="sidebar-section-title">Quick access</div>
+          <div class="sidebar-item" id="sidebar-folder-desktop" onclick="switchExplorerFolder('desktop')">
+            <span class="sb-icon">🖥️</span>
+            <span class="sb-label">Desktop</span>
+          </div>
+          <div class="sidebar-item active" id="sidebar-folder-downloads" onclick="switchExplorerFolder('downloads')">
+            <span class="sb-icon">⬇️</span>
+            <span class="sb-label">Downloads</span>
+            <span class="sb-badge" id="downloads-badge">9</span>
+          </div>
+          <div class="sidebar-item" id="sidebar-folder-documents" onclick="switchExplorerFolder('documents')">
+            <span class="sb-icon">📄</span>
+            <span class="sb-label">Documents</span>
+          </div>
+          <div class="sidebar-item" id="sidebar-folder-pictures" onclick="switchExplorerFolder('pictures')">
+            <span class="sb-icon">🖼️</span>
+            <span class="sb-label">Pictures</span>
+          </div>
+          <div class="sidebar-item" id="sidebar-folder-videos" onclick="switchExplorerFolder('videos')">
+            <span class="sb-icon">🎬</span>
+            <span class="sb-label">Videos</span>
+          </div>
+          <div class="sidebar-item" id="sidebar-folder-music" onclick="switchExplorerFolder('music')">
+            <span class="sb-icon">🎵</span>
+            <span class="sb-label">Music</span>
+          </div>
+
+          <div class="sidebar-divider"></div>
+          <div class="sidebar-section-title">This PC</div>
+          <div class="sidebar-item" id="sidebar-folder-thispc" onclick="switchExplorerFolder('thispc')">
+            <span class="sb-icon">💻</span>
+            <span class="sb-label">Windows (C:)</span>
+          </div>
+          <div class="sidebar-item" id="sidebar-folder-usb" onclick="switchExplorerFolder('usb')">
+            <span class="sb-icon">💾</span>
+            <span class="sb-label">USB Drive (E:)</span>
+          </div>
+          <div class="sidebar-item" id="sidebar-folder-network" onclick="switchExplorerFolder('network')">
+            <span class="sb-icon">🌐</span>
+            <span class="sb-label">Network</span>
+          </div>
+        </div>
+
+        <!-- Center File Area -->
         <div class="folder-file-list-wrap">
-          <div class="folder-file-table-header">
-            <span class="col-name">Name</span>
-            <span class="col-date">Date modified</span>
-            <span class="col-type">Type</span>
-            <span class="col-size">Size</span>
+          <!-- Dynamic Explorer Header Banner for USB, Network, and System Drives -->
+          <div id="explorer-banner-area" class="explorer-banner-area hidden"></div>
+
+          <!-- Details View Header (hidden in grid mode) -->
+          <div class="folder-file-table-header" id="explorer-table-header">
+            <span class="col-name" onclick="sortExplorerFiles('name')">Name ↕</span>
+            <span class="col-date" onclick="sortExplorerFiles('date')">Date modified ↕</span>
+            <span class="col-type" onclick="sortExplorerFiles('type')">Type ↕</span>
+            <span class="col-size" onclick="sortExplorerFiles('size')">Size ↕</span>
             <span class="col-status">Status</span>
           </div>
-          <div id="folder-file-list" class="folder-file-list">
+
+          <!-- File Items Container -->
+          <div id="folder-file-list" class="folder-file-list view-details">
             <!-- Populated by JS -->
           </div>
         </div>
 
-        <!-- File Inspection Side Pane -->
+        <!-- Right File Inspection & Live Preview Pane -->
         <div id="folder-detail-pane" class="folder-detail-pane">
           <div class="fdp-empty" id="fdp-empty">
-            <div style="font-size:32px;margin-bottom:8px">📄</div>
-            <div>Select a file to inspect metadata and verify safety</div>
+            <div class="fdp-empty-icon">📁</div>
+            <div class="fdp-empty-text">Select a file to inspect metadata and verify safety</div>
+            <div class="fdp-empty-hint">Double-click or press "Open" to launch DOCX, images, or videos</div>
           </div>
           <div id="fdp-content" class="fdp-content hidden">
             <!-- Populated by JS -->
           </div>
         </div>
       </div>
+
+      <!-- Bottom Status Bar -->
+      <div class="explorer-status-bar">
+        <div class="status-left">
+          <span id="explorer-status-items">9 items</span>
+          <span class="status-sep">|</span>
+          <span id="explorer-status-selected">1 item selected</span>
+        </div>
+        <div class="status-right">
+          <span class="status-shield" id="explorer-shield-status">🛡️ ShieldAV Real-Time: ON</span>
+          <span class="status-sep">|</span>
+          <button class="status-view-btn active" id="stat-btn-details" onclick="setExplorerViewMode('details')" title="Details view">📄</button>
+          <button class="status-view-btn" id="stat-btn-grid" onclick="setExplorerViewMode('grid')" title="Large icons view">⊞</button>
+        </div>
+      </div>
     </div>
   </div>
+
+  <!-- ── MICROSOFT WORD / DOCUMENT VIEWER WINDOW ── -->
+  <div id="win-docviewer" class="app-window hidden" data-app="docviewer">
+    <div class="win-titlebar docviewer-titlebar" id="titlebar-docviewer">
+      <div class="win-title">
+        <span class="win-icon">📄</span>
+        <span id="docviewer-title-text">Microsoft Word — project_architecture_notes.docx</span>
+      </div>
+      <div class="win-controls">
+        <button class="win-btn win-minimize" onclick="minimizeApp('docviewer')" title="Minimize">─</button>
+        <button class="win-btn win-maximize" onclick="toggleMaximize('docviewer')" title="Maximize">□</button>
+        <button class="win-btn win-close" onclick="closeApp('docviewer')" title="Close">✕</button>
+      </div>
+    </div>
+    <div class="win-body docviewer-body">
+      <!-- Word Top Menu Tabs -->
+      <div class="word-menu-tabs">
+        <span class="word-autosave-wrap"><span class="word-autosave-dot"></span> AutoSave [ON]</span>
+        <button class="word-tab active">File</button>
+        <button class="word-tab active">Home</button>
+        <button class="word-tab">Insert</button>
+        <button class="word-tab">Layout</button>
+        <button class="word-tab">References</button>
+        <button class="word-tab">Review</button>
+        <button class="word-tab">View</button>
+        <button class="word-tab">Help</button>
+        <div class="word-badge-clean">🛡️ Verified Clean Office Document (Zero Macro Payloads)</div>
+      </div>
+
+      <!-- Word Ribbon Toolbar -->
+      <div class="word-ribbon">
+        <div class="ribbon-group">
+          <button class="ribbon-btn" onclick="showToast('Clipboard copied', 'info')" title="Paste">📋 Paste</button>
+        </div>
+        <div class="ribbon-divider"></div>
+        <div class="ribbon-group font-group">
+          <div class="font-row">
+            <select class="word-select font-family" title="Font">
+              <option>Calibri</option>
+              <option>Arial</option>
+              <option>Times New Roman</option>
+              <option>Segoe UI</option>
+            </select>
+            <select class="word-select font-size" title="Font Size">
+              <option>11</option>
+              <option>12</option>
+              <option>14</option>
+              <option>16</option>
+            </select>
+            <button class="ribbon-mini-btn active" title="Bold"><b>B</b></button>
+            <button class="ribbon-mini-btn" title="Italic"><i>I</i></button>
+            <button class="ribbon-mini-btn" title="Underline"><u>U</u></button>
+            <button class="ribbon-mini-btn" title="Highlight">🖊️</button>
+          </div>
+          <div class="font-row">
+            <button class="ribbon-mini-btn" title="Align Left">⫷</button>
+            <button class="ribbon-mini-btn" title="Align Center">≡</button>
+            <button class="ribbon-mini-btn" title="Align Right">⫸</button>
+            <button class="ribbon-mini-btn" title="Bullets">•≡</button>
+            <button class="ribbon-mini-btn" title="Numbers">1≡</button>
+          </div>
+        </div>
+        <div class="ribbon-divider"></div>
+        <div class="ribbon-group styles-group">
+          <button class="ribbon-style-card active">Normal</button>
+          <button class="ribbon-style-card">Heading 1</button>
+          <button class="ribbon-style-card">Heading 2</button>
+          <button class="ribbon-style-card">Title</button>
+        </div>
+        <div class="ribbon-divider"></div>
+        <div class="ribbon-group actions-group">
+          <button class="ribbon-btn ribbon-btn-action" onclick="scanCurrentDocumentInAV()" title="Scan document with Anti-Virus">⚡ Scan in AV</button>
+          <button class="ribbon-btn" onclick="window.print()" title="Print">🖨️ Print</button>
+        </div>
+      </div>
+
+      <!-- Document Workspace Canvas -->
+      <div class="word-canvas-scroll">
+        <div class="word-page-sheet" id="docviewer-page-content">
+          <!-- Populated by JS -->
+        </div>
+      </div>
+
+      <!-- Word Status Bar -->
+      <div class="word-status-bar">
+        <span>Page 1 of 1</span>
+        <span class="status-sep">|</span>
+        <span id="docviewer-word-count">482 words</span>
+        <span class="status-sep">|</span>
+        <span>English (United States)</span>
+        <span class="status-sep">|</span>
+        <span class="doc-sec-badge">🛡️ Macro Execution Disabled (Protected View)</span>
+        <div class="word-zoom-controls">
+          <span>100%</span>
+          <input type="range" min="50" max="150" value="100" class="word-zoom-slider" oninput="setWordZoom(this.value)" />
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── PHOTOS / IMAGE VIEWER WINDOW ── -->
+  <div id="win-imageviewer" class="app-window hidden" data-app="imageviewer">
+    <div class="win-titlebar imageviewer-titlebar" id="titlebar-imageviewer">
+      <div class="win-title">
+        <span class="win-icon">🖼️</span>
+        <span id="imageviewer-title-text">Photos — annual_team_retreat.jpg</span>
+      </div>
+      <div class="win-controls">
+        <button class="win-btn win-minimize" onclick="minimizeApp('imageviewer')" title="Minimize">─</button>
+        <button class="win-btn win-maximize" onclick="toggleMaximize('imageviewer')" title="Maximize">□</button>
+        <button class="win-btn win-close" onclick="closeApp('imageviewer')" title="Close">✕</button>
+      </div>
+    </div>
+    <div class="win-body imageviewer-body">
+      <!-- Photos Top Action Bar -->
+      <div class="photos-toolbar">
+        <button class="photo-tool-btn" onclick="imgViewerZoomIn()" title="Zoom In">🔍 +</button>
+        <button class="photo-tool-btn" onclick="imgViewerZoomOut()" title="Zoom Out">🔍 −</button>
+        <button class="photo-tool-btn" onclick="imgViewerZoomReset()" title="Actual Size (1:1)">1:1</button>
+        <div class="photo-divider"></div>
+        <button class="photo-tool-btn" onclick="imgViewerRotateLeft()" title="Rotate Left">↺ Rotate</button>
+        <button class="photo-tool-btn" onclick="imgViewerRotateRight()" title="Rotate Right">↻ Rotate</button>
+        <div class="photo-divider"></div>
+        <button class="photo-tool-btn active" id="btn-toggle-img-info" onclick="toggleImageInfoDrawer()" title="File Info">ℹ️ Details</button>
+        <button class="photo-tool-btn" onclick="scanCurrentImageInAV()" title="Scan in Anti-Virus">⚡ Scan in AV</button>
+      </div>
+
+      <!-- Photos Canvas & Drawer -->
+      <div class="photos-workspace">
+        <div class="photos-canvas" id="photos-canvas">
+          <img id="imgviewer-display" src="assets/background/Coffe shop.png" alt="Viewing Image" />
+        </div>
+
+        <!-- Toggleable Info Drawer -->
+        <div class="photos-info-drawer" id="photos-info-drawer">
+          <div class="pinfo-header">
+            <strong>Photo Information</strong>
+            <button class="pinfo-close" onclick="toggleImageInfoDrawer()">✕</button>
+          </div>
+          <div class="pinfo-list" id="pinfo-list">
+            <!-- Populated by JS -->
+          </div>
+        </div>
+      </div>
+
+      <!-- Photos Bottom Status Bar -->
+      <div class="photos-status-bar">
+        <span id="photos-status-dim">1920 × 1080 px</span>
+        <span class="status-sep">|</span>
+        <span id="photos-status-size">1.2 MB</span>
+        <span class="status-sep">|</span>
+        <span id="photos-status-zoom">Zoom: 100%</span>
+        <span class="status-sep">|</span>
+        <span class="badge-clean" style="font-size:10px">✓ Clean Photographic Asset</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── MEDIA / VIDEO PLAYER WINDOW ── -->
+  <div id="win-videoplayer" class="app-window hidden" data-app="videoplayer">
+    <div class="win-titlebar videoplayer-titlebar" id="titlebar-videoplayer">
+      <div class="win-title">
+        <span class="win-icon">🎬</span>
+        <span id="videoplayer-title-text">Media Player — cyber_awareness_clip.mp4</span>
+      </div>
+      <div class="win-controls">
+        <button class="win-btn win-minimize" onclick="minimizeApp('videoplayer')" title="Minimize">─</button>
+        <button class="win-btn win-maximize" onclick="toggleMaximize('videoplayer')" title="Maximize">□</button>
+        <button class="win-btn win-close" onclick="closeApp('videoplayer')" title="Close">✕</button>
+      </div>
+    </div>
+    <div class="win-body videoplayer-body">
+      <!-- Video Stage -->
+      <div class="vp-stage" id="vp-stage" onclick="vpTogglePlay()">
+        <video id="videoplayer-video" src="assets/video/video3.mp4" playsinline preload="auto"></video>
+        <!-- Audio Mode Visualizer Stage -->
+        <div class="vp-audio-stage hidden" id="vp-audio-stage">
+          <div class="vp-audio-disc-wrap">
+            <div class="vp-audio-disc" id="vp-audio-disc">🎵</div>
+          </div>
+          <div class="vp-audio-meta">
+            <div class="vp-audio-track-title" id="vp-audio-track-title">CyberZero Track</div>
+            <div class="vp-audio-artist-name" id="vp-audio-artist-name">CyberZero Audio Deck • 320 kbps MP3</div>
+          </div>
+          <div class="vp-audio-eq-bars" id="vp-audio-eq">
+            <span class="eq-bar b1"></span>
+            <span class="eq-bar b2"></span>
+            <span class="eq-bar b3"></span>
+            <span class="eq-bar b4"></span>
+            <span class="eq-bar b5"></span>
+            <span class="eq-bar b6"></span>
+            <span class="eq-bar b7"></span>
+            <span class="eq-bar b8"></span>
+            <span class="eq-bar b9"></span>
+            <span class="eq-bar b10"></span>
+            <span class="eq-bar b11"></span>
+            <span class="eq-bar b12"></span>
+          </div>
+        </div>
+        <div class="vp-center-play-overlay hidden" id="vp-center-overlay">
+          <span>▶</span>
+        </div>
+      </div>
+
+      <!-- Video Controls Bar -->
+      <div class="vp-controls">
+        <!-- Progress Bar -->
+        <div class="vp-progress-container" id="vp-progress-container" onclick="vpSeek(event)">
+          <div class="vp-progress-fill" id="vp-progress-fill" style="width:0%"></div>
+          <div class="vp-progress-thumb" id="vp-progress-thumb" style="left:0%"></div>
+        </div>
+
+        <div class="vp-buttons-row">
+          <div class="vp-btn-group">
+            <button class="vp-btn" id="vp-play-btn" onclick="vpTogglePlay()" title="Play / Pause">▶</button>
+            <button class="vp-btn" onclick="vpSkip(-10)" title="Rewind 10s">⏪ 10s</button>
+            <button class="vp-btn" onclick="vpSkip(10)" title="Forward 10s">10s ⏩</button>
+            <span class="vp-time" id="vp-time-display">0:00 / 0:00</span>
+          </div>
+
+          <div class="vp-btn-group">
+            <button class="vp-btn" id="vp-mute-btn" onclick="vpToggleMute()" title="Mute / Unmute">🔊</button>
+            <input type="range" min="0" max="1" step="0.05" value="1" class="vp-volume-slider" id="vp-volume-slider" oninput="vpSetVolume(this.value)" title="Volume" />
+            <select class="vp-speed-select" onchange="vpSetSpeed(this.value)" title="Playback Speed">
+              <option value="0.75">0.75x</option>
+              <option value="1" selected>1.0x</option>
+              <option value="1.25">1.25x</option>
+              <option value="1.5">1.5x</option>
+            </select>
+            <button class="vp-btn" onclick="vpToggleFullscreen()" title="Fullscreen">⛶</button>
+            <button class="vp-btn vp-btn-av" onclick="scanCurrentVideoInAV()" title="Scan Video in ShieldAV">⚡ Scan in AV</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── WINDOWS DEFENDER SMARTSCREEN MODAL (Malware Blocked) ── -->
+  <div id="modal-smartscreen" class="smartscreen-overlay hidden">
+    <div class="smartscreen-card">
+      <div class="smartscreen-topbar">
+        <span class="smartscreen-shield">🛡️</span>
+        <span class="smartscreen-banner-title">Windows Defender SmartScreen</span>
+      </div>
+      <div class="smartscreen-body">
+        <h2 class="smartscreen-title">Windows Defender SmartScreen prevented an unrecognized app from starting</h2>
+        <p class="smartscreen-desc">Running this unrecognized app might put your PC at risk. Attackers frequently camouflage executables with innocent names or deceptive double extensions.</p>
+
+        <div class="smartscreen-details-box">
+          <div class="ss-detail-row">
+            <span class="ss-label">App:</span>
+            <span class="ss-val" id="smartscreen-app-name">salary_bonus_september.pdf.exe</span>
+          </div>
+          <div class="ss-detail-row">
+            <span class="ss-label">Actual Format:</span>
+            <span class="ss-val alert-danger" id="smartscreen-app-format">Executable Binary (.exe)</span>
+          </div>
+          <div class="ss-detail-row">
+            <span class="ss-label">Publisher:</span>
+            <span class="ss-val">Unknown / Untrusted Publisher</span>
+          </div>
+          <div class="ss-detail-row">
+            <span class="ss-label">Signature:</span>
+            <span class="ss-val" id="smartscreen-app-sig">Unsigned • Suspicious Binary</span>
+          </div>
+        </div>
+
+        <div class="smartscreen-actions">
+          <button class="btn-danger" id="smartscreen-btn-quarantine" onclick="smartscreenQuarantine()">🛡️ Quarantine Immediately (+100 pts)</button>
+          <button class="btn-primary" id="smartscreen-btn-scan" onclick="smartscreenScan()">⚡ Deep Scan with ShieldAV</button>
+          <button class="btn-ghost" onclick="closeSmartScreenModal()">Don't Run (Safe)</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
 
   <!-- ── ANTI-VIRUS WINDOW ── -->
   <div id="win-antivirus" class="app-window hidden" data-app="antivirus">
@@ -763,7 +1183,15 @@
       <button class="taskbar-app-btn" id="taskbar-comms" onclick="taskbarClick('comms')" title="Phone Link">
         <span><img src="assets/icons/apps/Smartphone.svg" alt="Phone Link" style="width:18px;height:18px;vertical-align:middle;"></span> Phone Link
       </button>
-
+      <button class="taskbar-app-btn hidden" id="taskbar-docviewer" onclick="taskbarClick('docviewer')" title="Microsoft Word">
+        <span>📄</span> Word
+      </button>
+      <button class="taskbar-app-btn hidden" id="taskbar-imageviewer" onclick="taskbarClick('imageviewer')" title="Photos">
+        <span>🖼️</span> Photos
+      </button>
+      <button class="taskbar-app-btn hidden" id="taskbar-videoplayer" onclick="taskbarClick('videoplayer')" title="Media Player">
+        <span>🎬</span> Media Player
+      </button>
     </div>
     <div class="taskbar-tray">
       <button class="tray-btn" id="tray-volume-btn" onclick="toggleVolumeFlyout(event)" title="🔊 Sound &amp; Audio Volume Settings" aria-label="Speakers / Sound Settings">
@@ -1604,126 +2032,60 @@
   </div>
 </div>
 
-<!-- ── CHAPTER 3: 30-SECOND AI AWARENESS VIDEO OVERLAY ── -->
-<div id="overlay-awareness-video" class="overlay">
-  <div class="video-player-container">
-    <!-- Top Bar -->
-    <div class="video-topbar">
-      <div class="video-title-wrap">
-        <span class="video-badge">AI AWARENESS VIDEO</span>
-        <span class="video-title">Think Before You Connect, Trust, or Download</span>
+<!-- ── CHAPTER 3: AI AWARENESS VIDEO OVERLAY (Real Video) ── -->
+<div id="overlay-awareness-video" class="overlay ov-awareness-real hidden">
+
+  <!-- Frosted desktop backdrop — desktop shows through -->
+  <div class="av-backdrop"></div>
+
+  <!-- Video Window Card -->
+  <div class="av-window" id="av-window">
+
+    <!-- Title bar -->
+    <div class="av-titlebar">
+      <div class="av-titlebar-left">
+        <span class="av-badge">AI AWARENESS VIDEO</span>
+        <span class="av-title">Think Before You Connect, Trust, or Download</span>
       </div>
-      <button class="video-skip-btn" id="btn-skip-video" onclick="skipAwarenessVideo()">Skip Video ⏩</button>
+      <div class="av-titlebar-right">
+        <button class="av-topbtn av-skip-top" id="btn-skip-video" onclick="skipAwarenessVideo()" title="Skip video and start mission">⏩ Skip</button>
+        <button class="av-topbtn av-close-btn" onclick="closeAwarenessVideo()" title="Close video">✕</button>
+      </div>
     </div>
 
-    <!-- Video Stage / Viewport -->
-    <div class="video-viewport" id="video-viewport">
-      <!-- Slide 1: Unsafe Public Wi-Fi (0-10s) -->
-      <div class="video-slide active" id="vslide-1" data-start="0" data-end="10">
-        <div class="vslide-visual">
-          <div class="vslide-scene scene-wifi">
-            <div class="vslide-actor">
-              <span class="vslide-icon">💻</span>
-              <div class="vslide-actor-tag">Café Workstation</div>
-            </div>
-            <div class="vslide-wifi-waves">
-              <div class="wifi-wave w1"></div>
-              <div class="wifi-wave w2"></div>
-              <div class="wifi-wave w3"></div>
-            </div>
-            <div class="vslide-warning-tag">⚠️ UNSECURED PUBLIC WI-FI DETECTED</div>
-            <div class="vslide-risk-nodes">
-              <span class="risk-node">CoffeeShop_Guest (Open)</span>
-              <span class="risk-node risk-alert">SJSHS_FREE_WIFI (Fake/Rogue)</span>
-            </div>
-          </div>
-        </div>
-        <div class="vslide-caption">
-          <span class="vslide-speaker">🎙️ NARRATOR (0:00 - 0:10):</span>
-          <p>“Public Wi-Fi is convenient, but it can introduce security risks. Verify the network before connecting and avoid sensitive activities on unsecured networks.”</p>
-        </div>
-      </div>
+    <!-- Real video element -->
+    <div class="av-video-wrap">
+      <video id="awareness-real-video"
+        class="av-real-video"
+        src="assets/video/video3.mp4"
+        preload="auto"
+        playsinline
+      ></video>
 
-      <!-- Slide 2: Social Engineering (10-20s) -->
-      <div class="video-slide" id="vslide-2" data-start="10" data-end="20">
-        <div class="vslide-visual">
-          <div class="vslide-scene scene-social">
-            <div class="vslide-chat-mock">
-              <div class="vchat-header">
-                <span class="vchat-avatar">⚠️</span>
-                <div>
-                  <div class="vchat-user">Mia — New Account <span class="vchat-badge-fake">UNVERIFIED</span></div>
-                  <div class="vchat-time">Active Today • Unknown device</div>
-                </div>
-              </div>
-              <div class="vchat-bubble urgent">
-                <p>“Hey, can you send me your student number and birthday? I need them to recover our project account. Please hurry!”</p>
-                <span class="vchat-urgency-tag">🚨 URGENT PRESSURE TACTIC</span>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="vslide-caption">
-          <span class="vslide-speaker">🎙️ NARRATOR (0:10 - 0:20):</span>
-          <p>“Attackers may impersonate people you know and create urgency. Verify unusual requests before sharing personal information.”</p>
-        </div>
-      </div>
-
-      <!-- Slide 3: Malicious Download (20-27s) -->
-      <div class="video-slide" id="vslide-3" data-start="20" data-end="27">
-        <div class="vslide-visual">
-          <div class="vslide-scene scene-download">
-            <div class="vslide-browser-mock">
-              <div class="vbrowser-bar">
-                <span class="vbrowser-ssl">⚠️ Not Secure</span>
-                <span class="vbrowser-url">http://canva-premium-free.example</span>
-              </div>
-              <div class="vbrowser-body">
-                <div class="vdownload-hero">
-                  <div class="vdownload-title">FREE PREMIUM DESIGN TOOL</div>
-                  <div class="vdownload-btn">⬇ DOWNLOAD NOW</div>
-                </div>
-                <div class="vfile-inspection-card">
-                  <div class="vfile-line"><span class="vfl-lbl">File:</span> <strong>PremiumDesignTool.exe</strong> <span class="badge-danger">.EXE</span></div>
-                  <div class="vfile-line"><span class="vfl-lbl">Publisher:</span> <span class="badge-danger">Unknown</span></div>
-                  <div class="vfile-line"><span class="vfl-lbl">Source:</span> <span class="badge-danger">canva-premium-free.example</span></div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="vslide-caption">
-          <span class="vslide-speaker">🎙️ NARRATOR (0:20 - 0:27):</span>
-          <p>“Before opening a downloaded file, check its source, file type, and publisher. Avoid untrusted software.”</p>
-        </div>
-      </div>
-
-      <!-- Slide 4: Transition (27-30s) -->
-      <div class="video-slide" id="vslide-4" data-start="27" data-end="30">
-        <div class="vslide-visual">
-          <div class="vslide-scene scene-start">
-            <div class="vstart-shield">🛡️</div>
-            <div class="vstart-title">CYBERZERØ SIMULATION</div>
-            <div class="vstart-subtitle">CHAPTER 3: GROUP 4 MULTIMEDIA PROJECT</div>
-            <div class="vstart-badge-start">CHAPTER START</div>
-          </div>
-        </div>
-        <div class="vslide-caption">
-          <span class="vslide-speaker">🎙️ NARRATOR (0:27 - 0:30):</span>
-          <p>“Now it's your turn. Investigate carefully, make your own decisions, and think before you act.”</p>
+      <!-- Finished banner overlay -->
+      <div class="av-finished-overlay hidden" id="av-finished-overlay">
+        <div class="av-finished-card">
+          <div class="av-finished-icon">✅</div>
+          <div class="av-finished-title">Video Complete</div>
+          <div class="av-finished-sub">You may now start the mission.</div>
+          <button class="av-finished-btn" onclick="skipAwarenessVideo()">Start Mission →</button>
         </div>
       </div>
     </div>
 
-    <!-- Video Bottom Control Bar -->
-    <div class="video-controls">
-      <button class="vctrl-btn" id="vctrl-play-btn" onclick="toggleAwarenessVideoPlay()">⏸ Pause</button>
-      <div class="vctrl-time" id="vctrl-time-display">00:00 / 00:30</div>
-      <div class="vctrl-progress-bar" onclick="seekAwarenessVideo(event)">
-        <div class="vctrl-progress-fill" id="vctrl-progress-fill" style="width: 0%"></div>
+    <!-- Controls bar -->
+    <div class="av-controls">
+      <button class="av-ctrl-btn" id="av-play-btn" onclick="avTogglePlay()" title="Play / Pause">▶</button>
+      <span class="av-time" id="av-time">0:00 / 0:00</span>
+      <div class="av-progress-bar" id="av-progress-bar" onclick="avSeek(event)" title="Click to seek">
+        <div class="av-progress-fill" id="av-progress-fill" style="width:0%"></div>
+        <div class="av-progress-thumb" id="av-progress-thumb" style="left:0%"></div>
       </div>
-      <button class="vctrl-btn vctrl-start-btn" onclick="skipAwarenessVideo()">Start Mission →</button>
+      <button class="av-ctrl-btn" id="av-mute-btn" onclick="avToggleMute()" title="Mute / Unmute">🔊</button>
+      <input type="range" class="av-volume-slider" id="av-volume-slider" min="0" max="1" step="0.05" value="1" oninput="avSetVolume(this.value)" title="Volume">
+      <button class="av-ctrl-btn av-ctrl-mission" onclick="skipAwarenessVideo()" title="Skip and Start Mission">Start Mission →</button>
     </div>
+
   </div>
 </div>
 
