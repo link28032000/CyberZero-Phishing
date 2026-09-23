@@ -47,9 +47,9 @@
         <div class="icon-img"><img src="assets/icons/apps/windows_defender.svg" alt="Anti-Virus" style="width:36px;height:36px;"></div>
         <span>Anti-Virus</span>
       </div>
-      <div class="desktop-icon locked" id="icon-comms" onclick="openApp('comms')" title="🔒 Locked — Complete Chapter 2 (Malware) first">
-        <div class="icon-img"><img src="assets/icons/apps/Smartphone.svg" alt="Comms" style="width:36px;height:36px;"></div>
-        <span>Comms</span>
+      <div class="desktop-icon" id="icon-comms" onclick="openApp('comms')" title="Phone Link">
+        <div class="icon-img"><img src="assets/icons/apps/Smartphone.svg" alt="Phone Link" style="width:36px;height:36px;"></div>
+        <span>Phone Link</span>
       </div>
     </div>
   </div>
@@ -372,12 +372,12 @@
     </div>
   </div>
 
-  <!-- ── COMMS CENTER WINDOW (SOCIAL ENGINEERING DEFENSE - PHILLIP) ── -->
+  <!-- ── PHONE LINK WINDOW ── -->
   <div id="win-comms" class="app-window hidden" data-app="comms">
     <div class="win-titlebar" id="titlebar-comms">
       <div class="win-title">
-        <span class="win-icon">📱</span>
-        <span>Comms Defense — Chapter 3: Social Engineering Incident Lab</span>
+        <span class="win-icon"><img src="assets/icons/apps/messages.svg" alt="Phone Link" style="width:16px;height:16px;vertical-align:middle;"></span>
+        <span>Phone Link</span>
       </div>
       <div class="win-controls">
         <button class="win-btn win-minimize" onclick="minimizeApp('comms')" title="Minimize">─</button>
@@ -385,38 +385,293 @@
         <button class="win-btn win-close" onclick="closeApp('comms')" title="Close">✕</button>
       </div>
     </div>
-    <div class="win-body comms-body">
-      <!-- Left Sidebar: Communications Feed -->
-      <div class="comms-sidebar">
-        <div class="comms-sidebar-header">
-          <div class="comms-user-tag">
-            <span class="comms-avatar">🎭</span>
-            <div>
-              <div class="comms-user-name">Phillip's Device</div>
-              <div class="comms-user-status">🟢 Live Threat Intercept Active</div>
+    <div class="win-body phone-link-body">
+
+      <!-- Phone Visual Sidebar -->
+      <div class="pl-phone-sidebar">
+        <div class="pl-phone-frame" id="pl-phone-frame">
+          <!-- Phone bezel -->
+          <div class="pl-phone-screen" id="pl-phone-screen">
+            <div class="pl-phone-status-bar">
+              <span class="pl-phone-time" id="pl-phone-time">10:42</span>
+              <div class="pl-phone-icons">
+                <span id="pl-phone-signal">📶</span>
+                <span>🔋</span>
+              </div>
+            </div>
+            <div class="pl-phone-app-bar">
+              <span id="pl-phone-app-name">Messages</span>
+            </div>
+            <div class="pl-phone-content" id="pl-phone-content">
+              <!-- Rendered by JS -->
             </div>
           </div>
+          <!-- Notification badge -->
+          <div class="pl-notif-badge hidden" id="pl-notif-badge">!</div>
         </div>
-        <div class="comms-filter-strip">
-          <span class="comms-filter-label">INCOMING TRANSMISSIONS</span>
-          <span class="comms-filter-badge" id="comms-filter-badge">4 Items</span>
-        </div>
-        <div class="comms-msg-list" id="comms-msg-list">
-          <!-- Rendered dynamically by script.js -->
+        <div class="pl-device-label" title="Mobile Phone Connected">
+          <span class="pl-device-name">📱 Mobile Phone</span>
+          <span class="pl-device-status" id="pl-device-status">🟢 Connected</span>
         </div>
       </div>
 
-      <!-- Right Main Area: Selected Comm Analysis & Action -->
-      <div class="comms-main-area" id="comms-main-area">
-        <div class="comms-empty-state" id="comms-empty-state">
-          <div class="comms-empty-icon">📱</div>
-          <div class="comms-empty-title">Select a communication to inspect</div>
-          <div class="comms-empty-sub">Analyze sender credentials, caller identity, pretexting psychology, fake IT vishing calls, and urgent smishing links.</div>
+      <!-- Main Message Panel -->
+      <div class="pl-main-panel">
+        <!-- Nav Tabs -->
+        <div class="pl-nav-tabs">
+          <button class="pl-tab active" id="pl-tab-messages" onclick="switchPhoneTab('messages')">
+            <span>💬</span> Messages
+            <span class="pl-tab-badge" id="pl-msg-badge">2</span>
+          </button>
+          <button class="pl-tab" id="pl-tab-calls" onclick="switchPhoneTab('calls')">
+            <span>📞</span> Calls
+          </button>
+          <button class="pl-tab" id="pl-tab-contacts" onclick="switchPhoneTab('contacts')">
+            <span>👥</span> Contacts
+          </button>
         </div>
-        <div class="comms-detail-view hidden" id="comms-detail-view">
-          <!-- Rendered dynamically by script.js -->
+
+        <!-- Tab Content Area -->
+        <div class="pl-tab-content" id="pl-tab-content">
+          <!-- Rendered by JS -->
         </div>
       </div>
+
+    </div>
+  </div>
+
+  <!-- ── WI-FI SETTINGS WINDOW (Group 4 — Stage 1) ── -->
+  <div id="win-wifi-settings" class="app-window hidden" data-app="wifi-settings">
+    <div class="win-titlebar" id="titlebar-wifi-settings">
+      <div class="win-title">
+        <span class="win-icon">📶</span>
+        <span>Settings — Network &amp; Internet — Wi-Fi</span>
+      </div>
+      <div class="win-controls">
+        <button class="win-btn win-minimize" onclick="minimizeApp('wifi-settings')" title="Minimize">─</button>
+        <button class="win-btn win-maximize" onclick="toggleMaximize('wifi-settings')" title="Maximize">□</button>
+        <button class="win-btn win-close" onclick="closeApp('wifi-settings')" title="Close">✕</button>
+      </div>
+    </div>
+    <div class="win-body wifi-settings-body">
+      <!-- Sidebar Nav -->
+      <div class="settings-sidebar">
+        <div class="settings-nav-item active" id="wsnav-wifi" onclick="switchWifiSettingsTab('wifi')">
+          <span><img src="assets/icons/networks/wi-fi.svg" alt="Wi-Fi" style="width:16px;height:16px;vertical-align:middle;"></span> Wi-Fi
+        </div>
+        <div class="settings-nav-item" id="wsnav-bluetooth" onclick="switchWifiSettingsTab('bluetooth')">
+          <span><img src="assets/icons/networks/bluetooth.svg" alt="Bluetooth" style="width:16px;height:16px;vertical-align:middle;"></span> Bluetooth
+        </div>
+        <div class="settings-nav-item" id="wsnav-airplane" onclick="switchWifiSettingsTab('airplane')">
+          <span><img src="assets/icons/networks/airlane mode.svg" alt="Airplane Mode" style="width:16px;height:16px;vertical-align:middle;"></span> Airplane Mode
+        </div>
+      </div>
+      <!-- Main Content -->
+      <div class="settings-main">
+        <!-- Wi-Fi Tab -->
+        <div id="wstab-wifi">
+          <div class="settings-page-title"><img src="assets/icons/networks/wi-fi.svg" alt="" style="width:20px;height:20px;vertical-align:middle;margin-right:8px;">Wi-Fi</div>
+          <div class="settings-section-header">Available Networks</div>
+          <div id="wifi-networks-settings-list" class="wifi-networks-settings-list">
+            <!-- Rendered by JS -->
+          </div>
+          <!-- Network Properties Panel (shown on inspect) -->
+          <div id="wifi-props-panel" class="wifi-props-panel hidden">
+            <!-- Rendered by JS -->
+          </div>
+          <!-- Narrator Tip -->
+          <div class="g4-narrator-tip" id="wifi-narrator-tip" style="display:none;">
+            <span class="g4-narrator-icon">🎙️</span>
+            <p>"Don't trust a network simply because its name looks familiar. Verify the network name with the establishment or another trusted source."</p>
+          </div>
+        </div>
+
+        <!-- Bluetooth Tab -->
+        <div id="wstab-bluetooth" style="display:none;">
+          <div class="settings-page-title"><img src="assets/icons/networks/bluetooth.svg" alt="" style="width:20px;height:20px;vertical-align:middle;margin-right:8px;">Bluetooth</div>
+          <div class="settings-section-header">Status</div>
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:1px solid rgba(255,255,255,0.07);">
+            <div>
+              <div style="font-weight:600;font-size:14px;color:var(--text-primary)">Bluetooth</div>
+              <div style="font-size:12px;color:var(--text-muted)" id="ws-bt-state-label">On — Student Headset connected</div>
+            </div>
+            <button id="ws-bt-toggle-btn" onclick="wsToggleBluetooth()" style="padding:6px 16px;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;background:rgba(56,189,248,0.15);border:1px solid rgba(56,189,248,0.4);color:#38bdf8;">Turn Off</button>
+          </div>
+          <div class="settings-section-header" style="margin-top:16px;">Available Devices</div>
+          <div style="display:flex;flex-direction:column;gap:8px;margin-top:8px;">
+            <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 12px;border-radius:8px;background:rgba(56,189,248,0.08);border:1px solid rgba(56,189,248,0.2);">
+              <div style="display:flex;align-items:center;gap:10px;">
+                <img src="assets/icons/networks/bluetooth.svg" alt="Bluetooth" style="width:18px;height:18px;">
+                <div>
+                  <div style="font-weight:600;font-size:13px;color:var(--text-primary)">Student Headset</div>
+                  <div style="font-size:11px;color:#38bdf8;">Connected • Audio device</div>
+                </div>
+              </div>
+              <button onclick="showToast('🎧 Student Headset is already connected.','info')" style="padding:4px 12px;border-radius:6px;font-size:11px;font-weight:600;cursor:pointer;background:rgba(0,255,136,0.1);border:1px solid rgba(0,255,136,0.3);color:#00ff88;">Connected</button>
+            </div>
+            <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 12px;border-radius:8px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);">
+              <div style="display:flex;align-items:center;gap:10px;">
+                <img src="assets/icons/networks/bluetooth.svg" alt="Bluetooth" style="width:18px;height:18px;opacity:0.5;">
+                <div>
+                  <div style="font-weight:600;font-size:13px;color:var(--text-primary)">CyberLab Printer</div>
+                  <div style="font-size:11px;color:var(--text-muted);">Available • Printer</div>
+                </div>
+              </div>
+              <button onclick="showToast('🖨️ Connecting to CyberLab Printer...','info')" style="padding:4px 12px;border-radius:6px;font-size:11px;font-weight:600;cursor:pointer;background:rgba(56,189,248,0.1);border:1px solid rgba(56,189,248,0.3);color:#38bdf8;">Pair</button>
+            </div>
+            <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 12px;border-radius:8px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);">
+              <div style="display:flex;align-items:center;gap:10px;">
+                <img src="assets/icons/networks/bluetooth.svg" alt="Bluetooth" style="width:18px;height:18px;opacity:0.5;">
+                <div>
+                  <div style="font-weight:600;font-size:13px;color:var(--text-primary)">Unknown Device (BT-4F2A)</div>
+                  <div style="font-size:11px;color:var(--accent-orange,#fb923c);">⚠️ Unrecognized — Do not pair</div>
+                </div>
+              </div>
+              <button onclick="showToast('⚠️ Unknown Bluetooth device detected. Do not pair with unrecognized devices.','warning')" style="padding:4px 12px;border-radius:6px;font-size:11px;font-weight:600;cursor:pointer;background:rgba(251,146,60,0.1);border:1px solid rgba(251,146,60,0.3);color:#fb923c;">Inspect</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Airplane Mode Tab -->
+        <div id="wstab-airplane" style="display:none;">
+          <div class="settings-page-title"><img src="assets/icons/networks/airlane mode.svg" alt="" style="width:20px;height:20px;vertical-align:middle;margin-right:8px;">Airplane Mode</div>
+          <div class="settings-section-header">Status</div>
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:1px solid rgba(255,255,255,0.07);">
+            <div>
+              <div style="font-weight:600;font-size:14px;color:var(--text-primary)">Airplane Mode</div>
+              <div style="font-size:12px;color:var(--text-muted)" id="ws-air-state-label">Off — All wireless transmitters active</div>
+            </div>
+            <button id="ws-air-toggle-btn" onclick="wsToggleAirplane()" style="padding:6px 16px;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);color:var(--text-secondary);">Turn On</button>
+          </div>
+          <div class="settings-section-header" style="margin-top:16px;">Wireless Transmitters</div>
+          <div style="display:flex;flex-direction:column;gap:10px;margin-top:8px;">
+            <div style="display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:8px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);">
+              <img src="assets/icons/networks/wi-fi.svg" alt="Wi-Fi" style="width:18px;height:18px;">
+              <div style="flex:1;"><div style="font-weight:600;font-size:13px;">Wi-Fi</div><div style="font-size:11px;color:var(--text-muted);">Suspended in airplane mode</div></div>
+              <span style="font-size:11px;color:#00ff88;font-weight:700;" id="ws-air-wifi-status">Active</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:8px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);">
+              <img src="assets/icons/networks/bluetooth.svg" alt="Bluetooth" style="width:18px;height:18px;">
+              <div style="flex:1;"><div style="font-weight:600;font-size:13px;">Bluetooth</div><div style="font-size:11px;color:var(--text-muted);">Suspended in airplane mode</div></div>
+              <span style="font-size:11px;color:#00ff88;font-weight:700;" id="ws-air-bt-status">Active</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:8px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);">
+              <img src="assets/icons/networks/audio.svg" alt="Audio" style="width:18px;height:18px;">
+              <div style="flex:1;"><div style="font-weight:600;font-size:13px;">Audio (Speakers)</div><div style="font-size:11px;color:var(--text-muted);">Not affected by airplane mode</div></div>
+              <span style="font-size:11px;color:#00ff88;font-weight:700;">Always On</span>
+            </div>
+          </div>
+          <div class="g4-narrator-tip" style="margin-top:16px;display:flex;">
+            <span class="g4-narrator-icon">🎙️</span>
+            <p>"Airplane Mode disables all wireless transmitters — Wi-Fi, Bluetooth, and mobile data. Enable it only when required in restricted areas."</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── SECURITY SETTINGS WINDOW (Group 4 — Stage 2) ── -->
+  <div id="win-security-settings" class="app-window hidden" data-app="security-settings">
+    <div class="win-titlebar" id="titlebar-security-settings">
+      <div class="win-title">
+        <span class="win-icon">🛡️</span>
+        <span>Settings — Network &amp; Security — Sharing</span>
+      </div>
+      <div class="win-controls">
+        <button class="win-btn win-minimize" onclick="minimizeApp('security-settings')" title="Minimize">─</button>
+        <button class="win-btn win-maximize" onclick="toggleMaximize('security-settings')" title="Maximize">□</button>
+        <button class="win-btn win-close" onclick="closeApp('security-settings')" title="Close">✕</button>
+      </div>
+    </div>
+    <div class="win-body wifi-settings-body">
+      <!-- Sidebar Nav -->
+      <div class="settings-sidebar">
+        <div class="settings-nav-item"><span>🏠</span> System</div>
+        <div class="settings-nav-item"><span>📶</span> Network</div>
+        <div class="settings-nav-item active"><span>🔒</span> Sharing</div>
+        <div class="settings-nav-item"><span>🛡️</span> Firewall</div>
+        <div class="settings-nav-item"><span>🔄</span> Updates</div>
+      </div>
+      <!-- Main Content -->
+      <div class="settings-main">
+        <div class="settings-page-title">Network Sharing Options</div>
+        <div class="g4-narrator-tip" id="sec-narrator-tip">
+          <span class="g4-narrator-icon">🎙️</span>
+          <p>"You're connected to a public network. Before continuing your work, check how your laptop is exposed."</p>
+        </div>
+        <div class="settings-section-header" style="margin-top:14px;">Sharing &amp; Discovery</div>
+        <div id="security-settings-list" class="security-settings-list">
+          <!-- Rendered by JS -->
+        </div>
+        <div id="sec-feedback" class="g4-sec-feedback hidden"></div>
+        <div class="g4-stage-nav" id="sec-stage-nav" style="display:none;">
+          <button class="btn-primary" onclick="group4NextStage()">Continue to Stage 3 →</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── TASK MANAGER WINDOW (Group 4 — Stage 5 Infection) ── -->
+  <div id="win-taskmanager" class="app-window hidden" data-app="taskmanager">
+    <div class="win-titlebar" id="titlebar-taskmanager">
+      <div class="win-title">
+        <span class="win-icon">📊</span>
+        <span>Task Manager — Processes</span>
+      </div>
+      <div class="win-controls">
+        <button class="win-btn win-minimize" onclick="minimizeApp('taskmanager')" title="Minimize">─</button>
+        <button class="win-btn win-maximize" onclick="toggleMaximize('taskmanager')" title="Maximize">□</button>
+        <button class="win-btn win-close" onclick="closeApp('taskmanager')" title="Close">✕</button>
+      </div>
+    </div>
+    <div class="win-body tm-body">
+      <div class="tm-tabs">
+        <span class="tm-tab active">Processes</span>
+        <span class="tm-tab">Performance</span>
+        <span class="tm-tab">Details</span>
+      </div>
+      <div class="tm-process-header">
+        <span class="tm-col-name">Name</span>
+        <span class="tm-col-cpu">CPU</span>
+        <span class="tm-col-mem">Memory</span>
+        <span class="tm-col-status">Status</span>
+      </div>
+      <div id="tm-process-list" class="tm-process-list">
+        <!-- Rendered by JS -->
+      </div>
+    </div>
+  </div>
+
+  <!-- ── SECURITY SCANNER WINDOW (Group 4 — Stage 5 Infection) ── -->
+  <div id="win-scanner" class="app-window hidden" data-app="scanner">
+    <div class="win-titlebar" id="titlebar-scanner">
+      <div class="win-title">
+        <span class="win-icon">🔍</span>
+        <span>Security Scanner — Threat Analysis</span>
+      </div>
+      <div class="win-controls">
+        <button class="win-btn win-minimize" onclick="minimizeApp('scanner')" title="Minimize">─</button>
+        <button class="win-btn win-maximize" onclick="toggleMaximize('scanner')" title="Maximize">□</button>
+        <button class="win-btn win-close" onclick="closeApp('scanner')" title="Close">✕</button>
+      </div>
+    </div>
+    <div class="win-body scanner-body">
+      <div class="scanner-banner" id="scanner-banner">
+        <div class="scanner-icon">🔍</div>
+        <div>
+          <div class="scanner-title" id="scanner-title">Security Scanner Ready</div>
+          <div class="scanner-sub" id="scanner-sub">Run a scan to detect threats on this device</div>
+        </div>
+        <button class="scanner-run-btn" id="scanner-run-btn" onclick="runSecurityScan()">▶ Run Scan</button>
+      </div>
+      <div class="scanner-progress hidden" id="scanner-progress">
+        <div class="scanner-progress-label">
+          <span id="scanner-progress-text">Scanning system files...</span>
+          <span id="scanner-progress-pct">0%</span>
+        </div>
+        <div class="av-progress-bar"><div class="av-progress-fill" id="scanner-progress-fill"></div></div>
+      </div>
+      <div id="scanner-results" class="scanner-results"></div>
     </div>
   </div>
 
@@ -496,9 +751,10 @@
       <button class="taskbar-app-btn locked" id="taskbar-antivirus" onclick="taskbarClick('antivirus')" title="ShieldAV Anti-Virus — Complete Chapter 1 (Phishing) to unlock">
         <span><img src="assets/icons/apps/windows_defender.svg" alt="Anti-Virus" style="width:18px;height:18px;vertical-align:middle;"></span> Anti-Virus
       </button>
-      <button class="taskbar-app-btn locked" id="taskbar-comms" onclick="taskbarClick('comms')" title="Comms Defense — Complete Chapter 2 (Malware) to unlock">
-        <span><img src="assets/icons/apps/Smartphone.svg" alt="Comms" style="width:18px;height:18px;vertical-align:middle;"></span> Comms
+      <button class="taskbar-app-btn" id="taskbar-comms" onclick="taskbarClick('comms')" title="Phone Link">
+        <span><img src="assets/icons/apps/Smartphone.svg" alt="Phone Link" style="width:18px;height:18px;vertical-align:middle;"></span> Phone Link
       </button>
+
     </div>
     <div class="taskbar-tray">
       <button class="tray-btn" id="tray-volume-btn" onclick="toggleVolumeFlyout(event)" title="🔊 Sound &amp; Audio Volume Settings" aria-label="Speakers / Sound Settings">
@@ -558,10 +814,16 @@
       <span class="start-tile-status lock" id="start-badge-antivirus">🔒 Locked</span>
     </div>
 
-    <div class="start-app-tile locked" onclick="startMenuOpenApp('comms')" id="start-app-comms" title="Comms Defense (Phillip / Social Eng)">
-      <div class="start-tile-icon"><img src="assets/icons/apps/Smartphone.svg" alt="Comms" style="width:32px;height:32px;"></div>
-      <div class="start-tile-name">Comms</div>
-      <span class="start-tile-status lock" id="start-badge-comms">🔒 Locked</span>
+    <div class="start-app-tile" onclick="startMenuOpenApp('comms')" id="start-app-comms" title="Phone Link">
+      <div class="start-tile-icon"><img src="assets/icons/apps/Smartphone.svg" alt="Phone Link" style="width:32px;height:32px;"></div>
+      <div class="start-tile-name">Phone Link</div>
+      <span class="start-tile-status" id="start-badge-comms">Ready</span>
+    </div>
+
+    <div class="start-app-tile" onclick="startMenuOpenApp('wifi-settings')" id="start-app-settings" title="Settings (Network &amp; Security)">
+      <div class="start-tile-icon"><img src="assets/icons/apps/settings.svg" alt="Settings" style="width:32px;height:32px;"></div>
+      <div class="start-tile-name">Settings</div>
+      <span class="start-tile-status" id="start-badge-settings">Ready</span>
     </div>
   </div>
 
@@ -611,9 +873,9 @@
   <!-- Windows 11 Profile & Power Footer Bar -->
   <div class="start-menu-footer">
     <div class="start-user-profile">
-      <div class="start-avatar">🕵️</div>
+      <div class="start-avatar">👨‍🎓</div>
       <div class="start-user-details">
-        <span class="start-user-name" id="start-user-name">Detective Zero</span>
+        <span class="start-user-name" id="start-user-name">Student</span>
         <span class="start-user-status"><span class="status-dot"></span> Online</span>
       </div>
     </div>
@@ -740,14 +1002,14 @@
         </div>
         <div class="quick-tile-info">
           <span class="quick-tile-label">Bluetooth</span>
-          <span class="quick-tile-status" id="tile-bt-status">Detective Headset</span>
+          <span class="quick-tile-status" id="tile-bt-status">Student Headset</span>
         </div>
       </div>
 
       <!-- Airplane Mode Tile -->
       <div class="quick-tile" id="tile-airplane" onclick="toggleAirplaneSetting()" title="Click to toggle Airplane Mode">
         <div class="quick-tile-top">
-          <span class="quick-tile-icon" id="tile-airplane-icon"><img src="assets/icons/networks/airlane mode.svg" alt="Airplane Mode" style="width:22px;height:22px;"></span>
+          <span class="quick-tile-icon" id="tile-airplane-icon" style="font-size:22px;line-height:1;">✈️</span>
           <span class="quick-tile-toggle-indicator" id="tile-airplane-badge">OFF</span>
         </div>
         <div class="quick-tile-info">
@@ -756,15 +1018,15 @@
         </div>
       </div>
 
-      <!-- Cyber Shield / Guard Tile -->
-      <div class="quick-tile active" id="tile-guard" onclick="toggleGuardSetting()" title="Cyber Defense Guard">
+      <!-- Wi-Fi Settings Tile -->
+      <div class="quick-tile" id="tile-wifi-settings" onclick="openWifiSettingsFromFlyout(event)" title="Click to show Wi-Fi Settings">
         <div class="quick-tile-top">
-          <span class="quick-tile-icon" id="tile-guard-icon"><img src="assets/icons/apps/windows_defender.svg" alt="Cyber Shield" style="width:22px;height:22px;"></span>
-          <span class="quick-tile-toggle-indicator" id="tile-guard-badge">ON</span>
+          <span class="quick-tile-icon" id="tile-settings-icon" style="font-size:22px;line-height:1;">📶</span>
+          <span class="quick-tile-toggle-indicator" id="tile-settings-badge">OPEN</span>
         </div>
         <div class="quick-tile-info">
-          <span class="quick-tile-label">Cyber Shield</span>
-          <span class="quick-tile-status" id="tile-guard-status">Secured</span>
+          <span class="quick-tile-label">Wi-Fi Settings</span>
+          <span class="quick-tile-status" id="tile-settings-status">Network Setup</span>
         </div>
       </div>
     </div>
@@ -791,7 +1053,7 @@
         <div class="wifi-net-icon"><img src="assets/icons/networks/wi-fi.svg" alt="Wi-Fi" style="width:20px;height:20px;"></div>
         <div class="wifi-net-details">
           <div class="wifi-net-name">HQ-CyberAcademy-Internal</div>
-          <div class="wifi-net-meta">Secured (802.1X Detective Key)</div>
+          <div class="wifi-net-meta">Secured (802.1X Student Key)</div>
         </div>
         <button class="wifi-net-action-btn connect">Connect</button>
       </div>
@@ -816,12 +1078,9 @@
     </div>
   </div>
 
-  <div class="volume-flyout-footer" style="justify-content:space-between;padding:10px 14px;">
-    <span style="font-size:11px;color:var(--text-muted);display:flex;align-items:center;gap:5px;">
-      <span style="color:var(--accent-green);font-size:10px;">●</span> WireGuard VPN Active
-    </span>
-    <button class="vol-test-btn" style="padding:4px 10px;font-size:11px;" onclick="showToast('ℹ️ Network Adapter: Virtual Intel Wi-Fi 6 AX200 • DNS: 1.1.1.1 (Encrypted DoH)', 'info')">
-      ⚙️ Properties
+  <div class="volume-flyout-footer" style="justify-content:center;padding:10px 14px;align-items:center;">
+    <button class="vol-test-btn" id="btn-flyout-wifi-settings" style="padding:6px 14px;font-size:12px;font-weight:700;display:flex;align-items:center;gap:6px;cursor:pointer;background:rgba(56,189,248,0.15);border:1px solid rgba(56,189,248,0.4);color:#38bdf8;border-radius:6px;" onclick="openWifiSettingsFromFlyout(event)" title="Click to show Wi-Fi Settings">
+      📶 Wi-Fi Settings
     </button>
   </div>
 </div>
@@ -1326,6 +1585,129 @@
     <div class="training-nav">
       <button class="btn-ghost" id="btn-training-prev" onclick="trainingPrev()" style="visibility:hidden">← Previous</button>
       <button class="btn-primary" id="btn-training-next" onclick="trainingNext()">Next →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── CHAPTER 3: 30-SECOND AI AWARENESS VIDEO OVERLAY ── -->
+<div id="overlay-awareness-video" class="overlay">
+  <div class="video-player-container">
+    <!-- Top Bar -->
+    <div class="video-topbar">
+      <div class="video-title-wrap">
+        <span class="video-badge">AI AWARENESS VIDEO</span>
+        <span class="video-title">Think Before You Connect, Trust, or Download</span>
+      </div>
+      <button class="video-skip-btn" id="btn-skip-video" onclick="skipAwarenessVideo()">Skip Video ⏩</button>
+    </div>
+
+    <!-- Video Stage / Viewport -->
+    <div class="video-viewport" id="video-viewport">
+      <!-- Slide 1: Unsafe Public Wi-Fi (0-10s) -->
+      <div class="video-slide active" id="vslide-1" data-start="0" data-end="10">
+        <div class="vslide-visual">
+          <div class="vslide-scene scene-wifi">
+            <div class="vslide-actor">
+              <span class="vslide-icon">💻</span>
+              <div class="vslide-actor-tag">Café Workstation</div>
+            </div>
+            <div class="vslide-wifi-waves">
+              <div class="wifi-wave w1"></div>
+              <div class="wifi-wave w2"></div>
+              <div class="wifi-wave w3"></div>
+            </div>
+            <div class="vslide-warning-tag">⚠️ UNSECURED PUBLIC WI-FI DETECTED</div>
+            <div class="vslide-risk-nodes">
+              <span class="risk-node">CoffeeShop_Guest (Open)</span>
+              <span class="risk-node risk-alert">SJSHS_FREE_WIFI (Fake/Rogue)</span>
+            </div>
+          </div>
+        </div>
+        <div class="vslide-caption">
+          <span class="vslide-speaker">🎙️ NARRATOR (0:00 - 0:10):</span>
+          <p>“Public Wi-Fi is convenient, but it can introduce security risks. Verify the network before connecting and avoid sensitive activities on unsecured networks.”</p>
+        </div>
+      </div>
+
+      <!-- Slide 2: Social Engineering (10-20s) -->
+      <div class="video-slide" id="vslide-2" data-start="10" data-end="20">
+        <div class="vslide-visual">
+          <div class="vslide-scene scene-social">
+            <div class="vslide-chat-mock">
+              <div class="vchat-header">
+                <span class="vchat-avatar">⚠️</span>
+                <div>
+                  <div class="vchat-user">Mia — New Account <span class="vchat-badge-fake">UNVERIFIED</span></div>
+                  <div class="vchat-time">Active Today • Unknown device</div>
+                </div>
+              </div>
+              <div class="vchat-bubble urgent">
+                <p>“Hey, can you send me your student number and birthday? I need them to recover our project account. Please hurry!”</p>
+                <span class="vchat-urgency-tag">🚨 URGENT PRESSURE TACTIC</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="vslide-caption">
+          <span class="vslide-speaker">🎙️ NARRATOR (0:10 - 0:20):</span>
+          <p>“Attackers may impersonate people you know and create urgency. Verify unusual requests before sharing personal information.”</p>
+        </div>
+      </div>
+
+      <!-- Slide 3: Malicious Download (20-27s) -->
+      <div class="video-slide" id="vslide-3" data-start="20" data-end="27">
+        <div class="vslide-visual">
+          <div class="vslide-scene scene-download">
+            <div class="vslide-browser-mock">
+              <div class="vbrowser-bar">
+                <span class="vbrowser-ssl">⚠️ Not Secure</span>
+                <span class="vbrowser-url">http://canva-premium-free.example</span>
+              </div>
+              <div class="vbrowser-body">
+                <div class="vdownload-hero">
+                  <div class="vdownload-title">FREE PREMIUM DESIGN TOOL</div>
+                  <div class="vdownload-btn">⬇ DOWNLOAD NOW</div>
+                </div>
+                <div class="vfile-inspection-card">
+                  <div class="vfile-line"><span class="vfl-lbl">File:</span> <strong>PremiumDesignTool.exe</strong> <span class="badge-danger">.EXE</span></div>
+                  <div class="vfile-line"><span class="vfl-lbl">Publisher:</span> <span class="badge-danger">Unknown</span></div>
+                  <div class="vfile-line"><span class="vfl-lbl">Source:</span> <span class="badge-danger">canva-premium-free.example</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="vslide-caption">
+          <span class="vslide-speaker">🎙️ NARRATOR (0:20 - 0:27):</span>
+          <p>“Before opening a downloaded file, check its source, file type, and publisher. Avoid untrusted software.”</p>
+        </div>
+      </div>
+
+      <!-- Slide 4: Transition (27-30s) -->
+      <div class="video-slide" id="vslide-4" data-start="27" data-end="30">
+        <div class="vslide-visual">
+          <div class="vslide-scene scene-start">
+            <div class="vstart-shield">🛡️</div>
+            <div class="vstart-title">CYBERZERØ SIMULATION</div>
+            <div class="vstart-subtitle">CHAPTER 3: GROUP 4 MULTIMEDIA PROJECT</div>
+            <div class="vstart-badge-start">CHAPTER START</div>
+          </div>
+        </div>
+        <div class="vslide-caption">
+          <span class="vslide-speaker">🎙️ NARRATOR (0:27 - 0:30):</span>
+          <p>“Now it's your turn. Investigate carefully, make your own decisions, and think before you act.”</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Video Bottom Control Bar -->
+    <div class="video-controls">
+      <button class="vctrl-btn" id="vctrl-play-btn" onclick="toggleAwarenessVideoPlay()">⏸ Pause</button>
+      <div class="vctrl-time" id="vctrl-time-display">00:00 / 00:30</div>
+      <div class="vctrl-progress-bar" onclick="seekAwarenessVideo(event)">
+        <div class="vctrl-progress-fill" id="vctrl-progress-fill" style="width: 0%"></div>
+      </div>
+      <button class="vctrl-btn vctrl-start-btn" onclick="skipAwarenessVideo()">Start Mission →</button>
     </div>
   </div>
 </div>
@@ -1925,7 +2307,7 @@
         </div>
 
         <p class="grand-cert-statement">
-          This certifies that Detective <strong id="grand-cert-name" style="color:#00e5ff">Ace</strong> has successfully guided <strong>Ace, Nishren, Phillip, and Jonald</strong> through all realistic threat simulations, demonstrating mastery over:
+          This certifies that Student <strong id="grand-cert-name" style="color:#00e5ff">Ace</strong> has successfully guided <strong>Ace, Nishren, Phillip, and Jonald</strong> through all realistic threat simulations, demonstrating mastery over:
         </p>
 
         <!-- 4 Badges Matrix -->

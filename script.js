@@ -201,7 +201,7 @@ const SENT_EMAILS = [
     body: [
       { type: 'p', text: 'Hi HR Department,' },
       { type: 'p', text: 'Thanks for the update — I reviewed the September benefits information through the normal internal resources. No issues on my end.' },
-      { type: 'p', text: 'Regards,\nCyber Detective' }
+      { type: 'p', text: 'Regards,\nStudent' }
     ]
   },
   {
@@ -213,7 +213,7 @@ const SENT_EMAILS = [
     body: [
       { type: 'p', text: 'Hi IT Security Team,' },
       { type: 'p', text: 'Sharing a couple of phishing samples I caught this week — fake sender domains, urgency pressure tactics, and mismatched links. Recommend circulating these for staff awareness training.' },
-      { type: 'p', text: 'Regards,\nCyber Detective' }
+      { type: 'p', text: 'Regards,\nStudent' }
     ]
   }
 ];
@@ -431,7 +431,11 @@ const appState = {
   folder: { open: false, minimized: false, maximized: false, hasBeenPositioned: false },
   antivirus: { open: false, minimized: false, maximized: false, hasBeenPositioned: false },
   comms: { open: false, minimized: false, maximized: false, hasBeenPositioned: false },
-  ransomware: { open: false, minimized: false, maximized: false, hasBeenPositioned: false }
+  ransomware: { open: false, minimized: false, maximized: false, hasBeenPositioned: false },
+  'wifi-settings': { open: false, minimized: false, maximized: false, hasBeenPositioned: false },
+  'security-settings': { open: false, minimized: false, maximized: false, hasBeenPositioned: false },
+  taskmanager: { open: false, minimized: false, maximized: false, hasBeenPositioned: false },
+  scanner: { open: false, minimized: false, maximized: false, hasBeenPositioned: false }
 };
 
 // ═══════════════════════════════════════════════════════════
@@ -517,7 +521,7 @@ function updateAppLockStates() {
 function openApp(appName) {
   if (isAppLocked(appName)) {
     const remaining = EMAILS.length - (gameState.emailResults ? gameState.emailResults.length : 0);
-    showToast(`🔒 Locked: Complete all 5 email investigations first (${remaining} remaining) to unlock ${appName === 'folder' ? 'Folder' : 'Anti-Virus'}!`, 'warning');
+    showToast(`🔒 Locked: Complete all 5 email investigations first (${remaining} remaining) to unlock ${appName === 'folder' ? 'Folder' : appName === 'comms' ? 'Phone Link' : 'Anti-Virus'}!`, 'warning');
     if (typeof AudioManager !== 'undefined') AudioManager.playWrong();
     return;
   }
@@ -547,6 +551,10 @@ function openApp(appName) {
     } else {
       renderActiveTab();
     }
+  }
+
+  if (appName === 'wifi-settings') {
+    renderG4WiFiSettings();
   }
 
   // First time this app is opened, center it on screen so it isn't
@@ -685,7 +693,7 @@ function minimizeApp_restore(appName) {
 
 function updateTaskbar() {
   updateAppLockStates();
-  ['gmail', 'browser', 'folder', 'antivirus', 'comms', 'ransomware'].forEach(appName => {
+  ['gmail', 'browser', 'folder', 'antivirus', 'comms', 'ransomware', 'wifi-settings'].forEach(appName => {
     const btn = document.getElementById(`taskbar-${appName}`);
     if (!btn) return;
     const state = appState[appName];
@@ -798,6 +806,10 @@ setInterval(updateClock, 1000);
 // ═══════════════════════════════════════════════════════════
 
 function showOverlay(id) {
+  // Hide desktop immediately so it never bleeds through during transition
+  const desktop = document.getElementById('desktop');
+  if (desktop) desktop.style.visibility = 'hidden';
+
   document.querySelectorAll('.overlay').forEach(o => o.classList.remove('active'));
   document.getElementById(id).classList.add('active');
   document.getElementById('overlay-backdrop').classList.add('active');
@@ -806,12 +818,20 @@ function showOverlay(id) {
 function closeOverlay(id) {
   document.getElementById(id).classList.remove('active');
   const anyActive = document.querySelectorAll('.overlay.active').length > 0;
-  if (!anyActive) document.getElementById('overlay-backdrop').classList.remove('active');
+  if (!anyActive) {
+    document.getElementById('overlay-backdrop').classList.remove('active');
+    // Reveal desktop only when no overlays remain
+    const desktop = document.getElementById('desktop');
+    if (desktop) desktop.style.visibility = 'visible';
+  }
 }
 
 function hideAllOverlays() {
   document.querySelectorAll('.overlay').forEach(o => o.classList.remove('active'));
   document.getElementById('overlay-backdrop').classList.remove('active');
+  // Reveal desktop
+  const desktop = document.getElementById('desktop');
+  if (desktop) desktop.style.visibility = 'visible';
 }
 
 // ═══════════════════════════════════════════════════════════
@@ -1101,7 +1121,7 @@ function submitPreAssessment() {
   const playerName = nameInput ? nameInput.value.trim() : '';
 
   if (!playerName) {
-    showToast('✍️ Please write your Detective Name on the exam paper before turning it in!', 'warning');
+    showToast('✍️ Please write your Student Name on the exam paper before turning it in!', 'warning');
     if (typeof AudioManager !== 'undefined') AudioManager.playWrong();
     if (nameInput) {
       nameInput.focus();
@@ -1273,10 +1293,10 @@ const CATEGORIES = [
     desc: 'Stay safe on public Wi-Fi networks, counter social engineering tactics, and block malicious file downloads.',
     specs: {
       threatType: 'Wi-Fi Hijacking & Rogue Downloads',
-      app: '📱 Comms Center',
-      objective: '4 Intercepts Resolved'
+      app: '📱 Phone Link & 📶 Wi-Fi Settings',
+      objective: '5 Stages Investigated'
     },
-    unlocked: false,
+    unlocked: true,
     completed: false,
     score: 0,
     rank: null
@@ -1499,7 +1519,7 @@ const VN_STORIES = {
       speaker: 'ZERO',
       tag: '🤖 AI CYBER GUIDE & NARRATOR',
       bg: 'assets/Cover.png',
-      text: 'Greetings, Detective. Welcome to CYBERZERØ — an interactive cybersecurity simulation where you will transform from zero knowledge into an alert cyber defender.',
+      text: 'Greetings, Student. Welcome to CYBERZERØ — an interactive cybersecurity simulation where you will transform from zero knowledge into an alert cyber defender.',
       speed: 24,
       scene: 'story'
     },
@@ -1591,7 +1611,7 @@ const VN_STORIES = {
       speaker: 'ZERO',
       tag: '🤖 AI CYBER GUIDE & NARRATOR',
       bg: 'assets/Cover.png',
-      text: 'You will now take our official 10-Question Cyber Threat Pre-Assessment Exam. Write your name on the test paper, analyze each question carefully, and do your best.\n\nDetective... are you ready?',
+      text: 'You will now take our official 10-Question Cyber Threat Pre-Assessment Exam. Write your name on the test paper, analyze each question carefully, and do your best.\n\nStudent... are you ready?',
       speed: 24,
       scene: 'story'
     }
@@ -1710,36 +1730,14 @@ const VN_STORIES = {
   social_engineering: [
     {
       speaker: 'NARRATOR',
-      text: 'CHAPTER 3: Phillip and Social Engineering\n\nWith the malware contained, Phillip receives an unexpected phone call and urgent text messages.',
+      text: 'CHAPTER 3: Group 4 Multimedia Project\n\nGroup 4 is working outside the school because the school network is temporarily unavailable. You use your laptop to continue the multimedia project, communicate with group members, and upload project files.',
       speed: 26,
       scene: 'story'
     },
     {
-      speaker: 'PHILLIP',
-      text: '"Someone claiming to be Academy IT Support called asking for my password and MFA code for an \'emergency server migration\'!"',
-      speed: 28,
-      mood: 'worried',
-      scene: 'story'
-    },
-    {
-      speaker: 'CYBERZERO',
-      text: 'That is Vishing (Voice Phishing)! Attackers use authority and fake urgency to manipulate victims into handing over credentials.',
+      speaker: 'NARRATOR',
+      text: '“Before you begin this chapter, watch a short 30-second awareness video. It introduces three cybersecurity threats you may encounter: unsafe public Wi-Fi, social engineering, and malicious downloads.\n\nPay attention to the warning signs and safety practices. You will use what you learn to investigate the situation yourself.”',
       speed: 26,
-      mood: 'neutral',
-      scene: 'story'
-    },
-    {
-      speaker: 'PHILLIP',
-      text: '"I also received an SMS with a fake banking link (Smishing) and a DM from someone pretending to be Nishren asking for project logins!"',
-      speed: 28,
-      mood: 'neutral',
-      scene: 'story'
-    },
-    {
-      speaker: 'CYBERZERO',
-      text: 'Open the Comms Defense Center. Inspect incoming voice transcripts, SMS alerts, and messages. Flag social engineering attacks and verify legitimate communications.',
-      speed: 26,
-      mood: 'neutral',
       scene: 'story'
     }
   ],
@@ -2070,7 +2068,7 @@ function vnPlayLine(index) {
         if (activeCategoryStory === 'prologue') nextLabel = '📝 Start Pre-Assessment Exam ➔';
         else if (activeCategoryStory === 'phishing') nextLabel = 'Start Phishing Demo ➔';
         else if (activeCategoryStory === 'malware') nextLabel = 'Start Malware Lab ➔';
-        else if (activeCategoryStory === 'social_engineering') nextLabel = 'Start Social Defense Lab ➔';
+        else if (activeCategoryStory === 'social_engineering') nextLabel = '🎬 Watch Awareness Video ➔';
         else if (activeCategoryStory === 'ransomware') nextLabel = 'Start Ransomware Console ➔';
         else if (activeCategoryStory === 'grand_finale') nextLabel = 'View Master Certificate ➔';
       }
@@ -2102,7 +2100,7 @@ function vnAdvance() {
       if (activeCategoryStory === 'prologue') nextLabel = '📝 Start Pre-Assessment Exam ➔';
       else if (activeCategoryStory === 'phishing') nextLabel = 'Start Phishing Demo ➔';
       else if (activeCategoryStory === 'malware') nextLabel = 'Start Malware Lab ➔';
-      else if (activeCategoryStory === 'social_engineering') nextLabel = 'Start Social Defense Lab ➔';
+      else if (activeCategoryStory === 'social_engineering') nextLabel = '🎬 Watch Awareness Video ➔';
       else if (activeCategoryStory === 'ransomware') nextLabel = 'Start Ransomware Console ➔';
       else if (activeCategoryStory === 'grand_finale') nextLabel = 'View Master Certificate ➔';
     }
@@ -2139,7 +2137,7 @@ function vnFinish() {
   } else if (activeCategoryStory === 'malware') {
     startMalwareDemo();
   } else if (activeCategoryStory === 'social_engineering') {
-    startSocialEngineeringMission();
+    startAwarenessVideo();
   } else if (activeCategoryStory === 'ransomware') {
     startRansomwareMission();
   } else if (activeCategoryStory === 'grand_finale') {
@@ -2224,7 +2222,7 @@ const DEMO_SCRIPT = [
     step: 0,
     label: 'Welcome',
     objective: 'Meet your instructor',
-    speech: `<strong>Hey there, Detective! 🕵️</strong><br><br>I'm <strong>Detective Zero</strong>. I'll walk you through <strong>2 emails</strong> — one <span style="color:#ff6b6b">phishing</span>, one <span style="color:#69db7c">legitimate</span> — so you know what to look for.`,
+    speech: `<strong>Hey there, Student! 🎓</strong><br><br>I'm <strong>Detective Zero</strong>. I'll walk you through <strong>2 emails</strong> — one <span style="color:#ff6b6b">phishing</span>, one <span style="color:#69db7c">legitimate</span> — so you know what to look for.`,
     btn: "Let's Begin →",
     action: null
   },
@@ -2296,7 +2294,7 @@ const DEMO_SCRIPT = [
     step: 9,
     label: 'Briefing',
     objective: 'Get ready for your real mission',
-    speech: `🏆 <strong>TRAINING COMPLETE, DETECTIVE!</strong><br><br>🔎 <strong>Spot phishing</strong> — fake senders, pressure tactics, bad links<br>🛡️ <strong>Recognize legit</strong> — verified domain, no urgency<br><br><strong>Your mission:</strong> 5 real emails. Read, flag the evidence, and submit your verdict.`,
+    speech: `🏆 <strong>TRAINING COMPLETE, STUDENT!</strong><br><br>🔎 <strong>Spot phishing</strong> — fake senders, pressure tactics, bad links<br>🛡️ <strong>Recognize legit</strong> — verified domain, no urgency<br><br><strong>Your mission:</strong> 5 real emails. Read, flag the evidence, and submit your verdict.`,
     btn: 'START MY MISSION →',
     action: 'done'
   }
@@ -3062,7 +3060,7 @@ function renderSentOrTrashList(items, folder) {
   }
 
   items.forEach((email, idx) => {
-    const initial = 'D'; // Detective — the player is the sender
+    const initial = gameState.playerName ? gameState.playerName.charAt(0).toUpperCase() : 'S'; // Student — the player is the sender
     const avatarColors = ['#5c6bc0', '#00897b'];
     const avatarColor = avatarColors[idx % avatarColors.length];
 
@@ -3132,7 +3130,7 @@ function openSentOrTrashEmail(id, folder) {
     <div class="email-subject-line">${email.subject}</div>
     <div class="email-meta-row">
       <span class="email-meta-label">FROM</span>
-      <span class="email-meta-value">Cyber Detective (You)</span>
+      <span class="email-meta-value">${escapeHtml(gameState.playerName || 'Student')} (You)</span>
     </div>
     <div class="email-meta-row">
       <span class="email-meta-label">TO</span>
@@ -5168,7 +5166,7 @@ const MALWARE_DEMO_SCRIPT = [
     step: 0,
     label: 'Welcome',
     objective: 'Meet your Chapter 2 malware hunting toolkit',
-    speech: `<strong>Welcome to Chapter 2, Detective! 🛡️</strong><br><br>Cybercriminals aren't just sending phishing emails — they're slipping <strong>malicious payloads</strong> directly into file downloads.<br><br>I'll show you how to inspect files in your <strong>Folder</strong> and neutralize threats with <strong>Anti-Virus</strong>!`,
+    speech: `<strong>Welcome to Chapter 2, Student! 🛡️</strong><br><br>Cybercriminals aren't just sending phishing emails — they're slipping <strong>malicious payloads</strong> directly into file downloads.<br><br>I'll show you how to inspect files in your <strong>Folder</strong> and neutralize threats with <strong>Anti-Virus</strong>!`,
     btn: "Let's Begin →",
     action: null
   },
@@ -5240,7 +5238,7 @@ const MALWARE_DEMO_SCRIPT = [
     step: 9,
     label: 'Briefing',
     objective: 'Start Chapter 2: Malware Hunter',
-    speech: `🏆 <strong>READY TO HUNT, DETECTIVE!</strong><br><br>📁 <strong>Check Files</strong> — Watch for double extensions (<em>.pdf.exe</em>), script droppers (<em>.vbs</em>), and suspicious executables (<em>.scr</em>, <em>.exe</em>).<br>🛡️ <strong>Anti-Virus Active</strong> — Keep Real-Time Protection ON to scan files and neutralize threats.<br><br><strong>Your Mission:</strong> 4 disguised malware threats are hidden in Downloads. Neutralize them all!`,
+    speech: `🏆 <strong>READY TO HUNT, STUDENT!</strong><br><br>📁 <strong>Check Files</strong> — Watch for double extensions (<em>.pdf.exe</em>), script droppers (<em>.vbs</em>), and suspicious executables (<em>.scr</em>, <em>.exe</em>).<br>🛡️ <strong>Anti-Virus Active</strong> — Keep Real-Time Protection ON to scan files and neutralize threats.<br><br><strong>Your Mission:</strong> 4 disguised malware threats are hidden in Downloads. Neutralize them all!`,
     btn: 'START HUNTING MALWARE →',
     action: 'done'
   }
@@ -6249,30 +6247,1029 @@ const COMMS_ITEMS = [
 
 let selectedCommId = 'vishing_1';
 
-function startSocialEngineeringMission() {
-  closeOverlay('overlay-results');
-  closeOverlay('overlay-malware-results');
-  closeOverlay('overlay-social-results');
-  gameState.phase = 'social_engineering';
+// ═══════════════════════════════════════════════════════════
+// GROUP 4 MISSION ENGINE — Wi-Fi / Social Eng / Malicious Download
+// ═══════════════════════════════════════════════════════════
 
-  COMMS_ITEMS.forEach(c => {
-    c.resolved = false;
-    c.playerVerdict = null;
-  });
+const G4_WIFI_NETWORKS = [
+  {
+    id: 'coffeeshop_guest',
+    name: 'CoffeeShop_Guest',
+    security: 'Open',
+    signal: 3,
+    password: 'None',
+    deviceVisibility: 'Available',
+    tag: 'Open — No Password',
+    tagClass: 'wifi-tag-open',
+    risk: 'high',
+    note: 'Open network with no encryption. All traffic is visible to anyone on this network.'
+  },
+  {
+    id: 'sjshs_free',
+    name: 'SJSHS_FREE_WIFI',
+    security: 'Open',
+    signal: 4,
+    password: 'None',
+    deviceVisibility: 'Available',
+    tag: 'Open — No Password',
+    tagClass: 'wifi-tag-open',
+    risk: 'high',
+    note: 'School name does not guarantee legitimacy. Anyone can create a network with any name.'
+  },
+  {
+    id: 'coffeeshop_secure',
+    name: 'CoffeeShop_Secure',
+    security: 'WPA2-Personal',
+    signal: 4,
+    password: 'Staff-provided',
+    deviceVisibility: 'Hidden',
+    tag: 'Password Protected',
+    tagClass: 'wifi-tag-secure',
+    risk: 'low',
+    note: 'Password-protected network provided by the establishment. Reduced risk.'
+  }
+];
 
-  selectedCommId = 'vishing_1';
-  openApp('comms');
+const G4_SECURITY_SETTINGS = [
+  { id: 'file_sharing', label: 'File Sharing', icon: '📂', state: true, risky: true, hint: 'Allows other devices to access your files over the network.' },
+  { id: 'device_discovery', label: 'Device Discovery', icon: '📡', state: true, risky: true, hint: 'Makes your laptop visible to other devices on the network.' },
+  { id: 'firewall', label: 'Firewall', icon: '🔥', state: true, risky: false, hint: 'Blocks unauthorized access from the network. Keep this ON.' },
+  { id: 'auto_updates', label: 'Automatic Updates', icon: '🔄', state: true, risky: false, hint: 'Keeps your software patched against vulnerabilities. Keep ON.' }
+];
 
-  const winComms = document.getElementById('win-comms');
-  if (winComms) {
-    winComms.style.left = '80px';
-    winComms.style.top = '60px';
+const G4_PROCESSES = [
+  { pid: '1284', name: 'explorer.exe', cpu: '0.5%', mem: '32 MB', status: 'Running', suspicious: false },
+  { pid: '2048', name: 'chrome.exe', cpu: '3.2%', mem: '180 MB', status: 'Running', suspicious: false },
+  { pid: '3104', name: 'OneDrive.exe', cpu: '0.1%', mem: '24 MB', status: 'Running', suspicious: false },
+  { pid: '4092', name: 'PremiumDesignTool.exe', cpu: '38.7%', mem: '412 MB', status: '⚠️ Suspicious', suspicious: true }
+];
+
+const g4State = {
+  stage: 0,          // 1-5
+  wifiChoice: null,  // network id chosen
+  securedLaptop: false,
+  fileSharingOff: false,
+  deviceDiscoveryOff: false,
+  miaAction: null,   // 'reported' | 'sent' | 'ignored'
+  fileDecision: null, // 'delete' | 'report' | 'open'
+  infectionInvestigated: false,
+  wifiDisconnected: false,
+  processKilled: false,
+  scannerRan: false,
+  score: 0
+};
+
+let g4ActiveTab = 'messages';
+let g4SelectedNetwork = null;
+let g4InfectionSymptoms = 0;
+let g4InfectionTimer = null;
+
+// ── 30-SECOND AI AWARENESS VIDEO CONTROLLER ──────────────────
+let awarenessVideoTimer = null;
+let awarenessVideoSec = 0;
+let awarenessVideoPlaying = false;
+
+function startAwarenessVideo() {
+  hideAllOverlays();
+  const ov = document.getElementById('overlay-awareness-video');
+  if (ov) {
+    ov.classList.remove('hidden');
+    ov.classList.add('active');
+  }
+  awarenessVideoSec = 0;
+  awarenessVideoPlaying = true;
+  updateAwarenessVideoUI();
+
+  if (awarenessVideoTimer) clearInterval(awarenessVideoTimer);
+  awarenessVideoTimer = setInterval(() => {
+    if (!awarenessVideoPlaying) return;
+    awarenessVideoSec++;
+    updateAwarenessVideoUI();
+    if (awarenessVideoSec >= 30) {
+      clearInterval(awarenessVideoTimer);
+      awarenessVideoTimer = null;
+      setTimeout(() => {
+        skipAwarenessVideo();
+      }, 1000);
+    }
+  }, 1000);
+}
+
+function updateAwarenessVideoUI() {
+  const timeEl = document.getElementById('vctrl-time-display');
+  const fillEl = document.getElementById('vctrl-progress-fill');
+  const playBtn = document.getElementById('vctrl-play-btn');
+
+  if (timeEl) {
+    const s = Math.min(30, awarenessVideoSec);
+    timeEl.textContent = `00:${String(s).padStart(2, '0')} / 00:30`;
+  }
+  if (fillEl) {
+    fillEl.style.width = `${(Math.min(30, awarenessVideoSec) / 30) * 100}%`;
+  }
+  if (playBtn) {
+    playBtn.textContent = awarenessVideoPlaying ? '⏸ Pause' : '▶ Play';
   }
 
-  renderCommsFeed();
-  selectCommItem('vishing_1');
-  showToast('📱 Chapter 3: Investigate all 4 incoming communications and expose social engineering attacks!', 'info');
+  // Slide activation based on current time
+  const slides = document.querySelectorAll('.video-slide');
+  slides.forEach(slide => {
+    const start = parseInt(slide.getAttribute('data-start') || 0, 10);
+    const end = parseInt(slide.getAttribute('data-end') || 30, 10);
+    const isActive = awarenessVideoSec >= start && (awarenessVideoSec < end || (end === 30 && awarenessVideoSec >= 30));
+    slide.classList.toggle('active', isActive);
+  });
 }
+
+function toggleAwarenessVideoPlay() {
+  awarenessVideoPlaying = !awarenessVideoPlaying;
+  updateAwarenessVideoUI();
+}
+
+function seekAwarenessVideo(e) {
+  const bar = e.currentTarget;
+  const rect = bar.getBoundingClientRect();
+  const clickX = e.clientX - rect.left;
+  const pct = Math.max(0, Math.min(1, clickX / rect.width));
+  awarenessVideoSec = Math.floor(pct * 30);
+  updateAwarenessVideoUI();
+}
+
+function skipAwarenessVideo() {
+  if (awarenessVideoTimer) {
+    clearInterval(awarenessVideoTimer);
+    awarenessVideoTimer = null;
+  }
+  awarenessVideoPlaying = false;
+  const ov = document.getElementById('overlay-awareness-video');
+  if (ov) {
+    ov.classList.add('hidden');
+    ov.classList.remove('active');
+  }
+  startGroup4Mission();
+}
+
+function startSocialEngineeringMission() {
+  startAwarenessVideo();
+}
+
+function startGroup4Mission() {
+  // Reset state
+  Object.assign(g4State, {
+    stage: 1, wifiChoice: null, securedLaptop: false,
+    fileSharingOff: false, deviceDiscoveryOff: false,
+    miaAction: null, fileDecision: null,
+    infectionInvestigated: false, wifiDisconnected: false,
+    processKilled: false, scannerRan: false, score: 0
+  });
+  G4_SECURITY_SETTINGS.forEach(s => { s.state = true; });
+  g4InfectionSymptoms = 0;
+  if (g4InfectionTimer) { clearInterval(g4InfectionTimer); g4InfectionTimer = null; }
+
+  gameState.phase = 'social_engineering';
+
+  // Show desktop and open Wi-Fi Settings for Stage 1
+  hideAllOverlays();
+  showToast('📶 Stage 1: Open Wi-Fi Settings and inspect the available networks before connecting.', 'info');
+  setTimeout(() => {
+    openApp('wifi-settings');
+    renderG4WiFiSettings();
+    const win = document.getElementById('win-wifi-settings');
+    if (win) { win.style.left = '100px'; win.style.top = '60px'; win.style.width = '700px'; win.style.height = '480px'; }
+    // Also open Phone app for context
+    setTimeout(() => {
+      renderPhoneLinkApp();
+    }, 400);
+  }, 300);
+}
+
+// ── STAGE 1: WI-FI SETTINGS ──────────────────────────────────
+
+function renderG4WiFiSettings() {
+  const list = document.getElementById('wifi-networks-settings-list');
+  const narTip = document.getElementById('wifi-narrator-tip');
+  if (narTip) narTip.style.display = 'flex';
+
+  if (!list) return;
+
+  // Always-visible base networks (same as the flyout panel)
+  const baseNetworks = `
+    <div class="wifi-net-item connected" id="ws-wifi-item-cybernet">
+      <div class="wifi-net-icon"><img src="assets/icons/networks/wi-fi.svg" alt="Wi-Fi" style="width:20px;height:20px;"></div>
+      <div class="wifi-net-details">
+        <div class="wifi-net-name">CYBER-NET (WPA3-Enterprise)</div>
+        <div class="wifi-net-meta">Connected, secured • 5.0 GHz • 1200 Mbps</div>
+      </div>
+      <button class="wifi-net-action-btn disconnect" onclick="toggleCybernetConnect()">Disconnect</button>
+    </div>
+    <div class="wifi-net-item" onclick="showToast('🔒 HQ-CyberAcademy-Internal requires a Student Key to connect.','info')">
+      <div class="wifi-net-icon"><img src="assets/icons/networks/wi-fi.svg" alt="Wi-Fi" style="width:20px;height:20px;"></div>
+      <div class="wifi-net-details">
+        <div class="wifi-net-name">HQ-CyberAcademy-Internal</div>
+        <div class="wifi-net-meta">Secured (802.1X Student Key)</div>
+      </div>
+      <button class="wifi-net-action-btn connect" onclick="event.stopPropagation();showToast('🔒 Requires Student Key authentication.','info')">Connect</button>
+    </div>
+    <div class="wifi-net-item" onclick="showToast('🔬 Lab-Investigation-Mesh is a forensic sandbox network.','info')">
+      <div class="wifi-net-icon"><img src="assets/icons/networks/wi-fi.svg" alt="Wi-Fi" style="width:20px;height:20px;"></div>
+      <div class="wifi-net-details">
+        <div class="wifi-net-name">Lab-Investigation-Mesh</div>
+        <div class="wifi-net-meta">Secured • Isolated Forensic Sandbox</div>
+      </div>
+      <button class="wifi-net-action-btn connect" onclick="event.stopPropagation();showToast('🔬 Lab network — forensic use only.','info')">Connect</button>
+    </div>
+    <div class="wifi-net-item warning-net" onclick="warnPublicWifi()">
+      <div class="wifi-net-icon"><img src="assets/icons/networks/wi-fi.svg" alt="Wi-Fi" style="width:20px;height:20px;"></div>
+      <div class="wifi-net-details">
+        <div class="wifi-net-name">Free_Public_Unsecured</div>
+        <div class="wifi-net-meta" style="color:var(--accent-red,#f87171)">⚠️ Open • High Risk of Phishing / MITM!</div>
+      </div>
+      <button class="wifi-net-action-btn warn-btn" onclick="event.stopPropagation();warnPublicWifi()">Inspect</button>
+    </div>
+  `;
+
+  // Scenario-specific networks (G4 mission networks) with inspect/connect
+  const scenarioNetworks = G4_WIFI_NETWORKS.map(net => `
+    <div class="wifi-net-item ${net.risk === 'high' ? 'warning-net' : ''} ${g4SelectedNetwork === net.id ? 'connected' : ''}" onclick="g4SelectNetwork('${net.id}')">
+      <div class="wifi-net-icon"><img src="assets/icons/networks/wi-fi.svg" alt="Wi-Fi" style="width:20px;height:20px;"></div>
+      <div class="wifi-net-details">
+        <div class="wifi-net-name">${net.name}</div>
+        <div class="wifi-net-meta" style="${net.risk === 'high' ? 'color:var(--accent-red,#f87171)' : ''}">${net.risk === 'high' ? '⚠️ ' : ''}${net.tag}</div>
+      </div>
+      <div style="display:flex;gap:6px;">
+        <button class="wifi-net-action-btn ${net.risk === 'high' ? 'warn-btn' : 'connect'}" onclick="event.stopPropagation(); g4InspectNetwork('${net.id}')">🔍 Inspect</button>
+        <button class="wifi-net-action-btn connect" onclick="event.stopPropagation(); g4ConnectNetwork('${net.id}')">Connect</button>
+      </div>
+    </div>
+  `).join('');
+
+  list.innerHTML = baseNetworks + scenarioNetworks;
+}
+
+function g4SelectNetwork(netId) {
+  g4SelectedNetwork = netId;
+  renderG4WiFiSettings();
+}
+
+function g4InspectNetwork(netId) {
+  const net = G4_WIFI_NETWORKS.find(n => n.id === netId);
+  if (!net) return;
+  g4SelectedNetwork = netId;
+  renderG4WiFiSettings();
+
+  const panel = document.getElementById('wifi-props-panel');
+  if (!panel) return;
+  panel.classList.remove('hidden');
+
+  const signalBars = '●'.repeat(net.signal) + '<span style="opacity:0.25">' + '●'.repeat(4 - net.signal) + '</span>';
+
+  panel.innerHTML = `
+    <div class="wifi-props-header">
+      <div class="wifi-props-icon">📶</div>
+      <div>
+        <div class="wifi-props-name">${net.name}</div>
+        <div style="font-size:11px;color:var(--text-muted)">Network Properties</div>
+      </div>
+      <button class="btn-ghost btn-sm" onclick="document.getElementById('wifi-props-panel').classList.add('hidden')">✕ Close</button>
+    </div>
+    <div class="wifi-props-table">
+      <div class="wifi-props-row"><span class="wifi-props-label">Network Name (SSID)</span><span class="wifi-props-val">${net.name}</span></div>
+      <div class="wifi-props-row"><span class="wifi-props-label">Security</span><span class="wifi-props-val ${net.security === 'Open' ? 'text-danger' : 'text-safe'}">${net.security}</span></div>
+      <div class="wifi-props-row"><span class="wifi-props-label">Password</span><span class="wifi-props-val ${net.password === 'None' ? 'text-danger' : 'text-safe'}">${net.password}</span></div>
+      <div class="wifi-props-row"><span class="wifi-props-label">Device Visibility</span><span class="wifi-props-val">${net.deviceVisibility}</span></div>
+      <div class="wifi-props-row"><span class="wifi-props-label">Signal Strength</span><span class="wifi-props-val">${signalBars}</span></div>
+    </div>
+    <div class="wifi-props-note ${net.risk === 'high' ? 'note-warning' : 'note-safe'}">
+      ${net.risk === 'high' ? '⚠️' : '✓'} ${net.note}
+    </div>
+    <div class="wifi-props-actions">
+      <button class="btn-ghost btn-sm" onclick="document.getElementById('wifi-props-panel').classList.add('hidden')">Cancel</button>
+      <button class="btn-primary btn-sm" onclick="g4ConnectNetwork('${net.id}')">Connect to ${net.name}</button>
+    </div>
+  `;
+}
+
+function g4ConnectNetwork(netId) {
+  const net = G4_WIFI_NETWORKS.find(n => n.id === netId);
+  if (!net) return;
+  g4State.wifiChoice = netId;
+
+  const panel = document.getElementById('wifi-props-panel');
+  if (panel) {
+    panel.classList.remove('hidden');
+    panel.innerHTML = `
+      <div style="text-align:center;padding:20px;display:flex;flex-direction:column;align-items:center;gap:12px;">
+        <div style="font-size:32px">📶</div>
+        <div style="font-weight:700;color:var(--text-primary)">Connected to ${net.name}</div>
+        <div class="g4-status-badge" style="background:rgba(0,229,255,0.1);border:1px solid rgba(0,229,255,0.3);padding:8px 16px;border-radius:8px;font-size:12px;">
+          <div>Status: <strong style="color:var(--accent-cyan)">Connected</strong></div>
+          <div>Network Type: <strong style="color:${net.risk === 'high' ? 'var(--accent-orange)' : 'var(--accent-green)'}">Public${net.risk === 'high' ? ' (Open)' : ' (Secured)'}</strong></div>
+        </div>
+        <button class="btn-primary" onclick="g4ProceedToStage2()">Continue → Check Laptop Security</button>
+      </div>
+    `;
+  }
+
+  const wifiIcon = document.getElementById('tray-wifi-icon');
+  if (wifiIcon) wifiIcon.innerHTML = `<img src="assets/icons/networks/wi-fi.svg" alt="Wi-Fi" style="width:18px;height:18px;vertical-align:middle;">`;
+
+  if (net.risk === 'high') {
+    showToast(`⚠️ Connected to ${net.name} — Open network. Check your security settings!`, 'warning');
+  } else {
+    showToast(`✓ Connected to ${net.name} — Password-protected network.`, 'success');
+  }
+
+  // Update phone signal
+  const phoneSignal = document.getElementById('pl-phone-signal');
+  if (phoneSignal) phoneSignal.textContent = '📶';
+}
+
+function g4ProceedToStage2() {
+  g4State.stage = 2;
+  closeApp('wifi-settings');
+  setTimeout(() => {
+    openApp('security-settings');
+    renderG4SecuritySettings();
+    const win = document.getElementById('win-security-settings');
+    if (win) { win.style.left = '120px'; win.style.top = '70px'; win.style.width = '700px'; win.style.height = '480px'; }
+    showToast('🛡️ Stage 2: Check your sharing settings. Disable unnecessary exposure on public networks.', 'info');
+  }, 300);
+}
+
+// ── STAGE 2: SECURITY SETTINGS ───────────────────────────────
+
+function renderG4SecuritySettings() {
+  const list = document.getElementById('security-settings-list');
+  if (!list) return;
+
+  list.innerHTML = G4_SECURITY_SETTINGS.map(s => `
+    <div class="g4-setting-row" id="g4-setting-${s.id}">
+      <div class="g4-setting-icon">${s.icon}</div>
+      <div class="g4-setting-info">
+        <div class="g4-setting-name">${s.label}</div>
+        <div class="g4-setting-hint">${s.hint}</div>
+      </div>
+      <div class="g4-toggle-wrap" onclick="g4ToggleSetting('${s.id}')">
+        <div class="g4-toggle ${s.state ? 'on' : 'off'}" id="g4-toggle-${s.id}">
+          <div class="g4-toggle-knob"></div>
+        </div>
+        <span class="g4-toggle-label" id="g4-tlabel-${s.id}">${s.state ? 'ON' : 'OFF'}</span>
+      </div>
+    </div>
+  `).join('');
+}
+
+function g4ToggleSetting(settingId) {
+  const setting = G4_SECURITY_SETTINGS.find(s => s.id === settingId);
+  if (!setting) return;
+  setting.state = !setting.state;
+
+  const toggle = document.getElementById(`g4-toggle-${settingId}`);
+  const label = document.getElementById(`g4-tlabel-${settingId}`);
+  if (toggle) { toggle.classList.toggle('on', setting.state); toggle.classList.toggle('off', !setting.state); }
+  if (label) label.textContent = setting.state ? 'ON' : 'OFF';
+
+  // Track risky settings
+  if (settingId === 'file_sharing') g4State.fileSharingOff = !setting.state;
+  if (settingId === 'device_discovery') g4State.deviceDiscoveryOff = !setting.state;
+
+  if (typeof AudioManager !== 'undefined') AudioManager.playClickSound();
+
+  // Show feedback when both risky ones are disabled
+  const bothDisabled = g4State.fileSharingOff && g4State.deviceDiscoveryOff;
+  const feedback = document.getElementById('sec-feedback');
+  const stageNav = document.getElementById('sec-stage-nav');
+
+  if (bothDisabled && !g4State.securedLaptop) {
+    g4State.securedLaptop = true;
+    g4State.score += 100;
+    if (feedback) {
+      feedback.classList.remove('hidden');
+      feedback.innerHTML = `
+        <div class="g4-success-box">
+          <span style="font-size:20px">✅</span>
+          <div>
+            <div style="font-weight:700;color:var(--accent-green)">Security Action Completed</div>
+            <div style="font-size:12px;color:var(--text-secondary)">File Sharing and Device Discovery are now OFF. Device Protected. (+100 pts)</div>
+          </div>
+        </div>
+      `;
+    }
+    if (stageNav) stageNav.style.display = 'flex';
+    showToast('✅ Laptop secured! File Sharing and Device Discovery disabled.', 'success');
+  } else if (!bothDisabled && stageNav) {
+    stageNav.style.display = 'none';
+    if (feedback) {
+      feedback.classList.remove('hidden');
+      feedback.innerHTML = `<div class="g4-warning-box">⚠️ Some risky settings are still enabled. Disable File Sharing and Device Discovery to protect your laptop on a public network.</div>`;
+    }
+  }
+}
+
+function group4NextStage() {
+  g4ProceedToStage3();
+}
+
+function g4ProceedToStage3() {
+  g4State.stage = 3;
+  closeApp('security-settings');
+  showToast('💬 Stage 3: You received a new chat message. Open Phone Link to investigate.', 'info');
+  setTimeout(() => {
+    openApp('comms');
+    renderPhoneLinkApp();
+    const win = document.getElementById('win-comms');
+    if (win) { win.style.left = '90px'; win.style.top = '50px'; win.style.width = '720px'; win.style.height = '500px'; }
+    // Show Mia chat notification
+    setTimeout(() => {
+      showToast('📱 New message from "Mia — New Account". Open Phone Link to investigate.', 'warning');
+      const badge = document.getElementById('pl-notif-badge');
+      if (badge) badge.classList.remove('hidden');
+    }, 600);
+  }, 300);
+}
+
+// ── PHONELINK APP ─────────────────────────────────────────────
+
+const G4_CONTACTS = [
+  { id: 'mia_fake', name: 'Mia — New Account', avatar: '👤', joined: 'Today', type: 'suspicious', isGroup4: true },
+  { id: 'carlo', name: 'Carlo', avatar: '👦', joined: '2 years ago', type: 'known', isGroup4: true },
+  { id: 'group4', name: 'Group 4 Chat', avatar: '👥', joined: '1 year ago', type: 'group', isGroup4: true },
+  { id: 'real_mia', name: 'Mia (Verified)', avatar: '👧', joined: '1 year ago', type: 'known', isGroup4: true }
+];
+
+const G4_MESSAGES = {
+  mia_fake: [
+    { from: 'them', text: 'Hey, can you send me your student number and birthday? I need them to recover our project account. Please hurry.', time: '2:47 PM', urgent: true }
+  ],
+  carlo: [
+    { from: 'them', text: 'I found a free premium design tool. Download this so we can finish the presentation faster.', time: '3:05 PM', link: 'canva-premium-free.example' }
+  ],
+  group4: [
+    { from: 'them', sender: 'Mia', text: "That's not me. Don't send anything.", time: '2:49 PM', verified: true },
+    { from: 'them', sender: 'Carlo', text: 'What happened? Is everything ok?', time: '2:50 PM' }
+  ],
+  real_mia: [
+    { from: 'them', text: "Hey! Did someone contact you pretending to be me? That account isn't mine.", time: '2:48 PM', verified: true }
+  ]
+};
+
+let g4ActiveConvo = null;
+let g4MiaInspected = false;
+let g4GroupChecked = false;
+
+function renderPhoneLinkApp() {
+  renderPhoneFrame();
+  switchPhoneTab('messages');
+}
+
+function renderPhoneFrame() {
+  const timeEl = document.getElementById('pl-phone-time');
+  if (timeEl) {
+    const now = new Date();
+    timeEl.textContent = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+  }
+}
+
+function switchPhoneTab(tab) {
+  g4ActiveTab = tab;
+  const tabs = document.querySelectorAll('.pl-tab');
+  tabs.forEach(t => {
+    const id = t.id.replace('pl-tab-', '');
+    t.classList.toggle('active', id === tab);
+  });
+
+  const content = document.getElementById('pl-tab-content');
+  if (!content) return;
+
+  if (tab === 'messages') {
+    renderPhoneMessages(content);
+  } else if (tab === 'calls') {
+    content.innerHTML = `
+      <div class="pl-empty-state">
+        <div class="pl-empty-state-icon">📞</div>
+        <div class="pl-empty-state-title">No recent calls</div>
+        <div class="pl-empty-state-sub">Recent phone and audio calls will appear here.</div>
+      </div>
+    `;
+  } else if (tab === 'contacts') {
+    renderPhoneContacts(content);
+  }
+}
+
+function renderPhoneMessages(container) {
+  const unreadCount = g4State.stage >= 3 ? (g4State.miaAction ? 0 : 2) : 0;
+  const badge = document.getElementById('pl-msg-badge');
+  if (badge) badge.textContent = unreadCount > 0 ? unreadCount : '';
+
+  const convos = [
+    { id: 'mia_fake', name: 'Mia — New Account', preview: 'Hey, can you send me your student...', time: '2:47 PM', unread: g4State.stage >= 3 && !g4State.miaAction, suspicious: true, showIf: g4State.stage >= 3 },
+    { id: 'carlo', name: 'Carlo', preview: 'I found a free premium design tool...', time: '3:05 PM', unread: g4State.stage >= 4 && !g4State.fileDecision, showIf: g4State.stage >= 4 },
+    { id: 'group4', name: 'Group 4 Chat', preview: 'Mia: That\'s not me. Don\'t send...', time: '2:49 PM', showIf: true },
+    { id: 'real_mia', name: 'Mia (Verified)', preview: 'Did someone contact you pretending...', time: '2:48 PM', showIf: g4State.stage >= 3 }
+  ].filter(c => c.showIf);
+
+  container.innerHTML = `
+    <div class="pl-msg-list">
+      ${convos.map(c => `
+        <div class="pl-msg-row ${c.unread ? 'unread' : ''} ${c.suspicious ? 'suspicious' : ''} ${g4ActiveConvo === c.id ? 'active' : ''}" onclick="openPhoneConversation('${c.id}')">
+          <div class="pl-msg-avatar">${c.suspicious ? '⚠️' : G4_CONTACTS.find(x => x.id === c.id)?.avatar || '👤'}</div>
+          <div class="pl-msg-info">
+            <div class="pl-msg-name">${c.name}${c.suspicious ? ' <span class="pl-suspicious-tag">New Account</span>' : ''}</div>
+            <div class="pl-msg-preview">${c.preview}</div>
+          </div>
+          <div class="pl-msg-meta">
+            <div class="pl-msg-time">${c.time}</div>
+            ${c.unread ? '<div class="pl-unread-dot"></div>' : ''}
+          </div>
+        </div>
+      `).join('')}
+    </div>
+  `;
+
+  // Also update phone screen preview
+  const phoneContent = document.getElementById('pl-phone-content');
+  if (phoneContent) {
+    phoneContent.innerHTML = `
+      <div style="padding:8px;display:flex;flex-direction:column;gap:6px;">
+        ${convos.slice(0, 3).map(c => `
+          <div style="background:rgba(255,255,255,0.08);border-radius:6px;padding:7px 9px;font-size:10px;display:flex;align-items:center;gap:6px;border:1px solid ${c.suspicious ? 'rgba(251,191,36,0.6)' : 'rgba(255,255,255,0.1)'};">
+            <span style="font-size:14px">${c.suspicious ? '⚠️' : '💬'}</span>
+            <div style="min-width:0;flex:1;">
+              <div style="font-weight:800;color:${c.suspicious ? '#fbbf24' : '#f8fafc'};white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${escapeHtml(c.name.slice(0, 16))}</div>
+              <div style="color:#cbd5e1;font-size:9.5px;margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${escapeHtml(c.preview.slice(0, 22))}...</div>
+            </div>
+          </div>
+        `).join('')}
+      </div>
+    `;
+  }
+}
+
+function renderPhoneContacts(container) {
+  container.innerHTML = `
+    <div class="pl-contacts-list">
+      ${G4_CONTACTS.map(c => `
+        <div class="pl-contact-row" onclick="openPhoneConversation('${c.id}')">
+          <div class="pl-contact-avatar ${c.type === 'suspicious' ? 'avatar-suspicious' : ''}">${c.avatar}</div>
+          <div class="pl-contact-info">
+            <div class="pl-contact-name">${c.name}</div>
+            <div class="pl-contact-meta">Member since: ${c.joined} ${c.type === 'suspicious' ? '• <span style="color:var(--accent-orange)">⚠️ New Account</span>' : ''}</div>
+          </div>
+          ${c.type === 'suspicious' ? '<span style="font-size:10px;color:var(--accent-orange);font-weight:700;padding:3px 6px;border:1px solid currentColor;border-radius:4px">INSPECT</span>' : ''}
+        </div>
+      `).join('')}
+    </div>
+  `;
+}
+
+function openPhoneConversation(contactId) {
+  g4ActiveConvo = contactId;
+  switchPhoneTab('messages');
+
+  const content = document.getElementById('pl-tab-content');
+  if (!content) return;
+
+  const msgs = G4_MESSAGES[contactId] || [];
+  const contact = G4_CONTACTS.find(c => c.id === contactId);
+
+  // Track investigation
+  if (contactId === 'mia_fake') g4MiaInspected = true;
+  if (contactId === 'group4' || contactId === 'real_mia') g4GroupChecked = true;
+
+  const actionHtml = buildPhoneActionHtml(contactId);
+
+  content.innerHTML = `
+    <div class="pl-convo-view">
+      <div class="pl-convo-header">
+        <button class="pl-back-btn" onclick="switchPhoneTab('messages')">← Back</button>
+        <div class="pl-convo-name">${contact?.name || contactId}</div>
+        <button class="pl-inspect-btn" onclick="g4InspectProfile('${contactId}')">🔍 Inspect Profile</button>
+      </div>
+      <div class="pl-convo-messages">
+        ${msgs.map(m => `
+          <div class="pl-msg-bubble ${m.from === 'me' ? 'mine' : 'theirs'}">
+            ${m.sender ? `<div class="pl-msg-sender">${m.sender}</div>` : ''}
+            <div class="pl-msg-text ${m.urgent ? 'urgent-msg' : ''} ${m.verified ? 'verified-msg' : ''}">
+              ${m.text}
+              ${m.link ? `<div class="pl-msg-link" onclick="g4OpenCarloLink()">🔗 ${m.link} <span style="color:var(--accent-cyan);font-size:10px">→ Open</span></div>` : ''}
+            </div>
+            <div class="pl-msg-time">${m.time} ${m.verified ? '✓ Verified' : ''}</div>
+          </div>
+        `).join('')}
+      </div>
+      ${actionHtml}
+    </div>
+  `;
+}
+
+function buildPhoneActionHtml(contactId) {
+  if (contactId === 'mia_fake' && !g4State.miaAction) {
+    return `
+      <div class="pl-action-bar">
+        <div class="pl-action-header">🎙️ <em>"A familiar name does not guarantee a legitimate request. Verify through another trusted method."</em></div>
+        <div class="pl-action-btns">
+          <button class="pl-action-btn pl-btn-danger" onclick="g4MiaDecision('sent')">📤 Send Info (Student ID + Birthday)</button>
+          <button class="pl-action-btn pl-btn-report" onclick="g4MiaDecision('reported')">🚩 Stop & Report Account</button>
+          <button class="pl-action-btn pl-btn-ghost" onclick="g4MiaDecision('ignored')">🚫 Ignore & Warn Group</button>
+        </div>
+      </div>
+    `;
+  } else if (contactId === 'carlo' && !g4State.fileDecision) {
+    return `
+      <div class="pl-action-bar">
+        <button class="pl-action-btn pl-btn-primary" onclick="g4OpenCarloLink()">🌐 Open Browser to Investigate</button>
+      </div>
+    `;
+  }
+  return '';
+}
+
+function g4InspectProfile(contactId) {
+  if (contactId !== 'mia_fake') {
+    showToast(`ℹ️ ${G4_CONTACTS.find(c => c.id === contactId)?.name}: Known contact. Account verified.`, 'info');
+    return;
+  }
+  showToast('⚠️ Profile "Mia — New Account" was created TODAY. Different from the real Mia\'s account. Investigate further!', 'warning');
+  g4MiaInspected = true;
+}
+
+function g4MiaDecision(action) {
+  g4State.miaAction = action;
+  const badge = document.getElementById('pl-notif-badge');
+  if (badge) badge.classList.add('hidden');
+
+  if (action === 'reported') {
+    g4State.score += 100;
+    showToast('✅ Threat Identified: Social Engineering. Personal Information Protected. (+100 pts)', 'success');
+    openPhoneConversation('mia_fake');
+    setTimeout(() => g4ProceedToStage4(), 1500);
+  } else if (action === 'ignored') {
+    g4State.score += 50;
+    showToast('⚠️ Smart to ignore — but reporting would help protect others too. (+50 pts)', 'info');
+    openPhoneConversation('mia_fake');
+    setTimeout(() => g4ProceedToStage4(), 1500);
+  } else if (action === 'sent') {
+    showToast('⚠️ You shared personal information! This was a social engineering attack. Be cautious next time.', 'warning');
+    openPhoneConversation('mia_fake');
+    setTimeout(() => g4ProceedToStage4(), 1500);
+  }
+}
+
+function g4ProceedToStage4() {
+  g4State.stage = 4;
+  showToast('⬇️ Stage 4: Carlo sent a download link. Open Browser to investigate the file.', 'info');
+  // Show Carlo message
+  setTimeout(() => {
+    openPhoneConversation('carlo');
+  }, 500);
+}
+
+function g4OpenCarloLink() {
+  openApp('browser');
+  const win = document.getElementById('win-browser');
+  if (win) { win.style.left = '160px'; win.style.top = '80px'; }
+  setTimeout(() => {
+    browserGo('canva-premium-free.example');
+    renderG4MaliciousSite();
+  }, 300);
+}
+
+// ── STAGE 4: MALICIOUS DOWNLOAD ───────────────────────────────
+
+function renderG4MaliciousSite() {
+  const contentEl = document.getElementById('browser-content');
+  if (!contentEl) return;
+
+  const urlBar = document.getElementById('browser-url-input');
+  if (urlBar) urlBar.value = 'http://canva-premium-free.example/download';
+
+  const secIndicator = document.getElementById('browser-security');
+  if (secIndicator) {
+    secIndicator.textContent = '⚠️ Not Secure';
+    secIndicator.style.color = 'var(--accent-red)';
+  }
+
+  contentEl.innerHTML = `
+    <div class="g4-malsite-wrap">
+      <div class="g4-malsite-header">
+        <div class="g4-malsite-logo">Canva<span style="color:#ff5252">-premium</span>-free</div>
+        <div style="font-size:11px;color:rgba(255,255,255,0.4);margin-top:4px">⚠️ Unofficial — Not affiliated with Canva</div>
+      </div>
+      <div class="g4-malsite-hero">
+        <div class="g4-malsite-title">FREE PREMIUM DESIGN TOOL</div>
+        <div class="g4-malsite-bullets">
+          <div>✓ Premium Features — FREE</div>
+          <div>✓ No Registration Required!</div>
+          <div>✓ Unlimited Templates &amp; Exports</div>
+        </div>
+        <button class="g4-download-btn" onclick="g4TriggerDownload()">⬇ DOWNLOAD NOW</button>
+        <div class="g4-malsite-counter">Downloaded by 4,892 users today!</div>
+      </div>
+
+      <!-- Narrator practice tip -->
+      <div class="g4-narrator-tip" style="max-width:600px;margin:16px auto 0;">
+        <span class="g4-narrator-icon">🎙️</span>
+        <p>"A useful-looking file can still be unsafe. Check the source, file type, and publisher before opening it."</p>
+      </div>
+    </div>
+  `;
+}
+
+function g4TriggerDownload() {
+  const contentEl = document.getElementById('browser-content');
+  if (!contentEl) return;
+
+  contentEl.innerHTML += `
+    <div class="g4-download-complete" id="g4-download-complete">
+      <div style="font-size:16px;font-weight:700;color:var(--text-primary)">⬇️ Download Complete</div>
+      <div class="g4-file-props">
+        <div style="font-size:14px;font-weight:700;color:var(--text-primary);margin-bottom:12px">📄 File Properties — Inspection Required</div>
+        <table class="g4-props-table">
+          <tr><td class="g4-prop-label">File Name</td><td class="g4-prop-val">PremiumDesignTool.exe</td></tr>
+          <tr><td class="g4-prop-label">File Type</td><td class="g4-prop-val" style="color:var(--accent-orange)">Application (.exe) ⚠️</td></tr>
+          <tr><td class="g4-prop-label">Publisher</td><td class="g4-prop-val" style="color:var(--accent-red)">Unknown ⚠️</td></tr>
+          <tr><td class="g4-prop-label">Source</td><td class="g4-prop-val" style="color:var(--accent-red)">Unverified — canva-premium-free.example</td></tr>
+          <tr><td class="g4-prop-label">Size</td><td class="g4-prop-val">3.4 MB</td></tr>
+          <tr><td class="g4-prop-label">SHA-256</td><td class="g4-prop-val" style="font-family:var(--font-mono);font-size:11px">f7e4b2c1a0d8e9f3...</td></tr>
+        </table>
+      </div>
+      <div class="g4-file-decision-btns">
+        <button class="btn-success btn-sm" onclick="g4FileDecision('delete')">🗑️ Delete File</button>
+        <button class="btn-ghost btn-sm" onclick="g4FileDecision('report')">🚩 Report File</button>
+        <button class="btn-danger btn-sm" onclick="g4FileDecision('open')">▶ Open File</button>
+      </div>
+    </div>
+  `;
+}
+
+function g4FileDecision(decision) {
+  g4State.fileDecision = decision;
+
+  if (decision === 'delete') {
+    g4State.score += 100;
+    showToast('✅ Correct! Deleted unknown .exe from unverified source. (+100 pts)', 'success');
+    setTimeout(() => g4ShowConsequences(), 1200);
+  } else if (decision === 'report') {
+    g4State.score += 75;
+    showToast('✅ Good decision! Reported the suspicious file. (+75 pts)', 'success');
+    setTimeout(() => g4ShowConsequences(), 1200);
+  } else if (decision === 'open') {
+    showToast('⚠️ You opened an unknown .exe! Watch what happens next...', 'warning');
+    setTimeout(() => g4StartInfection(), 1000);
+  }
+}
+
+// ── STAGE 5: INFECTION SIMULATION ─────────────────────────────
+
+const G4_SYMPTOMS = [
+  { icon: '📁', text: 'Project Folder is responding slowly...', delay: 800 },
+  { icon: '⚙️', text: 'Unknown process "PremiumDesignTool.exe" is running at high CPU...', delay: 2000 },
+  { icon: '🌐', text: 'Browser opened unexpected tab: "ads.malware-domain.ru"', delay: 3500 },
+  { icon: '🔒', text: 'Project files are becoming difficult to access...', delay: 5000 }
+];
+
+function g4StartInfection() {
+  g4State.stage = 5;
+  const contentEl = document.getElementById('browser-content');
+  if (contentEl) {
+    contentEl.innerHTML = `
+      <div class="g4-infection-wrap" id="g4-infection-wrap">
+        <div class="g4-infection-header">
+          <div class="g4-infection-alert">⚠️ UNKNOWN APPLICATION RUNNING...</div>
+          <div class="g4-narrator-box">🎙️ "Something isn't behaving normally."</div>
+        </div>
+        <div class="g4-symptom-list" id="g4-symptom-list"></div>
+        <div class="g4-investigation-tools hidden" id="g4-investigation-tools">
+          <div style="font-weight:700;color:var(--text-primary);margin-bottom:10px;">🔧 Investigation Tools</div>
+          <div class="g4-tools-grid">
+            <button class="g4-tool-btn" onclick="openApp('taskmanager'); renderG4TaskManager()">📊 Task Manager</button>
+            <button class="g4-tool-btn" onclick="g4CheckDownloads()">📁 Downloads</button>
+            <button class="g4-tool-btn" onclick="g4CheckProjectFolder()">📂 Project Folder</button>
+            <button class="g4-tool-btn" onclick="g4DisconnectWifi()">📶 Disconnect Wi-Fi</button>
+            <button class="g4-tool-btn" onclick="openApp('scanner'); renderG4Scanner()">🔍 Security Scanner</button>
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
+  // Apply visual glitch effect
+  document.body.classList.add('g4-infected');
+
+  // Reveal symptoms one by one
+  let shown = 0;
+  G4_SYMPTOMS.forEach((s, i) => {
+    setTimeout(() => {
+      const list = document.getElementById('g4-symptom-list');
+      if (list) {
+        const div = document.createElement('div');
+        div.className = 'g4-symptom-row';
+        div.innerHTML = `<span class="g4-sym-icon">${s.icon}</span><span>${s.text}</span>`;
+        div.style.animation = 'g4-sym-appear 400ms ease';
+        list.appendChild(div);
+        shown++;
+        if (shown === G4_SYMPTOMS.length) {
+          setTimeout(() => {
+            const tools = document.getElementById('g4-investigation-tools');
+            if (tools) tools.classList.remove('hidden');
+          }, 600);
+        }
+      }
+    }, s.delay);
+  });
+}
+
+function renderG4TaskManager() {
+  const list = document.getElementById('tm-process-list');
+  if (!list) return;
+
+  list.innerHTML = G4_PROCESSES.map(p => `
+    <div class="tm-process-row ${p.suspicious ? 'suspicious-process' : ''}">
+      <span class="tm-col-name">${p.suspicious ? '⚠️ ' : ''}${p.name}</span>
+      <span class="tm-col-cpu ${p.suspicious ? 'text-danger' : ''}">${p.cpu}</span>
+      <span class="tm-col-mem">${p.mem}</span>
+      <span class="tm-col-status">${p.status}</span>
+      ${p.suspicious ? `<button class="btn-danger btn-sm" onclick="g4KillProcess('${p.pid}')">End Task</button>` : '<span style="width:80px"></span>'}
+    </div>
+  `).join('');
+}
+
+function g4KillProcess(pid) {
+  g4State.processKilled = true;
+  g4State.infectionInvestigated = true;
+  g4State.score += 75;
+  showToast('✅ Suspicious process terminated! (+75 pts)', 'success');
+  const list = document.getElementById('tm-process-list');
+  if (list) {
+    renderG4TaskManager();
+    const rows = list.querySelectorAll('.suspicious-process');
+    rows.forEach(r => { r.style.opacity = '0.3'; r.style.textDecoration = 'line-through'; });
+    setTimeout(() => {
+      list.innerHTML = list.innerHTML.replace('suspicious-process', '') + `<div style="padding:8px;color:var(--accent-green);font-size:12px">✓ PremiumDesignTool.exe (PID 4092) terminated.</div>`;
+    }, 400);
+  }
+  g4CheckAllInfectionSteps();
+}
+
+function g4CheckDownloads() {
+  g4State.infectionInvestigated = true;
+  showToast('📁 Downloads folder: Found "PremiumDesignTool.exe" — source: canva-premium-free.example (Unverified)', 'warning');
+}
+
+function g4CheckProjectFolder() {
+  showToast('📂 Project Folder: Files responding slowly. 2 files show access errors. Disconnect network to limit damage.', 'warning');
+}
+
+function g4DisconnectWifi() {
+  g4State.wifiDisconnected = true;
+  g4State.score += 50;
+  showToast('📶 Wi-Fi disconnected. Network communication limited. (+50 pts)', 'success');
+
+  // Update tray icon
+  const wifiIcon = document.getElementById('tray-wifi-icon');
+  if (wifiIcon) wifiIcon.innerHTML = `<img src="assets/icons/networks/wi-fi.svg" alt="Wi-Fi" style="width:18px;height:18px;vertical-align:middle;opacity:0.4;filter:grayscale(1)">`;
+
+  showToast('🎙️ "Disconnecting the laptop can help limit further network communication while the incident is investigated."', 'info');
+  g4CheckAllInfectionSteps();
+}
+
+function renderG4Scanner() {
+  const title = document.getElementById('scanner-title');
+  const sub = document.getElementById('scanner-sub');
+  if (title) title.textContent = 'Security Scanner — Threat Analysis';
+  if (sub) sub.textContent = g4State.fileDecision === 'open' ? '⚠️ Suspicious activity detected. Run a full scan.' : 'No active threat. Run scan to verify.';
+}
+
+function runSecurityScan() {
+  const btn = document.getElementById('scanner-run-btn');
+  const progress = document.getElementById('scanner-progress');
+  const fill = document.getElementById('scanner-progress-fill');
+  const text = document.getElementById('scanner-progress-text');
+  const pct = document.getElementById('scanner-progress-pct');
+  const results = document.getElementById('scanner-results');
+
+  if (btn) btn.disabled = true;
+  if (progress) progress.classList.remove('hidden');
+  if (results) results.innerHTML = '';
+
+  let p = 0;
+  const scanSteps = ['Checking startup programs...', 'Scanning running processes...', 'Inspecting downloaded files...', 'Analyzing network connections...'];
+  const interval = setInterval(() => {
+    p += 4;
+    if (fill) fill.style.width = p + '%';
+    if (pct) pct.textContent = p + '%';
+    if (text) text.textContent = scanSteps[Math.floor(p / 25)] || 'Finalizing scan...';
+    if (p >= 100) {
+      clearInterval(interval);
+      g4State.scannerRan = true;
+      g4State.score += 50;
+      if (progress) progress.classList.add('hidden');
+      if (results) {
+        results.innerHTML = g4State.fileDecision === 'open' ? `
+          <div class="scanner-threat-found">
+            <div style="font-weight:700;color:var(--accent-red)">⚠️ THREAT DETECTED</div>
+            <div class="scanner-threat-item">
+              <strong>PremiumDesignTool.exe</strong><br>
+              Threat: Trojan.Downloader.Unknown<br>
+              Action: <button class="btn-danger btn-sm" onclick="g4ScannerQuarantine()">Quarantine</button>
+            </div>
+          </div>
+        ` : `<div class="scanner-clean"><span>✅</span> No threats found. Device appears clean.</div>`;
+      }
+      g4CheckAllInfectionSteps();
+    }
+  }, 60);
+}
+
+function g4ScannerQuarantine() {
+  g4State.score += 50;
+  showToast('✅ Threat quarantined by Security Scanner! (+50 pts)', 'success');
+  const results = document.getElementById('scanner-results');
+  if (results) results.innerHTML = `<div class="scanner-clean">🛡️ Threat quarantined. File removed from system.</div>`;
+  document.body.classList.remove('g4-infected');
+  g4CheckAllInfectionSteps();
+}
+
+function g4CheckAllInfectionSteps() {
+  const allDone = g4State.wifiDisconnected || g4State.scannerRan || g4State.processKilled;
+  if (allDone && g4State.fileDecision === 'open') {
+    setTimeout(() => {
+      showToast('🔍 Investigation complete. Proceeding to results...', 'info');
+      setTimeout(() => g4ShowConsequences(), 2000);
+    }, 1000);
+  }
+}
+
+// ── CONSEQUENCES & RESULTS ─────────────────────────────────────
+
+function g4ShowConsequences() {
+  document.body.classList.remove('g4-infected');
+  if (g4InfectionTimer) { clearInterval(g4InfectionTimer); g4InfectionTimer = null; }
+
+  // Compute result tier
+  const saferDecisions = [
+    !!g4State.wifiChoice, // connected (any)
+    g4State.securedLaptop,
+    g4State.miaAction === 'reported' || g4State.miaAction === 'ignored',
+    g4State.fileDecision === 'delete' || g4State.fileDecision === 'report'
+  ];
+  const saferCount = saferDecisions.filter(Boolean).length;
+  const isSaferPath = saferCount >= 3;
+
+  const rank = isSaferPath ? (g4State.score >= 300 ? 'S' : 'A') : 'B';
+  completeCategory('social_engineering', g4State.score, rank);
+
+  const overlay = document.getElementById('overlay-social-results');
+  if (overlay) {
+    // Update results content
+    const blockedEl = document.getElementById('res-social-blocked');
+    const scoreEl = document.getElementById('res-social-score');
+    const rankEl = document.getElementById('social-results-rank');
+    const labelEl = document.getElementById('social-results-rank-label');
+
+    if (blockedEl) blockedEl.textContent = `${saferCount} / 4 Safer Decisions`;
+    if (scoreEl) scoreEl.textContent = g4State.score;
+    if (rankEl) rankEl.textContent = rank;
+    if (labelEl) labelEl.textContent = isSaferPath ? 'CYBER AWARE INVESTIGATOR' : 'LEARNING SECURITY BASICS';
+
+    // Inject consequence summary into overlay
+    const card = overlay.querySelector('.results-card');
+    if (card) {
+      const existing = card.querySelector('.g4-consequence-card');
+      if (existing) existing.remove();
+
+      const conseq = document.createElement('div');
+      conseq.className = 'g4-consequence-card';
+      conseq.innerHTML = isSaferPath ? `
+        <div class="g4-conseq-safer">
+          <div class="g4-conseq-title">✅ Project Progress Maintained</div>
+          <div class="g4-conseq-body">Threats identified and handled. Project files secure. Good investigation!</div>
+          <div class="g4-conseq-steps">
+            ${g4State.wifiChoice ? '✓ Verified network before connecting' : '✗ Chose a network'}<br>
+            ${g4State.securedLaptop ? '✓ Secured laptop settings' : '✗ Left sharing enabled'}<br>
+            ${g4State.miaAction !== 'sent' ? '✓ Verified Mia\'s identity' : '✗ Sent personal information'}<br>
+            ${g4State.fileDecision !== 'open' ? '✓ Rejected unknown file' : '✗ Opened unknown file'}
+          </div>
+        </div>
+      ` : `
+        <div class="g4-conseq-risky">
+          <div class="g4-conseq-title">⚠️ Security Risk Increased</div>
+          <div class="g4-conseq-body">Some decisions increased exposure. Laptop potentially compromised. Project files affected.</div>
+          <div class="g4-conseq-steps">
+            ${g4State.securedLaptop ? '✓ Secured laptop settings' : '✗ Left File Sharing / Discovery enabled'}<br>
+            ${g4State.miaAction !== 'sent' ? '✓ Protected personal information' : '✗ Shared student ID and birthday'}<br>
+            ${g4State.fileDecision !== 'open' ? '✓ Handled unknown file safely' : '✗ Opened unknown .exe — Infection triggered'}
+          </div>
+        </div>
+      `;
+      card.insertBefore(conseq, card.querySelector('.results-actions') || card.lastChild);
+    }
+
+    showOverlay('overlay-social-results');
+    if (typeof AudioManager !== 'undefined') AudioManager.playMissionComplete();
+  }
+}
+
 
 function renderCommsFeed() {
   const listEl = document.getElementById('comms-msg-list');
@@ -6751,6 +7748,10 @@ const LOADING_TIPS = [
 ];
 
 function startFromTitleMenu() {
+  // Hide desktop immediately — prevents any flash of desktop behind overlays
+  const desktop = document.getElementById('desktop');
+  if (desktop) desktop.style.visibility = 'hidden';
+
   // Show the loading screen immediately
   const ls = document.getElementById('overlay-loading-screen');
   if (!ls) {
@@ -6758,12 +7759,12 @@ function startFromTitleMenu() {
     return;
   }
 
-  // Pre-close title menu underneath
-  closeOverlay('overlay-title-menu');
-
-  // Activate loading overlay smoothly
+  // Activate loading overlay smoothly FIRST, then close title menu
   ls.classList.remove('ls-leaving');
   ls.classList.add('ls-active');
+
+  // Now safely close title menu — loading screen is already covering everything
+  closeOverlay('overlay-title-menu');
 
   const titleEl = document.getElementById('ls-pixel-title');
   if (titleEl) {
@@ -6865,6 +7866,9 @@ function startFromTitleMenu() {
       ls.classList.add('ls-leaving');
       setTimeout(() => {
         ls.classList.remove('ls-active', 'ls-leaving');
+        // Only reveal desktop AFTER loading screen is fully gone
+        const desktop = document.getElementById('desktop');
+        if (desktop) desktop.style.visibility = 'visible';
       }, 800);
     }, 300);
 
@@ -6872,7 +7876,10 @@ function startFromTitleMenu() {
 }
 
 function _doStartFromTitleMenu() {
-  closeOverlay('overlay-title-menu');
+  // Don't call closeOverlay here — it would briefly show the desktop.
+  // The title menu is already closed by startFromTitleMenu().
+  const titleMenu = document.getElementById('overlay-title-menu');
+  if (titleMenu) titleMenu.classList.remove('active');
   if (typeof AudioManager !== 'undefined') {
     AudioManager.playNotification();
   }
@@ -6940,7 +7947,7 @@ function reconnectTerminal() {
   if (discScreen) discScreen.classList.add('hidden');
   closeExitModal();
   showOverlay('overlay-title-menu');
-  showToast('⚡ Terminal reconnected. Welcome back, Detective.', 'success');
+  showToast('⚡ Terminal reconnected. Welcome back, Student.', 'success');
 }
 
 function initTitleParticles() {
@@ -7700,6 +8707,84 @@ function closeNetworkFlyout(event) {
   if (trayBtn) trayBtn.classList.remove('active');
 }
 
+function openWifiSettingsFromFlyout(event) {
+  if (event) event.stopPropagation();
+  closeNetworkFlyout();
+  openApp('wifi-settings');
+  renderG4WiFiSettings();
+  switchWifiSettingsTab('wifi');
+  showToast('⚙️ Opened Wi-Fi Settings.', 'info');
+}
+
+// ── WIFI SETTINGS WINDOW TAB SWITCHING ──────────────────────────────────────
+
+function switchWifiSettingsTab(tab) {
+  const tabs = ['wifi', 'bluetooth', 'airplane'];
+  tabs.forEach(t => {
+    const tabEl = document.getElementById('wstab-' + t);
+    const navEl = document.getElementById('wsnav-' + t);
+    if (tabEl) tabEl.style.display = (t === tab) ? '' : 'none';
+    if (navEl) {
+      navEl.classList.toggle('active', t === tab);
+    }
+  });
+  // Sync airplane tab state with current networkSettings
+  if (tab === 'airplane') wsUpdateAirplaneTab();
+  if (tab === 'bluetooth') wsUpdateBluetoothTab();
+}
+
+function wsUpdateBluetoothTab() {
+  const label = document.getElementById('ws-bt-state-label');
+  const btn = document.getElementById('ws-bt-toggle-btn');
+  const isOn = networkSettings.bluetooth;
+  if (label) label.textContent = isOn ? 'On — Student Headset connected' : 'Off — No devices connected';
+  if (btn) {
+    btn.textContent = isOn ? 'Turn Off' : 'Turn On';
+    btn.style.background = isOn ? 'rgba(56,189,248,0.15)' : 'rgba(255,255,255,0.08)';
+    btn.style.borderColor = isOn ? 'rgba(56,189,248,0.4)' : 'rgba(255,255,255,0.15)';
+    btn.style.color = isOn ? '#38bdf8' : 'var(--text-secondary)';
+  }
+}
+
+function wsToggleBluetooth() {
+  if (networkSettings.airplane) {
+    showToast('✈️ Turn off Airplane Mode first to enable Bluetooth.', 'warning');
+    return;
+  }
+  networkSettings.bluetooth = !networkSettings.bluetooth;
+  updateNetworkUI();
+  if (typeof AudioManager !== 'undefined') AudioManager.playMouseClick();
+  showToast(networkSettings.bluetooth ? '📡 Bluetooth On • Student Headset Connected.' : '📡 Bluetooth Off.', networkSettings.bluetooth ? 'success' : 'info');
+  wsUpdateBluetoothTab();
+}
+
+function wsUpdateAirplaneTab() {
+  const label = document.getElementById('ws-air-state-label');
+  const btn = document.getElementById('ws-air-toggle-btn');
+  const wifiStatus = document.getElementById('ws-air-wifi-status');
+  const btStatus = document.getElementById('ws-air-bt-status');
+  const isOn = networkSettings.airplane;
+  if (label) label.textContent = isOn ? 'On — All wireless transmitters suspended' : 'Off — All wireless transmitters active';
+  if (btn) {
+    btn.textContent = isOn ? 'Turn Off' : 'Turn On';
+    btn.style.background = isOn ? 'rgba(251,146,60,0.15)' : 'rgba(255,255,255,0.08)';
+    btn.style.borderColor = isOn ? 'rgba(251,146,60,0.4)' : 'rgba(255,255,255,0.15)';
+    btn.style.color = isOn ? '#fb923c' : 'var(--text-secondary)';
+  }
+  const statusText = isOn ? 'Suspended' : 'Active';
+  const statusColor = isOn ? '#fb923c' : '#00ff88';
+  if (wifiStatus) { wifiStatus.textContent = statusText; wifiStatus.style.color = statusColor; }
+  if (btStatus) { btStatus.textContent = statusText; btStatus.style.color = statusColor; }
+}
+
+function wsToggleAirplane() {
+  networkSettings.airplane = !networkSettings.airplane;
+  updateNetworkUI();
+  if (typeof AudioManager !== 'undefined') AudioManager.playMouseClick();
+  showToast(networkSettings.airplane ? '✈️ Airplane Mode Activated — Wireless transmitters suspended.' : '✈️ Airplane Mode Disabled — Wireless restored.', networkSettings.airplane ? 'warning' : 'success');
+  wsUpdateAirplaneTab();
+}
+
 function updateNetworkUI() {
   const tileWifi = document.getElementById('tile-wifi');
   const tileWifiStatus = document.getElementById('tile-wifi-status');
@@ -7760,7 +8845,7 @@ function updateNetworkUI() {
   // Bluetooth
   if (networkSettings.bluetooth) {
     if (tileBt) tileBt.classList.add('active');
-    if (tileBtStatus) tileBtStatus.textContent = 'Detective Headset';
+    if (tileBtStatus) tileBtStatus.textContent = 'Student Headset';
     if (tileBtBadge) tileBtBadge.textContent = 'ON';
   } else {
     if (tileBt) tileBt.classList.remove('active');
@@ -7799,7 +8884,7 @@ function toggleBluetoothSetting() {
   networkSettings.bluetooth = !networkSettings.bluetooth;
   updateNetworkUI();
   if (typeof AudioManager !== 'undefined') AudioManager.playMouseClick();
-  showToast(networkSettings.bluetooth ? '📡 Bluetooth On • Detective Headset Connected.' : '📡 Bluetooth Off.', networkSettings.bluetooth ? 'success' : 'info');
+  showToast(networkSettings.bluetooth ? '📡 Bluetooth On • Student Headset Connected.' : '📡 Bluetooth Off.', networkSettings.bluetooth ? 'success' : 'info');
 }
 
 function toggleAirplaneSetting() {
