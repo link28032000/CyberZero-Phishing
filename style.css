@@ -8217,7 +8217,7 @@ p { line-height: 1.6; }
   position: fixed;
   inset: 0;
   z-index: 9500;
-  background: rgba(3, 8, 20, 0.95);
+  background: radial-gradient(circle at center, rgba(13, 27, 62, 0.75) 0%, rgba(6, 13, 31, 0.95) 100%), url('assets/background/Coffe shop.png') center/cover no-repeat;
   backdrop-filter: blur(14px);
   align-items: center;
   justify-content: center;
@@ -8295,7 +8295,7 @@ p { line-height: 1.6; }
   position: relative;
   width: 100%;
   height: 440px;
-  background: #060b14;
+  background: radial-gradient(ellipse at center, rgba(13, 27, 62, 0.65) 0%, rgba(6, 13, 31, 0.92) 100%), url('assets/background/Coffe shop.png') center/cover no-repeat;
   overflow: hidden;
 }
 
@@ -9179,22 +9179,25 @@ p { line-height: 1.6; }
   border-radius: 6px;
   font-size: 12px;
   font-weight: 600;
-  color: #94a3b8;
+  color: #cbd5e1;
   cursor: pointer;
+  transition: all 0.15s ease;
 }
 .settings-nav-item.active {
-  background: rgba(56, 189, 248, 0.12);
+  background: rgba(56, 189, 248, 0.15);
   color: #38bdf8;
+  font-weight: 700;
 }
 .settings-nav-item:hover:not(.active) {
-  background: rgba(255, 255, 255, 0.05);
-  color: #e2e8f0;
+  background: rgba(255, 255, 255, 0.08);
+  color: #ffffff;
 }
 
 .settings-main {
   flex: 1;
   padding: 20px;
   overflow-y: auto;
+  color: #e2e8f0;
 }
 .settings-page-title {
   font-size: 18px;

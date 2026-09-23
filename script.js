@@ -820,18 +820,26 @@ function closeOverlay(id) {
   const anyActive = document.querySelectorAll('.overlay.active').length > 0;
   if (!anyActive) {
     document.getElementById('overlay-backdrop').classList.remove('active');
-    // Reveal desktop only when no overlays remain
-    const desktop = document.getElementById('desktop');
-    if (desktop) desktop.style.visibility = 'visible';
+    // Reveal desktop only when no overlays remain AND loading screen is not active
+    const ls = document.getElementById('overlay-loading-screen');
+    const loadingActive = ls && ls.classList.contains('ls-active');
+    if (!loadingActive) {
+      const desktop = document.getElementById('desktop');
+      if (desktop) desktop.style.visibility = 'visible';
+    }
   }
 }
 
 function hideAllOverlays() {
   document.querySelectorAll('.overlay').forEach(o => o.classList.remove('active'));
   document.getElementById('overlay-backdrop').classList.remove('active');
-  // Reveal desktop
-  const desktop = document.getElementById('desktop');
-  if (desktop) desktop.style.visibility = 'visible';
+  // Only reveal desktop if the loading screen is NOT currently active
+  const ls = document.getElementById('overlay-loading-screen');
+  const loadingActive = ls && ls.classList.contains('ls-active');
+  if (!loadingActive) {
+    const desktop = document.getElementById('desktop');
+    if (desktop) desktop.style.visibility = 'visible';
+  }
 }
 
 // ═══════════════════════════════════════════════════════════
@@ -1324,6 +1332,20 @@ const CATEGORIES = [
 
 let activeCategoryStory = 'phishing';
 
+function updateDesktopBackgroundForPhase(phase) {
+  const desktop = document.getElementById('desktop');
+  if (!desktop) return;
+  if (phase === 'social_engineering' || phase === 'chapter3') {
+    desktop.style.backgroundImage = "linear-gradient(rgba(10, 15, 30, 0.65), rgba(10, 15, 30, 0.75)), url('assets/background/Coffe shop.png')";
+    desktop.style.backgroundSize = "cover";
+    desktop.style.backgroundPosition = "center";
+  } else {
+    desktop.style.backgroundImage = "";
+    desktop.style.backgroundSize = "";
+    desktop.style.backgroundPosition = "";
+  }
+}
+
 function openCategoryHub() {
   // Called from exam/title flow
   _openCategoryHubInternal(false);
@@ -1336,6 +1358,7 @@ function openCategoryHubFromDesktop() {
 
 function _openCategoryHubInternal(fromDesktop) {
   hideAllOverlays();
+  updateDesktopBackgroundForPhase('hub');
   renderCategoryHub();
   showOverlay('overlay-category-select');
   updateAppLockStates();
@@ -1732,13 +1755,15 @@ const VN_STORIES = {
       speaker: 'NARRATOR',
       text: 'CHAPTER 3: Group 4 Multimedia Project\n\nGroup 4 is working outside the school because the school network is temporarily unavailable. You use your laptop to continue the multimedia project, communicate with group members, and upload project files.',
       speed: 26,
-      scene: 'story'
+      scene: 'story',
+      bg: 'assets/background/Coffe shop.png'
     },
     {
       speaker: 'NARRATOR',
       text: '“Before you begin this chapter, watch a short 30-second awareness video. It introduces three cybersecurity threats you may encounter: unsafe public Wi-Fi, social engineering, and malicious downloads.\n\nPay attention to the warning signs and safety practices. You will use what you learn to investigate the situation yourself.”',
       speed: 26,
-      scene: 'story'
+      scene: 'story',
+      bg: 'assets/background/Coffe shop.png'
     }
   ],
 
@@ -1859,6 +1884,8 @@ function vnInit() {
   if (bgBackdrop) {
     if (activeCategoryStory === 'prologue') {
       bgBackdrop.style.backgroundImage = "url('assets/Cover.png')";
+    } else if (activeCategoryStory === 'social_engineering') {
+      bgBackdrop.style.backgroundImage = "url('assets/background/Coffe shop.png')";
     } else {
       bgBackdrop.style.backgroundImage = "url('assets/01Cover.png')";
     }
@@ -2006,6 +2033,8 @@ function vnPlayLine(index) {
     } else if (bgBackdrop) {
       if (activeCategoryStory === 'prologue') {
         bgBackdrop.style.backgroundImage = "url('assets/Cover.png')";
+      } else if (activeCategoryStory === 'social_engineering') {
+        bgBackdrop.style.backgroundImage = "url('assets/background/Coffe shop.png')";
       } else {
         bgBackdrop.style.backgroundImage = "url('assets/01Cover.png')";
       }
@@ -2308,6 +2337,7 @@ function startDemo() {
   gameState.phase = 'demo';
   gdemoStep = 0;
   gdemoFlags = [];
+  updateDesktopBackgroundForPhase('phishing');
 
   // Reset all demo state
   resetDemoVisuals();
@@ -5249,6 +5279,7 @@ let gmalwareDemoStep = 0;
 function startMalwareDemo() {
   gameState.phase = 'malware-demo';
   gmalwareDemoStep = 0;
+  updateDesktopBackgroundForPhase('malware');
 
   // Reset all demo visuals
   resetMalwareDemoVisuals();
@@ -5995,6 +6026,22 @@ function updateAntiVirusProtectionUI() {
     if (title) title.textContent = 'DEFENSE ENGINE DISABLED';
     if (sub) sub.textContent = '⚠️ Real-Time Protection is OFF • Turn ON to scan threats';
   }
+
+  // Synchronize Quick Settings Anti-Virus Tile
+  const tileAv = document.getElementById('tile-antivirus');
+  const tileAvStatus = document.getElementById('tile-antivirus-status');
+  const tileAvBadge = document.getElementById('tile-antivirus-badge');
+  if (tileAv) {
+    if (gameState.antivirusProtection) {
+      tileAv.classList.add('active');
+      if (tileAvStatus) tileAvStatus.textContent = 'Real-Time On';
+      if (tileAvBadge) tileAvBadge.textContent = 'ON';
+    } else {
+      tileAv.classList.remove('active');
+      if (tileAvStatus) tileAvStatus.textContent = 'Turned Off';
+      if (tileAvBadge) tileAvBadge.textContent = 'OFF';
+    }
+  }
 }
 
 let scanInProgress = false;
@@ -6427,6 +6474,7 @@ function startGroup4Mission() {
   if (g4InfectionTimer) { clearInterval(g4InfectionTimer); g4InfectionTimer = null; }
 
   gameState.phase = 'social_engineering';
+  updateDesktopBackgroundForPhase('social_engineering');
 
   // Show desktop and open Wi-Fi Settings for Stage 1
   hideAllOverlays();
@@ -7486,6 +7534,7 @@ function startRansomwareMission() {
   closeOverlay('overlay-social-results');
   closeOverlay('overlay-ransomware-results');
   gameState.phase = 'ransomware';
+  updateDesktopBackgroundForPhase('ransomware');
 
   RANSOMWARE_NODES.forEach((n, idx) => {
     if (idx === 3) {
@@ -7862,13 +7911,11 @@ function startFromTitleMenu() {
     _doStartFromTitleMenu();
 
     // Smoothly dissolve loading screen over 800ms
+    // Desktop is revealed by hideAllOverlays() when the game reaches desktop mode
     setTimeout(() => {
       ls.classList.add('ls-leaving');
       setTimeout(() => {
         ls.classList.remove('ls-active', 'ls-leaving');
-        // Only reveal desktop AFTER loading screen is fully gone
-        const desktop = document.getElementById('desktop');
-        if (desktop) desktop.style.visibility = 'visible';
       }, 800);
     }, 300);
 
@@ -7880,6 +7927,7 @@ function _doStartFromTitleMenu() {
   // The title menu is already closed by startFromTitleMenu().
   const titleMenu = document.getElementById('overlay-title-menu');
   if (titleMenu) titleMenu.classList.remove('active');
+  updateDesktopBackgroundForPhase('prologue');
   if (typeof AudioManager !== 'undefined') {
     AudioManager.playNotification();
   }
@@ -8764,17 +8812,29 @@ function wsUpdateAirplaneTab() {
   const wifiStatus = document.getElementById('ws-air-wifi-status');
   const btStatus = document.getElementById('ws-air-bt-status');
   const isOn = networkSettings.airplane;
-  if (label) label.textContent = isOn ? 'On — All wireless transmitters suspended' : 'Off — All wireless transmitters active';
+  if (label) {
+    label.textContent = isOn ? 'On — All wireless transmitters suspended' : 'Off — All wireless transmitters active';
+    label.style.color = isOn ? '#fb923c' : '#94a3b8';
+  }
   if (btn) {
     btn.textContent = isOn ? 'Turn Off' : 'Turn On';
-    btn.style.background = isOn ? 'rgba(251,146,60,0.15)' : 'rgba(255,255,255,0.08)';
-    btn.style.borderColor = isOn ? 'rgba(251,146,60,0.4)' : 'rgba(255,255,255,0.15)';
-    btn.style.color = isOn ? '#fb923c' : 'var(--text-secondary)';
+    btn.style.background = isOn ? 'rgba(251,146,60,0.2)' : 'rgba(56,189,248,0.15)';
+    btn.style.borderColor = isOn ? '#fb923c' : '#38bdf8';
+    btn.style.color = isOn ? '#ffedd5' : '#e0f2fe';
   }
   const statusText = isOn ? 'Suspended' : 'Active';
-  const statusColor = isOn ? '#fb923c' : '#00ff88';
-  if (wifiStatus) { wifiStatus.textContent = statusText; wifiStatus.style.color = statusColor; }
-  if (btStatus) { btStatus.textContent = statusText; btStatus.style.color = statusColor; }
+  if (wifiStatus) {
+    wifiStatus.textContent = statusText;
+    wifiStatus.style.color = isOn ? '#fb923c' : '#4ade80';
+    wifiStatus.style.background = isOn ? 'rgba(251,146,60,0.15)' : 'rgba(74,222,128,0.12)';
+    wifiStatus.style.borderColor = isOn ? 'rgba(251,146,60,0.4)' : 'rgba(74,222,128,0.3)';
+  }
+  if (btStatus) {
+    btStatus.textContent = statusText;
+    btStatus.style.color = isOn ? '#fb923c' : '#4ade80';
+    btStatus.style.background = isOn ? 'rgba(251,146,60,0.15)' : 'rgba(74,222,128,0.12)';
+    btStatus.style.borderColor = isOn ? 'rgba(251,146,60,0.4)' : 'rgba(74,222,128,0.3)';
+  }
 }
 
 function wsToggleAirplane() {
@@ -8863,6 +8923,22 @@ function updateNetworkUI() {
     if (tileGuardStatus) tileGuardStatus.textContent = 'Paused';
     if (tileGuardBadge) tileGuardBadge.textContent = 'OFF';
   }
+
+  // Anti-Virus Quick Tile
+  const tileAv = document.getElementById('tile-antivirus');
+  const tileAvStatus = document.getElementById('tile-antivirus-status');
+  const tileAvBadge = document.getElementById('tile-antivirus-badge');
+  if (tileAv) {
+    if (gameState.antivirusProtection) {
+      tileAv.classList.add('active');
+      if (tileAvStatus) tileAvStatus.textContent = 'Real-Time On';
+      if (tileAvBadge) tileAvBadge.textContent = 'ON';
+    } else {
+      tileAv.classList.remove('active');
+      if (tileAvStatus) tileAvStatus.textContent = 'Turned Off';
+      if (tileAvBadge) tileAvBadge.textContent = 'OFF';
+    }
+  }
 }
 
 function toggleWifiSetting() {
@@ -8892,6 +8968,11 @@ function toggleAirplaneSetting() {
   updateNetworkUI();
   if (typeof AudioManager !== 'undefined') AudioManager.playMouseClick();
   showToast(networkSettings.airplane ? '✈️ Airplane Mode Activated — Wireless transmitters suspended.' : '✈️ Airplane Mode Disabled — Wireless restored.', networkSettings.airplane ? 'warning' : 'success');
+}
+
+function toggleAntiVirusSetting() {
+  if (typeof AudioManager !== 'undefined') AudioManager.playMouseClick();
+  toggleAntiVirusProtection();
 }
 
 function toggleGuardSetting() {
