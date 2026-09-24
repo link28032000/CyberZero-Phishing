@@ -5113,163 +5113,7 @@ function calculateScore(correctDecision, correct, incorrect, penaltyPerIncorrect
 
 const TOTAL_MALWARE_COUNT = 4;
 
-const FOLDER_FILES = [
-  {
-    id: 'f1',
-    name: 'salary_bonus_september.pdf.exe',
-    fakeExt: 'pdf',
-    realExt: 'exe',
-    type: 'Application (.exe)',
-    size: '1.8 MB',
-    date: '9/6/2026 09:14 AM',
-    icon: '⚡',
-    isMalware: true,
-    threatName: 'Trojan.Win32.DoubleExt.Dropper',
-    threatCategory: 'CRITICAL THREAT',
-    hash: 'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855',
-    analysis: '⚠️ Dangerous double extension! Disguised as a PDF document but actually an executable program that installs backdoors.',
-    quarantined: false,
-    scanned: false
-  },
-  {
-    id: 'f2',
-    name: 'project_architecture_notes.docx',
-    fakeExt: 'docx',
-    realExt: 'docx',
-    type: 'Microsoft Word Document',
-    size: '48 KB',
-    date: '9/6/2026 08:30 AM',
-    icon: '📄',
-    isMalware: false,
-    threatName: 'Clean File',
-    threatCategory: 'SAFE',
-    hash: 'a591a6d40bf420404a011733cfb7b190d62c65bf0bcda32b57b277d9ad9f146e',
-    analysis: '✅ Verified clean Word document. Normal Office OpenXML structure, no malicious macro payloads detected.',
-    quarantined: false,
-    scanned: false
-  },
-  {
-    id: 'f3',
-    name: 'security_credentials_patch.scr',
-    fakeExt: 'scr',
-    realExt: 'scr',
-    type: 'Screensaver Executable (.scr)',
-    size: '3.4 MB',
-    date: '9/6/2026 10:02 AM',
-    icon: '⚡',
-    isMalware: true,
-    threatName: 'Spyware.Keylogger.Injector',
-    threatCategory: 'CRITICAL THREAT',
-    hash: '5f4dcc3b5aa765d61d8327deb882cf992b95990a9151374abd8fa30ee0633b4b',
-    analysis: '⚠️ Screensaver executable (.scr). Windows executes .scr files identically to .exe files. Contains keylogging telemetry.',
-    quarantined: false,
-    scanned: false
-  },
-  {
-    id: 'f4',
-    name: 'company_vacation_policy.pdf',
-    fakeExt: 'pdf',
-    realExt: 'pdf',
-    type: 'Adobe Acrobat Document',
-    size: '220 KB',
-    date: '9/5/2026 04:15 PM',
-    icon: '📄',
-    isMalware: false,
-    threatName: 'Clean File',
-    threatCategory: 'SAFE',
-    hash: 'ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad',
-    analysis: '✅ Standard PDF document. No embedded JavaScript, exploits, or malicious stream objects found.',
-    quarantined: false,
-    scanned: false
-  },
-  {
-    id: 'f5',
-    name: 'overdue_invoice_inv9918.vbs',
-    fakeExt: 'vbs',
-    realExt: 'vbs',
-    type: 'VBScript Script File',
-    size: '14 KB',
-    date: '9/6/2026 09:48 AM',
-    icon: '📜',
-    isMalware: true,
-    threatName: 'Dropper.VBS.PowerShellDownloader',
-    threatCategory: 'HIGH RISK',
-    hash: 'ca978112ca1bbdcafac231b39a23dc4da786081cd1e14eed6da746e44b4735f6',
-    analysis: '⚠️ Malicious VBScript. Obfuscated script configured to spawn PowerShell in hidden mode and download ransomware.',
-    quarantined: false,
-    scanned: false
-  },
-  {
-    id: 'f6',
-    name: 'annual_team_retreat.jpg',
-    fakeExt: 'jpg',
-    realExt: 'jpg',
-    type: 'JPEG Image',
-    size: '1.2 MB',
-    date: '9/4/2026 02:22 PM',
-    icon: '🖼️',
-    isMalware: false,
-    threatName: 'Clean File',
-    threatCategory: 'SAFE',
-    hash: '098f6bcd4621d373cade4e832627b4f6cf4c45a76e9c60e34c98f98c4f74d081',
-    analysis: '✅ Standard digital photograph. Valid JFIF/EXIF header metadata, no steganographic or buffer overflow payload.',
-    quarantined: false,
-    scanned: false,
-    mediaSrc: 'assets/background/Coffe shop.png'
-  },
-  {
-    id: 'f7',
-    name: 'crypto_mining_daemon.exe',
-    fakeExt: 'exe',
-    realExt: 'exe',
-    type: 'Executable Binary (.exe)',
-    size: '5.1 MB',
-    date: '9/6/2026 10:15 AM',
-    icon: '⚡',
-    isMalware: true,
-    threatName: 'CoinMiner.XMR.Stealth',
-    threatCategory: 'CRITICAL THREAT',
-    hash: '4e07408562bedb8b60ce05c1decfe3ad16b72230967de01f640b7e4729b49fce',
-    analysis: '⚠️ Unauthorized cryptomining payload. Connects to remote command-and-control pools to consume host hardware resources.',
-    quarantined: false,
-    scanned: false
-  },
-  {
-    id: 'f8',
-    name: 'q3_quarterly_budget.xlsx',
-    fakeExt: 'xlsx',
-    realExt: 'xlsx',
-    type: 'Microsoft Excel Spreadsheet',
-    size: '86 KB',
-    date: '9/6/2026 08:45 AM',
-    icon: '📊',
-    isMalware: false,
-    threatName: 'Clean File',
-    threatCategory: 'SAFE',
-    hash: 'b10a8db164e0754105b7a99be72e3fe572b8d009fe82670d912da6d65427ec56',
-    analysis: '✅ Standard Excel workbook. Clean formulas, digitally unsigned VBA macros disabled, zero malicious hooks.',
-    quarantined: false,
-    scanned: false
-  },
-  {
-    id: 'f9',
-    name: 'cyber_awareness_clip.mp4',
-    fakeExt: 'mp4',
-    realExt: 'mp4',
-    type: 'MP4 Video File (.mp4)',
-    size: '17.3 MB',
-    date: '9/6/2026 10:20 AM',
-    icon: '🎬',
-    isMalware: false,
-    threatName: 'Clean File',
-    threatCategory: 'SAFE',
-    hash: '7c91a6d40bf420404a011733cfb7b190d62c65bf0bcda32b57b277d9ad9f99aa',
-    analysis: '✅ Standard H.264 / AAC multimedia file. Verified digital container structure with no malicious buffer overflow triggers.',
-    quarantined: false,
-    scanned: false,
-    mediaSrc: 'assets/video/video3.mp4'
-  }
-];
+const FOLDER_FILES = [];
 
 // ═══════════════════════════════════════════════════════════
 // CHAPTER 2: MALWARE GUIDED DEMO — Interactive Walkthrough
@@ -5838,23 +5682,7 @@ function animateMalwareCursorTo(targetId, cb) {
   setTimeout(() => {
     target.classList.add('gdemo-highlight-pulse');
     setTimeout(() => target.classList.remove('gdemo-highlight-pulse'), 700);
-    if (cb) cb();
   }, 700);
-}
-
-function malwareClickEffect(cb) {
-  const cursor = document.getElementById('gdemo-malware-cursor');
-  if (!cursor) { if (cb) cb(); return; }
-  cursor.style.transform = 'scale(0.85)';
-  setTimeout(() => {
-    cursor.style.transform = 'scale(1)';
-    if (cb) cb();
-  }, 200);
-}
-
-function hideMalwareCursor() {
-  const cursor = document.getElementById('gdemo-malware-cursor');
-  if (cursor) cursor.classList.remove('visible');
 }
 
 function handleMalwareDemoFileClick(fileKey) {
@@ -5865,12 +5693,12 @@ function handleMalwareDemoFileClick(fileKey) {
     if (f2) f2.classList.remove('selected');
     setMalwareDemoInspection({
       icon: '📄',
-      name: 'bonus_payroll_sept.pdf.exe',
-      sub: 'Executable Binary • 2.4 MB',
-      hash: 'a94f82c1b483e102…',
-      ext: '<span style="color:var(--accent-red);font-weight:700">.exe <span class="gdemo-warning-pill">⚠️ HIDDEN EXECUTABLE</span></span>',
-      status: 'Ready for Scan',
-      analysis: '⚠️ <strong>Double Extension Alert</strong>: Filename mimics a PDF document, but the real file extension is <code>.exe</code>. Opening it executes binary code!',
+      name: 'invoice_march_overdue.pdf.exe',
+      sub: 'Executable Application (.exe) • 840 KB',
+      hash: 'e71829da1b0c9f42…',
+      ext: '<span style="color:var(--accent-red);font-weight:700">.exe</span> <span style="font-size:10px;color:var(--accent-red)">(Double Extension!)</span>',
+      status: '<span style="color:var(--accent-red);font-weight:700">⚠️ Fake PDF Extension</span>',
+      analysis: '⚠️ <strong>Trojan / Double Extension Alert</strong>: Filename mimics a PDF document, but the real file extension is <code>.exe</code>. Opening it executes binary code!',
       analysisClass: 'suspicious'
     });
   } else if (fileKey === 'f2') {
@@ -5962,7 +5790,7 @@ function startMalwareMission() {
 
 let currentExplorerFolder = 'downloads';
 let explorerViewMode = 'details'; // 'details' | 'grid'
-let previewPaneVisible = true;
+let previewPaneVisible = false;
 let explorerHistory = ['downloads'];
 let explorerHistoryIdx = 0;
 let explorerSortCol = 'name';
@@ -5987,40 +5815,6 @@ const EXPLORER_ADDITIONAL_FILES = {
       analysis: '✅ Verified clean Word document. Normal Office OpenXML structure, zero macro scripts.',
       quarantined: false,
       scanned: true
-    },
-    {
-      id: 'doc_policy',
-      name: 'employee_security_policy.pdf',
-      fakeExt: 'pdf',
-      realExt: 'pdf',
-      type: 'Adobe Acrobat Document',
-      size: '220 KB',
-      date: '9/5/2026 04:15 PM',
-      icon: '📄',
-      isMalware: false,
-      threatName: 'Clean File',
-      threatCategory: 'SAFE',
-      hash: 'ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad',
-      analysis: '✅ Standard PDF document. No embedded JavaScript, exploits, or malicious streams.',
-      quarantined: false,
-      scanned: true
-    },
-    {
-      id: 'doc_ir',
-      name: 'cyber_incident_report_draft.docx',
-      fakeExt: 'docx',
-      realExt: 'docx',
-      type: 'Microsoft Word Document',
-      size: '62 KB',
-      date: '9/6/2026 09:10 AM',
-      icon: '📄',
-      isMalware: false,
-      threatName: 'Clean File',
-      threatCategory: 'SAFE',
-      hash: '9f83a45c71120404a011733cfb7b190d62c65bf0bcda32b57b277d9ad9fe018a',
-      analysis: '✅ Verified clean Word document. Contains incident timeline and forensic observations.',
-      quarantined: false,
-      scanned: false
     }
   ],
   pictures: [
@@ -6041,42 +5835,6 @@ const EXPLORER_ADDITIONAL_FILES = {
       quarantined: false,
       scanned: true,
       mediaSrc: 'assets/background/Coffe shop.png'
-    },
-    {
-      id: 'pic_lab',
-      name: 'campus_cyber_lab_floorplan.png',
-      fakeExt: 'png',
-      realExt: 'png',
-      type: 'PNG Image',
-      size: '2.1 MB',
-      date: '9/2/2026 11:15 AM',
-      icon: '🖼️',
-      isMalware: false,
-      threatName: 'Clean File',
-      threatCategory: 'SAFE',
-      hash: '12384a6d40bf420404a011733cfb7b190d62c65bf0bcda32b57b277d9ad9fa90',
-      analysis: '✅ Clean architectural diagram of the school computer lab.',
-      quarantined: false,
-      scanned: false,
-      mediaSrc: 'assets/Cover.png'
-    },
-    {
-      id: 'pic_detective',
-      name: 'detective_badge_avatar.png',
-      fakeExt: 'png',
-      realExt: 'png',
-      type: 'PNG Image',
-      size: '1.1 MB',
-      date: '9/1/2026 08:00 AM',
-      icon: '🖼️',
-      isMalware: false,
-      threatName: 'Clean File',
-      threatCategory: 'SAFE',
-      hash: '89104a6d40bf420404a011733cfb7b190d62c65bf0bcda32b57b277d9ad9f9842',
-      analysis: '✅ Official Cyber Detective badge identification image.',
-      quarantined: false,
-      scanned: false,
-      mediaSrc: 'assets/Ace.png'
     }
   ],
   videos: [
@@ -6101,39 +5859,129 @@ const EXPLORER_ADDITIONAL_FILES = {
   ],
   desktop: [
     {
-      id: 'desk_notes',
-      name: 'project_architecture_notes.docx',
-      fakeExt: 'docx',
-      realExt: 'docx',
-      type: 'Microsoft Word Document',
-      size: '48 KB',
-      date: '9/6/2026 08:30 AM',
-      icon: '📄',
+      id: 'desk_app_gmail',
+      name: 'Email',
+      fakeExt: 'lnk',
+      realExt: 'lnk',
+      type: 'Application Shortcut',
+      size: '2 KB',
+      date: '9/6/2026 08:00 AM',
+      icon: '<img src="assets/icons/apps/mail.svg" alt="Email" />',
+      appId: 'gmail',
       isMalware: false,
-      threatName: 'Clean File',
+      threatName: 'Application',
       threatCategory: 'SAFE',
-      hash: 'a591a6d40bf420404a011733cfb7b190d62c65bf0bcda32b57b277d9ad9f146e',
-      analysis: '✅ Verified clean Word document. Desktop shortcut to project documentation.',
+      hash: 'EMAIL-APP-SHORTCUT-CYBERZERO',
+      analysis: 'System shortcut for Email (Phishing Investigation Suite).',
       quarantined: false,
       scanned: true
     },
     {
-      id: 'desk_video',
-      name: 'cyber_awareness_clip.mp4',
-      fakeExt: 'mp4',
-      realExt: 'mp4',
-      type: 'MP4 Video File (.mp4)',
-      size: '17.3 MB',
-      date: '9/6/2026 10:20 AM',
-      icon: '🎬',
+      id: 'desk_app_browser',
+      name: 'Browser',
+      fakeExt: 'lnk',
+      realExt: 'lnk',
+      type: 'Application Shortcut',
+      size: '2 KB',
+      date: '9/6/2026 08:00 AM',
+      icon: '<img src="assets/icons/apps/browser.svg" alt="Browser" />',
+      appId: 'browser',
       isMalware: false,
-      threatName: 'Clean File',
+      threatName: 'Application',
       threatCategory: 'SAFE',
-      hash: '7c91a6d40bf420404a011733cfb7b190d62c65bf0bcda32b57b277d9ad9f99aa',
-      analysis: '✅ Verified clean video file shortcut.',
+      hash: 'BROWSER-APP-SHORTCUT-CYBERZERO',
+      analysis: 'System shortcut for Cyber-Net Web Browser.',
       quarantined: false,
-      scanned: false,
-      mediaSrc: 'assets/video/video3.mp4'
+      scanned: true
+    },
+    {
+      id: 'desk_app_notes',
+      name: 'Sticky Notes',
+      fakeExt: 'lnk',
+      realExt: 'lnk',
+      type: 'Application Shortcut',
+      size: '1 KB',
+      date: '9/6/2026 08:00 AM',
+      icon: '<img src="assets/icons/apps/note.svg" alt="Sticky Notes" />',
+      appId: 'notes',
+      isMalware: false,
+      threatName: 'Application',
+      threatCategory: 'SAFE',
+      hash: 'NOTES-APP-SHORTCUT-CYBERZERO',
+      analysis: 'System shortcut for Sticky Notes application.',
+      quarantined: false,
+      scanned: true
+    },
+    {
+      id: 'desk_app_folder',
+      name: 'File Explorer',
+      fakeExt: 'lnk',
+      realExt: 'lnk',
+      type: 'Application Shortcut',
+      size: '2 KB',
+      date: '9/6/2026 08:00 AM',
+      icon: '<img src="assets/icons/apps/folder.svg" alt="File Explorer" />',
+      appId: 'folder',
+      isMalware: false,
+      threatName: 'Application',
+      threatCategory: 'SAFE',
+      hash: 'EXPLORER-APP-SHORTCUT-CYBERZERO',
+      analysis: 'System shortcut for Windows File Explorer.',
+      quarantined: false,
+      scanned: true
+    },
+    {
+      id: 'desk_app_antivirus',
+      name: 'ShieldAV Anti-Virus',
+      fakeExt: 'lnk',
+      realExt: 'lnk',
+      type: 'Application Shortcut',
+      size: '3 KB',
+      date: '9/6/2026 08:00 AM',
+      icon: '<img src="assets/icons/apps/windows_defender.svg" alt="ShieldAV Anti-Virus" />',
+      appId: 'antivirus',
+      isMalware: false,
+      threatName: 'Application',
+      threatCategory: 'SAFE',
+      hash: 'SHIELDAV-APP-SHORTCUT-CYBERZERO',
+      analysis: 'System shortcut for ShieldAV Endpoint Protection.',
+      quarantined: false,
+      scanned: true
+    },
+    {
+      id: 'desk_app_comms',
+      name: 'Phone Link',
+      fakeExt: 'lnk',
+      realExt: 'lnk',
+      type: 'Application Shortcut',
+      size: '2 KB',
+      date: '9/6/2026 08:00 AM',
+      icon: '<img src="assets/icons/apps/Smartphone.svg" alt="Phone Link" />',
+      appId: 'comms',
+      isMalware: false,
+      threatName: 'Application',
+      threatCategory: 'SAFE',
+      hash: 'PHONELINK-APP-SHORTCUT-CYBERZERO',
+      analysis: 'System shortcut for Phone Link / CyberComms application.',
+      quarantined: false,
+      scanned: true
+    },
+    {
+      id: 'desk_app_recycle',
+      name: 'Recycle Bin',
+      fakeExt: 'lnk',
+      realExt: 'lnk',
+      type: 'System Folder',
+      size: '0 KB',
+      date: '9/6/2026 08:00 AM',
+      icon: '<img src="assets/icons/folder icons/delete.svg" alt="Recycle Bin" />',
+      isMalware: false,
+      threatName: 'System Folder',
+      threatCategory: 'SAFE',
+      hash: 'RECYCLE-BIN-SYSTEM-SHORTCUT',
+      analysis: 'Windows Recycle Bin for temporary deleted file storage.',
+      quarantined: false,
+      scanned: true
     }
   ],
   music: [
@@ -6155,337 +6003,39 @@ const EXPLORER_ADDITIONAL_FILES = {
       scanned: true,
       mediaSrc: 'assets/sounds/Hi - Wii.mp3',
       artist: 'CyberZero OST • 320 kbps'
-    },
-    {
-      id: 'mus_lofi',
-      name: 'lofi_synthwave_study_session.mp3',
-      fakeExt: 'mp3',
-      realExt: 'mp3',
-      type: 'MP3 Audio File (.mp3)',
-      size: '3.8 MB',
-      date: '9/5/2026 03:40 PM',
-      icon: '🎵',
-      isMalware: false,
-      threatName: 'Clean File',
-      threatCategory: 'SAFE',
-      hash: 'b2195f012de940404a011733cfb7b190d62c65bf0bcda32b57b277d9ad9fe04b',
-      analysis: '✅ Verified clean stereo MP3 audio track. Zero obfuscated payloads in audio frame headers.',
-      quarantined: false,
-      scanned: true,
-      mediaSrc: 'assets/sounds/Hi - Wii.mp3',
-      artist: 'Lofi Cyber Lab • Chill Beats'
-    },
-    {
-      id: 'mus_investigation',
-      name: 'forensic_investigation_bgm.mp3',
-      fakeExt: 'mp3',
-      realExt: 'mp3',
-      type: 'MP3 Audio File (.mp3)',
-      size: '5.2 MB',
-      date: '9/4/2026 08:15 PM',
-      icon: '🎵',
-      isMalware: false,
-      threatName: 'Clean File',
-      threatCategory: 'SAFE',
-      hash: 'f7813a012de940404a011733cfb7b190d62c65bf0bcda32b57b277d9ad9f9391',
-      analysis: '✅ Standard MPEG-1 Audio Layer III file. Constant bit rate 320kbps, clean ID3 metadata.',
-      quarantined: false,
-      scanned: false,
-      mediaSrc: 'assets/sounds/Hi - Wii.mp3',
-      artist: 'Detective Focus Track'
-    },
-    {
-      id: 'mus_podcast',
-      name: 'zero_day_podcast_ep01.mp3',
-      fakeExt: 'mp3',
-      realExt: 'mp3',
-      type: 'MP3 Audio File (.mp3)',
-      size: '14.8 MB',
-      date: '9/2/2026 10:00 AM',
-      icon: '🎙️',
-      isMalware: false,
-      threatName: 'Clean File',
-      threatCategory: 'SAFE',
-      hash: 'e9184a012de940404a011733cfb7b190d62c65bf0bcda32b57b277d9ad9f116a',
-      analysis: '✅ Digital educational audio podcast: Episode 1 — Spotting Social Engineering & Double Extensions.',
-      quarantined: false,
-      scanned: true,
-      mediaSrc: 'assets/sounds/Hi - Wii.mp3',
-      artist: 'CyberZero Academy Podcast'
-    },
-    {
-      id: 'mus_synthwave',
-      name: 'synthwave_night_drive.mp3',
-      fakeExt: 'mp3',
-      realExt: 'mp3',
-      type: 'MP3 Audio File (.mp3)',
-      size: '6.1 MB',
-      date: '8/30/2026 06:12 PM',
-      icon: '🎵',
-      isMalware: false,
-      threatName: 'Clean File',
-      threatCategory: 'SAFE',
-      hash: 'a1b2c3d4e5f67890123456789abcdef0123456789abcdef0123456789abcdef0',
-      analysis: '✅ Verified clean synthwave track. Clean audio frames and standard ID3 tags.',
-      quarantined: false,
-      scanned: false,
-      mediaSrc: 'assets/sounds/Hi - Wii.mp3',
-      artist: 'Neon CyberDrive OST'
     }
   ],
-  usb: [
-    {
-      id: 'usb_rescue',
-      name: 'rescue_toolkit_v4.iso',
-      fakeExt: 'iso',
-      realExt: 'iso',
-      type: 'Disc Image File (.iso)',
-      size: '1.2 GB',
-      date: '9/5/2026 02:00 PM',
-      icon: '💿',
-      isMalware: false,
-      threatName: 'Clean File',
-      threatCategory: 'SAFE',
-      hash: '9a8b7c6d5e4f3a2b1c0d9e8f7a6b5c4d3e2f1a0b9c8d7e6f5a4b3c2d1e0f9a8b',
-      analysis: '✅ Verified clean offline recovery image. Includes memory forensics and rootkit diagnostic tools.',
-      quarantined: false,
-      scanned: true
-    },
-    {
-      id: 'usb_bodycam',
-      name: 'field_bodycam_evidence.mp4',
-      fakeExt: 'mp4',
-      realExt: 'mp4',
-      type: 'MP4 Video File (.mp4)',
-      size: '17.3 MB',
-      date: '9/6/2026 07:45 AM',
-      icon: '🎬',
-      isMalware: false,
-      threatName: 'Clean File',
-      threatCategory: 'SAFE',
-      hash: '7c91a6d40bf420404a011733cfb7b190d62c65bf0bcda32b57b277d9ad9f99aa',
-      analysis: '✅ Security camera / bodycam footage from campus server room perimeter.',
-      quarantined: false,
-      scanned: false,
-      mediaSrc: 'assets/video/video3.mp4'
-    },
-    {
-      id: 'usb_notes',
-      name: 'case_notes_encrypted.docx',
-      fakeExt: 'docx',
-      realExt: 'docx',
-      type: 'Microsoft Word Document',
-      size: '54 KB',
-      date: '9/6/2026 08:50 AM',
-      icon: '📄',
-      isMalware: false,
-      threatName: 'Clean File',
-      threatCategory: 'SAFE',
-      hash: '9f83a45c71120404a011733cfb7b190d62c65bf0bcda32b57b277d9ad9fe018a',
-      analysis: '✅ Clean Word document. Detective field log with timeline of Wi-Fi beacon anomalies.',
-      quarantined: false,
-      scanned: true
-    },
-    {
-      id: 'usb_diag',
-      name: 'usb_diagnostic_scan_log.txt',
-      fakeExt: 'txt',
-      realExt: 'txt',
-      type: 'Text Document (.txt)',
-      size: '8 KB',
-      date: '9/6/2026 09:30 AM',
-      icon: '📝',
-      isMalware: false,
-      threatName: 'Clean File',
-      threatCategory: 'SAFE',
-      hash: '4d3c2b1a0f9e8d7c6b5a4f3e2d1c0b9a8f7e6d5c4b3a2f1e0d9c8b7a6f5e4d3c',
-      analysis: '✅ Clean ASCII text log. Hardware diagnostics reported 0 bad sectors on flash storage.',
-      quarantined: false,
-      scanned: false
-    },
-    {
-      id: 'usb_firmware',
-      name: 'router_firmware_backup.bin',
-      fakeExt: 'bin',
-      realExt: 'bin',
-      type: 'Firmware Binary (.bin)',
-      size: '32.4 MB',
-      date: '9/3/2026 04:12 PM',
-      icon: '⚙️',
-      isMalware: false,
-      threatName: 'Clean File',
-      threatCategory: 'SAFE',
-      hash: '1a2b3c4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f9a0b1c2d3e4f5a6b7c8d9e0f1a2b',
-      analysis: '✅ SHA-256 verified vendor firmware backup for campus gateway router.',
-      quarantined: false,
-      scanned: true
-    },
-    {
-      id: 'usb_pcap',
-      name: 'network_traffic_dump.pcap',
-      fakeExt: 'pcap',
-      realExt: 'pcap',
-      type: 'Wireshark Capture (.pcap)',
-      size: '9.8 MB',
-      date: '9/6/2026 10:45 AM',
-      icon: '📊',
-      isMalware: false,
-      threatName: 'Clean File',
-      threatCategory: 'SAFE',
-      hash: '2b3c4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f9a0b1c2d3e4f5a6b7c8d9e0f1a2b3c',
-      analysis: '✅ Packet capture file containing 14,200 Ethernet frames from the local subnet.',
-      quarantined: false,
-      scanned: false
-    },
-    {
-      id: 'usb_autorun',
-      name: 'autorun.inf',
-      fakeExt: 'inf',
-      realExt: 'inf',
-      type: 'Setup Information (.inf)',
-      size: '1 KB',
-      date: '9/1/2026 08:00 AM',
-      icon: '⚙️',
-      isMalware: false,
-      threatName: 'Clean File',
-      threatCategory: 'SAFE',
-      hash: '3c4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f9a0b1c2d3e4f5a6b7c8d9e0f1a2b3c4d',
-      analysis: '✅ Standard USB volume label descriptor. No automatic executable launch triggers.',
-      quarantined: false,
-      scanned: true
-    }
-  ],
-  network: [
-    {
-      id: 'net_gw',
-      name: 'GATEWAY-CORE-SRV',
-      fakeExt: 'srv',
-      realExt: 'srv',
-      type: 'Domain Controller / Gateway',
-      size: '192.168.1.1',
-      date: 'Online • 99.9% Up',
-      icon: '🖥️',
-      isMalware: false,
-      threatName: 'Verified Server',
-      threatCategory: 'SAFE',
-      hash: 'NET-CORE-GATEWAY-AUTH-TOKEN-OK',
-      analysis: '✅ Academy Core Gateway & Firewall. Active Services: DNS, DHCP, Active Directory, SMB 3.1.1.',
-      quarantined: false,
-      scanned: true
-    },
-    {
-      id: 'net_nas',
-      name: 'CORP-NAS-STORAGE',
-      fakeExt: 'nas',
-      realExt: 'nas',
-      type: 'Network Attached Storage',
-      size: '192.168.1.20',
-      date: 'Online • RAID 6',
-      icon: '🗄️',
-      isMalware: false,
-      threatName: 'Verified Storage',
-      threatCategory: 'SAFE',
-      hash: 'NET-NAS-STORAGE-POOL-HASH-OK',
-      analysis: '✅ Enterprise NAS Storage Pool (RAID 6). Shared Volumes: \\\\CORP-NAS-STORAGE\\Public_Drop, \\\\Evidence_Vault.',
-      quarantined: false,
-      scanned: true
-    },
-    {
-      id: 'net_share_public',
-      name: '\\\\ACADEMY-SRV01\\Public_Drop',
-      fakeExt: 'share',
-      realExt: 'share',
-      type: 'SMB Network Shared Folder',
-      size: '4.8 GB used',
-      date: '9/6/2026 11:00 AM',
-      icon: '📁',
-      isMalware: false,
-      threatName: 'Clean Network Share',
-      threatCategory: 'SAFE',
-      hash: 'SMB-SHARE-PUBLIC-DROP-V2',
-      analysis: '✅ Read/Write department staging share. Used for distributing authorized coursework.',
-      quarantined: false,
-      scanned: true
-    },
-    {
-      id: 'net_detective',
-      name: 'DETECTIVE-DESK-WS01',
-      fakeExt: 'ws',
-      realExt: 'ws',
-      type: 'Windows 11 Workstation',
-      size: '192.168.1.105',
-      date: 'Online • Local',
-      icon: '💻',
-      isMalware: false,
-      threatName: 'Verified Host',
-      threatCategory: 'SAFE',
-      hash: 'NET-WS01-ENDPOINT-AUTH-OK',
-      analysis: '✅ Local endpoint workstation assigned to Nishren. Windows 11 Enterprise, Defender Real-Time: Enabled.',
-      quarantined: false,
-      scanned: true
-    },
-    {
-      id: 'net_printer',
-      name: 'LAB-HP-LASERJET-M404',
-      fakeExt: 'prt',
-      realExt: 'prt',
-      type: 'Network Laser Printer',
-      size: '192.168.1.50',
-      date: 'Ready • 85% Toner',
-      icon: '🖨️',
-      isMalware: false,
-      threatName: 'Verified Peripheral',
-      threatCategory: 'SAFE',
-      hash: 'HP-M404-NETWORK-IPP-OK',
-      analysis: '✅ Campus Computer Lab High-Capacity Laser Printer. Port 9100 / IPP enabled.',
-      quarantined: false,
-      scanned: true
-    },
-    {
-      id: 'net_mia',
-      name: 'MIA-SMARTPHONE-LINK',
-      fakeExt: 'mob',
-      realExt: 'mob',
-      type: 'Mobile Endpoint (Wi-Fi 6)',
-      size: '192.168.1.142',
-      date: 'Connected • 866M',
-      icon: '📱',
-      isMalware: false,
-      threatName: 'Authorized Device',
-      threatCategory: 'SAFE',
-      hash: 'MIA-PHONE-WIFI6-CLIENT-OK',
-      analysis: '✅ Mia\'s personal smartphone connected via the Campus Staff AP. Link Speed: 866 Mbps.',
-      quarantined: false,
-      scanned: true
-    },
-    {
-      id: 'net_share_vault',
-      name: '\\\\CORP-NAS-STORAGE\\Evidence_Vault',
-      fakeExt: 'share',
-      realExt: 'share',
-      type: 'Encrypted Network Share',
-      size: '1.2 TB used',
-      date: '9/6/2026 09:00 AM',
-      icon: '🗄️',
-      isMalware: false,
-      threatName: 'Restricted Storage',
-      threatCategory: 'SAFE',
-      hash: 'SMB-VAULT-AES256-GCM-OK',
-      analysis: '✅ Read-only encrypted evidence vault. Access governed by Kerberos ticket authentication.',
-      quarantined: false,
-      scanned: true
-    }
-  ],
+  usb: [],
+  network: [],
   thispc: [
+    {
+      id: 'pc_perflogs',
+      name: 'PerfLogs',
+      fakeExt: 'dir',
+      realExt: 'dir',
+      subFolderKey: 'dir_perflogs',
+      type: 'File Folder',
+      size: '0 KB',
+      date: '9/1/2026 08:00 AM',
+      icon: '<img src="assets/icons/apps/folder.svg" alt="Folder" />',
+      isMalware: false,
+      threatName: 'System Folder',
+      threatCategory: 'SAFE',
+      hash: 'C-PERFLOGS-DIR',
+      analysis: '✅ Windows Performance Logs directory.',
+      quarantined: false,
+      scanned: true
+    },
     {
       id: 'pc_prog',
       name: 'Program Files',
       fakeExt: 'dir',
       realExt: 'dir',
+      subFolderKey: 'dir_progfiles',
       type: 'File Folder',
       size: '24.5 GB',
       date: '9/1/2026 08:00 AM',
-      icon: '📁',
+      icon: '<img src="assets/icons/apps/folder.svg" alt="Folder" />',
       isMalware: false,
       threatName: 'System Folder',
       threatCategory: 'SAFE',
@@ -6499,10 +6049,11 @@ const EXPLORER_ADDITIONAL_FILES = {
       name: 'Program Files (x86)',
       fakeExt: 'dir',
       realExt: 'dir',
+      subFolderKey: 'dir_progfiles86',
       type: 'File Folder',
       size: '12.1 GB',
       date: '9/1/2026 08:00 AM',
-      icon: '📁',
+      icon: '<img src="assets/icons/apps/folder.svg" alt="Folder" />',
       isMalware: false,
       threatName: 'System Folder',
       threatCategory: 'SAFE',
@@ -6512,31 +6063,15 @@ const EXPLORER_ADDITIONAL_FILES = {
       scanned: true
     },
     {
-      id: 'pc_win',
-      name: 'Windows',
-      fakeExt: 'dir',
-      realExt: 'dir',
-      type: 'System Folder',
-      size: '38.2 GB',
-      date: '9/1/2026 08:00 AM',
-      icon: '📁',
-      isMalware: false,
-      threatName: 'System Folder',
-      threatCategory: 'SAFE',
-      hash: 'C-WINDOWS-SYSTEM-ROOT',
-      analysis: '✅ Windows 11 Operating System files, system drivers, and kernel assemblies.',
-      quarantined: false,
-      scanned: true
-    },
-    {
       id: 'pc_users',
       name: 'Users',
       fakeExt: 'dir',
       realExt: 'dir',
+      subFolderKey: 'dir_users',
       type: 'File Folder',
       size: '45.8 GB',
       date: '9/1/2026 08:00 AM',
-      icon: '📁',
+      icon: '<img src="assets/icons/apps/folder.svg" alt="Folder" />',
       isMalware: false,
       threatName: 'System Folder',
       threatCategory: 'SAFE',
@@ -6546,62 +6081,67 @@ const EXPLORER_ADDITIONAL_FILES = {
       scanned: true
     },
     {
-      id: 'pc_suite',
-      name: 'CyberZero_Security_Suite',
+      id: 'pc_win',
+      name: 'Windows',
       fakeExt: 'dir',
       realExt: 'dir',
-      type: 'Security Folder',
-      size: '2.4 GB',
-      date: '9/5/2026 09:00 AM',
-      icon: '🛡️',
+      subFolderKey: 'dir_windows',
+      type: 'System Folder',
+      size: '38.2 GB',
+      date: '9/1/2026 08:00 AM',
+      icon: '<img src="assets/icons/apps/folder.svg" alt="Folder" />',
       isMalware: false,
-      threatName: 'Protected Suite',
+      threatName: 'System Folder',
       threatCategory: 'SAFE',
-      hash: 'C-CYBERZERO-SECURITY-SUITE',
-      analysis: '✅ ShieldAV threat detection engine, quarantine database, and behavioral telemetry logs.',
-      quarantined: false,
-      scanned: true
-    },
-    {
-      id: 'pc_pagefile',
-      name: 'pagefile.sys',
-      fakeExt: 'sys',
-      realExt: 'sys',
-      type: 'System Paging File (.sys)',
-      size: '4.0 GB',
-      date: '9/6/2026 08:00 AM',
-      icon: '⚙️',
-      isMalware: false,
-      threatName: 'System File',
-      threatCategory: 'SAFE',
-      hash: 'C-PAGEFILE-SYS-KERNEL',
-      analysis: '✅ Virtual memory swap file managed automatically by the Windows kernel.',
-      quarantined: false,
-      scanned: true
-    },
-    {
-      id: 'pc_bootlog',
-      name: 'dump_system_boot.log',
-      fakeExt: 'log',
-      realExt: 'log',
-      type: 'Text Document (.log)',
-      size: '24 KB',
-      date: '9/6/2026 08:01 AM',
-      icon: '📝',
-      isMalware: false,
-      threatName: 'Clean Log',
-      threatCategory: 'SAFE',
-      hash: 'C-BOOT-LOG-DIGITAL-SIG',
-      analysis: '✅ Secure boot log. TPM 2.0 measurement hash: verified uncompromised.',
+      hash: 'C-WINDOWS-SYSTEM-ROOT',
+      analysis: '✅ Windows 11 Operating System files, system drivers, and kernel assemblies.',
       quarantined: false,
       scanned: true
     }
+  ],
+
+  // ── Windows C Sub-folders ──────────────────────────────────
+  dir_perflogs: [],
+
+  dir_progfiles: [
+    { id: 'pf_wdef', name: 'Windows Defender', fakeExt: 'dir', realExt: 'dir', subFolderKey: null, type: 'File Folder', size: '210 MB', date: '9/1/2026 08:00 AM', icon: '<img src="assets/icons/apps/folder.svg" alt="Folder" />', isMalware: false, threatName: 'System Folder', threatCategory: 'SAFE', hash: 'PF-WDEF', analysis: '✅ Windows Defender antivirus binaries.', quarantined: false, scanned: true },
+    { id: 'pf_edge', name: 'Microsoft Edge', fakeExt: 'dir', realExt: 'dir', subFolderKey: null, type: 'File Folder', size: '890 MB', date: '9/1/2026 08:00 AM', icon: '<img src="assets/icons/apps/folder.svg" alt="Folder" />', isMalware: false, threatName: 'System Folder', threatCategory: 'SAFE', hash: 'PF-EDGE', analysis: '✅ Microsoft Edge browser installation.', quarantined: false, scanned: true },
+    { id: 'pf_office', name: 'Microsoft Office', fakeExt: 'dir', realExt: 'dir', subFolderKey: null, type: 'File Folder', size: '4.2 GB', date: '9/1/2026 08:00 AM', icon: '<img src="assets/icons/apps/folder.svg" alt="Folder" />', isMalware: false, threatName: 'System Folder', threatCategory: 'SAFE', hash: 'PF-OFFICE', analysis: '✅ Microsoft Office 365 suite (Word, Excel, Outlook).', quarantined: false, scanned: true },
+    { id: 'pf_wt', name: 'WindowsApps', fakeExt: 'dir', realExt: 'dir', subFolderKey: null, type: 'File Folder', size: '1.8 GB', date: '9/1/2026 08:00 AM', icon: '<img src="assets/icons/apps/folder.svg" alt="Folder" />', isMalware: false, threatName: 'System Folder', threatCategory: 'SAFE', hash: 'PF-WAPPS', analysis: '✅ Microsoft Store and UWP applications.', quarantined: false, scanned: true }
+  ],
+
+  dir_progfiles86: [
+    { id: 'pf86_vc', name: 'Microsoft Visual C++', fakeExt: 'dir', realExt: 'dir', subFolderKey: null, type: 'File Folder', size: '340 MB', date: '9/1/2026 08:00 AM', icon: '<img src="assets/icons/apps/folder.svg" alt="Folder" />', isMalware: false, threatName: 'System Folder', threatCategory: 'SAFE', hash: 'PF86-VC', analysis: '✅ Microsoft Visual C++ Redistributable (x86).', quarantined: false, scanned: true },
+    { id: 'pf86_java', name: 'Java', fakeExt: 'dir', realExt: 'dir', subFolderKey: null, type: 'File Folder', size: '480 MB', date: '9/1/2026 08:00 AM', icon: '<img src="assets/icons/apps/folder.svg" alt="Folder" />', isMalware: false, threatName: 'System Folder', threatCategory: 'SAFE', hash: 'PF86-JAVA', analysis: '✅ Java Runtime Environment (JRE 8 x86).', quarantined: false, scanned: true },
+    { id: 'pf86_inet', name: 'Internet Explorer', fakeExt: 'dir', realExt: 'dir', subFolderKey: null, type: 'File Folder', size: '92 MB', date: '9/1/2026 08:00 AM', icon: '<img src="assets/icons/apps/folder.svg" alt="Folder" />', isMalware: false, threatName: 'System Folder', threatCategory: 'SAFE', hash: 'PF86-IE', analysis: '✅ Legacy IE compatibility shim (disabled on Windows 11).', quarantined: false, scanned: true }
+  ],
+
+  dir_users: [
+    { id: 'usr_nishren', name: 'Nishren', fakeExt: 'dir', realExt: 'dir', subFolderKey: null, type: 'File Folder', size: '45.1 GB', date: '9/6/2026 08:00 AM', icon: '<img src="assets/icons/apps/folder.svg" alt="Folder" />', isMalware: false, threatName: 'User Profile', threatCategory: 'SAFE', hash: 'USERS-NISHREN', analysis: '✅ Primary user profile directory.', quarantined: false, scanned: true },
+    { id: 'usr_public', name: 'Public', fakeExt: 'dir', realExt: 'dir', subFolderKey: null, type: 'File Folder', size: '512 MB', date: '9/1/2026 08:00 AM', icon: '<img src="assets/icons/apps/folder.svg" alt="Folder" />', isMalware: false, threatName: 'User Profile', threatCategory: 'SAFE', hash: 'USERS-PUBLIC', analysis: '✅ Shared public user folder accessible to all local accounts.', quarantined: false, scanned: true },
+    { id: 'usr_default', name: 'Default', fakeExt: 'dir', realExt: 'dir', subFolderKey: null, type: 'File Folder', size: '28 MB', date: '9/1/2026 08:00 AM', icon: '<img src="assets/icons/apps/folder.svg" alt="Folder" />', isMalware: false, threatName: 'User Profile', threatCategory: 'SAFE', hash: 'USERS-DEFAULT', analysis: '✅ Default user profile template used for new account creation.', quarantined: false, scanned: true }
+  ],
+
+  dir_windows: [
+    { id: 'win_sys32', name: 'System32', fakeExt: 'dir', realExt: 'dir', subFolderKey: null, type: 'File Folder', size: '18.4 GB', date: '9/1/2026 08:00 AM', icon: '<img src="assets/icons/apps/folder.svg" alt="Folder" />', isMalware: false, threatName: 'System Folder', threatCategory: 'SAFE', hash: 'WIN-SYS32', analysis: '✅ Core Windows 64-bit system DLLs, drivers and executables.', quarantined: false, scanned: true },
+    { id: 'win_syswow', name: 'SysWOW64', fakeExt: 'dir', realExt: 'dir', subFolderKey: null, type: 'File Folder', size: '6.1 GB', date: '9/1/2026 08:00 AM', icon: '<img src="assets/icons/apps/folder.svg" alt="Folder" />', isMalware: false, threatName: 'System Folder', threatCategory: 'SAFE', hash: 'WIN-SYSWOW64', analysis: '✅ 32-bit compatibility system libraries (WoW64 subsystem).', quarantined: false, scanned: true },
+    { id: 'win_temp', name: 'Temp', fakeExt: 'dir', realExt: 'dir', subFolderKey: null, type: 'File Folder', size: '1.2 GB', date: '9/6/2026 08:00 AM', icon: '<img src="assets/icons/apps/folder.svg" alt="Folder" />', isMalware: false, threatName: 'System Folder', threatCategory: 'SAFE', hash: 'WIN-TEMP', analysis: '✅ Windows temporary files directory. Safe to clear periodically.', quarantined: false, scanned: true },
+    { id: 'win_fonts', name: 'Fonts', fakeExt: 'dir', realExt: 'dir', subFolderKey: null, type: 'File Folder', size: '340 MB', date: '9/1/2026 08:00 AM', icon: '<img src="assets/icons/apps/folder.svg" alt="Folder" />', isMalware: false, threatName: 'System Folder', threatCategory: 'SAFE', hash: 'WIN-FONTS', analysis: '✅ Installed system font files (TrueType and OpenType).', quarantined: false, scanned: true },
+    { id: 'win_logs', name: 'Logs', fakeExt: 'dir', realExt: 'dir', subFolderKey: null, type: 'File Folder', size: '880 MB', date: '9/6/2026 08:00 AM', icon: '<img src="assets/icons/apps/folder.svg" alt="Folder" />', isMalware: false, threatName: 'System Folder', threatCategory: 'SAFE', hash: 'WIN-LOGS', analysis: '✅ Windows event and setup logs used for diagnostics.', quarantined: false, scanned: true }
   ]
 };
 
 function getExplorerCurrentFiles() {
   if (currentExplorerFolder === 'downloads') {
     return FOLDER_FILES;
+  }
+  // thispc_contents shows the actual C: folder list
+  if (currentExplorerFolder === 'thispc_contents') {
+    return EXPLORER_ADDITIONAL_FILES['thispc'] || [];
+  }
+  // usb_contents shows the USB drive folder list (empty)
+  if (currentExplorerFolder === 'usb_contents') {
+    return EXPLORER_ADDITIONAL_FILES['usb'] || [];
   }
   return EXPLORER_ADDITIONAL_FILES[currentExplorerFolder] || [];
 }
@@ -6623,9 +6163,116 @@ function renderFolderFiles(filterQuery = '') {
   const list = document.getElementById('folder-file-list');
   if (!list) return;
   list.innerHTML = '';
+  list.removeAttribute('style');
 
-  // Update view mode class
-  list.className = `folder-file-list view-${explorerViewMode}`;
+  // ── SPECIAL VIEW: "This PC" — Devices and Drives ──────────────
+  if (currentExplorerFolder === 'thispc') {
+    list.className = 'folder-file-list thispc-view';
+    list.innerHTML = `
+      <div style="padding:8px 14px 0">
+        <div class="thispc-section-label">Devices and drives</div>
+        <div class="thispc-drives-grid">
+          <div class="thispc-drive-card" id="drive-card-c" ondblclick="switchExplorerFolder('thispc_contents')" onclick="document.querySelectorAll('.thispc-drive-card').forEach(c=>c.classList.remove('selected'));this.classList.add('selected')" title="Double-click to open Windows (C:)">
+            <div class="thispc-drive-card-top">
+              <div class="thispc-drive-icon">💻<span class="drive-badge">C</span></div>
+              <div class="thispc-drive-info">
+                <div class="thispc-drive-name">Windows (C:)</div>
+                <div class="thispc-drive-free">182 GB free of 512 GB</div>
+              </div>
+            </div>
+            <div class="thispc-drive-bar"><div class="thispc-drive-bar-fill" style="width:64%"></div></div>
+          </div>
+          <div class="thispc-drive-card" id="drive-card-e" onclick="document.querySelectorAll('.thispc-drive-card').forEach(c=>c.classList.remove('selected'));this.classList.add('selected')" ondblclick="switchExplorerFolder('usb_contents')" title="Double-click to open USB Drive (E:)">
+            <div class="thispc-drive-card-top">
+              <div class="thispc-drive-icon">💾<span class="drive-badge">E</span></div>
+              <div class="thispc-drive-info">
+                <div class="thispc-drive-name">USB Drive (E:)</div>
+                <div class="thispc-drive-free">16.0 GB free of 16.0 GB</div>
+              </div>
+            </div>
+            <div class="thispc-drive-bar"><div class="thispc-drive-bar-fill empty" style="width:0%"></div></div>
+          </div>
+        </div>
+        <div class="thispc-section-label">Network locations</div>
+        <div class="thispc-drives-grid">
+          <div class="thispc-drive-card" id="drive-card-net" ondblclick="switchExplorerFolder('network')" onclick="document.querySelectorAll('.thispc-drive-card').forEach(c=>c.classList.remove('selected'));this.classList.add('selected')" title="Double-click to open Network">
+            <div class="thispc-drive-card-top">
+              <div class="thispc-drive-icon">🌐</div>
+              <div class="thispc-drive-info">
+                <div class="thispc-drive-name">Network (CYBER-ACADEMY)</div>
+                <div class="thispc-drive-free">192.168.1.0/24 • SMB 3.1.1</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>`;
+    updateFolderStatusBar(3, null);
+    return;
+  }
+
+  // ── SPECIAL VIEW: "USB Drive" root — show as drive card ──────
+  if (currentExplorerFolder === 'usb') {
+    list.className = 'folder-file-list thispc-view';
+    list.innerHTML = `
+      <div style="padding:8px 14px 0">
+        <div class="thispc-section-label">USB Drive (E:)</div>
+        <div class="thispc-drives-grid">
+          <div class="thispc-drive-card" id="usb-open-card" ondblclick="switchExplorerFolder('usb_contents')" onclick="document.querySelectorAll('.thispc-drive-card').forEach(c=>c.classList.remove('selected'));this.classList.add('selected')" title="Double-click to open USB Drive (E:)">
+            <div class="thispc-drive-card-top">
+              <div class="thispc-drive-icon">💾<span class="drive-badge">E</span></div>
+              <div class="thispc-drive-info">
+                <div class="thispc-drive-name">USB Drive (E:)</div>
+                <div class="thispc-drive-free">16.0 GB free of 16.0 GB</div>
+              </div>
+            </div>
+            <div class="thispc-drive-bar"><div class="thispc-drive-bar-fill empty" style="width:0%"></div></div>
+          </div>
+        </div>
+      </div>`;
+    updateFolderStatusBar(1, null);
+    return;
+  }
+
+  const isDesktop = (currentExplorerFolder === 'desktop');
+
+  // ── SPECIAL VIEW: Desktop folder — Windows desktop icon layout ─
+  if (isDesktop) {
+    list.className = 'folder-file-list desktop-folder-view';
+
+    const currentFiles = getExplorerCurrentFiles();
+    const q = filterQuery.toLowerCase().trim();
+    const filtered = currentFiles.filter(f => f.name.toLowerCase().includes(q) || f.type.toLowerCase().includes(q));
+
+    if (filtered.length === 0) {
+      list.className = 'folder-file-list empty-folder-view';
+      list.innerHTML = `
+        <div class="folder-empty-state">
+          <div class="folder-empty-icon">🔍</div>
+          <div class="folder-empty-text">No matching items.</div>
+        </div>`;
+      updateFolderStatusBar(0, null);
+      return;
+    }
+
+    // Build column-flow grid of desktop icons
+    list.innerHTML = `<div class="desk-folder-grid">${filtered.map(file => `
+      <div class="desk-folder-icon ${file.id === gameState.selectedFolderFileId ? 'selected' : ''}"
+           id="dfi-${file.id}"
+           onclick="selectFolderFile('${file.id}')"
+           ondblclick="openFileFromFolder('${file.id}')"
+           title="${file.name}">
+        <div class="dfi-icon">${file.icon}</div>
+        <div class="dfi-name">${file.name}</div>
+      </div>`).join('')}
+    </div>`;
+
+    updateFolderStatusBar(filtered.length, getExplorerFileById(gameState.selectedFolderFileId));
+    return;
+  }
+
+  // Desktop folder is always shown in icon grid view
+  const effectiveViewMode = explorerViewMode;
+  list.className = `folder-file-list view-${effectiveViewMode}`;
 
   const currentFiles = getExplorerCurrentFiles();
   const q = filterQuery.toLowerCase().trim();
@@ -6643,22 +6290,21 @@ function renderFolderFiles(filterQuery = '') {
   });
 
   if (filtered.length === 0) {
-    list.innerHTML = '<div style="padding:30px;text-align:center;color:var(--text-muted);font-size:12px;grid-column:1/-1"><div style="font-size:24px;margin-bottom:8px">🔍</div>No matching files found.</div>';
+    const isUsb = (currentExplorerFolder === 'usb_contents');
+    const emptyMsg = q ? 'No matching files found.' : (isUsb ? 'This drive is empty.' : 'This folder is empty.');
+    const emptyIcon = q ? '🔍' : (isUsb ? '💾' : '📁');
+    list.className = 'folder-file-list empty-folder-view';
+    list.innerHTML = `
+      <div class="folder-empty-state">
+        <div class="folder-empty-icon">${emptyIcon}</div>
+        <div class="folder-empty-text">${emptyMsg}</div>
+      </div>`;
     updateFolderStatusBar(0, null);
     return;
   }
 
   filtered.forEach(file => {
-    let statusBadge = '<span class="badge-file-status badge-unscanned">Unscanned</span>';
-    if (file.quarantined) {
-      statusBadge = '<span class="badge-file-status badge-quarantined">🛡️ Quarantined</span>';
-    } else if (file.scanned) {
-      statusBadge = file.isMalware
-        ? '<span class="badge-file-status badge-threat">⚠️ Threat</span>'
-        : '<span class="badge-file-status badge-clean">✓ Safe</span>';
-    }
-
-    if (explorerViewMode === 'details') {
+    if (effectiveViewMode === 'details') {
       const row = document.createElement('div');
       row.className = `folder-file-row ${file.id === gameState.selectedFolderFileId ? 'selected' : ''} ${file.quarantined ? 'quarantined' : ''}`;
       row.onclick = () => selectFolderFile(file.id);
@@ -6671,8 +6317,7 @@ function renderFolderFiles(filterQuery = '') {
         </div>
         <div>${file.date}</div>
         <div>${file.type}</div>
-        <div>${file.size}</div>
-        <div>${statusBadge}</div>`;
+        <div>${file.size}</div>`;
 
       list.appendChild(row);
     } else {
@@ -6685,8 +6330,7 @@ function renderFolderFiles(filterQuery = '') {
       card.innerHTML = `
         <div class="grid-card-icon">${file.icon}</div>
         <div class="grid-card-name" title="${file.name}">${file.name}</div>
-        <div class="grid-card-tag">${file.size}</div>
-        <div style="margin-top:4px">${statusBadge}</div>`;
+        ${isDesktop ? '' : `<div class="grid-card-tag">${file.size}</div>`}`;
 
       list.appendChild(card);
     }
@@ -6733,69 +6377,46 @@ function switchExplorerFolder(folderKey) {
 
   // Update sidebar active class
   document.querySelectorAll('.explorer-sidebar .sidebar-item').forEach(el => el.classList.remove('active'));
-  const activeSidebarItem = document.getElementById(`sidebar-folder-${folderKey}`) || (folderKey === 'thispc' ? document.getElementById('sidebar-folder-c') : null);
+  const _sidebarKey = (folderKey === 'thispc' || folderKey === 'thispc_contents' || folderKey.startsWith('dir_'))
+    ? 'c'
+    : (folderKey === 'usb' || folderKey === 'usb_contents') ? 'usb'
+    : folderKey;
+  const activeSidebarItem = document.getElementById(`sidebar-folder-${_sidebarKey}`) || document.getElementById(`sidebar-folder-${folderKey}`);
   if (activeSidebarItem) activeSidebarItem.classList.add('active');
 
   // Update downloads badge count
   const dlBadge = document.getElementById('downloads-badge');
-  if (dlBadge) dlBadge.textContent = FOLDER_FILES.length;
+  if (dlBadge) {
+    dlBadge.textContent = FOLDER_FILES.length;
+    dlBadge.style.display = FOLDER_FILES.length > 0 ? '' : 'none';
+  }
+
+
 
   // Render Drive & Network Location Banners
   const bannerEl = document.getElementById('explorer-banner-area');
   if (bannerEl) {
-    if (folderKey === 'usb') {
+    if (folderKey === 'thispc' || folderKey === 'usb' || folderKey === 'network' || folderKey === 'usb_contents') {
+      // Self-contained pages and empty locations — no banner needed
+      bannerEl.classList.add('hidden');
+      bannerEl.innerHTML = '';
+    } else if (folderKey.startsWith('dir_')) {
       bannerEl.classList.remove('hidden');
       bannerEl.innerHTML = `
-        <div class="explorer-drive-banner">
-          <div class="edb-icon">💾</div>
-          <div class="edb-main">
-            <div class="edb-title-row">
-              <span class="edb-title">USB Drive (E:)</span>
-              <span class="edb-badge">FAT32 Removable Storage</span>
-            </div>
-            <div class="edb-bar"><div class="edb-bar-fill" style="width: 25%"></div></div>
-            <div class="edb-stats">1.8 GB used • 14.2 GB free of 16.0 GB</div>
-          </div>
-          <div class="edb-actions">
-            <button class="edb-btn" onclick="showToast('USB Drive is safely verified and ready to eject.', 'info')">⏏ Safely Eject</button>
-            <button class="edb-btn" onclick="showToast('Scanning USB Drive with ShieldAV... All files clean.', 'success')">🛡️ Scan USB</button>
-          </div>
-        </div>`;
-    } else if (folderKey === 'network') {
-      bannerEl.classList.remove('hidden');
-      bannerEl.innerHTML = `
-        <div class="explorer-network-banner">
-          <div class="enb-icon">🌐</div>
-          <div class="enb-main">
-            <div class="enb-title">
-              <span class="enb-status-dot"></span>
-              Network Infrastructure & Shares
-            </div>
-            <div class="enb-desc">Domain: <strong>CYBER-ACADEMY.LOCAL</strong> • Subnet: 192.168.1.0/24 • Protocol: SMB 3.1.1 (AES-128)</div>
-          </div>
-          <div class="enb-actions">
-            <button class="edb-btn" onclick="showToast('Refreshing network hosts... Discovered 7 active endpoints.', 'info'); renderFolderFiles();">🔄 Refresh</button>
-            <button class="edb-btn" onclick="showToast('Enter network path: \\\\\\\\ACADEMY-SRV01\\\\Public_Drop', 'info')">🔗 Map Network Drive</button>
-          </div>
-        </div>`;
-    } else if (folderKey === 'thispc') {
-      bannerEl.classList.remove('hidden');
-      bannerEl.innerHTML = `
-        <div class="explorer-drive-banner">
+        <div class="explorer-drive-banner" style="cursor:pointer" onclick="switchExplorerFolder('thispc_contents')" title="Back to Windows (C:)">
           <div class="edb-icon">💻</div>
           <div class="edb-main">
             <div class="edb-title-row">
-              <span class="edb-title">Windows (C:)</span>
-              <span class="edb-badge">NTFS System Volume</span>
+              <span class="edb-title">Windows (C:) — 512 GB</span>
             </div>
             <div class="edb-bar"><div class="edb-bar-fill" style="width: 64%"></div></div>
             <div class="edb-stats">330 GB used • 182 GB free of 512 GB (BitLocker: ON)</div>
           </div>
-          <div class="edb-actions">
-            <button class="edb-btn" onclick="showToast('Drive C: Volume health optimal (0 errors detected).', 'success')">📊 Drive Health</button>
-            <button class="edb-btn" onclick="showToast('System volume optimization: TRIM executed.', 'info')">⚡ Optimize</button>
-          </div>
         </div>`;
+    } else if (folderKey === 'usb_contents') {
+      // Inside USB folder — no banner, just show files
+      bannerEl.classList.add('hidden');
+      bannerEl.innerHTML = '';
     } else {
       bannerEl.classList.add('hidden');
       bannerEl.innerHTML = '';
@@ -6808,27 +6429,62 @@ function switchExplorerFolder(folderKey) {
   const searchInput = document.getElementById('folder-search-input');
 
   const folderNames = {
-    downloads: 'This PC > Downloads',
-    documents: 'This PC > Documents',
-    pictures: 'This PC > Pictures',
-    videos: 'This PC > Videos',
-    desktop: 'This PC > Desktop',
-    music: 'This PC > Music',
-    thispc: 'This PC > Windows (C:)',
-    usb: 'This PC > USB Drive (E:)',
-    network: 'Network > CYBER-ACADEMY-LAN'
+    downloads: 'Suspicious_Transfers',
+    documents: 'Documents',
+    pictures: 'Pictures',
+    videos: 'Videos',
+    music: 'Music',
+    desktop: 'Desktop',
+    thispc: 'This PC',
+    thispc_contents: 'Windows (C:)',
+    usb: 'USB Drive (E:)',
+    usb_contents: 'USB Drive (E:)',
+    network: 'Network',
+    // Windows C sub-folders
+    dir_perflogs:   'PerfLogs',
+    dir_progfiles:  'Program Files',
+    dir_progfiles86:'Program Files (x86)',
+    dir_users:      'Users',
+    dir_windows:    'Windows'
   };
 
-  const label = folderNames[folderKey] || folderKey;
-  if (pathEl) pathEl.textContent = label;
-  if (tabTitle) {
-    if (folderKey === 'thispc') tabTitle.textContent = 'Windows (C:)';
-    else if (folderKey === 'usb') tabTitle.textContent = 'USB Drive (E:)';
-    else tabTitle.textContent = folderKey.charAt(0).toUpperCase() + folderKey.slice(1);
-  }
-  if (searchInput) searchInput.placeholder = `Search ${tabTitle?.textContent || 'files'}...`;
+  // Map sub-folder keys back to their parent drive banner
+  const subFolderParent = {
+    dir_perflogs:   'thispc_contents',
+    dir_progfiles:  'thispc_contents',
+    dir_progfiles86:'thispc_contents',
+    dir_users:      'thispc_contents',
+    dir_windows:    'thispc_contents',
+    thispc_contents: 'thispc',
+    usb_contents:   'thispc'
+  };
+  const parentKey = subFolderParent[folderKey] || null;
 
-  renderFolderFiles(searchInput?.value || '');
+  const displayName = folderNames[folderKey] || folderKey;
+  const parentDriveName = parentKey ? (folderNames[parentKey] || parentKey) : null;
+  const breadcrumb = parentDriveName ? `${parentDriveName} › ${displayName}` : displayName;
+  if (pathEl) pathEl.textContent = breadcrumb;
+  if (tabTitle) tabTitle.textContent = `${displayName} — File Explorer`;
+  if (searchInput) searchInput.placeholder = `Search ${displayName}...`;
+
+  // Reset search
+  if (searchInput) searchInput.value = '';
+
+  // Reset file selection
+  gameState.selectedFolderFileId = null;
+  const emptyEl = document.getElementById('fdp-empty');
+  const contentEl = document.getElementById('fdp-content');
+  if (emptyEl) emptyEl.classList.remove('hidden');
+  if (contentEl) contentEl.classList.add('hidden');
+
+  // Show/hide the details column header (Name / Date / Type / Size)
+  const tableHeader = document.getElementById('explorer-table-header');
+  if (tableHeader) {
+    const hideHeader = (folderKey === 'desktop' || folderKey === 'thispc' || folderKey === 'usb');
+    tableHeader.style.display = hideHeader ? 'none' : (explorerViewMode === 'details' ? 'grid' : 'none');
+  }
+
+  renderFolderFiles('');
 }
 
 function explorerGoBack() {
@@ -6851,15 +6507,26 @@ function explorerGoUp() {
 
 function refreshExplorerFolder() {
   renderFolderFiles(document.getElementById('folder-search-input')?.value || '');
-  showToast('📁 Folder refreshed', 'info');
+  showToast('📁 Folder refreshed.', 'info');
 }
 
 function setExplorerViewMode(mode) {
   explorerViewMode = mode;
-  document.getElementById('cmd-view-details')?.classList.toggle('active', mode === 'details');
-  document.getElementById('cmd-view-grid')?.classList.toggle('active', mode === 'grid');
-  document.getElementById('stat-btn-details')?.classList.toggle('active', mode === 'details');
-  document.getElementById('stat-btn-grid')?.classList.toggle('active', mode === 'grid');
+  const btnDetails = document.getElementById('cmd-view-details');
+  const btnGrid = document.getElementById('cmd-view-grid');
+  const statBtnDetails = document.getElementById('stat-btn-details');
+  const statBtnGrid = document.getElementById('stat-btn-grid');
+  const header = document.getElementById('explorer-table-header');
+
+  if (btnDetails) btnDetails.classList.toggle('active', mode === 'details');
+  if (btnGrid) btnGrid.classList.toggle('active', mode === 'grid');
+  if (statBtnDetails) statBtnDetails.classList.toggle('active', mode === 'details');
+  if (statBtnGrid) statBtnGrid.classList.toggle('active', mode === 'grid');
+
+  if (header) {
+    header.style.display = (mode === 'details') ? 'grid' : 'none';
+  }
+
   renderFolderFiles(document.getElementById('folder-search-input')?.value || '');
 }
 
@@ -6870,6 +6537,7 @@ function toggleExplorerPreviewPane() {
   if (pane) pane.classList.toggle('collapsed', !previewPaneVisible);
   if (btn) btn.classList.toggle('active', previewPaneVisible);
 }
+
 
 function sortExplorerFiles(col) {
   if (explorerSortCol === col) {
@@ -7017,13 +6685,6 @@ function selectFolderFile(fileId) {
       </div>`;
   }
 
-  let quarantineBtnHtml = '';
-  if (file.quarantined) {
-    quarantineBtnHtml = `<button class="btn-ghost btn-sm" disabled style="opacity:0.6;width:100%">🛡️ File Quarantined</button>`;
-  } else {
-    quarantineBtnHtml = `<button class="btn-danger btn-sm" style="width:100%" onclick="quarantineFile('${file.id}')">🚩 Quarantine This File</button>`;
-  }
-
   contentEl.innerHTML = `
     <div class="fdp-header">
       <div class="fdp-icon-large">${file.icon}</div>
@@ -7041,27 +6702,25 @@ function selectFolderFile(fileId) {
         <span class="fdp-meta-val">${file.date}</span>
       </div>
       <div class="fdp-meta-row">
-        <span class="fdp-meta-label">Actual Ext</span>
+        <span class="fdp-meta-label">File Type</span>
+        <span class="fdp-meta-val">${file.type}</span>
+      </div>
+      <div class="fdp-meta-row">
+        <span class="fdp-meta-label">File Size</span>
+        <span class="fdp-meta-val">${file.size}</span>
+      </div>
+      <div class="fdp-meta-row">
+        <span class="fdp-meta-label">Extension</span>
         <span class="fdp-meta-val" style="color:${file.realExt === 'exe' || file.realExt === 'scr' || file.realExt === 'vbs' ? 'var(--accent-red)' : 'var(--accent-cyan)'}">.${file.realExt}</span>
       </div>
       <div class="fdp-meta-row">
         <span class="fdp-meta-label">SHA-256</span>
-        <span class="fdp-meta-val">${file.hash.slice(0, 16)}…</span>
-      </div>
-      <div class="fdp-meta-row">
-        <span class="fdp-meta-label">Status</span>
-        <span class="fdp-meta-val">${file.quarantined ? 'Quarantined' : file.scanned ? (file.isMalware ? 'Threat Detected' : 'Clean') : 'Ready for Scan'}</span>
+        <span class="fdp-meta-val">${file.hash ? file.hash.slice(0, 16) + '…' : 'N/A'}</span>
       </div>
     </div>
 
     <div class="fdp-analysis-box ${analysisClass}">
       ${file.analysis}
-    </div>
-
-    <div class="fdp-actions">
-      <button class="btn-ghost btn-sm" style="width:100%;margin-bottom:2px" onclick="openFileFromFolder('${file.id}')">📂 Open File</button>
-      <button class="btn-primary btn-sm" style="width:100%" onclick="scanFileInAntivirus('${file.id}')">⚡ Scan with Anti-Virus</button>
-      ${quarantineBtnHtml}
     </div>`;
 
   // Pre-load target in Anti-Virus window
@@ -7071,7 +6730,7 @@ function selectFolderFile(fileId) {
   if (avTcName && avTcDetail && avTcIcon) {
     avTcName.textContent = file.name;
     avTcDetail.textContent = `${file.type} • ${file.size} • SHA-256: ${file.hash.slice(0, 10)}…`;
-    avTcIcon.textContent = file.icon;
+    avTcIcon.innerHTML = file.icon;
   }
 }
 
@@ -7091,6 +6750,20 @@ let smartscreenTargetFile = null;
 function openFileFromFolder(fileId) {
   const file = getExplorerFileById(fileId);
   if (!file) return;
+
+  // App shortcuts in Desktop folder
+  if (file.appId) {
+    if (file.appId === 'notes') {
+      toggleStickyNote();
+    } else {
+      openApp(file.appId);
+    }
+    return;
+  }
+  if (file.id === 'desk_app_recycle') {
+    showToast('🗑️ Recycle Bin is currently empty.', 'info');
+    return;
+  }
 
   if (file.quarantined) {
     showToast(`🛡️ Access Denied: "${file.name}" is quarantined in the Anti-Virus security vault!`, 'warning');
@@ -7147,6 +6820,15 @@ function openFileFromFolder(fileId) {
   }
   if (ext === 'bin' || ext === 'inf' || ext === 'sys' || ext === 'log') {
     showToast(`⚙️ Inspected system file: "${file.name}" (${file.type}).`, 'info');
+    return;
+  }
+  if (ext === 'dir') {
+    // If this folder has a defined sub-folder, navigate into it
+    if (file.subFolderKey) {
+      switchExplorerFolder(file.subFolderKey);
+    } else {
+      showToast(`📁 "${file.name}" is empty or a protected system folder.`, 'info');
+    }
     return;
   }
 

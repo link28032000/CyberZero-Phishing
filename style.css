@@ -4470,7 +4470,18 @@ p { line-height: 1.6; }
   border-color: rgba(0, 229, 255, 0.35);
   color: #00e5ff;
 }
-.cmd-btn .cmd-icon { font-size: 13px; }
+.cmd-btn .cmd-icon {
+  font-size: 13px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.cmd-btn .cmd-icon img {
+  width: 14px;
+  height: 14px;
+  object-fit: contain;
+  display: block;
+}
 .cmd-btn-accent {
   background: rgba(0, 229, 255, 0.12);
   border-color: rgba(0, 229, 255, 0.3);
@@ -4771,6 +4782,119 @@ p { line-height: 1.6; }
   border-color: rgba(255, 255, 255, 0.25);
 }
 
+/* ═══════════════════════════════════════════════════════════
+   THIS PC — DEVICES AND DRIVES CARD GRID VIEW
+   ═══════════════════════════════════════════════════════════ */
+.thispc-section-label {
+  font-size: 11px;
+  font-weight: 700;
+  color: #94a3b8;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding: 14px 0 8px 0;
+  user-select: none;
+}
+.thispc-drives-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding-bottom: 16px;
+}
+.thispc-drive-card {
+  width: 220px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 8px;
+  padding: 10px 12px 12px 12px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  transition: background 0.15s, border-color 0.15s, box-shadow 0.15s;
+  user-select: none;
+}
+.thispc-drive-card:hover {
+  background: rgba(255,255,255,0.08);
+  border-color: rgba(59,130,246,0.5);
+  box-shadow: 0 0 0 1px rgba(59,130,246,0.25);
+}
+.thispc-drive-card.selected {
+  background: rgba(59,130,246,0.18);
+  border-color: #3b82f6;
+}
+.thispc-drive-card-top {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.thispc-drive-icon {
+  width: 42px;
+  height: 42px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 30px;
+  position: relative;
+}
+.thispc-drive-icon img {
+  width: 38px;
+  height: 38px;
+  object-fit: contain;
+}
+.thispc-drive-icon .drive-badge {
+  position: absolute;
+  bottom: -2px;
+  right: -2px;
+  width: 16px;
+  height: 16px;
+  font-size: 10px;
+  line-height: 16px;
+  text-align: center;
+  background: #1e40af;
+  border-radius: 3px;
+  border: 1px solid #3b82f6;
+  color: #fff;
+}
+.thispc-drive-info {
+  flex: 1;
+  min-width: 0;
+}
+.thispc-drive-name {
+  font-size: 12px;
+  font-weight: 700;
+  color: #e2e8f0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.thispc-drive-free {
+  font-size: 11px;
+  color: #94a3b8;
+  margin-top: 1px;
+  white-space: nowrap;
+}
+.thispc-drive-bar {
+  width: 100%;
+  height: 7px;
+  background: rgba(255,255,255,0.1);
+  border-radius: 3px;
+  overflow: hidden;
+}
+.thispc-drive-bar-fill {
+  height: 100%;
+  border-radius: 3px;
+  background: linear-gradient(90deg, #3b82f6, #60a5fa);
+  transition: width 0.4s ease;
+}
+.thispc-drive-bar-fill.full {
+  background: linear-gradient(90deg, #ef4444, #f97316);
+}
+.thispc-drive-bar-fill.empty {
+  background: rgba(255,255,255,0.08);
+  width: 0% !important;
+}
+
 /* Network Discovery Banner */
 .explorer-network-banner {
   display: flex;
@@ -4901,7 +5025,7 @@ p { line-height: 1.6; }
 /* Table Header (Details View) */
 .folder-file-table-header {
   display: grid;
-  grid-template-columns: 2.2fr 1.2fr 1fr 0.8fr 1fr;
+  grid-template-columns: 2.4fr 1.3fr 1.1fr 0.9fr;
   padding: 7px 16px;
   font-size: 11px;
   font-weight: 600;
@@ -4923,7 +5047,7 @@ p { line-height: 1.6; }
 }
 .folder-file-list.view-details .folder-file-row {
   display: grid;
-  grid-template-columns: 2.2fr 1.2fr 1fr 0.8fr 1fr;
+  grid-template-columns: 2.4fr 1.3fr 1.1fr 0.9fr;
   align-items: center;
   padding: 8px 16px;
   font-size: 12px;
@@ -4954,28 +5078,67 @@ p { line-height: 1.6; }
   white-space: nowrap;
   font-weight: 500;
 }
-.file-name-cell .file-icon { font-size: 16px; flex-shrink: 0; }
+.file-name-cell .file-icon {
+  font-size: 16px;
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+}
+.file-name-cell .file-icon img {
+  width: 18px;
+  height: 18px;
+  object-fit: contain;
+  display: block;
+}
+.grid-card-icon img {
+  width: 44px;
+  height: 44px;
+  object-fit: contain;
+  display: block;
+  margin: 0 auto;
+  pointer-events: none;
+  filter: drop-shadow(0 2px 5px rgba(0,0,0,0.3));
+}
+.fdp-icon-large img {
+  width: 36px;
+  height: 36px;
+  object-fit: contain;
+  display: block;
+}
 .file-name-text { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
-/* File List (Large Icons Grid View) */
+/* File List (Large Icons Grid View) — Horizontal Left→Right Flow */
 .folder-file-list.view-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(115px, 1fr));
-  gap: 12px;
-  padding: 16px;
-  align-content: start;
+  display: flex !important;
+  flex-direction: row !important;
+  flex-wrap: wrap !important;
+  align-content: flex-start !important;
+  align-items: flex-start !important;
+  justify-content: flex-start !important;
+  gap: 8px 10px !important;
+  padding: 14px 16px !important;
+  overflow-y: auto !important;
 }
 .grid-file-card {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  padding: 12px 8px;
+  width: 96px !important;
+  min-width: 96px !important;
+  max-width: 96px !important;
+  flex: 0 0 96px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  text-align: center !important;
+  padding: 10px 6px 8px !important;
   border-radius: 8px;
   border: 1px solid transparent;
   cursor: pointer;
   transition: all 0.15s ease;
   background: rgba(255, 255, 255, 0.02);
+  box-sizing: border-box !important;
+  user-select: none;
 }
 .grid-file-card:hover {
   background: rgba(255, 255, 255, 0.06);
@@ -5009,6 +5172,179 @@ p { line-height: 1.6; }
   font-size: 9.5px;
   color: #64748b;
   margin-top: 3px;
+}
+
+
+/* ═══════════════════════════════════════════════════════════
+   DESKTOP FOLDER — Windows-Style Icon View
+   Icons flow top→bottom in columns, left→right (like real desktop)
+   ═══════════════════════════════════════════════════════════ */
+.folder-file-list.desktop-folder-view {
+  background: transparent;
+}
+.desk-folder-grid {
+  display: grid;
+  /* Row-first flow: icons go left→right, then wrap down */
+  grid-auto-flow: row;
+  grid-template-columns: repeat(auto-fill, 88px);
+  gap: 4px 8px;
+  padding: 16px 14px;
+  align-content: start;
+  justify-content: start;
+  overflow-y: auto;
+  min-height: 100%;
+}
+.desk-folder-icon {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 8px 4px 6px;
+  border-radius: 6px;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: background 0.12s, border-color 0.12s;
+  user-select: none;
+  width: 80px;
+}
+.desk-folder-icon:hover {
+  background: rgba(79, 195, 247, 0.10);
+  border-color: rgba(79, 195, 247, 0.28);
+}
+.desk-folder-icon.selected {
+  background: rgba(0, 229, 255, 0.18);
+  border-color: rgba(0, 229, 255, 0.55);
+  box-shadow: 0 0 0 1px rgba(0,229,255,0.2);
+}
+.desk-folder-icon:active {
+  transform: scale(0.95);
+}
+.dfi-icon {
+  font-size: 40px;
+  margin-bottom: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  filter: drop-shadow(0 2px 6px rgba(0,0,0,0.5));
+  transition: transform 0.12s ease;
+}
+.desk-folder-icon:hover .dfi-icon {
+  transform: scale(1.08);
+}
+.dfi-icon img {
+  width: 44px;
+  height: 44px;
+  object-fit: contain;
+  display: block;
+  filter: drop-shadow(0 2px 8px rgba(79,195,247,0.35));
+}
+.dfi-name {
+  font-size: 11px;
+  font-weight: 600;
+  color: #e2e8f0;
+  text-shadow: 0 1px 4px rgba(0,0,0,0.9), 0 0 8px rgba(0,0,0,0.6);
+  line-height: 1.3;
+  word-break: break-word;
+  max-height: 2.8em;
+  overflow: hidden;
+  width: 100%;
+}
+
+/* ── Large Icons Grid View — horizontal left→right rows ── */
+.folder-file-list.view-grid {
+  display: flex !important;
+  flex-direction: row !important;
+  flex-wrap: wrap !important;
+  align-content: flex-start !important;
+  align-items: flex-start !important;
+  justify-content: flex-start !important;
+  gap: 8px 10px !important;
+  padding: 14px 16px !important;
+  overflow-y: auto !important;
+}
+/* Large icon cards — Windows Explorer style */
+.folder-file-list.view-grid .grid-file-card {
+  width: 96px !important;
+  min-width: 96px !important;
+  max-width: 96px !important;
+  flex: 0 0 96px !important;
+  padding: 10px 6px 8px !important;
+  border-radius: 8px;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  text-align: center !important;
+  box-sizing: border-box !important;
+}
+.folder-file-list.view-grid .grid-card-icon {
+  font-size: 42px;
+  margin-bottom: 6px;
+}
+.folder-file-list.view-grid .grid-card-name {
+  font-size: 11px;
+  font-weight: 600;
+  text-align: center;
+  word-break: break-word;
+  line-height: 1.3;
+  max-height: 2.6em;
+  overflow: hidden;
+}
+
+/* ── Details View (Vertical List with Columns) ── */
+.folder-file-list.view-details {
+  display: flex !important;
+  flex-direction: column !important;
+  overflow-y: auto !important;
+}
+
+/* ── Special Views ── */
+.folder-file-list.thispc-view {
+  display: block !important;
+  padding: 0 !important;
+  overflow-y: auto !important;
+}
+.folder-file-list.desktop-folder-view {
+  display: block !important;
+  padding: 0 !important;
+  overflow-y: auto !important;
+  background: transparent !important;
+}
+
+/* ── Empty Folder / Drive State (Centered in the middle) ── */
+.folder-file-list.empty-folder-view {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  flex: 1 !important;
+  height: 100% !important;
+  min-height: 280px !important;
+  width: 100% !important;
+}
+.folder-empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 30px;
+  margin: auto;
+  user-select: none;
+}
+.folder-empty-icon {
+  font-size: 52px;
+  margin-bottom: 12px;
+  opacity: 0.85;
+  filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.5));
+  line-height: 1;
+}
+.folder-empty-text {
+  font-size: 14px;
+  font-weight: 500;
+  color: #94a3b8;
+  letter-spacing: 0.2px;
 }
 
 /* Badges */

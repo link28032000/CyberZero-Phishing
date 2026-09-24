@@ -259,44 +259,29 @@
       <div class="explorer-command-bar">
         <div class="cmd-group">
           <button class="cmd-btn" onclick="explorerNewItem()" title="New item">
-            <span class="cmd-icon">➕</span>
+            <span class="cmd-icon"><img src="assets/icons/folder icons/new.svg" alt="New" /></span>
             <span class="cmd-label">New</span>
           </button>
         </div>
         <div class="cmd-divider"></div>
         <div class="cmd-group">
           <button class="cmd-btn" onclick="explorerCut()" title="Cut">
-            <span class="cmd-icon">✂️</span>
+            <span class="cmd-icon"><img src="assets/icons/folder icons/cut.svg" alt="Cut" /></span>
           </button>
           <button class="cmd-btn" onclick="explorerCopy()" title="Copy">
-            <span class="cmd-icon">📋</span>
+            <span class="cmd-icon"><img src="assets/icons/folder icons/copy.svg" alt="Copy" /></span>
           </button>
           <button class="cmd-btn" onclick="explorerRename()" title="Rename">
-            <span class="cmd-icon">🏷️</span>
+            <span class="cmd-icon"><img src="assets/icons/folder icons/rename.svg" alt="Rename" /></span>
           </button>
           <button class="cmd-btn" onclick="explorerDelete()" title="Delete">
-            <span class="cmd-icon">🗑️</span>
-          </button>
-        </div>
-        <div class="cmd-divider"></div>
-        <div class="cmd-group">
-          <button class="cmd-btn cmd-btn-accent" onclick="openSelectedExplorerFile()" title="Open selected file">
-            <span class="cmd-icon">📂</span>
-            <span class="cmd-label">Open</span>
-          </button>
-          <button class="cmd-btn cmd-btn-scan" onclick="scanSelectedExplorerFile()" title="Scan with ShieldAV">
-            <span class="cmd-icon">⚡</span>
-            <span class="cmd-label">Scan File</span>
-          </button>
-          <button class="cmd-btn cmd-btn-danger" onclick="quarantineSelectedExplorerFile()" title="Quarantine selected file">
-            <span class="cmd-icon">🛡️</span>
-            <span class="cmd-label">Quarantine</span>
+            <span class="cmd-icon"><img src="assets/icons/folder icons/delete.svg" alt="Delete" /></span>
           </button>
         </div>
         <div class="cmd-spacer"></div>
         <div class="cmd-group">
-          <button class="cmd-btn active" id="cmd-toggle-preview" onclick="toggleExplorerPreviewPane()" title="Toggle Preview Pane">
-            <span class="cmd-icon">👁️</span>
+          <button class="cmd-btn" id="cmd-toggle-preview" onclick="toggleExplorerPreviewPane()" title="Toggle Preview Pane">
+            <span class="cmd-icon"><img src="assets/icons/folder icons/file_preview.svg" alt="Preview" /></span>
             <span class="cmd-label">Preview</span>
           </button>
           <div class="cmd-view-switcher">
@@ -353,7 +338,7 @@
           <div class="sidebar-item active" id="sidebar-folder-downloads" onclick="switchExplorerFolder('downloads')">
             <span class="sb-icon">⬇️</span>
             <span class="sb-label">Downloads</span>
-            <span class="sb-badge" id="downloads-badge">9</span>
+            <span class="sb-badge" id="downloads-badge" style="display:none">0</span>
           </div>
           <div class="sidebar-item" id="sidebar-folder-documents" onclick="switchExplorerFolder('documents')">
             <span class="sb-icon">📄</span>
@@ -399,7 +384,6 @@
             <span class="col-date" onclick="sortExplorerFiles('date')">Date modified ↕</span>
             <span class="col-type" onclick="sortExplorerFiles('type')">Type ↕</span>
             <span class="col-size" onclick="sortExplorerFiles('size')">Size ↕</span>
-            <span class="col-status">Status</span>
           </div>
 
           <!-- File Items Container -->
@@ -408,12 +392,12 @@
           </div>
         </div>
 
-        <!-- Right File Inspection & Live Preview Pane -->
-        <div id="folder-detail-pane" class="folder-detail-pane">
+        <!-- Right File Inspection & Live Preview Pane (Collapsed by default) -->
+        <div id="folder-detail-pane" class="folder-detail-pane collapsed">
           <div class="fdp-empty" id="fdp-empty">
             <div class="fdp-empty-icon">📁</div>
-            <div class="fdp-empty-text">Select a file to inspect metadata and verify safety</div>
-            <div class="fdp-empty-hint">Double-click or press "Open" to launch DOCX, images, or videos</div>
+            <div class="fdp-empty-text">Select a file to view details and properties</div>
+            <div class="fdp-empty-hint">Double-click any file to open</div>
           </div>
           <div id="fdp-content" class="fdp-content hidden">
             <!-- Populated by JS -->
@@ -424,9 +408,9 @@
       <!-- Bottom Status Bar -->
       <div class="explorer-status-bar">
         <div class="status-left">
-          <span id="explorer-status-items">9 items</span>
+          <span id="explorer-status-items">0 items</span>
           <span class="status-sep">|</span>
-          <span id="explorer-status-selected">1 item selected</span>
+          <span id="explorer-status-selected">0 items selected</span>
         </div>
         <div class="status-right">
           <span class="status-shield" id="explorer-shield-status">🛡️ ShieldAV Real-Time: ON</span>
