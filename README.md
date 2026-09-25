@@ -1,15 +1,29 @@
 <div align="center">
 
-# 🕵️ CYBERZERO
+# 🕵️‍♂️ CYBERZERØ (CyberZero)
 
-### *A Cybersecurity Detective Simulation Game*
+### _A Web based Simulation Game for Enchancing Cyber Threat Awareness and Knowledge_
 
-![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white)
-![CSS3](https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white)
-![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)
-![No Backend](https://img.shields.io/badge/No%20Backend-Required-success?style=for-the-badge)
+[![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white)](https://developer.mozilla.org/en-US/docs/Web/HTML)
+[![CSS3](https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white)](https://developer.mozilla.org/en-US/docs/Web/CSS)
+[![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)](https://developer.mozilla.org/en-US/docs/Web/JavaScript)
+[![License: Unlicense](https://img.shields.io/badge/License-Unlicense-blue.svg?style=for-the-badge)](https://unlicense.org/)
+[![Zero Dependencies](https://img.shields.io/badge/Dependencies-0-brightgreen?style=for-the-badge)](#-tech-stack)
+[![GitHub Pages Ready](https://img.shields.io/badge/GitHub_Pages-Ready-success?style=for-the-badge&logo=github)](https://pages.github.com/)
 
-> **Don't just guess that an email is phishing. Find the evidence.**
+<p align="center">
+  <strong>"Don't just guess that something is a cyber threat. Find the evidence."</strong>
+</p>
+
+<p align="center">
+  <a href="#-overview">Overview</a> •
+  <a href="#-the-story--defenders">Story & Defenders</a> •
+  <a href="#-the-four-chapters">Chapters</a> •
+  <a href="#-simulated-desktop-environment">Desktop OS</a> •
+  <a href="#-scoring--ranking-system">Scoring System</a> •
+  <a href="#-getting-started">Getting Started</a> •
+  <a href="#-project-structure">Project Structure</a>
+</p>
 
 </div>
 
@@ -17,513 +31,283 @@
 
 ## 📖 Overview
 
-**CYBERZERO** is an interactive cybersecurity simulation game built with pure HTML, CSS, and JavaScript — no backend required.
+**CYBERZERØ** is an immersive, story-driven cybersecurity training game built entirely in **pure Vanilla HTML5, CSS3, and modern JavaScript**. Running directly in any web browser without frameworks, build tools, or backend servers, the game drops players into a fully functional **simulated cyber workstation OS**.
 
-You play as a **newly hired Cyber Detective**. Your mission: investigate suspicious emails inside a simulated Windows desktop, identify phishing attacks, and flag the evidence before reporting your findings to the Capybara Detective.
+Rather than memorizing abstract rules or clicking through traditional multiple-choice quizzes, players step into the shoes of high school cyber defenders guided by **AI Mentor ZERO**. Players must actively investigate suspicious emails, inspect malicious file extensions, quarantine malware payloads, foil social engineering attacks, and execute incident response procedures during a live ransomware extortion crisis.
 
-### Core Gameplay Loop
+### 🎯 Key Highlights
 
-```
-READ → INVESTIGATE → 🚩 FLAG → REPORT → 🕵️ CAPYBARA REVIEWS → LEARN
-```
-
-The game rewards **evidence-based investigation**, not guessing. You must find and flag the specific suspicious parts of each email — fake senders, false urgency, and mismatched links — before submitting your decision.
+- 🖥️ **Simulated Desktop Environment**: Window multitasking (drag, minimize, maximize, snap), live taskbar, notification center, system tray, real-time clock, and sound effects.
+- 🔍 **Evidence-Based Investigation Engine**: Click and place flags directly on suspicious email elements, inspect hidden links, verify domain certificates, and inspect binary file extensions.
+- 🤖 **Dynamic AI Mentor Feedback**: Detective ZERO analyzes every action, breaking down correct discoveries, explaining missed clues, and penalizing wild guesses.
+- 📱 **Multi-Vector Threat Defense**: Covers the four primary pillars of modern cybersecurity: **Phishing**, **Malware**, **Social Engineering (Vishing/Smishing)**, and **Ransomware Incident Response**.
+- ⚡ **Zero Installation & Setup**: 100% client-side. Double-click `index.html` or host effortlessly on GitHub Pages.
 
 ---
 
-## 🖥️ Simulated Desktop
+## 👥 The Story & Defenders
 
-The entire game takes place inside a **simulated Windows desktop**. It does not look or feel like a normal webpage.
+Four senior high school students collaborate on an important multimedia graduation project. As real-world threat actors target their accounts, devices, and shared network drives, they partner with **CyberZerØ**, an advanced cybersecurity AI agent, to defend their systems.
 
 ```
-┌──────────────────────────────────────────────────────────────┐
-│                                                              │
-│                    CYBERZERO DESKTOP                         │
-│                                                              │
-│         📧                              🌐                   │
-│        Gmail                          Browser                │
-│                                                              │
-├──────────────────────────────────────────────────────────────┤
-│  🪟 Start     📧 Gmail     🌐 Browser          🔊  🌐  09:42 │
-└──────────────────────────────────────────────────────────────┘
+       ┌────────────────────────────────────────────────────────┐
+       │                 🤖 CYBERZERØ (ZERO)                    │
+       │           AI Cyber Guide & Detective Mentor            │
+       └──────────────────────────┬─────────────────────────────┘
+                                  │
+    ┌──────────────┬──────────────┴──────────────┬──────────────┐
+    ▼              ▼                             ▼              ▼
+  📧 ACE        📁 NISHREN                   📱 PHILLIP     🚨 JONALD
+Chapter 1:     Chapter 2:                   Chapter 3:     Chapter 4:
+Phishing       Malware & Trojans            Social Eng.    Ransomware
+Defender       Hunter                       Defender       Responder
 ```
 
-The desktop contains **exactly two applications**:
+| Defender    | Focus Area            | Mission Threat                                                                            |
+| ----------- | --------------------- | ----------------------------------------------------------------------------------------- |
+| **Ace**     | 📧 Phishing Detection | Defend school & banking accounts against urgent credential harvesting attacks.            |
+| **Nishren** | 📁 Malware Analysis   | Neutralize disguised software payloads and Trojan droppers hiding in downloads.           |
+| **Phillip** | 📱 Social Engineering | Expose impersonators, fraudulent SMS alerts (smishing), and urgent voice calls (vishing). |
+| **Jonald**  | 🚨 Incident Response  | Respond to a `.locky` ransomware outbreak, isolate drives, and restore cloud backups.     |
 
-| App | Purpose |
-|-----|---------|
-| 📧 **Gmail** | Investigate emails, place flags, report phishing |
-| 🌐 **Browser** | Inspect suspicious links in simulated websites |
+---
 
-> No File Explorer, Settings, Calculator, Command Prompt, or other apps.
+## 🎮 The Four Chapters
+
+```
+┌─────────────────────────────────────────────────────────────────────────────────┐
+│ CHAPTER 1: PHISHING INVESTIGATION (ACE)                                         │
+│ Investigate 5 realistic emails. Flag fake sender domains, false urgency, and    │
+│ mismatched hyperlinks. Conclude with Capybara/Zero's line-by-line verdict.     │
+├─────────────────────────────────────────────────────────────────────────────────┤
+│ CHAPTER 2: MALWARE HUNTING & EXTENSION DEFENSE (NISHREN)                        │
+│ Open File Explorer & ShieldAV Anti-Virus. Spot double extensions (.pdf.exe),    │
+│ analyze SHA-256 hashes, scan suspicious binaries, and quarantine threats.      │
+├─────────────────────────────────────────────────────────────────────────────────┤
+│ CHAPTER 3: SOCIAL ENGINEERING LAB (PHILLIP)                                     │
+│ Access Phone Link. Filter out SMS smishing scams, identify urgent IT support    │
+│ vishing calls, and protect one-time PINs (OTPs) and account credentials.       │
+├─────────────────────────────────────────────────────────────────────────────────┤
+│ CHAPTER 4: RANSOMWARE INCIDENT CONSOLE (JONALD)                                 │
+│ A high-stakes emergency! Isolate infected storage nodes, terminate malicious   │
+│ processes in Task Manager, and restore encrypted files from clean backups.     │
+└─────────────────────────────────────────────────────────────────────────────────┘
+```
+
+### 1️⃣ Chapter 1: Phishing Investigation
+
+- **Mission**: Examine 5 workplace and personal emails.
+- **Mechanic**: Toggle **🚩 Flag Evidence** mode. Click directly on:
+  - 📛 **Fake Sender Addresses** (e.g., `bpi.security.verification@gmail.com` using a free email provider instead of the bank's official domain).
+  - ⏳ **False Urgency** (e.g., threatening permanent suspension within 30 minutes).
+  - 🔗 **Mismatched Links** (e.g., button label says "Verify Account", but leads to an external spoofed domain).
+- **Verification**: Switch to the **Browser** app to inspect suspicious landing pages without resetting your email progress.
+- **Reporting**: Choose **Report as Phishing** or **Mark as Legitimate**.
+
+### 2️⃣ Chapter 2: Malware Hunting
+
+- **Mission**: Audit downloaded files in the **Folder** (File Explorer) app.
+- **Mechanic**:
+  - Expose double extensions (e.g., `bonus_payroll_sept.pdf.exe`).
+  - Identify script droppers (`.vbs`) and rogue screensavers (`.scr`).
+  - Send suspicious files to **ShieldAV Anti-Virus** for automated signature and heuristic scanning.
+  - Quarantine verified malware threats while avoiding false positives on clean files.
+
+### 3️⃣ Chapter 3: Social Engineering & Smishing
+
+- **Mission**: Investigate mobile communications in the **Phone Link** app.
+- **Mechanic**:
+  - Analyze SMS messages (smishing) offering fake deliveries, prizes, or urgent security alerts.
+  - Identify phone impersonation attempts (vishing) targeting student credentials.
+  - Apply the **Zero-Trust Rule**: Never transmit OTPs or sensitive info over unverified channels.
+
+### 4️⃣ Chapter 4: Ransomware Incident Response
+
+- **Mission**: Combat a live crypto-ransomware outbreak threatening the team's project database.
+- **Mechanic**:
+  - **Network Isolation**: Cut infected storage volumes off from the local network to stop lateral spread.
+  - **Process Neutralization**: Use the system console and Task Manager to locate and kill malicious dropper processes.
+  - **Vault Restoration**: Verify SHA-256 backup integrity and restore encrypted volumes to 100% operational health without paying the extortion fee.
+
+---
+
+## 🖥️ Simulated Desktop Environment
+
+CYBERZERØ features a comprehensive operating system interface built from scratch in CSS and JavaScript:
+
+```
+┌────────────────────────────────────────────────────────────────────────┐
+│ [📁 Folder]   [📧 Email]   [🌐 Browser]   [🛡️ ShieldAV]   [📱 Phone Link]│
+│                                                                        │
+│   ┌───────────────────────────┐     ┌────────────────────────────┐    │
+│   │ 📧 Email (Gmail)    ─ □ ✕ │     │ 🛡️ ShieldAV Scanner  ─ □ ✕ │    │
+│   ├───────────────────────────┤     ├────────────────────────────┤    │
+│   │ Inbox (5)                 │     │ Real-Time Shield: ACTIVE   │    │
+│   │ 🚩 Flags Placed: 3        │     │ Threat: Trojan.Dropper.EXE │    │
+│   │ [ REPORT SUSPICIOUS ]     │     │ [ 🛡️ QUARANTINE PAYLOAD ]   │    │
+│   └───────────────────────────┘     └────────────────────────────┘    │
+│                                                                        │
+├────────────────────────────────────────────────────────────────────────┤
+│ 🪟 Start  |  📧 Email   🌐 Browser   📁 Files   🛡️ AV   |  🔊 🌐  10:24 AM │
+└────────────────────────────────────────────────────────────────────────┘
+```
+
+### Desktop Applications Suite
+
+| App Icon | Application             | Role in Investigation                                                           |
+| :------: | ----------------------- | ------------------------------------------------------------------------------- |
+|    📧    | **Email Client**        | Inspect headers, read messages, flag suspicious evidence, and report phishing.  |
+|    🌐    | **Cyber-Net Browser**   | Inspect destination URLs, search web intelligence, and check website security.  |
+|    📁    | **File Explorer**       | Browse file paths, inspect actual file extensions, and check file properties.   |
+|    🛡️    | **ShieldAV Anti-Virus** | Run on-demand file scans, review threat detections, and isolate infected files. |
+|    📱    | **Phone Link**          | Review mobile SMS messages, incoming voice alerts, and smishing attacks.        |
+|    📄    | **Document Viewer**     | Inspect internal company memos, syllabi, and text documentation.                |
+|    🖼️    | **Image Viewer**        | Examine visual assets and screenshots for digital evidence.                     |
+|    🎬    | **Video Player**        | Play in-game briefing videos and multimedia team updates.                       |
+|    ⚙️    | **Wi-Fi & Network**     | Toggle network adapters to isolate endpoints during active network threats.     |
+|    📒    | **Sticky Notes**        | Draggable, real-time cheat sheet explaining scoring mechanics and tips.         |
+
+---
+
+## 🏆 Scoring & Ranking System
+
+CYBERZERØ utilizes a dual-source scoring calculation: points are awarded for **accurate verdicts** AND **evidence discovery**.
+
+```
+TOTAL EMAIL SCORE = Decision Points + Correct Evidence Points - Penalties
+```
+
+### Scoring Matrix
+
+| Action                                 |  Points   | Description                                                       |
+| -------------------------------------- | :-------: | ----------------------------------------------------------------- |
+| **Phishing Verdict (Backed by Clues)** |  `+100`   | Correctly identified phishing with at least 1 valid flag placed.  |
+| **Phishing Verdict (Blind Guess)**     |   `+0`    | Called phishing correctly, but found 0 actual evidence flags.     |
+| **Legitimate Verdict**                 |   `+50`   | Correctly verified clean email (no flags required).               |
+| **Correct Evidence Flag**              |   `+25`   | Pinned an actual phishing indicator (fake sender, urgency, etc.). |
+| **Incorrect Verdict**                  |   `-50`   | Called a legitimate email phishing, or fell for a phishing scam.  |
+| **Incorrect Evidence Flag**            |   `-10`   | Flagged safe or normal email text as suspicious.                  |
+| **Missed Clue Penalty**                |   `-25`   | Overlooked a real phishing indicator present in the email.        |
+| **Malware Neutralized**                |  `+100`   | Successfully identified and quarantined a malicious binary.       |
+| **False Positive Quarantine**          |   `-25`   | Quarantined a safe, legitimate user file.                         |
+| **Contradiction Rule**                 | `0 total` | Placing flags but submitting as "Legitimate" voids the report.    |
+
+### Detective Ranks
+
+| Rank Badge | Rank Title                        | Score Bracket | Rating Description                                                |
+| :--------: | --------------------------------- | :-----------: | ----------------------------------------------------------------- |
+|   **S**    | 🏅 **Master Cyber Detective**     | `95% – 100%`  | Flawless investigation. All clues spotted with zero false alarms. |
+|   **A**    | ⭐ **Senior Cyber Investigator**  |  `85% – 94%`  | High-accuracy detection with minimal oversights.                  |
+|   **B**    | 👍 **Cyber Defense Agent**        |  `70% – 84%`  | Solid performance; caught major threats but missed subtle signs.  |
+|   **C**    | 📚 **Junior Analyst in Training** |  `50% – 69%`  | Inconsistent evidence gathering; needs additional review.         |
+|   **D**    | ⚠️ **Investigation Compromised**  |    `< 50%`    | Critical threats missed or false alarms triggered.                |
 
 ---
 
 ## 🚀 Getting Started
 
-Open the game by launching:
+Because CYBERZERØ is built entirely with standard web technologies, there are **no build steps, Node packages, or servers required**.
 
-```
-index.html
-```
+### Option A: Run Locally (Instant)
 
-No installation. No server. No dependencies.
+1. **Clone the repository**:
+
+   ```bash
+   git clone https://github.com/your-username/CyberZero-Phishing.git
+   cd CyberZero-Phishing
+   ```
+
+2. **Open the game**:
+   - Simply double-click `index.html` in your file explorer, **OR**
+   - Right-click `index.html` and choose **Open with > Chrome / Firefox / Edge / Safari**.
+
+3. _(Optional)_ **Run via local development server**:
+
+   ```bash
+   # Using Python 3:
+   python -m http.server 8080
+
+   # Or using Node npx:
+   npx serve .
+   ```
+
+   Navigate to `http://localhost:8080` in your web browser.
+
+---
+
+### Option B: Deploy to GitHub Pages (Free Hosting in 1 Minute)
+
+1. Fork or push this repository to your GitHub account.
+2. In your GitHub repository, navigate to **Settings** > **Pages**.
+3. Under **Branch**, select `main` (or `master`) and folder `/ (root)`.
+4. Click **Save**.
+5. Your game will be live at:
+   ```
+   https://<your-username>.github.io/<repository-name>/
+   ```
 
 ---
 
 ## 📁 Project Structure
 
 ```
-CYBERZERO/
+CyberZero-Phishing/
 │
-├── index.html      ← Entry point
-├── style.css       ← All styles & desktop UI
-├── script.js       ← Game logic & data
-└── README.md
+├── index.html               # Main entry point & desktop OS DOM hierarchy
+├── style.css                # Desktop OS styling, windows, animations & themes
+├── script.js                # Core game engine, data models, state & chapter logic
+├── LICENSE                  # Unlicense (Public Domain dedication)
+├── README.md                # Project documentation & GitHub overview
+│
+└── assets/                  # Visual and audio assets
+    ├── Cover.png            # Main menu & introduction background
+    ├── 01Cover.png          # Story transition wallpaper
+    ├── win10_wallpaper.jpg  # Desktop OS high-resolution wallpaper
+    ├── CyberZerØ.png        # AI Mentor ZERO avatar
+    ├── Ace.png / Ace1.png   # Ace character illustrations
+    ├── Nishren.png          # Nishren character illustrations
+    ├── Phillip.png          # Phillip character illustrations
+    ├── Jonald.png           # Jonald character illustrations
+    ├── icons/
+    │   ├── apps/            # SVG icons for Mail, Browser, Folder, Anti-Virus, etc.
+    │   └── folder icons/    # System explorer file type icons
+    ├── sounds/              # Audio effects (clicks, alerts, success, victory cues)
+    └── video/               # Cutscenes and interactive media briefings
 ```
 
 ---
 
-## 🎮 Full Gameplay Flow
+## 🛡️ Educational Value & Safe Simulation Design
 
-```
-START GAME
-    ↓
-WINDOWS DESKTOP
-    ↓
-WELCOME SCREEN           ← Timer NOT running yet
-    ↓
-🕵️ CAPYBARA INTRODUCTION
-    ↓
-PHISHING GUIDE
-    ↓
-CAPYBARA DEMONSTRATION   ← Live example walkthrough
-    ↓
-"YOUR TURN, DETECTIVE"
-    ↓
-⏱ START 4-MINUTE TIMER
-    ↓
-OPEN GMAIL
-    ↓
-READ EMAIL → 🚩 FLAG EVIDENCE → INSPECT SENDER / URGENCY / LINKS
-    ↓
-OPEN BROWSER (if needed to investigate a link)
-    ↓
-RETURN TO GMAIL → REPORT EMAIL
-    ↓
-🕵️ CAPYBARA EXAMINES SUBMISSION
-    ↓
-EXPLAIN CORRECT / MISSED FLAGS → AWARD SCORE
-    ↓
-NEXT EMAIL  (×5 total)
-    ↓
-🏆 FINAL RESULTS
-```
+CYBERZERØ was developed to reinforce practical digital literacy and defensive cybersecurity habits:
+
+- 🔒 **100% Safe & Offline-Ready**: All email addresses use RFC 2606 reserved domains (`.example`, `.test`, or simulated domains). No real banking portals or credentials are ever accessed.
+- 🎯 **Critical Thinking Over Rote Memorization**: Teaches users _how_ attackers engineer urgency, spoof headers, and hide executable extensions inside routine office files.
+- 🏢 **Applicable to Security Awareness Programs**: Ideal for high school classrooms, university labs, corporate phishing awareness training, and cybersecurity bootcamps.
 
 ---
 
-## 🖼️ Application Windows
+## 🤝 Contributing
 
-Each app behaves like a native Windows window:
+Contributions, feedback, and new chapter ideas are warmly welcome!
 
-```
-┌──────────────────────────────────────────────┐
-│ Gmail                              ─  □  X   │
-├──────────────────────────────────────────────┤
-│                                              │
-│   [ Inbox ]                                  │
-│   ─────────────────────────────────────      │
-│   📧 BPI Security    URGENT: Your account…   │
-│   📧 HR Department   September Benefits…     │
-│                                              │
-└──────────────────────────────────────────────┘
-```
-
-Supported window actions: **Open · Close · Minimize · Maximize · Restore · Switch · Focus**
-
-The Gmail investigation **never resets** when switching to Browser and back.
+1. Fork the Project (`https://github.com/your-username/CyberZero-Phishing/fork`)
+2. Create your Feature Branch (`git checkout -b feature/NewChapter`)
+3. Commit your Changes (`git commit -m 'Add new social engineering scenario'`)
+4. Push to the Branch (`git push origin feature/NewChapter`)
+5. Open a Pull Request
 
 ---
 
-## ⏱️ Investigation Timer
+## 📜 License
 
-The 4-minute countdown starts **only** when the real investigation begins.
-
-```
-┌───────────────────────┐
-│ EMAIL 2 / 5           │
-│ SCORE: 175            │
-│ TIME: 03:21           │
-└───────────────────────┘
-```
-
-| Time Remaining | State |
-|----------------|-------|
-| 04:00 – 01:01  | 🟢 NORMAL |
-| 01:00 – 00:31  | 🟡 WARNING |
-| 00:30 – 00:01  | 🔴 CRITICAL |
-| 00:00          | ⛔ TIME UP |
-
-The timer does **not** run during the welcome screen, training, guide, or demonstration.
-
----
-
-## 🚩 Flag-Based Investigation
-
-This is the heart of the game. Activate **Flag Mode** and click suspicious parts of the email to place evidence flags.
-
-### What to Flag
-
-| Category | Example |
-|----------|---------|
-| `fake_sender` | `security@bpi-secure-login.example` |
-| `false_urgency` | *"Your account will be suspended in 30 minutes"* |
-| `suspicious_link` | Button says "Verify Account" → goes to `bpi-check.example` |
-| `suspicious_attachment` | Unexpected `.zip` or `.exe` attached |
-| `credential_request` | *"Enter your PIN to confirm"* |
-| `suspicious_wording` | Unusual phrasing or grammatical errors |
-
-### Evidence Panel
-
-```
-┌─────────────────────────────────────┐
-│ INVESTIGATION EVIDENCE              │
-├─────────────────────────────────────┤
-│ 🚩 Suspicious sender                │
-│ 🚩 False urgency                    │
-│ 🚩 Suspicious link                  │
-│                                     │
-│ FLAGS: 3          [ REMOVE FLAG ]   │
-└─────────────────────────────────────┘
-```
-
-Players can remove a flag if it was placed incorrectly.
-
----
-
-## 📧 The Five-Email Mission
-
-| # | Type | Evidence to Find |
-|---|------|-----------------|
-| 1 | 🎣 Phishing | Fake sender + urgency + suspicious link |
-| 2 | ✅ Legitimate | Normal company email — don't flag it |
-| 3 | 🎣 Phishing | Fake sender + password threat + suspicious link |
-| 4 | ✅ Legitimate | Normal internal email — don't flag it |
-| 5 | 🎣 Phishing | Fake sender + reward scam + suspicious link |
-
----
-
-## 💡 Phishing Indicators Guide
-
-The Capybara Detective teaches you the three key red flags:
-
-### 🔴 Fake Sender Address
-
-```
-security@bpi-secure-login.example
-```
-
-The domain looks related to the bank, but it's not the real one.
-
-### 🔴 False Urgency
-
-```
-URGENT! Your account will be permanently locked
-within 30 minutes unless you verify it.
-```
-
-Attackers pressure victims into acting fast, without thinking.
-
-### 🔴 Mismatched Link
-
-```
-Button text:  "Verify Your Account"
-Destination:  https://bpi-account-security.example/login
-```
-
-The visible text looks safe — the actual destination doesn't.
-
----
-
-## 📬 Example Emails
-
-<details>
-<summary><strong>📧 BPI Phishing Email (Email #1)</strong></summary>
-
-```
-From:    BPI Security <security@bpi-secure-login.example>
-Subject: URGENT: Your account will be locked today
-
-Dear Customer,
-
-We detected unusual activity on your account.
-
-You must verify your account within 30 minutes
-or your online banking access will be suspended.
-
-[ Verify Your Account ]  →  https://bpi-account-security.example/login
-
-Thank you,
-BPI Security Team
-```
-
-**Expected Flags:** `fake_sender` · `false_urgency` · `suspicious_link`
-
-</details>
-
-<details>
-<summary><strong>📧 PayPal Phishing Email (Email #3)</strong></summary>
-
-```
-From:    PayPal Security <security@paypa1-security.example>
-Subject: URGENT: Your PayPal account will be suspended
-
-Dear Customer,
-
-We detected unusual activity on your PayPal account.
-
-Your account will be permanently limited within
-24 hours unless you verify your information.
-
-[ Restore My Account ]  →  https://paypal-account-check.example/login
-
-Thank you,
-PayPal Security Team
-```
-
-**Expected Flags:** `fake_sender` · `false_urgency` · `suspicious_link`
-
-</details>
-
-<details>
-<summary><strong>📧 Legitimate Email (Email #2)</strong></summary>
-
-```
-From:    HR Department <hr@company.example>
-Subject: September Employee Benefits Update
-
-Dear Employee,
-
-The September employee benefits information is now available.
-
-Please review the information through the company's
-normal internal resources.
-
-Thank you,
-HR Department
-```
-
-**Expected Action:** ✅ Mark as Legitimate — no flags needed.
-
-</details>
-
----
-
-## 🕵️ Capybara Review System
-
-After every email submission, the Capybara Detective reviews your investigation:
-
-```
-╔════════════════════════════════════════════╗
-║       🕵️ CAPYBARA DETECTIVE               ║
-║           INVESTIGATION COMPLETE           ║
-╠════════════════════════════════════════════╣
-║  ✓ PHISHING CONFIRMED                      ║
-║                                            ║
-║  🚩 SENDER — CORRECT                       ║
-║  The sender uses a suspicious domain and   ║
-║  does not represent the legitimate bank.   ║
-║                                            ║
-║  🚩 URGENCY — CORRECT                      ║
-║  The email threatens account suspension    ║
-║  within a short deadline to force action.  ║
-║                                            ║
-║  🚩 LINK — CORRECT                         ║
-║  The button destination uses an unrelated  ║
-║  suspicious domain.                        ║
-║                                            ║
-║              SCORE: +175                   ║
-║              [ NEXT EMAIL ]                ║
-╚════════════════════════════════════════════╝
-```
-
-The Capybara also explains **wrong flags** and **missed evidence**:
-
-```
-⚠ INCORRECT FLAG
-"Dear Customer" is not enough evidence to identify phishing.
-Look for: suspicious senders · false urgency · suspicious links
-
-🚩 MISSED EVIDENCE
-You did not flag the suspicious sender.
-→ security@bpi-secure-login.example
-```
-
----
-
-## 🏆 Scoring System
-
-| Action | Points |
-|--------|-------:|
-| Correct phishing decision | +100 |
-| Correct legitimate decision | +100 |
-| Correct evidence flag | +25 |
-| Incorrect decision | −50 |
-| Incorrect evidence flag | −10 |
-
-**Example:** Correct decision + 3 correct flags = **+175 points**
-
-### Detective Ranks
-
-| Rank | Label | Score % |
-|------|-------|---------|
-| **S** | 🏅 Cyber Detective | 95 – 100% |
-| **A** | ⭐ Excellent | 85 – 94% |
-| **B** | 👍 Good | 70 – 84% |
-| **C** | 📚 Needs Training | 50 – 69% |
-| **D** | ❌ Investigation Failed | Below 50% |
-
----
-
-## 📊 Final Results Screen
-
-```
-╔════════════════════════════════════════╗
-║             MISSION COMPLETE           ║
-╠════════════════════════════════════════╣
-║  Emails Investigated:      5 / 5       ║
-║  Correct Decisions:        5 / 5       ║
-║  Evidence Found:          11 / 12      ║
-║                                        ║
-║  Phishing Detected:        3           ║
-║  Legitimate Identified:    2           ║
-║                                        ║
-║  Time Remaining:          01:24        ║
-║  FINAL SCORE:              725         ║
-║  RANK:                     A           ║
-║                                        ║
-║        EXCELLENT DETECTIVE!            ║
-╚════════════════════════════════════════╝
-```
-
----
-
-## 🧱 Technical Reference
-
-### Email Data Structure
-
-```javascript
-{
-    id: 1,
-    sender: {
-        name: "BPI Security",
-        address: "security@bpi-secure-login.example"
-    },
-    subject: "URGENT: Your account will be locked today",
-    body: "...",
-    links: [
-        {
-            text: "Verify Your Account",
-            destination: "https://bpi-account-security.example/login",
-            suspicious: true
-        }
-    ],
-    phishing: true,
-    evidence: ["fake_sender", "false_urgency", "suspicious_link"]
-}
-```
-
-### Game State
-
-```javascript
-const gameState = {
-    currentEmail: 0,
-    totalEmails: 5,
-    score: 0,
-    correctDecisions: 0,
-    phishingDetected: 0,
-    legitimateDetected: 0,
-    flagsPlaced: [],
-    timeRemaining: 240,
-    missionStarted: false
-};
-```
-
-### Application State
-
-```javascript
-const apps = {
-    gmail:   { open: false, minimized: false, maximized: false },
-    browser: { open: false, minimized: false, maximized: false }
-};
-```
-
-### Key Functions
-
-```javascript
-// Window management
-openApp()  closeApp()  minimizeApp()  maximizeApp()  restoreApp()
-
-// Game flow
-startGame()  startTraining()  startMission()
-
-// Timer
-startTimer()  stopTimer()  updateTimer()
-
-// Email investigation
-openEmail()  inspectEmail()  inspectLink()  openSuspiciousSite()
-
-// Flagging
-activateFlagMode()  placeFlag()  removeFlag()
-
-// Reporting
-reportEmail()  submitReport()  markLegitimate()
-
-// Scoring & results
-checkEvidence()  calculateScore()  showCapybaraResult()
-nextEmail()  finishMission()  showFinalResults()  playAgain()
-```
-
----
-
-## 📐 Design Principles
-
-### The Only Rule That Matters
-
-> **CYBERZERO is not a phishing quiz.**
-> It is an interactive **cybersecurity detective investigation simulation.**
-> The player must *find the evidence* — not just guess.
-
-### Gameplay Rules
-
-1. Players cannot immediately know the answer — they must investigate
-2. Flags must be placed directly on suspicious evidence
-3. A final decision (Phishing / Legitimate) must be submitted
-4. The Capybara reviews every flag placed
-5. The Capybara explains why each flag was correct or incorrect
-6. Points are awarded based on investigation quality
-7. Players cannot spam "Report as Phishing" — wrong flags cost points
-8. Some emails are always legitimate
-9. The Browser app is available to inspect suspicious link destinations
-10. The timer only starts when the real investigation begins
-
----
-
-## 🛡️ Safety & Privacy
-
-All content in CYBERZERO is **fictional and simulated**:
-
-- All email addresses use `.example` domains (per RFC 2606)
-- All websites are simulated — no real banking, PayPal, or financial sites
-- No real credentials, login systems, or backend connections
-- No data is collected or transmitted
+This project is released into the public domain under the **[The Unlicense](LICENSE)**. Anyone is free to copy, modify, publish, use, compile, sell, or distribute this software for educational or commercial purposes.
 
 ---
 
 <div align="center">
 
-*Built with HTML · CSS · JavaScript*
-
-**🕵️ Good luck, Detective.**
+**Developed with ❤️ for aspiring Cyber Detectives everywhere.**  
+_Stay vigilant. Check the sender. Inspect the link. Trust the evidence._
 
 </div>
