@@ -40,8 +40,8 @@
     <!-- Column 2: Threat Progression / Locked Apps -->
     <div class="desktop-icons-col">
       <div class="desktop-icon locked" id="icon-folder" onclick="openApp('folder')" title="🔒 Locked — Complete Chapter 1 (Phishing) first">
-        <div class="icon-img"><img src="assets/icons/apps/folder.svg" alt="Folder" style="width:36px;height:36px;"></div>
-        <span>Folder</span>
+        <div class="icon-img"><img src="assets/icons/apps/folder.svg" alt="File Explorer" style="width:36px;height:36px;"></div>
+        <span>File Explorer</span>
       </div>
       <div class="desktop-icon locked" id="icon-antivirus" onclick="openApp('antivirus')" title="🔒 Locked — Complete Chapter 1 (Phishing) first">
         <div class="icon-img"><img src="assets/icons/apps/windows_defender.svg" alt="Anti-Virus" style="width:36px;height:36px;"></div>
@@ -492,7 +492,6 @@
         </div>
         <div class="ribbon-divider"></div>
         <div class="ribbon-group actions-group">
-          <button class="ribbon-btn ribbon-btn-action" onclick="scanCurrentDocumentInAV()" title="Scan document with Anti-Virus">⚡ Scan in AV</button>
           <button class="ribbon-btn" onclick="window.print()" title="Print">🖨️ Print</button>
         </div>
       </div>
@@ -545,7 +544,6 @@
         <button class="photo-tool-btn" onclick="imgViewerRotateRight()" title="Rotate Right">↻ Rotate</button>
         <div class="photo-divider"></div>
         <button class="photo-tool-btn active" id="btn-toggle-img-info" onclick="toggleImageInfoDrawer()" title="File Info">ℹ️ Details</button>
-        <button class="photo-tool-btn" onclick="scanCurrentImageInAV()" title="Scan in Anti-Virus">⚡ Scan in AV</button>
       </div>
 
       <!-- Photos Canvas & Drawer -->
@@ -651,7 +649,6 @@
               <option value="1.5">1.5x</option>
             </select>
             <button class="vp-btn" onclick="vpToggleFullscreen()" title="Fullscreen">⛶</button>
-            <button class="vp-btn vp-btn-av" onclick="scanCurrentVideoInAV()" title="Scan Video in ShieldAV">⚡ Scan in AV</button>
           </div>
         </div>
       </div>
@@ -875,7 +872,15 @@
         <!-- Wi-Fi Tab -->
         <div id="wstab-wifi">
           <div class="settings-page-title"><img src="assets/icons/networks/wi-fi.svg" alt="" style="width:20px;height:20px;vertical-align:middle;margin-right:8px;">Wi-Fi</div>
-          <div class="settings-section-header">Available Networks</div>
+          <div class="settings-section-header">Status</div>
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:1px solid rgba(255,255,255,0.07);">
+            <div>
+              <div style="font-weight:600;font-size:14px;color:var(--text-primary)">Wi-Fi</div>
+              <div style="font-size:12px;color:var(--text-muted)" id="ws-wifi-state-label">On — Connected to CYBER-NET (WPA3-Enterprise)</div>
+            </div>
+            <button id="ws-wifi-toggle-btn" onclick="wsToggleWifi()" style="padding:6px 16px;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;background:rgba(56,189,248,0.15);border:1px solid rgba(56,189,248,0.4);color:#38bdf8;">Turn Off</button>
+          </div>
+          <div class="settings-section-header" style="margin-top:16px;">Available Networks</div>
           <div id="wifi-networks-settings-list" class="wifi-networks-settings-list">
             <!-- Rendered by JS -->
           </div>
@@ -1158,8 +1163,8 @@
       <button class="taskbar-app-btn" id="taskbar-browser" onclick="taskbarClick('browser')" title="Browser — Cyber-Net Web Search">
         <span><img src="assets/icons/apps/browser.svg" alt="Browser" style="width:18px;height:18px;vertical-align:middle;"></span> Browser
       </button>
-      <button class="taskbar-app-btn locked" id="taskbar-folder" onclick="taskbarClick('folder')" title="Folder — Complete Chapter 1 (Phishing) to unlock">
-        <span><img src="assets/icons/apps/folder.svg" alt="Folder" style="width:18px;height:18px;vertical-align:middle;"></span> Folder
+      <button class="taskbar-app-btn locked" id="taskbar-folder" onclick="taskbarClick('folder')" title="File Explorer — Complete Chapter 1 (Phishing) to unlock">
+        <span><img src="assets/icons/apps/folder.svg" alt="File Explorer" style="width:18px;height:18px;vertical-align:middle;"></span> File Explorer
       </button>
       <button class="taskbar-app-btn locked" id="taskbar-antivirus" onclick="taskbarClick('antivirus')" title="ShieldAV Anti-Virus — Complete Chapter 1 (Phishing) to unlock">
         <span><img src="assets/icons/apps/windows_defender.svg" alt="Anti-Virus" style="width:18px;height:18px;vertical-align:middle;"></span> Anti-Virus
@@ -1178,6 +1183,7 @@
       </button>
     </div>
     <div class="taskbar-tray">
+
       <button class="tray-btn" id="tray-volume-btn" onclick="toggleVolumeFlyout(event)" title="🔊 Sound &amp; Audio Volume Settings" aria-label="Speakers / Sound Settings">
         <span id="tray-volume-icon" class="tray-icon"><img src="assets/icons/networks/audio.svg" alt="Sound" style="width:18px;height:18px;vertical-align:middle;"></span>
       </button>
@@ -1190,6 +1196,7 @@
       </button>
     </div>
   </div>
+
 
 </div><!-- /desktop -->
 
@@ -1226,8 +1233,8 @@
       </div>
 
       <div class="start-app-tile locked" onclick="startMenuOpenApp('folder')" id="start-app-folder" title="File Explorer (Nishren / Malware)">
-        <div class="start-tile-icon"><img src="assets/icons/apps/folder.svg" alt="Folder" style="width:32px;height:32px;"></div>
-        <div class="start-tile-name">Explorer</div>
+        <div class="start-tile-icon"><img src="assets/icons/apps/folder.svg" alt="File Explorer" style="width:32px;height:32px;"></div>
+        <div class="start-tile-name">File Explorer</div>
         <span class="start-tile-status lock" id="start-badge-folder">🔒 Locked</span>
       </div>
 
@@ -1417,7 +1424,7 @@
         </div>
         <div class="quick-tile-info">
           <span class="quick-tile-label">Wi-Fi</span>
-          <span class="quick-tile-status" id="tile-wifi-status">CYBER-NET 5G</span>
+          <span class="quick-tile-status" id="tile-wifi-status">On</span>
         </div>
       </div>
 
@@ -1429,7 +1436,7 @@
         </div>
         <div class="quick-tile-info">
           <span class="quick-tile-label">Bluetooth</span>
-          <span class="quick-tile-status" id="tile-bt-status">Student Headset</span>
+          <span class="quick-tile-status" id="tile-bt-status">On</span>
         </div>
       </div>
 
@@ -1453,7 +1460,7 @@
         </div>
         <div class="quick-tile-info">
           <span class="quick-tile-label">Anti-Virus</span>
-          <span class="quick-tile-status" id="tile-antivirus-status">Real-Time On</span>
+          <span class="quick-tile-status" id="tile-antivirus-status">On</span>
         </div>
       </div>
     </div>
@@ -1625,81 +1632,82 @@
 ══════════════════════════════════════════════════════════ -->
 <div id="overlay-backdrop" class="overlay-backdrop"></div>
 
-<!-- ── MAIN MENU / TITLE SCREEN ── -->
+<!-- ── MAIN MENU / TITLE SCREEN (Windows 10 Login Style) ── -->
 <div id="overlay-title-menu" class="overlay active">
-  <div class="title-screen-container">
-    <!-- Cyber Corner Accents for Terminal Look -->
-    <div class="title-corner title-corner-tl"></div>
-    <div class="title-corner title-corner-tr"></div>
-    <div class="title-corner title-corner-bl"></div>
-    <div class="title-corner title-corner-br"></div>
+  <!-- Windows 10 Background Wallpaper -->
+  <div class="ls-win10-bg"></div>
 
-    <!-- Background cyber grid & animated scanner beam -->
-    <div class="title-cyber-grid"></div>
-    <div class="title-cyber-scanline"></div>
-    <div class="title-particles" id="title-particles"></div>
+  <!-- Login Panel (left-center aligned like Windows 10) -->
+  <div class="ls-center-panel">
 
-    <div class="title-content-card">
-      <!-- Main Logo with Crest -->
-      <div class="title-logo-wrap">
-        <div class="title-shield-badge">
-          <span class="title-shield-icon">🛡️</span>
-        </div>
-        <h1 class="title-logo">CYBER<span class="logo-accent">ZERO</span></h1>
-      </div>
-
-      <!-- Cyber Threat Awareness Subtitle Badge -->
-      <div class="title-subtitle-badge">
-        <span class="badge-accent-bracket">[</span>
-        <span>FROM ZERO KNOWLEDGE TO CYBER AWARENESS</span>
-        <span class="badge-accent-bracket">]</span>
-      </div>
-
-      <!-- Main Menu Buttons (Stacked: Start on top, Exit down below) -->
-      <div class="title-menu-actions">
-        <button class="btn-title-play" id="btn-menu-play" onclick="startFromTitleMenu()">
-          <span class="play-icon">▶</span>
-          <span>START (PLAY)</span>
-        </button>
-        <button class="btn-title-exit" id="btn-menu-exit" onclick="openExitModal()">
-          <span>✕</span>
-          <span>EXIT</span>
-        </button>
-      </div>
+    <!-- User Avatar (gray circle with person icon) -->
+    <div class="ls-user-avatar" id="ls-user-avatar">
+      <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg" width="76" height="76">
+        <circle cx="40" cy="30" r="13" stroke="#ffffff" stroke-width="4.5" fill="none"/>
+        <path d="M18 68 C18 52, 28 44, 40 44 C52 44, 62 52, 62 68" stroke="#ffffff" stroke-width="4.5" stroke-linecap="round" fill="none"/>
+      </svg>
+      <div class="ls-avatar-initials" id="ls-avatar-initials"></div>
     </div>
 
-    <!-- Exit Confirmation Modal (inside title screen) -->
-    <div class="title-modal-backdrop hidden" id="title-exit-modal">
-      <div class="title-exit-card">
-        <div class="exit-modal-icon">⚠️</div>
-        <h3 class="exit-modal-title">TERMINAL SESSION SUSPENSION</h3>
-        <p class="exit-modal-msg">
-          Cybersecurity is for everyone — especially students. Ace, Nishren, Phillip, and Jonald are counting on you to stay aware. Learn. Detect. Defend.
-        </p>
-        <p class="exit-modal-sub">Are you sure you want to exit CyberZerØ?</p>
-        <div class="exit-modal-actions">
-          <button class="btn-primary" onclick="closeExitModal()">◀ RETURN TO TITLE MENU</button>
-          <button class="btn-danger" onclick="confirmExitGame()">DISCONNECT &amp; CLOSE</button>
-        </div>
-      </div>
+    <!-- Username display -->
+    <div class="ls-win10-username" id="ls-win10-username-display">Enter your Name</div>
+
+    <!-- Name Input Row -->
+    <div class="ls-name-input-wrap" id="ls-name-input-wrap">
+      <input
+        type="text"
+        id="ls-name-input"
+        class="ls-name-input"
+        placeholder="Enter your Name"
+        maxlength="32"
+        autocomplete="off"
+        oninput="lsHandleNameInput(this.value)"
+        onkeydown="if(event.key==='Enter') lsSignIn()"
+        aria-label="Enter your name to sign in"
+      />
+      <button class="ls-signin-btn" id="ls-signin-arrow" onclick="lsSignIn()" title="Sign In">Enter</button>
     </div>
 
-    <!-- Disconnected Terminal Screen (if user confirms exit) -->
-    <div class="title-modal-backdrop hidden" id="title-disconnected-screen">
-      <div class="title-exit-card" style="border-color:rgba(255,82,82,0.5)">
-        <div class="exit-modal-icon" style="color:var(--accent-red)">🔌</div>
-        <h3 class="exit-modal-title" style="color:var(--accent-red)">TERMINAL DISCONNECTED</h3>
-        <p class="exit-modal-msg">
-          CyberZerØ simulation offline. Thank you for enhancing your cybersecurity knowledge and awareness!
-        </p>
-        <div class="exit-modal-actions" style="justify-content:center;margin-top:18px">
-          <button class="btn-primary" onclick="reconnectTerminal()">⚡ RECONNECT TERMINAL</button>
-        </div>
-      </div>
+    <!-- Clock Block (bottom) -->
+    <div class="ls-win10-clock-block">
+      <div class="ls-clock-time" id="ls-clock-display">00:00</div>
+      <div class="ls-clock-date" id="ls-date-display">Monday, September 6, 2026</div>
     </div>
 
   </div>
+
+  <!-- Exit Confirmation Modal (inside title screen) -->
+  <div class="title-modal-backdrop hidden" id="title-exit-modal">
+    <div class="title-exit-card">
+      <div class="exit-modal-icon">⚠️</div>
+      <h3 class="exit-modal-title">TERMINAL SESSION SUSPENSION</h3>
+      <p class="exit-modal-msg">
+        Cybersecurity is for everyone — especially students. Ace, Nishren, Phillip, and Jonald are counting on you to stay aware. Learn. Detect. Defend.
+      </p>
+      <p class="exit-modal-sub">Are you sure you want to exit CyberZerØ?</p>
+      <div class="exit-modal-actions">
+        <button class="btn-primary" onclick="closeExitModal()">◀ RETURN TO TITLE MENU</button>
+        <button class="btn-danger" onclick="confirmExitGame()">DISCONNECT &amp; CLOSE</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Disconnected Terminal Screen (if user confirms exit) -->
+  <div class="title-modal-backdrop hidden" id="title-disconnected-screen">
+    <div class="title-exit-card" style="border-color:rgba(255,82,82,0.5)">
+      <div class="exit-modal-icon" style="color:var(--accent-red)">🔌</div>
+      <h3 class="exit-modal-title" style="color:var(--accent-red)">TERMINAL DISCONNECTED</h3>
+      <p class="exit-modal-msg">
+        CyberZerØ simulation offline. Thank you for enhancing your cybersecurity knowledge and awareness!
+      </p>
+      <div class="exit-modal-actions" style="justify-content:center;margin-top:18px">
+        <button class="btn-primary" onclick="reconnectTerminal()">⚡ RECONNECT TERMINAL</button>
+      </div>
+    </div>
+  </div>
+
 </div>
+
 
 <!-- ── GAME INTRO BRIEFING MODAL (Narrator Introduction) ── -->
 <div id="overlay-game-intro" class="overlay">
@@ -2759,43 +2767,42 @@
 <!-- ── NOTIFICATION TOAST ── -->
 <div id="toast" class="toast hidden"></div>
 
-<!-- ── LOADING SCREEN (shown for 10s after clicking START) ── -->
+<!-- ── LOADING SCREEN (Windows "Just a moment...") ── -->
 <div id="overlay-loading-screen">
+  <div class="win-loading-content">
 
-  <!-- Pixel-art style center layout -->
-  <div class="ls-pixel-wrap">
-
-    <!-- CYBERZERO header (small) -->
-    <div class="ls-pixel-brand">CYBER<span>ZER</span>Ø</div>
-
-    <!-- LOADING... title -->
-    <div class="ls-pixel-title" id="ls-pixel-title">LOADING<span class="ls-ellipsis">...</span></div>
-
-    <!-- Pixel block progress bar -->
-    <div class="ls-pixel-bar-outer">
-      <div class="ls-pixel-bar-inner" id="ls-pixel-bar-inner">
-        <!-- blocks injected by JS -->
-      </div>
+    <!-- Windows 12-Dot Spinning Ring -->
+    <div class="win-spinner-wrap" aria-hidden="true">
+      <svg class="win-spinner-svg" viewBox="0 0 64 64" width="60" height="60">
+        <circle cx="32" cy="10" r="3.2" fill="#ffffff" opacity="1.0"/>
+        <circle cx="43" cy="13" r="3.2" fill="#ffffff" opacity="0.91"/>
+        <circle cx="51" cy="21" r="3.2" fill="#ffffff" opacity="0.80"/>
+        <circle cx="54" cy="32" r="3.2" fill="#ffffff" opacity="0.65"/>
+        <circle cx="51" cy="43" r="3.2" fill="#ffffff" opacity="0.48"/>
+        <circle cx="43" cy="51" r="3.2" fill="#ffffff" opacity="0.32"/>
+        <circle cx="32" cy="54" r="3.2" fill="#ffffff" opacity="0.18"/>
+        <circle cx="21" cy="51" r="3.2" fill="#ffffff" opacity="0.08"/>
+        <circle cx="13" cy="43" r="3.2" fill="#ffffff" opacity="0.02"/>
+        <circle cx="10" cy="32" r="3.2" fill="#ffffff" opacity="0.05"/>
+        <circle cx="13" cy="21" r="3.2" fill="#ffffff" opacity="0.25"/>
+        <circle cx="21" cy="13" r="3.2" fill="#ffffff" opacity="0.60"/>
+      </svg>
     </div>
 
-    <!-- Percentage -->
-    <div class="ls-pixel-pct" id="ls-pixel-pct">0%</div>
+    <!-- Title: Just a moment... -->
+    <h2 class="win-loading-title" id="win-loading-title">Just a moment...</h2>
 
-    <!-- Knowledge tip card (1 random note per loading) -->
-    <div class="ls-tip-card" id="ls-tip-card">
-      <div class="ls-tip-label">
-        <div class="ls-tip-label-dot"></div>
-        <span id="ls-tip-category">CYBER KNOWLEDGE</span>
+    <!-- Cyber Awareness Note Box with Shield Icon -->
+    <div class="win-loading-note-wrap" id="win-loading-note-wrap">
+      <div class="win-loading-shield-icon">
+        <svg width="28" height="32" viewBox="0 0 24 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M12 2L4 5.5v7.5c0 6.8 8 11.5 8 11.5s8-4.7 8-11.5V5.5L12 2z" stroke="#ffffff" stroke-width="2" stroke-linejoin="round"/>
+          <path d="M12 10.5c-1.4 0-2.3.9-2.3 2.1 0 1.3 1.3 2.6 2.3 3.6 1-1 2.3-2.3 2.3-3.6 0-1.2-.9-2.1-2.3-2.1z" fill="#ffffff"/>
+        </svg>
       </div>
-      <div class="ls-tip-body-wrap" id="ls-tip-body-wrap">
-        <div class="ls-tip-row">
-          <div class="ls-tip-icon" id="ls-tip-icon">🎣</div>
-          <div>
-            <div class="ls-tip-title" id="ls-tip-title">Did You Know?</div>
-            <div class="ls-tip-body" id="ls-tip-body">Loading threat data…</div>
-          </div>
-        </div>
-      </div>
+      <p class="win-loading-note-text" id="win-loading-note-text">
+        Phishing is a trick to steal your personal information, like passwords and bank details.
+      </p>
     </div>
 
   </div>

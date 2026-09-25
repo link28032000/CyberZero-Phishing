@@ -513,7 +513,7 @@ function updateAppLockStates() {
 function openApp(appName) {
   if (isAppLocked(appName)) {
     const remaining = EMAILS.length - (gameState.emailResults ? gameState.emailResults.length : 0);
-    showToast(`🔒 Locked: Complete all 5 email investigations first (${remaining} remaining) to unlock ${appName === 'folder' ? 'Folder' : appName === 'comms' ? 'Phone Link' : 'Anti-Virus'}!`, 'warning');
+    showToast(`🔒 Locked: Complete all 5 email investigations first (${remaining} remaining) to unlock ${appName === 'folder' ? 'File Explorer' : appName === 'comms' ? 'Phone Link' : 'Anti-Virus'}!`, 'warning');
     if (typeof AudioManager !== 'undefined') AudioManager.playWrong();
     return;
   }
@@ -547,6 +547,13 @@ function openApp(appName) {
 
   if (appName === 'wifi-settings') {
     renderG4WiFiSettings();
+    if (typeof wsUpdateWifiTab === 'function') wsUpdateWifiTab();
+    if (typeof wsUpdateBluetoothTab === 'function') wsUpdateBluetoothTab();
+    if (typeof wsUpdateAirplaneTab === 'function') wsUpdateAirplaneTab();
+  }
+
+  if (appName === 'videoplayer') {
+    if (typeof syncMediaPlayerVolume === 'function') syncMediaPlayerVolume();
   }
 
   // First time this app is opened, center it on screen so it isn't
@@ -657,7 +664,7 @@ function focusWindow(appName) {
 function taskbarClick(appName) {
   if (isAppLocked(appName)) {
     const remaining = EMAILS.length - (gameState.emailResults ? gameState.emailResults.length : 0);
-    showToast(`🔒 Locked: Complete all 5 email investigations first (${remaining} remaining) to unlock ${appName === 'folder' ? 'Folder' : 'Anti-Virus'}!`, 'warning');
+    showToast(`🔒 Locked: Complete all 5 email investigations first (${remaining} remaining) to unlock ${appName === 'folder' ? 'File Explorer' : 'Anti-Virus'}!`, 'warning');
     return;
   }
 
@@ -6076,7 +6083,7 @@ const EXPLORER_ADDITIONAL_FILES = {
       threatName: 'System Folder',
       threatCategory: 'SAFE',
       hash: 'C-USERS-PROFILES-DIR',
-      analysis: '✅ User profiles directory (C:\\Users\\Nishren).',
+      analysis: '✅ User profiles directory (C:\\Users).',
       quarantined: false,
       scanned: true
     },
@@ -6117,7 +6124,6 @@ const EXPLORER_ADDITIONAL_FILES = {
   ],
 
   dir_users: [
-    { id: 'usr_nishren', name: 'Nishren', fakeExt: 'dir', realExt: 'dir', subFolderKey: null, type: 'File Folder', size: '45.1 GB', date: '9/6/2026 08:00 AM', icon: '<img src="assets/icons/apps/folder.svg" alt="Folder" />', isMalware: false, threatName: 'User Profile', threatCategory: 'SAFE', hash: 'USERS-NISHREN', analysis: '✅ Primary user profile directory.', quarantined: false, scanned: true },
     { id: 'usr_public', name: 'Public', fakeExt: 'dir', realExt: 'dir', subFolderKey: null, type: 'File Folder', size: '512 MB', date: '9/1/2026 08:00 AM', icon: '<img src="assets/icons/apps/folder.svg" alt="Folder" />', isMalware: false, threatName: 'User Profile', threatCategory: 'SAFE', hash: 'USERS-PUBLIC', analysis: '✅ Shared public user folder accessible to all local accounts.', quarantined: false, scanned: true },
     { id: 'usr_default', name: 'Default', fakeExt: 'dir', realExt: 'dir', subFolderKey: null, type: 'File Folder', size: '28 MB', date: '9/1/2026 08:00 AM', icon: '<img src="assets/icons/apps/folder.svg" alt="Folder" />', isMalware: false, threatName: 'User Profile', threatCategory: 'SAFE', hash: 'USERS-DEFAULT', analysis: '✅ Default user profile template used for new account creation.', quarantined: false, scanned: true }
   ],
@@ -6199,8 +6205,7 @@ function renderFolderFiles(filterQuery = '') {
             <div class="thispc-drive-card-top">
               <div class="thispc-drive-icon">🌐</div>
               <div class="thispc-drive-info">
-                <div class="thispc-drive-name">Network (CYBER-ACADEMY)</div>
-                <div class="thispc-drive-free">192.168.1.0/24 • SMB 3.1.1</div>
+                <div class="thispc-drive-name">Network</div>
               </div>
             </div>
           </div>
@@ -6396,31 +6401,8 @@ function switchExplorerFolder(folderKey) {
   // Render Drive & Network Location Banners
   const bannerEl = document.getElementById('explorer-banner-area');
   if (bannerEl) {
-    if (folderKey === 'thispc' || folderKey === 'usb' || folderKey === 'network' || folderKey === 'usb_contents') {
-      // Self-contained pages and empty locations — no banner needed
-      bannerEl.classList.add('hidden');
-      bannerEl.innerHTML = '';
-    } else if (folderKey.startsWith('dir_')) {
-      bannerEl.classList.remove('hidden');
-      bannerEl.innerHTML = `
-        <div class="explorer-drive-banner" style="cursor:pointer" onclick="switchExplorerFolder('thispc_contents')" title="Back to Windows (C:)">
-          <div class="edb-icon">💻</div>
-          <div class="edb-main">
-            <div class="edb-title-row">
-              <span class="edb-title">Windows (C:) — 512 GB</span>
-            </div>
-            <div class="edb-bar"><div class="edb-bar-fill" style="width: 64%"></div></div>
-            <div class="edb-stats">330 GB used • 182 GB free of 512 GB (BitLocker: ON)</div>
-          </div>
-        </div>`;
-    } else if (folderKey === 'usb_contents') {
-      // Inside USB folder — no banner, just show files
-      bannerEl.classList.add('hidden');
-      bannerEl.innerHTML = '';
-    } else {
-      bannerEl.classList.add('hidden');
-      bannerEl.innerHTML = '';
-    }
+    bannerEl.classList.add('hidden');
+    bannerEl.innerHTML = '';
   }
 
   // Update breadcrumb
@@ -6756,6 +6738,17 @@ function openFileFromFolder(fileId) {
     if (file.appId === 'notes') {
       toggleStickyNote();
     } else {
+      // Pre-load this shortcut into the AV target card when opening antivirus
+      if (file.appId === 'antivirus') {
+        const avTcName   = document.getElementById('av-tc-name');
+        const avTcDetail = document.getElementById('av-tc-detail');
+        const avTcIcon   = document.getElementById('av-tc-icon');
+        if (avTcName && avTcDetail && avTcIcon) {
+          avTcName.textContent   = file.name;
+          avTcDetail.textContent = `${file.type} \u2022 ${file.size} \u2022 SHA-256: ${file.hash.slice(0, 10)}\u2026`;
+          avTcIcon.innerHTML     = file.icon;
+        }
+      }
       openApp(file.appId);
     }
     return;
@@ -7081,7 +7074,7 @@ function openVideoPlayer(file) {
     vid.style.display = 'block';
     vid.src = file.mediaSrc || 'assets/video/video3.mp4';
     vid.currentTime = 0;
-    vid.volume = 1;
+    syncMediaPlayerVolume();
 
     // Wire up events once
     if (!vid._vpWired) {
@@ -7130,7 +7123,7 @@ function openAudioPlayer(file) {
     vid.style.display = 'none';
     vid.src = file.mediaSrc || 'assets/sounds/Hi - Wii.mp3';
     vid.currentTime = 0;
-    vid.volume = 1;
+    syncMediaPlayerVolume();
 
     if (!vid._vpWired) {
       vid._vpWired = true;
@@ -7209,20 +7202,60 @@ function _vpOnEnded() {
 }
 
 function vpToggleMute() {
-  const vid = document.getElementById('videoplayer-video');
-  if (!vid) return;
-  vid.muted = !vid.muted;
-  const btn = document.getElementById('vp-mute-btn');
-  if (btn) btn.textContent = vid.muted ? '🔇' : '🔊';
+  if (typeof toggleMasterMute === 'function') {
+    toggleMasterMute();
+  } else {
+    const vid = document.getElementById('videoplayer-video');
+    if (!vid) return;
+    vid.muted = !vid.muted;
+    const btn = document.getElementById('vp-mute-btn');
+    if (btn) btn.textContent = vid.muted ? '🔇' : '🔊';
+  }
 }
 
 function vpSetVolume(val) {
   const vid = document.getElementById('videoplayer-video');
-  if (!vid) return;
-  vid.volume = parseFloat(val);
-  vid.muted = false;
+  const floatVal = parseFloat(val);
+  const masterVal = Math.round(floatVal * 100);
+
+  if (vid) {
+    vid.volume = floatVal;
+    vid.muted = (floatVal === 0);
+  }
   const btn = document.getElementById('vp-mute-btn');
-  if (btn) btn.textContent = vid.volume === 0 ? '🔇' : '🔊';
+  if (btn) btn.textContent = floatVal === 0 ? '🔇' : (masterVal < 50 ? '🔉' : '🔊');
+
+  // Synchronize with system Master Volume
+  if (typeof AudioManager !== 'undefined' && AudioManager.settings) {
+    AudioManager.settings.masterVolume = masterVal;
+    if (AudioManager.settings.masterMuted && masterVal > 0) {
+      AudioManager.settings.masterMuted = false;
+    }
+    AudioManager.saveSettings();
+    updateVolumeUI();
+  }
+}
+
+function syncMediaPlayerVolume() {
+  const vid = document.getElementById('videoplayer-video');
+  const vpSlider = document.getElementById('vp-volume-slider');
+  const vpMuteBtn = document.getElementById('vp-mute-btn');
+  const s = (typeof AudioManager !== 'undefined' && AudioManager.settings) ? AudioManager.settings : null;
+  if (!s) return;
+
+  const isMuted = s.masterMuted || s.masterVolume === 0;
+  const volFraction = s.masterVolume / 100;
+
+  if (vid) {
+    vid.volume = volFraction;
+    vid.muted = s.masterMuted;
+  }
+  if (vpSlider) {
+    vpSlider.value = s.masterMuted ? 0 : volFraction;
+  }
+  if (vpMuteBtn) {
+    vpMuteBtn.textContent = isMuted ? '🔇' : (s.masterVolume < 50 ? '🔉' : '🔊');
+  }
 }
 
 function vpSetSpeed(speed) {
@@ -7329,11 +7362,11 @@ function updateAntiVirusProtectionUI() {
   if (tileAv) {
     if (gameState.antivirusProtection) {
       tileAv.classList.add('active');
-      if (tileAvStatus) tileAvStatus.textContent = 'Real-Time On';
+      if (tileAvStatus) tileAvStatus.textContent = 'On';
       if (tileAvBadge) tileAvBadge.textContent = 'ON';
     } else {
       tileAv.classList.remove('active');
-      if (tileAvStatus) tileAvStatus.textContent = 'Turned Off';
+      if (tileAvStatus) tileAvStatus.textContent = 'Off';
       if (tileAvBadge) tileAvBadge.textContent = 'OFF';
     }
   }
@@ -9066,64 +9099,28 @@ function restartEntireGame() {
 // ── LOADING SCREEN KNOWLEDGE TIPS ──
 const LOADING_TIPS = [
   {
-    category: 'PHISHING THREAT',
-    icon: '🎣',
-    title: 'Check the Sender\'s Email Domain',
-    body: 'Phishing emails often use free domains like Gmail or misspelled company names. A real bank like BPI will always use @bpi.com.ph — never @gmail.com or @bpi-support.com.'
+    text: 'Phishing is a trick to steal your personal information, like passwords and bank details.'
   },
   {
-    category: 'PHISHING THREAT',
-    icon: '⏰',
-    title: 'Urgency Is a Red Flag',
-    body: '"You have 30 minutes before your account is locked!" Scammers create panic to stop you from thinking clearly. Legitimate organizations never threaten immediate account closures via email.'
+    text: 'Check the sender\'s email address carefully. Attackers often use lookalike domains to fool you.'
   },
   {
-    category: 'PHISHING THREAT',
-    icon: '🔗',
-    title: 'Hover Before You Click Any Link',
-    body: 'A button may say "Verify My Account" but link to a fake site. Always check where a link actually leads — the real PayPal is paypal.com, not paypal-account-check.com or any lookalike domain.'
+    text: 'Urgency is a red flag. Scammers create panic to prevent you from thinking clearly.'
   },
   {
-    category: 'MALWARE DEFENSE',
-    icon: '🦠',
-    title: 'Malware Hides in Ordinary File Names',
-    body: 'Files like "Invoice_Final.pdf.exe" or "ResumeUpdate.docx" can secretly be malware. Always check real file extensions and never open attachments from unknown or unexpected senders.'
+    text: 'Hover over links before clicking to verify where they actually lead.'
   },
   {
-    category: 'MALWARE DEFENSE',
-    icon: '🛡️',
-    title: 'Keep Your Anti-Virus Updated',
-    body: 'Malware databases are updated daily to catch new threats. An anti-virus with outdated definitions is like a lock with a missing key. Run regular scans and always keep your security software current.'
+    text: 'Banks, e-wallets, and services will never ask for your passwords, OTPs, or MPINs.'
   },
   {
-    category: 'MALWARE DEFENSE',
-    icon: '📂',
-    title: 'Ransomware Encrypts Your Files for Money',
-    body: 'Ransomware is a type of malware that locks your files and demands payment to restore them. Never pay — there\'s no guarantee your files will be returned. Always maintain offline backups.'
+    text: 'Multi-factor authentication (MFA) adds an essential extra layer of defense to your accounts.'
   },
   {
-    category: 'SOCIAL ENGINEERING',
-    icon: '🎭',
-    title: 'Social Engineering Exploits Human Trust',
-    body: 'Attackers often impersonate IT support, HR, or authority figures to trick people into giving credentials. Always verify callers through official channels — never give your password over the phone.'
+    text: 'Files disguised as invoices or receipts (e.g. .pdf.exe) can secretly harbor malware.'
   },
   {
-    category: 'CYBER HYGIENE',
-    icon: '🔐',
-    title: 'Use Multi-Factor Authentication (MFA)',
-    body: 'Even if a phisher steals your password, MFA adds a second barrier. Enable it on all important accounts — email, banking, and social media. It\'s your best defense against credential theft.'
-  },
-  {
-    category: 'CYBER HYGIENE',
-    icon: '📱',
-    title: 'Never Share OTPs or MPINs on Websites',
-    body: 'GCash, BPI, and all legitimate services will NEVER ask for your 4-digit MPIN or 6-digit OTP through a website link. Any site that asks is a phishing scam — close it immediately.'
-  },
-  {
-    category: 'TYPOSQUAT ATTACK',
-    icon: '🔍',
-    title: 'Typosquatting Swaps Letters to Fool You',
-    body: 'Fake domains like "paypa1.com" (using digit 1 instead of letter l) look almost identical to real ones. Always read URLs carefully character by character before entering any sensitive information.'
+    text: 'Keep your operating system and security software up to date against emerging threats.'
   }
 ];
 
@@ -9147,7 +9144,77 @@ function _playLoadingBeep(freq, gain, delay) {
   } catch(e) {}
 }
 
+// ═══════════════════════════════════════════════════════════
+// LOCK SCREEN — Name Input & Sign-In
+// ═══════════════════════════════════════════════════════════
+
+function lsStartClock() {
+  function updateLsClock() {
+    const now = new Date();
+    const timeEl = document.getElementById('ls-clock-display');
+    const dateEl = document.getElementById('ls-date-display');
+    if (timeEl) {
+      const h = now.getHours();
+      const m = String(now.getMinutes()).padStart(2, '0');
+      const ampm = h >= 12 ? 'PM' : 'AM';
+      const h12 = h % 12 || 12;
+      timeEl.textContent = `${h12}:${m}`;
+    }
+    if (dateEl) {
+      const days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+      const months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+      dateEl.textContent = `${days[now.getDay()]}, ${months[now.getMonth()]} ${now.getDate()}, ${now.getFullYear()}`;
+    }
+  }
+  updateLsClock();
+  setInterval(updateLsClock, 1000);
+}
+
+function lsHandleNameInput(val) {
+  const avatar   = document.getElementById('ls-user-avatar');
+  const initials = document.getElementById('ls-avatar-initials');
+  const userDisp = document.getElementById('ls-win10-username-display');
+  const trimmed  = val.trim();
+
+  if (trimmed.length > 0) {
+    const initial = trimmed.charAt(0).toUpperCase();
+    if (initials) initials.textContent = initial;
+    if (avatar)   avatar.classList.add('has-name');
+    if (userDisp) userDisp.textContent = trimmed;
+  } else {
+    if (avatar)   avatar.classList.remove('has-name');
+    if (userDisp) userDisp.textContent = 'Enter your Name';
+  }
+}
+
+function applyPlayerName(name) {
+  // Update Start Menu footer username
+  const startUserName = document.getElementById('start-user-name');
+  if (startUserName) startUserName.textContent = name;
+
+  // Update taskbar username pill
+  const tbPill   = document.getElementById('taskbar-username-pill');
+  const tbText   = document.getElementById('tb-username-text');
+  const tbAvatar = document.getElementById('tb-user-avatar-mini');
+  if (tbText)   tbText.textContent = name;
+  if (tbAvatar) tbAvatar.textContent = name.charAt(0).toUpperCase();
+  if (tbPill)   tbPill.classList.remove('hidden');
+
+  // Persist to gameState
+  gameState.playerName = name;
+}
+
+function lsSignIn() {
+  const input   = document.getElementById('ls-name-input');
+  const rawName = input ? input.value.trim() : '';
+  const name    = rawName.length > 0 ? rawName : 'Student';
+
+  applyPlayerName(name);
+  startFromTitleMenu();
+}
+
 function startFromTitleMenu() {
+
   // Hide desktop immediately — prevents any flash of desktop behind overlays
   const desktop = document.getElementById('desktop');
   if (desktop) desktop.style.visibility = 'hidden';
@@ -9169,70 +9236,9 @@ function startFromTitleMenu() {
   // Now safely close title menu — loading screen is already covering everything
   closeOverlay('overlay-title-menu');
 
-  const titleEl = document.getElementById('ls-pixel-title');
-  if (titleEl) {
-    titleEl.innerHTML = 'LOADING<span class="ls-ellipsis">...</span>';
-  }
-
-  // ── Build pixel block bar ──
-  const BAR_BLOCKS = 28; // number of segments
-  const barInner = document.getElementById('ls-pixel-bar-inner');
-  if (barInner) {
-    barInner.innerHTML = '';
-    for (let i = 0; i < BAR_BLOCKS; i++) {
-      const block = document.createElement('div');
-      block.className = 'ls-pixel-block';
-      block.dataset.index = i;
-      barInner.appendChild(block);
-    }
-  }
-
-  // ── Live percent + pixel block animation (10 seconds) ──
-  const pctEl = document.getElementById('ls-pixel-pct');
-  const DURATION = 10000; // 10 seconds
-  let startTime = null;
-  let barAnimId = null;
-  let halfwayBeepFired = false;
-
-  function animateBar(ts) {
-    if (!startTime) startTime = ts;
-    const elapsed = ts - startTime;
-    const progress = Math.min(elapsed / DURATION, 1); // 0 → 1
-    const pct = Math.round(progress * 100);
-
-    // Update percentage text
-    if (pctEl) pctEl.textContent = pct + '%';
-
-    // Midway beep at 50%
-    if (!halfwayBeepFired && pct >= 50) {
-      halfwayBeepFired = true;
-      _playLoadingBeep(520, 0.1, 0);
-    }
-
-    // Animate pixel blocks
-    if (barInner) {
-      const litCount = Math.round(progress * BAR_BLOCKS);
-      const blocks = barInner.querySelectorAll('.ls-pixel-block');
-      blocks.forEach((b, i) => {
-        if (i < litCount - 1) {
-          b.classList.add('lit');
-          b.classList.remove('lit-edge');
-        } else if (i === litCount - 1 && litCount > 0) {
-          // Leading edge block = bright white flash
-          b.classList.add('lit', 'lit-edge');
-        } else {
-          b.classList.remove('lit', 'lit-edge');
-        }
-      });
-    }
-
-    if (progress < 1) {
-      barAnimId = requestAnimationFrame(animateBar);
-    }
-  }
-  barAnimId = requestAnimationFrame(animateBar);
-
-  // ── Select 1 random note for this loading session (rotates every new load) ──
+  // ── Select initial cyber note for loading screen ──
+  const noteEl = document.getElementById('win-loading-note-text');
+  const noteWrap = document.getElementById('win-loading-note-wrap');
   let tipIdx = Math.floor(Math.random() * LOADING_TIPS.length);
   if (typeof window._lastLoadingTipIdx === 'number' && LOADING_TIPS.length > 1) {
     while (tipIdx === window._lastLoadingTipIdx) {
@@ -9240,35 +9246,28 @@ function startFromTitleMenu() {
     }
   }
   window._lastLoadingTipIdx = tipIdx;
-  const tip = LOADING_TIPS[tipIdx];
+  if (noteEl) {
+    noteEl.textContent = LOADING_TIPS[tipIdx].text;
+  }
 
-  const catEl = document.getElementById('ls-tip-category');
-  const iconEl = document.getElementById('ls-tip-icon');
-  const tipTitleEl = document.getElementById('ls-tip-title');
-  const bodyEl = document.getElementById('ls-tip-body');
-
-  if (catEl) catEl.textContent = tip.category;
-  if (iconEl) iconEl.textContent = tip.icon;
-  if (tipTitleEl) tipTitleEl.textContent = tip.title;
-  if (bodyEl) bodyEl.textContent = tip.body;
+  // Midway note rotation at 5 seconds with a smooth fade
+  const DURATION = 10000; // 10 seconds
+  const midTimer = setTimeout(() => {
+    if (noteWrap && noteEl) {
+      noteWrap.classList.add('transitioning');
+      setTimeout(() => {
+        let nextIdx = (tipIdx + 1 + Math.floor(Math.random() * (LOADING_TIPS.length - 1))) % LOADING_TIPS.length;
+        noteEl.textContent = LOADING_TIPS[nextIdx].text;
+        noteWrap.classList.remove('transitioning');
+      }, 350);
+    }
+  }, 5000);
 
   // ── After 10 seconds: complete & smooth fade transition into game ──
   setTimeout(() => {
-    if (barAnimId) cancelAnimationFrame(barAnimId);
+    clearTimeout(midTimer);
 
-    // Final state: 100% full glow
-    if (pctEl) pctEl.textContent = '100%';
-    if (titleEl) {
-      titleEl.innerHTML = 'READY<span class="ls-ellipsis">!</span>';
-    }
-    if (barInner) {
-      barInner.querySelectorAll('.ls-pixel-block').forEach(b => {
-        b.classList.add('lit');
-        b.classList.remove('lit-edge');
-      });
-    }
-
-    // Play success chime: three ascending beeps
+    // Play subtle success chime: three ascending beeps
     _playLoadingBeep(440, 0.12, 0);
     _playLoadingBeep(660, 0.12, 0.12);
     _playLoadingBeep(880, 0.18, 0.24);
@@ -9277,7 +9276,6 @@ function startFromTitleMenu() {
     _doStartFromTitleMenu();
 
     // Smoothly dissolve loading screen over 800ms
-    // Desktop is revealed by hideAllOverlays() when the game reaches desktop mode
     setTimeout(() => {
       ls.classList.add('ls-leaving');
       setTimeout(() => {
@@ -9365,21 +9363,23 @@ function reconnectTerminal() {
 }
 
 function initTitleParticles() {
-  const container = document.getElementById('title-particles');
+  // Try new lock screen container first, fall back to old title-particles
+  const container = document.getElementById('ls-bg-particles') || document.getElementById('title-particles');
   if (!container) return;
   container.innerHTML = '';
-  const count = 20;
+  const count = 28;
   for (let i = 0; i < count; i++) {
     const p = document.createElement('div');
     p.className = 'vn-particle';
     p.style.left = Math.random() * 100 + '%';
-    p.style.bottom = Math.random() * 20 + '%';
-    p.style.animationDelay = (Math.random() * 5) + 's';
-    p.style.animationDuration = (4 + Math.random() * 6) + 's';
-    p.style.opacity = (0.2 + Math.random() * 0.5).toString();
+    p.style.bottom = Math.random() * 100 + '%';
+    p.style.animationDelay = (Math.random() * 8) + 's';
+    p.style.animationDuration = (5 + Math.random() * 8) + 's';
+    p.style.opacity = (0.1 + Math.random() * 0.35).toString();
     container.appendChild(p);
   }
 }
+
 
 // ═══════════════════════════════════════════════════════════
 // AUDIO ENGINE (Web Audio API Synthesizer & Sound System)
@@ -10044,6 +10044,9 @@ function updateVolumeUI() {
   if (trayBtn) {
     trayBtn.title = s.masterMuted ? 'Sound (Muted)' : `Sound (${s.masterVolume}%)`;
   }
+
+  // Live sync Media Player volume
+  syncMediaPlayerVolume();
 }
 
 function toggleVolumeFlyout(event) {
@@ -10142,9 +10145,46 @@ function switchWifiSettingsTab(tab) {
       navEl.classList.toggle('active', t === tab);
     }
   });
-  // Sync airplane tab state with current networkSettings
+  // Sync tab states with current networkSettings
+  if (tab === 'wifi') wsUpdateWifiTab();
   if (tab === 'airplane') wsUpdateAirplaneTab();
   if (tab === 'bluetooth') wsUpdateBluetoothTab();
+}
+
+function wsUpdateWifiTab() {
+  const label = document.getElementById('ws-wifi-state-label');
+  const btn = document.getElementById('ws-wifi-toggle-btn');
+  const list = document.getElementById('wifi-networks-settings-list');
+  const isOn = networkSettings.wifi && !networkSettings.airplane;
+
+  if (label) {
+    if (networkSettings.airplane) {
+      label.textContent = 'Disabled by Airplane Mode';
+      label.style.color = '#fb923c';
+    } else if (isOn) {
+      label.textContent = networkSettings.currentSsid ? `On — Connected to ${networkSettings.currentSsid}` : 'On — Disconnected';
+      label.style.color = 'var(--text-muted)';
+    } else {
+      label.textContent = 'Off — Wireless network hardware disabled';
+      label.style.color = 'var(--text-muted)';
+    }
+  }
+
+  if (btn) {
+    btn.textContent = isOn ? 'Turn Off' : 'Turn On';
+    btn.style.background = isOn ? 'rgba(56,189,248,0.15)' : 'rgba(255,255,255,0.08)';
+    btn.style.borderColor = isOn ? 'rgba(56,189,248,0.4)' : 'rgba(255,255,255,0.15)';
+    btn.style.color = isOn ? '#38bdf8' : 'var(--text-secondary)';
+  }
+
+  if (list) {
+    list.style.opacity = isOn ? '1' : '0.35';
+    list.style.pointerEvents = isOn ? 'auto' : 'none';
+  }
+}
+
+function wsToggleWifi() {
+  toggleWifiSetting();
 }
 
 function wsUpdateBluetoothTab() {
@@ -10188,18 +10228,19 @@ function wsUpdateAirplaneTab() {
     btn.style.borderColor = isOn ? '#fb923c' : '#38bdf8';
     btn.style.color = isOn ? '#ffedd5' : '#e0f2fe';
   }
-  const statusText = isOn ? 'Suspended' : 'Active';
   if (wifiStatus) {
-    wifiStatus.textContent = statusText;
-    wifiStatus.style.color = isOn ? '#fb923c' : '#4ade80';
-    wifiStatus.style.background = isOn ? 'rgba(251,146,60,0.15)' : 'rgba(74,222,128,0.12)';
-    wifiStatus.style.borderColor = isOn ? 'rgba(251,146,60,0.4)' : 'rgba(74,222,128,0.3)';
+    const isWifiActive = networkSettings.wifi && !isOn;
+    wifiStatus.textContent = isOn ? 'Suspended' : (networkSettings.wifi ? 'Active' : 'Disabled');
+    wifiStatus.style.color = isWifiActive ? '#4ade80' : '#fb923c';
+    wifiStatus.style.background = isWifiActive ? 'rgba(74,222,128,0.12)' : 'rgba(251,146,60,0.15)';
+    wifiStatus.style.borderColor = isWifiActive ? 'rgba(74,222,128,0.3)' : 'rgba(251,146,60,0.4)';
   }
   if (btStatus) {
-    btStatus.textContent = statusText;
-    btStatus.style.color = isOn ? '#fb923c' : '#4ade80';
-    btStatus.style.background = isOn ? 'rgba(251,146,60,0.15)' : 'rgba(74,222,128,0.12)';
-    btStatus.style.borderColor = isOn ? 'rgba(251,146,60,0.4)' : 'rgba(74,222,128,0.3)';
+    const isBtActive = networkSettings.bluetooth && !isOn;
+    btStatus.textContent = isOn ? 'Suspended' : (networkSettings.bluetooth ? 'Active' : 'Disabled');
+    btStatus.style.color = isBtActive ? '#4ade80' : '#fb923c';
+    btStatus.style.background = isBtActive ? 'rgba(74,222,128,0.12)' : 'rgba(251,146,60,0.15)';
+    btStatus.style.borderColor = isBtActive ? 'rgba(74,222,128,0.3)' : 'rgba(251,146,60,0.4)';
   }
 }
 
@@ -10233,18 +10274,24 @@ function updateNetworkUI() {
   if (networkSettings.airplane) {
     if (trayWifiIcon) trayWifiIcon.innerHTML = '<img src="assets/icons/networks/airlane mode.svg" alt="Airplane Mode" style="width:18px;height:18px;vertical-align:middle;">';
     if (tileAir) tileAir.classList.add('active');
-    if (tileAirStatus) tileAirStatus.textContent = 'Active (Transmitters off)';
+    if (tileAirStatus) tileAirStatus.textContent = 'On';
     if (tileAirBadge) tileAirBadge.textContent = 'ON';
 
     if (tileWifi) tileWifi.classList.remove('active');
-    if (tileWifiStatus) tileWifiStatus.textContent = 'Disabled by Airplane Mode';
+    if (tileWifiStatus) tileWifiStatus.textContent = 'Off';
     if (tileWifiBadge) tileWifiBadge.textContent = 'OFF';
 
     if (tileBt) tileBt.classList.remove('active');
-    if (tileBtStatus) tileBtStatus.textContent = 'Disabled';
+    if (tileBtStatus) tileBtStatus.textContent = 'Off';
     if (tileBtBadge) tileBtBadge.textContent = 'OFF';
 
-    if (wifiList) wifiList.style.opacity = '0.35';
+    if (wifiList) {
+      wifiList.style.opacity = '0.35';
+      wifiList.style.pointerEvents = 'none';
+    }
+    wsUpdateWifiTab();
+    wsUpdateAirplaneTab();
+    wsUpdateBluetoothTab();
     return;
   }
 
@@ -10253,25 +10300,31 @@ function updateNetworkUI() {
   if (tileAirStatus) tileAirStatus.textContent = 'Off';
   if (tileAirBadge) tileAirBadge.textContent = 'OFF';
 
-  if (wifiList) wifiList.style.opacity = '1';
-
   // Wi-Fi
   if (networkSettings.wifi) {
     if (trayWifiIcon) trayWifiIcon.innerHTML = '<img src="assets/icons/networks/wi-fi.svg" alt="Wi-Fi" style="width:18px;height:18px;vertical-align:middle;">';
     if (tileWifi) tileWifi.classList.add('active');
-    if (tileWifiStatus) tileWifiStatus.textContent = networkSettings.currentSsid ? networkSettings.currentSsid.split(' ')[0] : 'Connected';
+    if (tileWifiStatus) tileWifiStatus.textContent = 'On';
     if (tileWifiBadge) tileWifiBadge.textContent = 'ON';
+    if (wifiList) {
+      wifiList.style.opacity = '1';
+      wifiList.style.pointerEvents = 'auto';
+    }
   } else {
     if (trayWifiIcon) trayWifiIcon.innerHTML = '<img src="assets/icons/networks/wi-fi.svg" alt="Wi-Fi" style="width:18px;height:18px;vertical-align:middle;opacity:0.35;">';
     if (tileWifi) tileWifi.classList.remove('active');
-    if (tileWifiStatus) tileWifiStatus.textContent = 'Turned Off';
+    if (tileWifiStatus) tileWifiStatus.textContent = 'Off';
     if (tileWifiBadge) tileWifiBadge.textContent = 'OFF';
+    if (wifiList) {
+      wifiList.style.opacity = '0.35';
+      wifiList.style.pointerEvents = 'none';
+    }
   }
 
   // Bluetooth
   if (networkSettings.bluetooth) {
     if (tileBt) tileBt.classList.add('active');
-    if (tileBtStatus) tileBtStatus.textContent = 'Student Headset';
+    if (tileBtStatus) tileBtStatus.textContent = 'On';
     if (tileBtBadge) tileBtBadge.textContent = 'ON';
   } else {
     if (tileBt) tileBt.classList.remove('active');
@@ -10297,11 +10350,11 @@ function updateNetworkUI() {
   if (tileAv) {
     if (gameState.antivirusProtection) {
       tileAv.classList.add('active');
-      if (tileAvStatus) tileAvStatus.textContent = 'Real-Time On';
+      if (tileAvStatus) tileAvStatus.textContent = 'On';
       if (tileAvBadge) tileAvBadge.textContent = 'ON';
     } else {
       tileAv.classList.remove('active');
-      if (tileAvStatus) tileAvStatus.textContent = 'Turned Off';
+      if (tileAvStatus) tileAvStatus.textContent = 'Off';
       if (tileAvBadge) tileAvBadge.textContent = 'OFF';
     }
   }
@@ -10312,6 +10365,11 @@ function updateNetworkUI() {
       renderActiveTab();
     }
   }
+
+  // Live sync Settings window tabs with current network state
+  wsUpdateWifiTab();
+  wsUpdateAirplaneTab();
+  wsUpdateBluetoothTab();
 }
 
 function toggleWifiSetting() {
@@ -10856,5 +10914,13 @@ window.addEventListener('DOMContentLoaded', () => {
   initStickyNote();
   updateAppLockStates();
   updateVolumeUI();
+  updateNetworkUI();
+  // Start lock screen clock
+  lsStartClock();
+  // Auto-focus name input
+  setTimeout(() => {
+    const inp = document.getElementById('ls-name-input');
+    if (inp) inp.focus();
+  }, 600);
 });
 
